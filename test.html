@@ -422,7 +422,7 @@
 
         <div class="header-banner"></div>
 
-        <div class="profile-area">
+        <div class="profile-area" id="sec-intro">
             <div class="profile-circle"></div>
             <div class="name-tag">
                 <h1>맛챠</h1>
@@ -450,14 +450,14 @@
             </div>
         </div>
 
-        <div class="content-section">
+        <div class="content-section" id="sec-package">
             <h2 class="section-title">패키지 & 할인 안내</h2>
             <div id="package-container" class="info-box" style="text-align: center; border:none; background:transparent; padding:0;">
                 <p style="color: #bbb;">패키지 정보를 불러오는 중입니다...</p>
             </div>
         </div>
 
-        <div class="content-section">
+        <div class="content-section" id="sec-guide">
             <h2 class="section-title">작업 안내</h2>
             <div class="table-wrapper">
                 <table class="license-table">
@@ -498,7 +498,7 @@
             </div>
         </div>
 
-        <div class="content-section">
+        <div class="content-section" id="sec-notice">
             <h2 class="section-title">공지사항</h2>
             <div class="info-box">
                 <ul id="notice-list" class="notice-list">
@@ -507,7 +507,7 @@
             </div>
         </div>
 
-        <div class="content-section">
+        <div class="content-section" id="sec-portfolio">
             <h2 class="section-title">포트폴리오</h2>
             <p style="font-size: 0.8rem; color: #bbb; margin-top: -15px; margin-bottom: 15px;">* 옆으로 밀어서 확인하세요.</p>
             <div class="tab-wrapper">
@@ -520,7 +520,7 @@
             <div id="tab3" class="port-grid"></div>
         </div>
 
-        <div class="content-section" style="border-bottom:none;">
+        <div class="content-section" id="sec-form" style="border-bottom:none;">
             <h2 class="section-title">신청 양식 (디자인)</h2>
             <form id="orderForm">
                 <div class="form-grid">
@@ -758,13 +758,24 @@
         }
 
         /* ----------------------------------------------------
-           추가된 부분: 상세페이지로 높이값 전달 스크립트
+           추가된 부분: 상세페이지로 높이값 전달 및 스크롤 요청 응답
         ---------------------------------------------------- */
         function sendHeight() {
-            // body가 아닌 main-wrapper의 실제 높이를 기준으로 계산 (여백 포함)
             const height = document.body.scrollHeight;
             window.parent.postMessage({ type: 'resize', height: height }, '*');
         }
+
+        // 스크롤 요청 수신 시 위치 계산해서 전송
+        window.addEventListener('message', function(e) {
+            if (e.data.type === 'requestScroll') {
+                const targetId = "sec-" + e.data.target;
+                const el = document.getElementById(targetId);
+                if (el) {
+                    const topPos = el.getBoundingClientRect().top + window.pageYOffset;
+                    window.parent.postMessage({ type: 'scrollResponse', top: topPos }, '*');
+                }
+            }
+        }, false);
 
         // 초기 실행 및 데이터 로드 후 실행
         window.addEventListener('load', () => {
@@ -773,16 +784,13 @@
             loadPortfolio().then(sendHeight); 
             loadPackages().then(sendHeight);
             
-            // 이미지 로딩 완료 후 높이 다시 계산
             document.querySelectorAll('img').forEach(img => {
                 img.addEventListener('load', sendHeight);
             });
         });
 
-        // 창 크기 변경 시 대응
         window.addEventListener('resize', sendHeight);
 
-        // 폼 입력 시 높이가 변할 수 있으므로 감시
         const observer = new MutationObserver(sendHeight);
         observer.observe(document.body, { childList: true, subtree: true, attributes: true });
     </script>
