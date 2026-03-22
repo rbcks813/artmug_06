@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>맛챠 디자인 찻집 - Design Commission</title>
     <style>
-        /* [기존 스타일 유지] */
+        /* 폰트 적용 */
         @font-face {
             font-family: 'KerisKedyuche';
             src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-3@1.0/KERISKEDU_R.woff2') format('woff2');
@@ -43,8 +43,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* 높이 자동 조절을 위해 body의 overflow를 숨김으로 설정할 수 있습니다 */
-            overflow-x: hidden;
+            /* 높이 자동 조절을 위해 최소 높이 해제 */
+            min-height: auto !important;
         }
 
         .main-wrapper {
@@ -297,6 +297,11 @@
             background: #f0f0f0;
         }
         .port-item img { transition: 0.5s cubic-bezier(0.2, 0, 0, 1); width: 100%; height: 100%; object-fit: cover; display: block; }
+        .port-item:hover img { transform: scale(1.08); }
+
+        #tab1 .port-item { aspect-ratio: 16 / 9; }
+        #tab2 .port-item { aspect-ratio: 9 / 16; }
+        #tab3 .port-item { aspect-ratio: 1 / 1; }
 
         .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; }
         input, textarea {
@@ -311,21 +316,106 @@
             font-size: 1rem;
         }
         
-        textarea { resize: none; overflow-y: auto; height: 150px; }
+        textarea {
+            resize: none; 
+            overflow-y: auto; 
+            height: 150px; 
+        }
         
+        input:focus, textarea:focus { border-color: var(--matcha); background: white; box-shadow: 0 0 0 4px rgba(182, 202, 167, 0.1); }
+
+        .extra-options {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 25px;
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px;
+        }
+        .option-item { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
+        .option-item input { width: 18px; height: 18px; accent-color: var(--matcha); cursor: pointer; }
+
+        .button-group { display: flex; gap: 15px; margin-top: 35px; width: 100%; }
+        .btn-container { position: relative; flex: 1; }
+        .reset-btn-container { flex: 0.4; }
+        
+        .submit-btn, .reset-btn {
+            width: 100%;
+            padding: 20px;
+            border: none;
+            border-radius: 22px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            font-family: inherit;
+            transition: 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+        .submit-btn { 
+            background: var(--dark-tea); 
+            color: white; 
+            box-shadow: 0 10px 25px rgba(93, 109, 79, 0.3);
+        }
+        .submit-btn:hover { transform: scale(1.02); filter: brightness(1.1); }
+        .reset-btn { background: rgba(0,0,0,0.05); color: #888; }
+        .reset-btn:hover { background: rgba(0,0,0,0.1); }
+        
+        .submit-btn.btn-error {
+            background-color: var(--error-red) !important;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        .toast-bubble {
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+            font-weight: 600;
+        }
+        .toast-bubble.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast-bubble::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 7px solid transparent;
+            border-top-color: #333;
+        }
+        .toast-bubble.warn { background: var(--error-red); }
+        .toast-bubble.warn::after { border-top-color: var(--error-red); }
+
         @media (max-width: 768px) {
             .content-section { padding: 30px 20px; margin: 15px; border-radius: 28px; }
             .profile-circle { width: 140px; height: 140px; border-radius: 36px; margin-top: -70px; }
             .form-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
             .extra-options { grid-template-columns: 1fr; }
             .button-group { flex-direction: column; }
+            .process-flow { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+            .process-arrow { transform: none; margin: 0; }
             .port-item { height: 180px; } 
         }
     </style>
 </head>
 <body>
 
-    <div class="main-wrapper" id="content-container">
+    <div class="main-wrapper">
         <div class="roof-container">
             <div class="awning-piece"></div><div class="awning-piece"></div><div class="awning-piece"></div><div class="awning-piece"></div><div class="awning-piece"></div><div class="awning-piece"></div><div class="awning-piece"></div><div class="awning-piece"></div><div class="awning-piece"></div><div class="awning-piece"></div>
         </div>
@@ -480,19 +570,6 @@
     </div>
 
     <script>
-        /* [높이 자동 조절 스크립트 추가] */
-        function sendHeight() {
-            const height = document.body.scrollHeight;
-            window.parent.postMessage({ frameHeight: height }, '*');
-        }
-
-        // 페이지 로드 및 창 크기 조절 시 높이 전송
-        window.addEventListener('load', sendHeight);
-        window.addEventListener('resize', sendHeight);
-
-        // 주기적으로 높이 체크 (이미지 로딩 등으로 변할 경우 대비)
-        setInterval(sendHeight, 500);
-
         const BASE_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?output=csv";
         const STATUS_CSV_URL = BASE_URL + "&gid=0&single=true";
         const NOTICE_CSV_URL = BASE_URL + "&gid=1376216961&single=true";
@@ -501,8 +578,8 @@
 
         const q3 = document.getElementById('quick_3d');
         const q1 = document.getElementById('quick_1d');
-        q3.addEventListener('change', () => { if(q3.checked) q1.checked = false; });
-        q1.addEventListener('change', () => { if(q1.checked) q3.checked = false; });
+        if(q3) q3.addEventListener('change', () => { if(q3.checked) q1.checked = false; });
+        if(q1) q1.addEventListener('change', () => { if(q1.checked) q3.checked = false; });
 
         function parseCSVLine(line) {
             const result = [];
@@ -528,7 +605,6 @@
                 const b2Value = cols[1].toUpperCase();
                 statusBadge.innerHTML = (b2Value === 'TRUE') ? "OPEN" : "CLOSED";
                 statusBadge.className = (b2Value === 'TRUE') ? "badge open" : "badge closed";
-                sendHeight(); // 데이터 로드 후 높이 재조절
             } catch (e) { statusBadge.innerText = "Error"; }
         }
 
@@ -547,7 +623,6 @@
                     }
                 }
                 noticeList.innerHTML = html || "<li>등록된 공지사항이 없습니다.</li>";
-                sendHeight(); // 데이터 로드 후 높이 재조절
             } catch (e) { noticeList.innerHTML = "<li>로드 실패</li>"; }
         }
 
@@ -607,7 +682,6 @@
                     html += `<div class="package-card"><h3>🎁 ${name}</h3>${cardInnerHtml}<p style="font-size: 0.8rem; color: #aaa; text-align: right; margin-top: 12px;">종료일: ${dateInfo}</p></div>`;
                 }
                 container.innerHTML = (visibleCount === 0) ? '<p style="color: #bbb; padding: 20px;">진행 중인 이벤트가 없습니다! 🍵</p>' : html;
-                sendHeight(); // 데이터 로드 후 높이 재조절
             } catch (e) { container.innerHTML = '<p style="color: #ff8b8b;">로드 실패</p>'; }
         }
 
@@ -617,7 +691,7 @@
                 const response = await fetch(PORTFOLIO_CSV_URL);
                 const data = await response.text();
                 const rows = data.split('\n').filter(r => r.trim() !== '');
-                Object.values(grids).forEach(g => g.innerHTML = '');
+                Object.values(grids).forEach(g => { if(g) g.innerHTML = ''; });
                 for (let i = 1; i < rows.length; i++) {
                     const cols = parseCSVLine(rows[i]);
                     if (cols.length >= 2) {
@@ -627,13 +701,12 @@
                         if (target) {
                             const item = document.createElement('div');
                             item.className = 'port-item';
-                            item.innerHTML = `<img src="${url}" alt="${cat}" onerror="this.src='https://via.placeholder.com/300x200?text=Error'" onload="sendHeight()">`;
+                            item.innerHTML = `<img src="${url}" alt="${cat}" onerror="this.src='https://via.placeholder.com/300x200?text=Error'">`;
                             target.appendChild(item);
                         }
                     }
                 }
-                Object.values(grids).forEach(g => { if (g.innerHTML === '') g.innerHTML = '<div style="width: 100%; text-align:center; padding: 60px 0; color:#bbb; font-size: 0.95rem;">아직 이미지가 없습니다! 🍵</div>'; });
-                sendHeight();
+                Object.values(grids).forEach(g => { if (g && g.innerHTML === '') g.innerHTML = '<div style="width: 100%; text-align:center; padding: 60px 0; color:#bbb; font-size: 0.95rem;">아직 이미지가 없습니다! 🍵</div>'; });
             } catch (e) { console.error(e); }
         }
 
@@ -642,7 +715,8 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             btn.classList.add('active');
-            sendHeight(); // 탭 변경 시 높이가 변할 수 있으므로 실행
+            // 탭 변경 시에도 높이 갱신
+            setTimeout(sendHeight, 100);
         }
 
         function triggerBubble(id) {
@@ -681,10 +755,36 @@
         function resetForm() { 
             document.getElementById('orderForm').reset(); 
             triggerBubble('reset-bubble'); 
-            sendHeight();
         }
 
-        updateCommissionStatus(); loadNotices(); loadPortfolio(); loadPackages();
+        /* ----------------------------------------------------
+           추가된 부분: 상세페이지로 높이값 전달 스크립트
+        ---------------------------------------------------- */
+        function sendHeight() {
+            // body가 아닌 main-wrapper의 실제 높이를 기준으로 계산 (여백 포함)
+            const height = document.body.scrollHeight;
+            window.parent.postMessage({ type: 'resize', height: height }, '*');
+        }
+
+        // 초기 실행 및 데이터 로드 후 실행
+        window.addEventListener('load', () => {
+            updateCommissionStatus(); 
+            loadNotices().then(sendHeight); 
+            loadPortfolio().then(sendHeight); 
+            loadPackages().then(sendHeight);
+            
+            // 이미지 로딩 완료 후 높이 다시 계산
+            document.querySelectorAll('img').forEach(img => {
+                img.addEventListener('load', sendHeight);
+            });
+        });
+
+        // 창 크기 변경 시 대응
+        window.addEventListener('resize', sendHeight);
+
+        // 폼 입력 시 높이가 변할 수 있으므로 감시
+        const observer = new MutationObserver(sendHeight);
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true });
     </script>
 </body>
 </html>
