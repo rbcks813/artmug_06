@@ -3,23 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fixed Height Video Portfolio</title>
+    <title>Balanced Mobile Portfolio</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
         :root {
             --main-beige: #D2B48C;
             --dark-beige: #A68A64;
-            /* PC 버전 높이 */
-            --vh-pc: 450px;
-            /* 모바일 버전 높이 (화면 너비를 넘지 않도록 조정) */
-            --vh-mobile: 200px; 
         }
 
         body {
             margin: 0;
             padding: 20px 0;
             background: transparent;
-            font-family: 'Pretendard', sans-serif;
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            overflow-x: hidden;
         }
 
         /* 카테고리 버튼 */
@@ -28,19 +25,20 @@
             justify-content: center;
             gap: 8px;
             margin-bottom: 30px;
-            flex-wrap: wrap;
+            padding: 0 10px;
         }
 
         .filter-btn {
-            padding: 8px 20px;
+            padding: 8px 18px;
             border: 1.5px solid var(--main-beige);
             background: #fff;
             color: var(--dark-beige);
             border-radius: 50px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             transition: 0.3s;
+            white-space: nowrap;
         }
 
         .filter-btn.active {
@@ -48,7 +46,7 @@
             color: white;
         }
 
-        /* 슬라이더 전체 컨테이너 */
+        /* 슬라이더 구조 */
         .swiper-container-wrapper {
             position: relative;
             width: 100%;
@@ -65,8 +63,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: auto; /* 너비는 비율에 따라 자동 */
-            opacity: 0.2;
+            width: auto; /* 영상 너비에 따라 슬라이드 폭 결정 */
+            opacity: 0.3;
             transition: opacity 0.4s;
         }
 
@@ -74,17 +72,16 @@
             opacity: 1;
         }
 
-        /* ⭐ 핵심: 모든 영상 컨테이너의 세로 높이를 동일하게 강제 */
+        /* ⭐ 영상 컨테이너: 높이 고정 및 비율 유지 */
         .video-container {
             position: relative;
-            height: var(--vh-pc); /* PC 높이 고정 */
+            height: 450px; /* PC 기준 높이 */
             border-radius: 12px;
             overflow: hidden;
             background: #000;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
         }
 
-        /* 비율에 따른 너비 설정 */
         .ratio-long { aspect-ratio: 16 / 9; }
         .ratio-short { aspect-ratio: 9 / 16; }
 
@@ -94,6 +91,7 @@
             border: none;
         }
 
+        /* 태그 */
         .tag-box {
             margin-top: 12px;
             display: flex;
@@ -112,36 +110,31 @@
         .swiper-button-next, .swiper-button-prev {
             width: 40px !important;
             height: 40px !important;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.9);
             border: 1px solid var(--main-beige);
             border-radius: 50%;
             color: var(--dark-beige) !important;
-            top: calc(var(--vh-pc) / 2) !important; /* 영상 높이의 딱 절반 */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            top: 225px !important; /* PC 높이의 절반 */
             z-index: 10;
         }
 
-        .swiper-button-next:after, .swiper-button-prev:after {
-            font-size: 14px !important;
-            font-weight: bold;
-        }
-
+        .swiper-button-next:after, .swiper-button-prev:after { font-size: 14px !important; font-weight: bold; }
         .swiper-button-prev { left: 10px !important; }
         .swiper-button-next { right: 10px !important; }
-
         .swiper-pagination-bullet-active { background: var(--main-beige) !important; }
 
-        /* ⭐ 모바일 환경 최적화 */
+        /* ⭐ 모바일 최적화 핵심 매개변수 */
         @media (max-width: 768px) {
             .video-container {
-                height: var(--vh-mobile); /* 모바일 높이로 강제 변경 */
+                height: 200px; /* 모바일에서 롱폼이 화면을 가득 채우는 너비일 때의 적정 높이 */
             }
             .swiper-button-next, .swiper-button-prev {
-                top: calc(var(--vh-mobile) / 2) !important; /* 줄어든 높이의 절반 */
+                top: 100px !important; /* 모바일 높이(200px)의 절반 */
+                width: 32px !important;
+                height: 32px !important;
             }
-            .swiper-slide {
-                padding: 0 10px;
-            }
+            .filter-container { gap: 5px; }
+            .filter-btn { padding: 6px 14px; font-size: 12px; }
         }
 
         #no-data {
@@ -247,7 +240,7 @@
                 const slide = `
                     <div class="swiper-slide">
                         <div class="video-container ${ratioClass}">
-                            <iframe src="${getEmbedUrl(video.url)}" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+                            <iframe src="${getEmbedUrl(video.url)}" allowfullscreen></iframe>
                         </div>
                         <div class="tag-box">${tagHtml}</div>
                     </div>
@@ -257,7 +250,7 @@
 
             swiperInstance = new Swiper('.swiper', {
                 slidesPerView: 'auto',
-                spaceBetween: 20,
+                spaceBetween: 15,
                 centeredSlides: true,
                 loop: filtered.length > 1,
                 pagination: { el: '.swiper-pagination', clickable: true },
