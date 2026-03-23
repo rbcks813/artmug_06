@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>맛챠 영상 작업실 - Video Edit Commission</title>
     <style>
-        /* 부드러운 스크롤 적용 */
-        html { scroll-behavior: smooth; }
+        /* [수정] 임베드 환경 최적화 */
+        html { 
+            scroll-behavior: smooth; 
+            overflow-x: hidden; /* 가로 스크롤 방지 */
+        }
 
         /* 폰트 적용 */
         @font-face {
@@ -23,7 +26,7 @@
         }
 
         :root {
-            --matcha: #ffffff;
+            --matcha: #b6caa7;
             --milktea: #C3B4AD;
             --dark-tea: #637353;
             --cream: rgba(253, 251, 249, 0.7);
@@ -42,10 +45,12 @@
             background-attachment: fixed;
             color: #444;
             margin: 0;
-            padding: 40px 15px;
+            /* [수정] 상하 여백 조정 */
+            padding: 20px 10px; 
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100%;
         }
 
         /* --- 플로팅 목차 내비게이션 --- */
@@ -59,13 +64,17 @@
             gap: 12px;
             z-index: 900;
         }
+        /* [추가] 화면이 너무 작으면 목차가 가릴 수 있으므로 모바일/임베드 대응 */
+        @media (max-width: 1000px) {
+            .toc-nav { display: none; } 
+        }
+
         .toc-item {
             position: relative;
             display: flex;
             align-items: center;
             justify-content: flex-end;
             text-decoration: none;
-            group: hover;
         }
         .toc-label {
             position: absolute;
@@ -257,7 +266,7 @@
             border-radius: 32px;
             border: 1px solid var(--glass-border);
             box-shadow: var(--widget-shadow);
-            scroll-margin-top: 30px; /* 목차 이동 시 여백 */
+            scroll-margin-top: 30px;
         }
         .section-title {
             font-size: 1.5rem;
@@ -590,7 +599,7 @@
         @media (max-width: 768px) {
             .toc-nav { right: 10px; gap: 8px; }
             .toc-dot { width: 35px; height: 35px; font-size: 0.9rem; }
-            .toc-label { display: none; } /* 모바일에서 텍스트 라벨 숨김 */
+            .toc-label { display: none; }
             .content-section { padding: 30px 20px; margin: 15px; border-radius: 28px; }
             .profile-circle { width: 140px; height: 140px; border-radius: 36px; margin-top: -70px; }
             .form-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -898,6 +907,12 @@
         const PORTFOLIO_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=528155867&single=true&output=csv";
         const PACKAGE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=490749441&single=true&output=csv";
 
+        /* [수정] 높이 자동 조절 함수 */
+        function sendHeight() {
+            const height = document.body.scrollHeight || document.documentElement.scrollHeight;
+            window.parent.postMessage({ type: 'resize_iframe', height: height }, '*');
+        }
+
         function parseCSVLine(line) {
             const result = [];
             let current = '';
@@ -922,6 +937,7 @@
                 const b3Value = cols[1].toUpperCase();
                 statusBadge.innerHTML = (b3Value === 'TRUE') ? "OPEN" : "CLOSED";
                 statusBadge.className = (b3Value === 'TRUE') ? "badge open" : "badge closed";
+                sendHeight(); /* 상태 변경 시 높이 재계산 */
             } catch (e) { statusBadge.innerText = "Error"; }
         }
 
@@ -940,6 +956,7 @@
                     }
                 }
                 noticeList.innerHTML = html || "<li>등록된 공지사항이 없습니다.</li>";
+                sendHeight(); /* 공지 로드 시 높이 재계산 */
             } catch (e) { noticeList.innerHTML = "<li>로드 실패</li>"; }
         }
 
@@ -1016,6 +1033,7 @@
                 }
                 
                 container.innerHTML = (visibleCount === 0) ? '<p style="color: #bbb; padding: 20px;">진행 중인 이벤트가 없습니다! 🍵</p>' : html;
+                sendHeight(); /* 패키지 로드 시 높이 재계산 */
             } catch (e) { 
                 container.innerHTML = '<p style="color: #ff8b8b;">로드 실패</p>'; 
             }
@@ -1046,6 +1064,7 @@
                     }
                 }
                 Object.values(grids).forEach(g => { if (g.innerHTML === '') g.innerHTML = '<div style="width: 100%; text-align:center; padding: 60px 0; color:#bbb; font-size: 0.95rem;">아직 포트폴리오가 없습니다! 🍵</div>'; });
+                sendHeight(); /* 포트폴리오 로드 시 높이 재계산 */
             } catch (e) { console.error(e); }
         }
 
@@ -1072,6 +1091,7 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             btn.classList.add('active');
+            sendHeight(); /* 탭 변경 시 높이가 달라질 수 있으므로 재계산 */
         }
 
         function setSelect(type, value) {
@@ -1181,9 +1201,27 @@
             document.getElementById('order_type').value = '';
             document.getElementById('total_display').innerText = "0원";
             triggerBubble('reset-bubble'); 
+            sendHeight();
         }
 
-        updateCommissionStatus(); loadNotices(); loadPortfolio(); loadPackages();
+        /* [수정] 초기 로드 및 변화 감지 자동 실행 */
+        window.addEventListener('load', () => {
+            updateCommissionStatus(); 
+            loadNotices(); 
+            loadPortfolio(); 
+            loadPackages();
+            sendHeight();
+        });
+        window.addEventListener('resize', sendHeight);
+
+        /* [추가] 페이지 내 요소가 바뀔 때마다 높이 체크 (포트폴리오 등) */
+        const observer = new MutationObserver(sendHeight);
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+
+        /* 이미지 등 늦게 로드되는 경우 대비 주기적 체크 */
+        setTimeout(sendHeight, 1500);
+        setTimeout(sendHeight, 3000);
+        setTimeout(sendHeight, 5000);
     </script>
 </body>
 </html>
