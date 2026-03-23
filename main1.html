@@ -849,6 +849,18 @@
         const PORTFOLIO_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=528155867&single=true&output=csv";
         const PACKAGE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=490749441&single=true&output=csv";
 
+        // [추가] 부모 페이지로 높이 정보를 보내는 함수
+        function sendHeightToParent() {
+            const wrapper = document.querySelector('.main-wrapper');
+            if (wrapper) {
+                const height = wrapper.offsetHeight + 100; // 여유값 포함
+                window.parent.postMessage({
+                    type: 'resize_iframe',
+                    height: height
+                }, '*');
+            }
+        }
+
         function parseCSVLine(line) {
             const result = [];
             let current = '';
@@ -1007,6 +1019,8 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             btn.classList.add('active');
+            // [추가] 탭 전환 시 높이 재계산
+            setTimeout(sendHeightToParent, 300);
         }
 
         function setSelect(type, value) {
@@ -1036,6 +1050,7 @@
 
             if (fastChecked || packageSelected !== "없음") { 
                 displayTarget.innerText = "문의 필요"; 
+                sendHeightToParent(); // [추가] 텍스트 변경 시 높이 재계산
                 return; 
             }
 
@@ -1048,7 +1063,7 @@
             else if (type === '숏폼 (편집점 O)') basePrice = 10000;
             else if (type === '숏폼 (편집점 X)') basePrice = 12000;
 
-            if (basePrice === 0 && min > 0) { displayTarget.innerText = "종류 선택 필요"; return; }
+            if (basePrice === 0 && min > 0) { displayTarget.innerText = "종류 선택 필요"; sendHeightToParent(); return; }
 
             let total = basePrice * min;
             if (totalRawMinutes > 180 && !type.includes('편집점 O') && !type.includes('컷편집 O')) {
@@ -1060,6 +1075,8 @@
             if (privateChecked) total *= 1.5;
 
             displayTarget.innerText = total.toLocaleString() + "원";
+            // [추가] 견적 결과 표시 후 높이 재계산
+            sendHeightToParent();
         }
 
         function triggerBubble(id) {
@@ -1107,9 +1124,23 @@
             document.getElementById('order_type').value = '';
             document.getElementById('total_display').innerText = "0원";
             triggerBubble('reset-bubble'); 
+            sendHeightToParent(); // [추가] 초기화 시 높이 재계산
         }
 
-        updateCommissionStatus(); loadNotices(); loadPortfolio(); loadPackages();
+        // [수정] 초기 실행 로직을 async 함수로 묶어 데이터 로드 후 높이를 전송하도록 변경
+        async function initPage() {
+            await Promise.all([
+                updateCommissionStatus(), 
+                loadNotices(), 
+                loadPortfolio(), 
+                loadPackages()
+            ]);
+            // 모든 데이터 로드 직후 높이 전송 (이미지 로딩 등을 위해 약간의 딜레이)
+            setTimeout(sendHeightToParent, 500);
+        }
+
+        window.addEventListener('resize', sendHeightToParent); // 창 크기 변경 시 대응
+        initPage();
     </script>
 </body>
 </html>
