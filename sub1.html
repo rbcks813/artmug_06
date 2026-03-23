@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* 폰트 설정 */
+        @font-face {
+            font-family: 'Paperlogy';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'Paperlogy';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'Paperlogy';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2');
+            font-weight: 900;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: transparent; /* 배경 금지 대응 */
+            font-family: 'Paperlogy', -apple-system, sans-serif;
+            color: #4A3E31;
+        }
+
+        .price-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #332B24;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #E8E2D9;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 6px;
+            height: 22px;
+            background: #A68B6D; /* 메인 베이지 */
+            border-radius: 3px;
+        }
+
+        .price-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .price-item {
+            background: #FFFFFF;
+            padding: 18px 22px;
+            border-radius: 16px;
+            border: 1px solid #E8E2D9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(166, 139, 109, 0.05);
+            flex: 1 1 300px; /* 마지막 항목 길게 채우기 설정 */
+            min-width: 280px;
+        }
+
+        .price-item:hover {
+            transform: translateY(-3px);
+            border-color: #A68B6D;
+            box-shadow: 0 10px 20px rgba(166, 139, 109, 0.1);
+        }
+
+        .item-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #5D5043;
+        }
+
+        .item-price {
+            font-size: 17px;
+            font-weight: 900;
+            color: #A68B6D;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-weight: 700;
+            color: #A68B6D;
+        }
+    </style>
+</head>
+<body>
+
+<div class="price-container" id="price-board">
+    <div class="loading">가격표를 불러오는 중...</div>
+</div>
+
+<script>
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSG_Lqcb6PVuS3aRdwOzzAK9a7q9_BgTm_Hih063KyRXtYLc7KIIO85xk7nfuGi8IzRJiuJKVmNZmyU/pub?gid=665563680&single=true&output=csv';
+
+    async function fetchPriceData() {
+        try {
+            const response = await fetch(CSV_URL);
+            const data = await response.text();
+            renderPriceList(data);
+        } catch (error) {
+            document.getElementById('price-board').innerHTML = '<div class="loading">데이터 로드 실패 (시트 권한을 확인해주세요)</div>';
+        }
+    }
+
+    function renderPriceList(csvData) {
+        // CSV 줄 단위 분리 및 빈 줄 제거
+        const rows = csvData.split('\n').map(row => row.trim()).filter(row => row.length > 0).slice(1);
+        
+        // 카테고리 저장소 (순서 보장을 위해 Map이나 객체 사용)
+        const categories = {
+            '롱폼': [],
+            '숏폼': [],
+            '기타 옵션': []
+        };
+
+        rows.forEach(row => {
+            const columns = row.split(',');
+            if (columns.length >= 3) {
+                let rawCat = columns[0].trim();
+                const name = columns[1].trim();
+                const price = columns[2].trim();
+
+                // 인식 최적화: 공백 제거 후 비교
+                let matchedCat = '';
+                const cleanCat = rawCat.replace(/\s+/g, ''); // 모든 공백 제거
+
+                if (cleanCat.includes('롱폼')) matchedCat = '롱폼';
+                else if (cleanCat.includes('숏폼')) matchedCat = '숏폼';
+                else if (cleanCat.includes('기타')) matchedCat = '기타 옵션';
+                else matchedCat = rawCat; // 정의되지 않은 카테고리가 있으면 그대로 표시
+
+                if (!categories[matchedCat]) categories[matchedCat] = [];
+                categories[matchedCat].push({ name, price });
+            }
+        });
+
+        let htmlContent = '';
+        // 정해진 순서대로 렌더링
+        const displayOrder = ['롱폼', '숏폼', '기타 옵션'];
+        
+        // 나머지 다른 카테고리가 있다면 추가
+        Object.keys(categories).forEach(cat => {
+            if (!displayOrder.includes(cat)) displayOrder.push(cat);
+        });
+
+        displayOrder.forEach(catName => {
+            const items = categories[catName];
+            if (!items || items.length === 0) return;
+
+            htmlContent += `
+                <div class="section">
+                    <h2 class="section-title">${catName}</h2>
+                    <div class="price-grid">
+                        ${items.map(item => `
+                            <div class="price-item">
+                                <span class="item-name">${item.name}</span>
+                                <span class="item-price">${formatPrice(item.price)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        });
+
+        document.getElementById('price-board').innerHTML = htmlContent || '<div class="loading">표시할 데이터가 없습니다.</div>';
+    }
+
+    function formatPrice(price) {
+        // 숫자만 남겨서 콤마 포맷팅, 숫자가 아니면 그대로 반환
+        const num = parseInt(price.replace(/[^0-9]/g, ''));
+        return !isNaN(num) ? num.toLocaleString() + '₩' : price;
+    }
+
+    fetchPriceData();
+</script>
+
+</body>
+</html>
