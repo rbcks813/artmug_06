@@ -9,15 +9,10 @@
         :root {
             --main-beige: #D2B48C;
             --dark-beige: #A68A64;
-            /* PC 버전 영상 높이 */
-            --video-height: 450px;
-        }
-
-        @media (max-width: 768px) {
-            :root {
-                /* 모바일 버전 영상 높이 (화면 크기에 맞춰 축소) */
-                --video-height: 350px;
-            }
+            /* PC 버전 높이 */
+            --vh-pc: 450px;
+            /* 모바일 버전 높이 (화면 너비를 넘지 않도록 조정) */
+            --vh-mobile: 200px; 
         }
 
         body {
@@ -31,21 +26,21 @@
         .filter-container {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 30px;
             flex-wrap: wrap;
         }
 
         .filter-btn {
-            padding: 8px 24px;
+            padding: 8px 20px;
             border: 1.5px solid var(--main-beige);
             background: #fff;
             color: var(--dark-beige);
             border-radius: 50px;
             cursor: pointer;
             font-weight: 600;
-            transition: 0.3s;
             font-size: 14px;
+            transition: 0.3s;
         }
 
         .filter-btn.active {
@@ -53,26 +48,25 @@
             color: white;
         }
 
-        /* 슬라이더 메인 컨테이너 */
+        /* 슬라이더 전체 컨테이너 */
         .swiper-container-wrapper {
             position: relative;
+            width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 60px;
         }
 
         .swiper {
             width: 100%;
-            padding-bottom: 60px !important;
+            padding-bottom: 50px !important;
         }
 
-        /* 높이 통일을 위한 슬라이드 설정 */
         .swiper-slide {
-            width: auto; /* 내용물(영상 너비)에 따라 가변적 */
             display: flex;
             flex-direction: column;
             align-items: center;
-            opacity: 0.3;
+            width: auto; /* 너비는 비율에 따라 자동 */
+            opacity: 0.2;
             transition: opacity 0.4s;
         }
 
@@ -80,83 +74,84 @@
             opacity: 1;
         }
 
-        /* 영상 프레임 스타일 */
+        /* ⭐ 핵심: 모든 영상 컨테이너의 세로 높이를 동일하게 강제 */
         .video-container {
-            height: var(--video-height); /* 세로 크기 고정 */
             position: relative;
-            border-radius: 16px;
+            height: var(--vh-pc); /* PC 높이 고정 */
+            border-radius: 12px;
             overflow: hidden;
             background: #000;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
 
-        /* 비율에 따른 너비 설정 (높이는 고정, 너비가 바뀜) */
+        /* 비율에 따른 너비 설정 */
         .ratio-long { aspect-ratio: 16 / 9; }
         .ratio-short { aspect-ratio: 9 / 16; }
 
         .video-container iframe {
-            width: 100%;
-            height: 100%;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
             border: none;
         }
 
-        /* 태그 */
         .tag-box {
-            margin-top: 15px;
+            margin-top: 12px;
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
             justify-content: center;
-            width: 100%;
         }
 
         .tag-item {
             color: var(--dark-beige);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
         }
 
         /* 화살표 버튼 */
         .swiper-button-next, .swiper-button-prev {
-            width: 44px !important;
-            height: 44px !important;
+            width: 40px !important;
+            height: 40px !important;
             background: #fff;
             border: 1px solid var(--main-beige);
             border-radius: 50%;
             color: var(--dark-beige) !important;
-            top: calc(var(--video-height) / 2) !important; /* 영상 높이의 딱 절반 */
+            top: calc(var(--vh-pc) / 2) !important; /* 영상 높이의 딱 절반 */
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             z-index: 10;
         }
 
         .swiper-button-next:after, .swiper-button-prev:after {
-            font-size: 16px !important;
+            font-size: 14px !important;
             font-weight: bold;
         }
 
-        .swiper-button-prev { left: 5px !important; }
-        .swiper-button-next { right: 5px !important; }
+        .swiper-button-prev { left: 10px !important; }
+        .swiper-button-next { right: 10px !important; }
 
         .swiper-pagination-bullet-active { background: var(--main-beige) !important; }
+
+        /* ⭐ 모바일 환경 최적화 */
+        @media (max-width: 768px) {
+            .video-container {
+                height: var(--vh-mobile); /* 모바일 높이로 강제 변경 */
+            }
+            .swiper-button-next, .swiper-button-prev {
+                top: calc(var(--vh-mobile) / 2) !important; /* 줄어든 높이의 절반 */
+            }
+            .swiper-slide {
+                padding: 0 10px;
+            }
+        }
 
         #no-data {
             display: none;
             text-align: center;
-            padding: 60px;
+            padding: 40px;
             color: var(--dark-beige);
             border: 2px dashed var(--main-beige);
             margin: 0 20px;
-            border-radius: 20px;
-        }
-
-        /* 모바일 최적화 (화면보다 넓어지는 것 방지) */
-        @media (max-width: 600px) {
-            .video-container.ratio-long {
-                width: calc(100vw - 120px); /* 화면 너비에 맞춤 */
-                height: auto;
-            }
-            .swiper-container-wrapper { padding: 0 40px; }
-            .swiper-button-next, .swiper-button-prev { width: 36px !important; height: 36px !important; }
+            border-radius: 15px;
         }
     </style>
 </head>
@@ -177,7 +172,7 @@
         <div class="swiper-button-next"></div>
     </div>
 
-    <div id="no-data">등록된 포트폴리오 영상이 없습니다.</div>
+    <div id="no-data">등록된 영상이 없습니다.</div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
@@ -213,10 +208,10 @@
                     if (cols.length < 2) return null;
                     return {
                         type: cols[0]?.replace(/"/g, '').trim(),
-                        originalUrl: cols[1]?.replace(/"/g, '').trim(),
+                        url: cols[1]?.replace(/"/g, '').trim(),
                         tags: cols[2]?.replace(/"/g, '').trim() || ""
                     };
-                }).filter(v => v && v.originalUrl);
+                }).filter(v => v && v.url);
                 renderVideos('전체');
             } catch (e) {
                 document.getElementById('no-data').style.display = 'block';
@@ -243,9 +238,7 @@
             }
 
             filtered.forEach(video => {
-                const embedUrl = getEmbedUrl(video.originalUrl);
-                const isShort = video.type === '숏폼';
-                const ratioClass = isShort ? 'ratio-short' : 'ratio-long';
+                const ratioClass = video.type === '숏폼' ? 'ratio-short' : 'ratio-long';
                 const tagHtml = video.tags.split(',')
                     .filter(t => t.trim() !== "")
                     .map(t => `<span class="tag-item">#${t.trim()}</span>`)
@@ -254,9 +247,7 @@
                 const slide = `
                     <div class="swiper-slide">
                         <div class="video-container ${ratioClass}">
-                            <iframe src="${embedUrl}" allowfullscreen 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
-                            </iframe>
+                            <iframe src="${getEmbedUrl(video.url)}" allowfullscreen allow="autoplay; encrypted-media"></iframe>
                         </div>
                         <div class="tag-box">${tagHtml}</div>
                     </div>
@@ -265,10 +256,10 @@
             });
 
             swiperInstance = new Swiper('.swiper', {
-                slidesPerView: 'auto', /* 높이 고정 및 가변 너비 대응 */
-                spaceBetween: 30,
+                slidesPerView: 'auto',
+                spaceBetween: 20,
                 centeredSlides: true,
-                loop: filtered.length > 2,
+                loop: filtered.length > 1,
                 pagination: { el: '.swiper-pagination', clickable: true },
                 navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
             });
