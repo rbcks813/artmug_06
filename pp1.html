@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Slider Portfolio</title>
+    <title>Multi-Platform Video Portfolio</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
         :root {
@@ -48,7 +48,7 @@
             position: relative;
             max-width: 1000px;
             margin: 0 auto;
-            padding: 0 50px; /* 화살표 공간 확보 */
+            padding: 0 50px;
         }
 
         .swiper {
@@ -74,8 +74,8 @@
             position: relative;
             border-radius: 16px;
             overflow: hidden;
-            background: #eee;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            background: #000;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
         .ratio-long { aspect-ratio: 16 / 9; width: 100%; }
@@ -103,25 +103,19 @@
             font-weight: 600;
         }
 
-        /* ⭐ 화살표 스타일 수정: 원형 배경 및 위치 조정 */
+        /* 화살표 스타일: 원형 배경 및 위치 고정 */
         .swiper-button-next, .swiper-button-prev {
             width: 44px !important;
             height: 44px !important;
-            background: #fff; /* 깔끔한 흰색 배경 */
+            background: #fff;
             border: 1px solid var(--main-beige);
-            border-radius: 50%; /* 동그란 배경 */
+            border-radius: 50%;
             color: var(--dark-beige) !important;
-            top: 40% !important; /* 영상 중앙 높이로 배치 */
+            top: 40% !important; /* 영상 높이 기준 중앙 */
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: 0.3s;
+            z-index: 10;
         }
 
-        .swiper-button-next:hover, .swiper-button-prev:hover {
-            background: var(--main-beige);
-            color: #fff !important;
-        }
-
-        /* 화살표 아이콘 크기 줄이기 */
         .swiper-button-next:after, .swiper-button-prev:after {
             font-size: 18px !important;
             font-weight: bold;
@@ -146,7 +140,6 @@
             .swiper-container-wrapper { padding: 0 40px; }
             .ratio-short { width: 220px; }
             .swiper-button-next, .swiper-button-prev { width: 36px !important; height: 36px !important; }
-            .swiper-button-next:after, .swiper-button-prev:after { font-size: 14px !important; }
         }
     </style>
 </head>
@@ -175,20 +168,57 @@
         let allVideos = [];
         let swiperInstance = null;
 
+        // 링크를 임베드용 주소로 변환하는 함수
+        function getEmbedUrl(url) {
+            if (!url) return '';
+            url = url.trim();
+
+            // 1. 유튜브 처리
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                let videoId = '';
+                if (url.includes('v=')) {
+                    videoId = url.split('v=')[1].split('&')[0];
+                } else if (url.includes('shorts/')) {
+                    videoId = url.split('shorts/')[1].split('?')[0];
+                } else if (url.includes('youtu.be/')) {
+                    videoId = url.split('youtu.be/')[1].split('?')[0];
+                }
+                return `https://www.youtube.com/embed/${videoId}`;
+            }
+
+            // 2. SOOP (아프리카TV) 처리
+            if (url.includes('sooplive.co.kr')) {
+                // vod.sooplive.co.kr/player/11223344 -> /embed 추가
+                if (!url.includes('/embed')) {
+                    // 마지막 숫자가 ID라고 가정하고 추출 (구조에 따라 조정 가능)
+                    const parts = url.split('/');
+                    const vodId = parts[parts.length - 1].split('?')[0];
+                    return `https://vod.sooplive.co.kr/player/${vodId}/embed`;
+                }
+                return url;
+            }
+
+            return url; // 그 외는 그대로 반환
+        }
+
         async function init() {
             try {
                 const response = await fetch(SHEET_URL);
                 const csvData = await response.text();
                 const rows = csvData.split('\n').slice(1);
+                
                 allVideos = rows.map(row => {
-                    const cols = row.split(',');
+                    // CSV 파싱 시 콤마 처리 보정
+                    const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     if (cols.length < 2) return null;
+                    
                     return {
-                        type: cols[0]?.trim(),
-                        id: cols[1]?.trim(),
-                        tags: cols[2]?.trim() || ""
+                        type: cols[0]?.replace(/"/g, '').trim(),
+                        originalUrl: cols[1]?.replace(/"/g, '').trim(),
+                        tags: cols[2]?.replace(/"/g, '').trim() || ""
                     };
-                }).filter(v => v && v.id);
+                }).filter(v => v && v.originalUrl);
+
                 renderVideos('전체');
             } catch (e) {
                 document.getElementById('no-data').style.display = 'block';
@@ -210,13 +240,13 @@
                 sliderWrapper.style.display = 'none';
                 return;
             } else {
-                noData.style.display = 'block'; // wrapper 역할을 위해 보임 처리
                 noData.style.display = 'none';
                 sliderWrapper.style.display = 'block';
             }
 
             filtered.forEach(video => {
-                const isShort = video.type === '숏폼' || video.type.toLowerCase().includes('short');
+                const embedUrl = getEmbedUrl(video.originalUrl);
+                const isShort = video.type === '숏폼';
                 const ratioClass = isShort ? 'ratio-short' : 'ratio-long';
                 const tagHtml = video.tags.split(',')
                     .filter(t => t.trim() !== "")
@@ -226,7 +256,9 @@
                 const slide = `
                     <div class="swiper-slide">
                         <div class="video-container ${ratioClass}">
-                            <iframe src="https://www.youtube.com/embed/${video.id}" allowfullscreen></iframe>
+                            <iframe src="${embedUrl}" allowfullscreen 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+                            </iframe>
                         </div>
                         <div class="tag-box">${tagHtml}</div>
                     </div>
