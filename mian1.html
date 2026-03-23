@@ -5,12 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>맛챠 영상 작업실 - Video Edit Commission</title>
     <style>
-        /* [수정] 임베드 환경 최적화 */
-        html { 
-            scroll-behavior: smooth; 
-            overflow-x: hidden; /* 가로 스크롤 방지 */
-        }
-
         /* 폰트 적용 */
         @font-face {
             font-family: 'KerisKedyuche';
@@ -45,74 +39,10 @@
             background-attachment: fixed;
             color: #444;
             margin: 0;
-            /* [수정] 상하 여백 조정 */
-            padding: 20px 10px; 
+            padding: 40px 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100%;
-        }
-
-        /* --- 플로팅 목차 내비게이션 --- */
-        .toc-nav {
-            position: fixed;
-            right: 25px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            z-index: 900;
-        }
-        /* [추가] 화면이 너무 작으면 목차가 가릴 수 있으므로 모바일/임베드 대응 */
-        @media (max-width: 1000px) {
-            .toc-nav { display: none; } 
-        }
-
-        .toc-item {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            text-decoration: none;
-        }
-        .toc-label {
-            position: absolute;
-            right: 55px;
-            background: var(--dark-tea);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            white-space: nowrap;
-            opacity: 0;
-            transform: translateX(10px);
-            transition: 0.3s;
-            pointer-events: none;
-        }
-        .toc-item:hover .toc-label {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        .toc-dot {
-            width: 42px;
-            height: 42px;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            box-shadow: var(--widget-shadow);
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .toc-item:hover .toc-dot {
-            background: var(--matcha);
-            transform: scale(1.15);
-            color: white;
         }
 
         .main-wrapper {
@@ -266,7 +196,6 @@
             border-radius: 32px;
             border: 1px solid var(--glass-border);
             box-shadow: var(--widget-shadow);
-            scroll-margin-top: 30px;
         }
         .section-title {
             font-size: 1.5rem;
@@ -286,6 +215,33 @@
             line-height: 1.8;
             border: 1px solid rgba(255, 255, 255, 0.9);
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        /* 수정된 목차 버튼 컨테이너 (테두리 삭제 및 마진 조정) */
+        .toc-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px; 
+        }
+        .toc-btn {
+            background: var(--white);
+            color: var(--dark-tea);
+            border: 1.5px solid var(--matcha);
+            padding: 7px 14px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .toc-btn:hover {
+            background: var(--matcha);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(182, 202, 167, 0.2);
         }
 
         .process-flow {
@@ -370,7 +326,7 @@
         .notice-list li { margin-bottom: 12px; display: flex; gap: 12px; align-items: flex-start; }
         .notice-num { color: var(--matcha); font-weight: 800; min-width: 20px; }
 
-        .tab-wrapper { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 25px; background: rgba(0,0,0,0.05); padding: 5px; border-radius: 166px; width: fit-content; max-width: 100%; }
+        .tab-wrapper { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 25px; background: rgba(0,0,0,0.05); padding: 5px; border-radius: 16px; width: fit-content; max-width: 100%; }
         .tab-btn {
             padding: 10px 24px;
             border: none;
@@ -412,7 +368,8 @@
             opacity: 0.8;
             transition: 0.3s;
         }
-        .port-item:hover::after { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+        .port-item.playing::after { display: none; }
+        .port-item iframe { width: 100%; height: 100%; border: none; }
 
         .port-grid > .port-item { aspect-ratio: 16 / 9; }
         #tab-shorts-game .port-item, #tab-shorts-chat .port-item { aspect-ratio: 9 / 16; }
@@ -438,7 +395,6 @@
             font-weight: bold; padding: 10px;
         }
 
-        /* --- 신청양식 디자인 --- */
         .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; }
         
         input, textarea, select {
@@ -596,54 +552,30 @@
         .price-label { font-weight: bold; color: var(--dark-tea); }
         .price-val { font-weight: 700; color: #333; }
 
+        /* 모바일 최적화 레이아웃 수정 */
         @media (max-width: 768px) {
-            .toc-nav { right: 10px; gap: 8px; }
-            .toc-dot { width: 35px; height: 35px; font-size: 0.9rem; }
-            .toc-label { display: none; }
-            .content-section { padding: 30px 20px; margin: 15px; border-radius: 28px; }
-            .profile-circle { width: 140px; height: 140px; border-radius: 36px; margin-top: -70px; }
-            .form-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            body { padding: 20px 10px; }
+            .content-section { padding: 25px 20px; margin: 15px 5px; border-radius: 28px; }
+            .profile-circle { width: 130px; height: 130px; border-radius: 36px; margin-top: -65px; }
+            .name-tag h1 { font-size: 2rem; }
+            .section-title { font-size: 1.3rem; }
+            
+            /* Form Grid 모바일 스택 정렬 처리 */
+            .form-grid { grid-template-columns: 1fr; gap: 12px; }
+            .form-grid > * { grid-column: 1 / -1 !important; }
             .extra-options { grid-template-columns: 1fr; }
+            
+            /* 포트폴리오 아이템 반응형 비율 제어 */
+            .port-item { height: auto; width: 80vw; max-width: 320px; }
+            #tab-shorts-game .port-item, #tab-shorts-chat .port-item { width: 50vw; max-width: 200px; }
+            
             .button-group { flex-direction: column; }
-            .port-item { height: 220px; } 
-            .modal-content { width: 95%; }
-            .close-btn { top: -45px; right: 10px; }
             .price-grid { grid-template-columns: 1fr !important; }
+            .toc-btn { padding: 6px 14px; font-size: 0.8rem; }
         }
     </style>
 </head>
 <body>
-
-    <nav class="toc-nav">
-        <a href="#" class="toc-item">
-            <span class="toc-label">맨 위로</span>
-            <div class="toc-dot">🔝</div>
-        </a>
-        <a href="#sec-packages" class="toc-item">
-            <span class="toc-label">패키지 안내</span>
-            <div class="toc-dot">🎁</div>
-        </a>
-        <a href="#sec-process" class="toc-item">
-            <span class="toc-label">작업 프로세스</span>
-            <div class="toc-dot">🛠️</div>
-        </a>
-        <a href="#sec-price" class="toc-item">
-            <span class="toc-label">가격 상세</span>
-            <div class="toc-dot">💰</div>
-        </a>
-        <a href="#sec-notice" class="toc-item">
-            <span class="toc-label">공지사항</span>
-            <div class="toc-dot">📌</div>
-        </a>
-        <a href="#sec-portfolio" class="toc-item">
-            <span class="toc-label">포트폴리오</span>
-            <div class="toc-dot">📺</div>
-        </a>
-        <a href="#sec-order" class="toc-item">
-            <span class="toc-label">신청하기</span>
-            <div class="toc-dot">📝</div>
-        </a>
-    </nav>
 
     <div id="videoModal" class="video-modal" onclick="closeVideo()">
         <div class="modal-content" id="modalContainer" onclick="event.stopPropagation()">
@@ -686,9 +618,17 @@
                     <span class="badge keyword" style="background: #f7f7f7;">산돌 라이프 구독</span>
                 </div>
             </div>
+            <div class="toc-container">
+                <button type="button" class="toc-btn" onclick="document.getElementById('sec-package').scrollIntoView({behavior:'smooth'})">🎁 패키지</button>
+                <button type="button" class="toc-btn" onclick="document.getElementById('sec-process').scrollIntoView({behavior:'smooth'})">📋 작업안내</button>
+                <button type="button" class="toc-btn" onclick="document.getElementById('sec-price').scrollIntoView({behavior:'smooth'})">💰 가격안내</button>
+                <button type="button" class="toc-btn" onclick="document.getElementById('sec-notice').scrollIntoView({behavior:'smooth'})">📢 공지사항</button>
+                <button type="button" class="toc-btn" onclick="document.getElementById('sec-portfolio').scrollIntoView({behavior:'smooth'})">🎞️ 포트폴리오</button>
+                <button type="button" class="toc-btn" onclick="document.getElementById('sec-order').scrollIntoView({behavior:'smooth'})">📝 신청하기</button>
+            </div>
         </div>
 
-        <div class="content-section" id="sec-packages">
+        <div class="content-section" id="sec-package">
             <h2 class="section-title">패키지 & 할인 안내</h2>
             <div id="package-container" class="info-box" style="text-align: center; border:none; background:transparent; padding:0;">
                 <p style="color: #bbb;">패키지 정보를 불러오는 중입니다...</p>
@@ -901,17 +841,13 @@
     </div>
 
     <script>
+        var activeVideoItem = null;
+
         const BASE_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?output=csv";
         const STATUS_CSV_URL = BASE_URL + "&gid=0&single=true";
         const NOTICE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=1056547103&single=true&output=csv";
         const PORTFOLIO_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=528155867&single=true&output=csv";
         const PACKAGE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=490749441&single=true&output=csv";
-
-        /* [수정] 높이 자동 조절 함수 */
-        function sendHeight() {
-            const height = document.body.scrollHeight || document.documentElement.scrollHeight;
-            window.parent.postMessage({ type: 'resize_iframe', height: height }, '*');
-        }
 
         function parseCSVLine(line) {
             const result = [];
@@ -937,7 +873,6 @@
                 const b3Value = cols[1].toUpperCase();
                 statusBadge.innerHTML = (b3Value === 'TRUE') ? "OPEN" : "CLOSED";
                 statusBadge.className = (b3Value === 'TRUE') ? "badge open" : "badge closed";
-                sendHeight(); /* 상태 변경 시 높이 재계산 */
             } catch (e) { statusBadge.innerText = "Error"; }
         }
 
@@ -956,7 +891,6 @@
                     }
                 }
                 noticeList.innerHTML = html || "<li>등록된 공지사항이 없습니다.</li>";
-                sendHeight(); /* 공지 로드 시 높이 재계산 */
             } catch (e) { noticeList.innerHTML = "<li>로드 실패</li>"; }
         }
 
@@ -965,78 +899,48 @@
             const packageSelect = document.getElementById('order_package');
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            
             try {
                 const response = await fetch(PACKAGE_CSV_URL);
                 const data = await response.text();
                 const rows = data.split('\n').filter(r => r.trim() !== '');
                 packageSelect.innerHTML = '<option value="없음" selected>선택 없음</option>';
-                
-                if (rows.length <= 1) { 
-                    container.innerHTML = '<p style="color: #bbb; padding: 20px;">진행 중인 이벤트가 없습니다! 🍵</p>'; 
-                    return; 
-                }
-                
+                if (rows.length <= 1) { container.innerHTML = '<p style="color: #bbb; padding: 20px;">진행 중인 이벤트가 없습니다! 🍵</p>'; return; }
                 let html = '';
                 let visibleCount = 0;
-                
                 for (let i = 1; i < rows.length; i++) {
                     const cols = parseCSVLine(rows[i]);
                     if (cols.length < 5) continue;
-                    
                     const dateStr = cols[3].trim();
                     if (dateStr !== "") {
                         const endDate = new Date(dateStr);
                         endDate.setHours(0, 0, 0, 0);
                         if (today > endDate) continue;
                     }
-                    
                     visibleCount++;
                     const name = cols[0];
                     const includedRaw = cols[1].trim();
                     const amountRaw = cols[2].replace(/"/g, '').trim();
                     const dateInfo = (dateStr === "") ? "마감일 미정" : `~ ${dateStr}`;
                     const content = cols[4].split('|').join('<br>');
-                    
                     const option = document.createElement('option');
                     option.value = name; option.textContent = name;
                     packageSelect.appendChild(option);
-                    
                     let cardInnerHtml = '';
-                    
                     if (includedRaw === "전체" || !amountRaw.includes(',')) {
                         const discountDisplay = (includedRaw === "전체") ? `모든 상품 ${amountRaw} 할인 이벤트` : `${amountRaw} 할인`;
-                        cardInnerHtml = `
-                            <div class="price-info"><span class="price-disc">${discountDisplay}</span></div>
-                            <p style="font-size: 0.95rem; color: #555; margin-bottom: 5px;">${content}</p>
-                            ${(includedRaw !== "전체") ? `<div class="package-included"><strong>대상 상품:</strong><br>• ${includedRaw}</div>` : ''}
-                        `;
+                        cardInnerHtml = `<div class="price-info"><span class="price-disc">${discountDisplay}</span></div><p style="font-size: 0.95rem; color: #555; margin-bottom: 5px;">${content}</p>${(includedRaw !== "전체") ? `<div class="package-included"><strong>대상 상품:</strong><br>• ${includedRaw}</div>` : ''}`;
                     } else {
                         const included = includedRaw.split('|').join('<br>• ');
                         const prices = amountRaw.split(',');
                         const origPrice = parseInt(prices[0].replace(/,/g, '').trim());
                         const discPrice = parseInt(prices[1].replace(/,/g, '').trim());
                         const discountRate = Math.round(((origPrice - discPrice) / origPrice) * 100);
-                        
-                        cardInnerHtml = `
-                            <div class="price-info">
-                                <span class="price-orig">${origPrice.toLocaleString()}원</span>
-                                <span class="price-disc">${discPrice.toLocaleString()}원</span>
-                                <span class="discount-rate">${discountRate}% 할인</span>
-                            </div>
-                            <p style="font-size: 0.9rem; color: #888; margin-bottom: 10px;">${content}</p>
-                            <div class="package-included"><strong>구성품:</strong><br>• ${included}</div>
-                        `;
+                        cardInnerHtml = `<div class="price-info"><span class="price-orig">${origPrice.toLocaleString()}원</span><span class="price-disc">${discPrice.toLocaleString()}원</span><span class="discount-rate">${discountRate}% 할인</span></div><p style="font-size: 0.9rem; color: #888; margin-bottom: 10px;">${content}</p><div class="package-included"><strong>구성품:</strong><br>• ${included}</div>`;
                     }
-                    
                     html += `<div class="package-card"><h3>🎁 ${name}</h3>${cardInnerHtml}<p style="font-size: 0.8rem; color: #aaa; text-align: right; margin-top: 12px;">종료일: ${dateInfo}</p></div>`;
                 }
-                
                 container.innerHTML = (visibleCount === 0) ? '<p style="color: #bbb; padding: 20px;">진행 중인 이벤트가 없습니다! 🍵</p>' : html;
-                sendHeight(); /* 패키지 로드 시 높이 재계산 */
-            } catch (e) { 
-                container.innerHTML = '<p style="color: #ff8b8b;">로드 실패</p>'; 
-            }
+            } catch (e) { container.innerHTML = '<p style="color: #ff8b8b;">로드 실패</p>'; }
         }
 
         async function loadPortfolio() {
@@ -1054,17 +958,29 @@
                         const target = grids[cat];
                         if (target && youtubeId) {
                             const thumbUrl = `https://img.youtube.com/vi/${youtubeId}/mqdefault.jpg`;
-                            const isShorts = cat.includes('쇼츠');
                             const item = document.createElement('div');
                             item.className = 'port-item';
-                            item.onclick = () => openVideo(youtubeId, isShorts);
-                            item.innerHTML = `<img src="${thumbUrl}" alt="${cat}" onerror="this.src='https://via.placeholder.com/300x200?text=Video+Thumbnail'">`;
+                            item.dataset.videoId = youtubeId;
+                            item.dataset.thumb = thumbUrl;
+                            item.innerHTML = `<img src="${thumbUrl}" alt="portfolio">`;
+                            
+                            item.onclick = function(e) {
+                                e.stopPropagation();
+                                if (activeVideoItem && activeVideoItem !== this) {
+                                    activeVideoItem.innerHTML = `<img src="${activeVideoItem.dataset.thumb}" alt="portfolio">`;
+                                    activeVideoItem.classList.remove('playing');
+                                }
+                                if (!this.classList.contains('playing')) {
+                                    this.innerHTML = `<iframe src="https://www.youtube.com/embed/${this.dataset.videoId}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                                    this.classList.add('playing');
+                                    activeVideoItem = this;
+                                }
+                            };
                             target.appendChild(item);
                         }
                     }
                 }
                 Object.values(grids).forEach(g => { if (g.innerHTML === '') g.innerHTML = '<div style="width: 100%; text-align:center; padding: 60px 0; color:#bbb; font-size: 0.95rem;">아직 포트폴리오가 없습니다! 🍵</div>'; });
-                sendHeight(); /* 포트폴리오 로드 시 높이 재계산 */
             } catch (e) { console.error(e); }
         }
 
@@ -1091,7 +1007,6 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             btn.classList.add('active');
-            sendHeight(); /* 탭 변경 시 높이가 달라질 수 있으므로 재계산 */
         }
 
         function setSelect(type, value) {
@@ -1114,7 +1029,6 @@
             const rawHour = parseInt(document.getElementById('raw_hour').value) || 0;
             const rawMin = parseInt(document.getElementById('raw_min').value) || 0;
             const totalRawMinutes = (rawHour * 60) + rawMin;
-
             const collabCount = parseInt(document.getElementById('collab_count').value) || 0;
             const povCount = parseInt(document.getElementById('pov_count').value) || 0;
             
@@ -1137,18 +1051,12 @@
             if (basePrice === 0 && min > 0) { displayTarget.innerText = "종류 선택 필요"; return; }
 
             let total = basePrice * min;
-
             if (totalRawMinutes > 180 && !type.includes('편집점 O') && !type.includes('컷편집 O')) {
                 const overTime = totalRawMinutes - 180;
                 total += Math.ceil(overTime / 30) * 5000;
             }
-
-            if (collabCount >= 4) {
-                total += (collabCount - 3) * 5000;
-            }
-            
+            if (collabCount >= 4) total += (collabCount - 3) * 5000;
             total += povCount * 5000;
-            
             if (privateChecked) total *= 1.5;
 
             displayTarget.innerText = total.toLocaleString() + "원";
@@ -1182,10 +1090,8 @@
             const extras = [];
             if(document.getElementById('private_port').checked) extras.push("포트폴리오 비공개");
             if(document.getElementById('fast_dead').checked) extras.push("빠른 마감");
-            
             const collab = parseInt(document.getElementById('collab_count').value) || 0;
             const pov = parseInt(document.getElementById('pov_count').value) || 0;
-            
             if(collab > 0) extras.push(`합방 인원(${collab}명)`);
             if(pov > 0) extras.push(`시점 추가(${pov}개)`);
             
@@ -1201,27 +1107,9 @@
             document.getElementById('order_type').value = '';
             document.getElementById('total_display').innerText = "0원";
             triggerBubble('reset-bubble'); 
-            sendHeight();
         }
 
-        /* [수정] 초기 로드 및 변화 감지 자동 실행 */
-        window.addEventListener('load', () => {
-            updateCommissionStatus(); 
-            loadNotices(); 
-            loadPortfolio(); 
-            loadPackages();
-            sendHeight();
-        });
-        window.addEventListener('resize', sendHeight);
-
-        /* [추가] 페이지 내 요소가 바뀔 때마다 높이 체크 (포트폴리오 등) */
-        const observer = new MutationObserver(sendHeight);
-        observer.observe(document.body, { childList: true, subtree: true, attributes: true });
-
-        /* 이미지 등 늦게 로드되는 경우 대비 주기적 체크 */
-        setTimeout(sendHeight, 1500);
-        setTimeout(sendHeight, 3000);
-        setTimeout(sendHeight, 5000);
+        updateCommissionStatus(); loadNotices(); loadPortfolio(); loadPackages();
     </script>
 </body>
 </html>
