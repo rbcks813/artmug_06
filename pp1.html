@@ -3,13 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Platform Video Portfolio</title>
+    <title>Fixed Height Video Portfolio</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
         :root {
             --main-beige: #D2B48C;
             --dark-beige: #A68A64;
-            --light-beige: #FDFBF8;
+            /* PC 버전 영상 높이 */
+            --video-height: 450px;
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                /* 모바일 버전 영상 높이 (화면 크기에 맞춰 축소) */
+                --video-height: 350px;
+            }
         }
 
         body {
@@ -25,6 +33,7 @@
             justify-content: center;
             gap: 10px;
             margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
         .filter-btn {
@@ -36,6 +45,7 @@
             cursor: pointer;
             font-weight: 600;
             transition: 0.3s;
+            font-size: 14px;
         }
 
         .filter-btn.active {
@@ -46,17 +56,19 @@
         /* 슬라이더 메인 컨테이너 */
         .swiper-container-wrapper {
             position: relative;
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 50px;
+            padding: 0 60px;
         }
 
         .swiper {
             width: 100%;
-            padding-bottom: 50px !important;
+            padding-bottom: 60px !important;
         }
 
+        /* 높이 통일을 위한 슬라이드 설정 */
         .swiper-slide {
+            width: auto; /* 내용물(영상 너비)에 따라 가변적 */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -68,9 +80,9 @@
             opacity: 1;
         }
 
-        /* 영상 프레임 */
+        /* 영상 프레임 스타일 */
         .video-container {
-            width: 100%;
+            height: var(--video-height); /* 세로 크기 고정 */
             position: relative;
             border-radius: 16px;
             overflow: hidden;
@@ -78,12 +90,13 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
-        .ratio-long { aspect-ratio: 16 / 9; width: 100%; }
-        .ratio-short { aspect-ratio: 9 / 16; width: 280px; margin: 0 auto; }
+        /* 비율에 따른 너비 설정 (높이는 고정, 너비가 바뀜) */
+        .ratio-long { aspect-ratio: 16 / 9; }
+        .ratio-short { aspect-ratio: 9 / 16; }
 
         .video-container iframe {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            width: 100%;
+            height: 100%;
             border: none;
         }
 
@@ -94,7 +107,7 @@
             flex-wrap: wrap;
             gap: 8px;
             justify-content: center;
-            min-height: 24px;
+            width: 100%;
         }
 
         .tag-item {
@@ -103,7 +116,7 @@
             font-weight: 600;
         }
 
-        /* 화살표 스타일: 원형 배경 및 위치 고정 */
+        /* 화살표 버튼 */
         .swiper-button-next, .swiper-button-prev {
             width: 44px !important;
             height: 44px !important;
@@ -111,18 +124,18 @@
             border: 1px solid var(--main-beige);
             border-radius: 50%;
             color: var(--dark-beige) !important;
-            top: 40% !important; /* 영상 높이 기준 중앙 */
+            top: calc(var(--video-height) / 2) !important; /* 영상 높이의 딱 절반 */
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             z-index: 10;
         }
 
         .swiper-button-next:after, .swiper-button-prev:after {
-            font-size: 18px !important;
+            font-size: 16px !important;
             font-weight: bold;
         }
 
-        .swiper-button-prev { left: 0px !important; }
-        .swiper-button-next { right: 0px !important; }
+        .swiper-button-prev { left: 5px !important; }
+        .swiper-button-next { right: 5px !important; }
 
         .swiper-pagination-bullet-active { background: var(--main-beige) !important; }
 
@@ -136,9 +149,13 @@
             border-radius: 20px;
         }
 
-        @media (max-width: 768px) {
+        /* 모바일 최적화 (화면보다 넓어지는 것 방지) */
+        @media (max-width: 600px) {
+            .video-container.ratio-long {
+                width: calc(100vw - 120px); /* 화면 너비에 맞춤 */
+                height: auto;
+            }
             .swiper-container-wrapper { padding: 0 40px; }
-            .ratio-short { width: 220px; }
             .swiper-button-next, .swiper-button-prev { width: 36px !important; height: 36px !important; }
         }
     </style>
@@ -168,37 +185,22 @@
         let allVideos = [];
         let swiperInstance = null;
 
-        // 링크를 임베드용 주소로 변환하는 함수
         function getEmbedUrl(url) {
             if (!url) return '';
             url = url.trim();
-
-            // 1. 유튜브 처리
             if (url.includes('youtube.com') || url.includes('youtu.be')) {
                 let videoId = '';
-                if (url.includes('v=')) {
-                    videoId = url.split('v=')[1].split('&')[0];
-                } else if (url.includes('shorts/')) {
-                    videoId = url.split('shorts/')[1].split('?')[0];
-                } else if (url.includes('youtu.be/')) {
-                    videoId = url.split('youtu.be/')[1].split('?')[0];
-                }
+                if (url.includes('v=')) videoId = url.split('v=')[1].split('&')[0];
+                else if (url.includes('shorts/')) videoId = url.split('shorts/')[1].split('?')[0];
+                else if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1].split('?')[0];
                 return `https://www.youtube.com/embed/${videoId}`;
             }
-
-            // 2. SOOP (아프리카TV) 처리
             if (url.includes('sooplive.co.kr')) {
-                // vod.sooplive.co.kr/player/11223344 -> /embed 추가
-                if (!url.includes('/embed')) {
-                    // 마지막 숫자가 ID라고 가정하고 추출 (구조에 따라 조정 가능)
-                    const parts = url.split('/');
-                    const vodId = parts[parts.length - 1].split('?')[0];
-                    return `https://vod.sooplive.co.kr/player/${vodId}/embed`;
-                }
-                return url;
+                const parts = url.split('/');
+                const vodId = parts[parts.length - 1].split('?')[0];
+                return `https://vod.sooplive.co.kr/player/${vodId}/embed`;
             }
-
-            return url; // 그 외는 그대로 반환
+            return url;
         }
 
         async function init() {
@@ -206,19 +208,15 @@
                 const response = await fetch(SHEET_URL);
                 const csvData = await response.text();
                 const rows = csvData.split('\n').slice(1);
-                
                 allVideos = rows.map(row => {
-                    // CSV 파싱 시 콤마 처리 보정
                     const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     if (cols.length < 2) return null;
-                    
                     return {
                         type: cols[0]?.replace(/"/g, '').trim(),
                         originalUrl: cols[1]?.replace(/"/g, '').trim(),
                         tags: cols[2]?.replace(/"/g, '').trim() || ""
                     };
                 }).filter(v => v && v.originalUrl);
-
                 renderVideos('전체');
             } catch (e) {
                 document.getElementById('no-data').style.display = 'block';
@@ -267,15 +265,12 @@
             });
 
             swiperInstance = new Swiper('.swiper', {
-                slidesPerView: 1,
-                spaceBetween: 20,
+                slidesPerView: 'auto', /* 높이 고정 및 가변 너비 대응 */
+                spaceBetween: 30,
                 centeredSlides: true,
-                loop: filtered.length > 1,
+                loop: filtered.length > 2,
                 pagination: { el: '.swiper-pagination', clickable: true },
                 navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                breakpoints: {
-                    768: { slidesPerView: 1.5, spaceBetween: 40 }
-                }
             });
         }
 
