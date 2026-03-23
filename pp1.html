@@ -23,22 +23,19 @@
         .filter-container {
             display: flex;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             margin-bottom: 30px;
-            padding: 0 10px;
         }
 
         .filter-btn {
-            padding: 8px 18px;
+            padding: 10px 24px;
             border: 1.5px solid var(--main-beige);
             background: #fff;
             color: var(--dark-beige);
             border-radius: 50px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 13px;
             transition: 0.3s;
-            white-space: nowrap;
         }
 
         .filter-btn.active {
@@ -63,7 +60,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: auto; /* 영상 너비에 따라 슬라이드 폭 결정 */
+            width: auto;
             opacity: 0.3;
             transition: opacity 0.4s;
         }
@@ -72,14 +69,14 @@
             opacity: 1;
         }
 
-        /* ⭐ 영상 컨테이너: 높이 고정 및 비율 유지 */
+        /* 💻 PC 설정 (사용자님 마음에 들었던 상태 유지) */
         .video-container {
             position: relative;
-            height: 450px; /* PC 기준 높이 */
-            border-radius: 12px;
+            height: 450px; /* PC 높이 유지 */
+            border-radius: 16px;
             overflow: hidden;
             background: #000;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         .ratio-long { aspect-ratio: 16 / 9; }
@@ -91,60 +88,65 @@
             border: none;
         }
 
-        /* 태그 */
         .tag-box {
-            margin-top: 12px;
+            margin-top: 15px;
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 8px;
             justify-content: center;
         }
 
         .tag-item {
             color: var(--dark-beige);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 600;
         }
 
         /* 화살표 버튼 */
         .swiper-button-next, .swiper-button-prev {
-            width: 40px !important;
-            height: 40px !important;
-            background: rgba(255, 255, 255, 0.9);
+            width: 44px !important;
+            height: 44px !important;
+            background: #fff;
             border: 1px solid var(--main-beige);
             border-radius: 50%;
             color: var(--dark-beige) !important;
-            top: 225px !important; /* PC 높이의 절반 */
+            top: 225px !important; /* 450px의 절반 */
             z-index: 10;
         }
 
-        .swiper-button-next:after, .swiper-button-prev:after { font-size: 14px !important; font-weight: bold; }
         .swiper-button-prev { left: 10px !important; }
         .swiper-button-next { right: 10px !important; }
-        .swiper-pagination-bullet-active { background: var(--main-beige) !important; }
 
-        /* ⭐ 모바일 최적화 핵심 매개변수 */
+        /* 📱 모바일 설정 (여기가 핵심 수정 사항입니다) */
         @media (max-width: 768px) {
             .video-container {
-                height: 200px; /* 모바일에서 롱폼이 화면을 가득 채우는 너비일 때의 적정 높이 */
+                /* 모바일 화면 너비에서 16:9 롱폼이 가질 수 있는 적정 높이로 제한 */
+                height: 210px; 
             }
             .swiper-button-next, .swiper-button-prev {
-                top: 100px !important; /* 모바일 높이(200px)의 절반 */
-                width: 32px !important;
-                height: 32px !important;
+                top: 105px !important; /* 변경된 높이 210px의 절반 */
+                width: 36px !important;
+                height: 36px !important;
             }
-            .filter-container { gap: 5px; }
-            .filter-btn { padding: 6px 14px; font-size: 12px; }
+            .swiper-button-next:after, .swiper-button-prev:after {
+                font-size: 14px !important;
+            }
+            .filter-btn {
+                padding: 8px 18px;
+                font-size: 13px;
+            }
         }
+
+        .swiper-pagination-bullet-active { background: var(--main-beige) !important; }
 
         #no-data {
             display: none;
             text-align: center;
-            padding: 40px;
+            padding: 60px;
             color: var(--dark-beige);
             border: 2px dashed var(--main-beige);
             margin: 0 20px;
-            border-radius: 15px;
+            border-radius: 20px;
         }
     </style>
 </head>
@@ -250,7 +252,7 @@
 
             swiperInstance = new Swiper('.swiper', {
                 slidesPerView: 'auto',
-                spaceBetween: 15,
+                spaceBetween: 20,
                 centeredSlides: true,
                 loop: filtered.length > 1,
                 pagination: { el: '.swiper-pagination', clickable: true },
