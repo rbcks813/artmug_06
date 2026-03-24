@@ -24,7 +24,7 @@
         body {
             margin: 0;
             padding: 20px;
-            background-color: transparent; /* 배경 금지 대응 */
+            background-color: transparent; /* 배경 금지 */
             font-family: 'Paperlogy', -apple-system, sans-serif;
             color: #4A3E31;
         }
@@ -75,7 +75,8 @@
             box-sizing: border-box;
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(166, 139, 109, 0.05);
-            flex: 1 1 300px; /* 마지막 항목 길게 채우기 설정 */
+            /* 홀수 개수일 때 마지막 항목 꽉 채우기 */
+            flex: 1 1 300px; 
             min-width: 280px;
         }
 
@@ -89,12 +90,15 @@
             font-size: 15px;
             font-weight: 700;
             color: #5D5043;
+            word-break: keep-all;
         }
 
         .item-price {
             font-size: 17px;
             font-weight: 900;
             color: #A68B6D;
+            white-space: nowrap;
+            margin-left: 10px;
         }
 
         .loading {
@@ -108,7 +112,7 @@
 <body>
 
 <div class="price-container" id="price-board">
-    <div class="loading">가격표를 불러오는 중...</div>
+    <div class="loading">가격 정보를 실시간으로 구성 중입니다...</div>
 </div>
 
 <script>
@@ -120,36 +124,65 @@
             const data = await response.text();
             renderPriceList(data);
         } catch (error) {
-            document.getElementById('price-board').innerHTML = '<div class="loading">데이터 로드 실패 (시트 권한을 확인해주세요)</div>';
+            document.getElementById('price-board').innerHTML = '<div class="loading">데이터 로드 실패</div>';
         }
     }
 
-    function renderPriceList(csvData) {
-        // CSV 줄 단위 분리 및 빈 줄 제거
-        const rows = csvData.split('\n').map(row => row.trim()).filter(row => row.length > 0).slice(1);
+    // [핵심 추가] 큰따옴표와 콤마를 제대로 파싱하는 함수
+    function parseCSV(text) {
+        const rows = [];
+        const lines = text.split(/\r?\n/);
         
-        // 카테고리 저장소 (순서 보장을 위해 Map이나 객체 사용)
+        for (let line of lines) {
+            if (!line.trim()) continue;
+            
+            // 정규식: 콤마로 분리하되, 큰따옴표 안에 있는 콤마는 무시
+            const pattern = /(".*?"|[^",\s]+)(?=\s*,|\s*$)/g;
+            const matches = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+            
+            // 만약 정규식으로 잘 안 풀릴 경우를 대비한 수동 파싱
+            let arr = [];
+            let quote = false;
+            let current = '';
+            for (let i = 0; i < line.length; i++) {
+                let char = line[i];
+                if (char === '"') quote = !quote;
+                else if (char === ',' && !quote) {
+                    arr.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            arr.push(current.trim());
+            rows.push(arr);
+        }
+        return rows;
+    }
+
+    function renderPriceList(csvData) {
+        const parsedRows = parseCSV(csvData).slice(1); // 헤더 제외
+        
         const categories = {
             '롱폼': [],
             '숏폼': [],
             '기타 옵션': []
         };
 
-        rows.forEach(row => {
-            const columns = row.split(',');
+        parsedRows.forEach(columns => {
             if (columns.length >= 3) {
-                let rawCat = columns[0].trim();
-                const name = columns[1].trim();
-                const price = columns[2].trim();
+                // 큰따옴표 제거 로직 포함
+                let rawCat = columns[0].replace(/^"|"$/g, '').trim();
+                let name = columns[1].replace(/^"|"$/g, '').trim();
+                let price = columns[2].replace(/^"|"$/g, '').trim();
 
-                // 인식 최적화: 공백 제거 후 비교
                 let matchedCat = '';
-                const cleanCat = rawCat.replace(/\s+/g, ''); // 모든 공백 제거
+                const cleanCat = rawCat.replace(/\s+/g, '');
 
                 if (cleanCat.includes('롱폼')) matchedCat = '롱폼';
                 else if (cleanCat.includes('숏폼')) matchedCat = '숏폼';
                 else if (cleanCat.includes('기타')) matchedCat = '기타 옵션';
-                else matchedCat = rawCat; // 정의되지 않은 카테고리가 있으면 그대로 표시
+                else matchedCat = rawCat;
 
                 if (!categories[matchedCat]) categories[matchedCat] = [];
                 categories[matchedCat].push({ name, price });
@@ -157,10 +190,8 @@
         });
 
         let htmlContent = '';
-        // 정해진 순서대로 렌더링
         const displayOrder = ['롱폼', '숏폼', '기타 옵션'];
         
-        // 나머지 다른 카테고리가 있다면 추가
         Object.keys(categories).forEach(cat => {
             if (!displayOrder.includes(cat)) displayOrder.push(cat);
         });
@@ -184,11 +215,10 @@
             `;
         });
 
-        document.getElementById('price-board').innerHTML = htmlContent || '<div class="loading">표시할 데이터가 없습니다.</div>';
+        document.getElementById('price-board').innerHTML = htmlContent;
     }
 
     function formatPrice(price) {
-        // 숫자만 남겨서 콤마 포맷팅, 숫자가 아니면 그대로 반환
         const num = parseInt(price.replace(/[^0-9]/g, ''));
         return !isNaN(num) ? num.toLocaleString() + '₩' : price;
     }
