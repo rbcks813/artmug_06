@@ -217,7 +217,6 @@
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
         }
 
-        /* 수정된 목차 버튼 컨테이너 (테두리 삭제 및 마진 조정) */
         .toc-container {
             display: flex;
             flex-wrap: wrap;
@@ -554,24 +553,56 @@
 
         /* 모바일 최적화 레이아웃 수정 */
         @media (max-width: 768px) {
-            body { padding: 20px 10px; }
-            .content-section { padding: 25px 20px; margin: 15px 5px; border-radius: 28px; }
-            .profile-circle { width: 130px; height: 130px; border-radius: 36px; margin-top: -65px; }
-            .name-tag h1 { font-size: 2rem; }
-            .section-title { font-size: 1.3rem; }
+            body { padding: 15px 5px; }
+            .content-section { padding: 20px 15px; margin: 15px 5px; border-radius: 20px; }
+            .profile-circle { width: 120px; height: 120px; border-radius: 32px; margin-top: -60px; }
+            .name-tag h1 { font-size: 1.8rem; }
+            .section-title { font-size: 1.2rem; margin-bottom: 15px; }
             
-            /* Form Grid 모바일 스택 정렬 처리 */
-            .form-grid { grid-template-columns: 1fr; gap: 12px; }
+            /* 작업 순서 세로 정렬 및 화살표 처리 */
+            .process-flow { flex-direction: column; align-items: center; padding: 20px 15px; border-radius: 20px; gap: 5px; }
+            .process-row { flex-direction: column; width: 100%; gap: 5px; display: flex; align-items: center; }
+            .process-step { width: 100%; text-align: center; padding: 10px; font-size: 0.85rem; }
+            .process-arrow { transform: rotate(90deg); display: inline-block; margin: 2px 0; opacity: 0.7; }
+            
+            /* [중요] 1차 컷편집본 전달 뒤에 화살표 자동 추가 */
+            .process-row:first-child::after {
+                content: '▶';
+                color: var(--milktea);
+                font-size: 0.8rem;
+                opacity: 0.7;
+                font-weight: bold;
+                transform: rotate(90deg);
+                margin: 5px 0;
+            }
+
+            .info-box, .package-card { padding: 15px; border-radius: 16px; }
+            .package-included { padding: 12px; }
+            
+            .tab-wrapper { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; width: 100%; border-radius: 12px; padding: 8px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+            .tab-wrapper::-webkit-scrollbar { display: none; }
+            .tab-btn { flex-shrink: 0; padding: 8px 14px; font-size: 0.85rem; }
+
+            .form-grid { grid-template-columns: 1fr; gap: 10px; }
             .form-grid > * { grid-column: 1 / -1 !important; }
-            .extra-options { grid-template-columns: 1fr; }
+            input, textarea, select { padding: 14px 15px; font-size: 0.95rem; border-radius: 14px; }
+            textarea { height: 120px; }
+            .selection-group { padding: 15px; border-radius: 16px; }
+            .selection-label { font-size: 0.85rem; margin-bottom: 8px; }
+            .selection-btns { gap: 6px; }
+            .selection-btns > div { gap: 6px; }
+            .select-btn { padding: 8px 10px; font-size: 0.85rem; flex: 1 1 calc(50% - 6px); border-radius: 10px; }
+            .extra-options { grid-template-columns: 1fr; padding: 15px; gap: 10px; border-radius: 16px; }
+            .estimate-wrapper { padding: 15px; border-radius: 16px; }
+            .submit-btn, .reset-btn { padding: 16px; border-radius: 16px; font-size: 1rem; }
+            .button-group { margin-top: 20px; gap: 10px; flex-direction: column; }
+            .reset-btn-container { flex: none; }
+
+            .port-item { height: auto; width: 85vw; max-width: none; }
+            #tab-shorts-game .port-item, #tab-shorts-chat .port-item { width: 55vw; max-width: none; }
             
-            /* 포트폴리오 아이템 반응형 비율 제어 */
-            .port-item { height: auto; width: 80vw; max-width: 320px; }
-            #tab-shorts-game .port-item, #tab-shorts-chat .port-item { width: 50vw; max-width: 200px; }
-            
-            .button-group { flex-direction: column; }
-            .price-grid { grid-template-columns: 1fr !important; }
-            .toc-btn { padding: 6px 14px; font-size: 0.8rem; }
+            .price-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+            .toc-btn { padding: 6px 12px; font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -849,11 +880,10 @@
         const PORTFOLIO_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=528155867&single=true&output=csv";
         const PACKAGE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=490749441&single=true&output=csv";
 
-        // [추가] 부모 페이지로 높이 정보를 보내는 함수
         function sendHeightToParent() {
             const wrapper = document.querySelector('.main-wrapper');
             if (wrapper) {
-                const height = wrapper.offsetHeight + 100; // 여유값 포함
+                const height = wrapper.offsetHeight + 100;
                 window.parent.postMessage({
                     type: 'resize_iframe',
                     height: height
@@ -1019,7 +1049,6 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             btn.classList.add('active');
-            // [추가] 탭 전환 시 높이 재계산
             setTimeout(sendHeightToParent, 300);
         }
 
@@ -1038,7 +1067,7 @@
             const min = parseInt(document.getElementById('hope_min').value) || 0;
             const packageSelected = document.getElementById('order_package').value;
             const privateChecked = document.getElementById('private_port').checked;
-            const fastChecked = document.getElementById('fast_dead').checked;
+            const fontChecked = document.getElementById('fast_dead').checked;
             
             const rawHour = parseInt(document.getElementById('raw_hour').value) || 0;
             const rawMin = parseInt(document.getElementById('raw_min').value) || 0;
@@ -1048,9 +1077,9 @@
             
             const displayTarget = document.getElementById('total_display');
 
-            if (fastChecked || packageSelected !== "없음") { 
+            if (fontChecked || packageSelected !== "없음") { 
                 displayTarget.innerText = "문의 필요"; 
-                sendHeightToParent(); // [추가] 텍스트 변경 시 높이 재계산
+                sendHeightToParent();
                 return; 
             }
 
@@ -1075,7 +1104,6 @@
             if (privateChecked) total *= 1.5;
 
             displayTarget.innerText = total.toLocaleString() + "원";
-            // [추가] 견적 결과 표시 후 높이 재계산
             sendHeightToParent();
         }
 
@@ -1124,10 +1152,9 @@
             document.getElementById('order_type').value = '';
             document.getElementById('total_display').innerText = "0원";
             triggerBubble('reset-bubble'); 
-            sendHeightToParent(); // [추가] 초기화 시 높이 재계산
+            sendHeightToParent();
         }
 
-        // [수정] 초기 실행 로직을 async 함수로 묶어 데이터 로드 후 높이를 전송하도록 변경
         async function initPage() {
             await Promise.all([
                 updateCommissionStatus(), 
@@ -1135,11 +1162,10 @@
                 loadPortfolio(), 
                 loadPackages()
             ]);
-            // 모든 데이터 로드 직후 높이 전송 (이미지 로딩 등을 위해 약간의 딜레이)
             setTimeout(sendHeightToParent, 500);
         }
 
-        window.addEventListener('resize', sendHeightToParent); // 창 크기 변경 시 대응
+        window.addEventListener('resize', sendHeightToParent);
         initPage();
     </script>
 </body>
