@@ -565,7 +565,7 @@
             .process-step { width: 100%; text-align: center; padding: 10px; font-size: 0.85rem; }
             .process-arrow { transform: rotate(90deg); display: inline-block; margin: 2px 0; opacity: 0.7; }
             
-            /* [중요] 1차 컷편집본 전달 뒤에 화살표 자동 추가 */
+            /* 1차 컷편집본 전달 뒤에 화살표 자동 추가 */
             .process-row:first-child::after {
                 content: '▶';
                 color: var(--milktea);
@@ -575,6 +575,9 @@
                 transform: rotate(90deg);
                 margin: 5px 0;
             }
+
+            /* [수정] 가격표 괄호 줄바꿈 처리 */
+            .price-val small { display: block; font-size: 0.75rem; color: #999; margin-top: 2px; text-align: right; }
 
             .info-box, .package-card { padding: 15px; border-radius: 16px; }
             .package-included { padding: 12px; }
