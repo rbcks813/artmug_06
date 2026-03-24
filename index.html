@@ -447,8 +447,32 @@
             .form-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
             .extra-options { grid-template-columns: 1fr; }
             .button-group { flex-direction: column; }
-            .process-flow { flex-direction: row; flex-wrap: wrap; gap: 6px; }
-            .process-arrow { transform: none; margin: 0; }
+            
+            /* 작업 순서 모바일 최적화 수정본 */
+            .process-flow { 
+                flex-direction: column; /* 세로 배치로 강제 */
+                gap: 5px; 
+                align-items: stretch; 
+                padding: 25px 20px;
+            }
+            .process-step { 
+                width: 100%; 
+                text-align: center; 
+                justify-content: center;
+                margin: 0;
+            }
+            .process-arrow { 
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transform: rotate(90deg); /* 삼각형을 아래로 */
+                margin: 8px 0;
+                font-size: 1rem;
+                height: 20px;
+                opacity: 0.6;
+            }
+            .process-break { display: none; } /* 모바일에서는 구분선 제거 */
+
             .port-item { height: 220px; } 
             .toc-btn { padding: 6px 14px; font-size: 0.8rem; }
         }
@@ -539,6 +563,7 @@
                 <span class="process-step">주문 및 결제 확인</span>
                 <span class="process-arrow">▶</span>
                 <span class="process-step">1차 시안 전달</span>
+                <span class="process-arrow">▶</span>
                 
                 <div class="process-break"></div>
 
