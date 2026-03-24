@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>가격표 임베드 페이지</title>
     <style>
         /* 폰트 설정 */
         @font-face {
@@ -24,9 +25,10 @@
         body {
             margin: 0;
             padding: 20px;
-            background-color: transparent; /* 배경 금지 */
+            background-color: transparent; /* 배경 투명 */
             font-family: 'Paperlogy', -apple-system, sans-serif;
             color: #4A3E31;
+            overflow: hidden; /* 내부 스크롤 방지 */
         }
 
         .price-container {
@@ -54,7 +56,7 @@
             content: '';
             width: 6px;
             height: 22px;
-            background: #A68B6D; /* 메인 베이지 */
+            background: #A68B6D; 
             border-radius: 3px;
         }
 
@@ -75,7 +77,6 @@
             box-sizing: border-box;
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(166, 139, 109, 0.05);
-            /* 홀수 개수일 때 마지막 항목 꽉 채우기 */
             flex: 1 1 300px; 
             min-width: 280px;
         }
@@ -118,17 +119,27 @@
 <script>
     const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSG_Lqcb6PVuS3aRdwOzzAK9a7q9_BgTm_Hih063KyRXtYLc7KIIO85xk7nfuGi8IzRJiuJKVmNZmyU/pub?gid=665563680&single=true&output=csv';
 
+    // [중요] 부모 페이지로 현재 높이를 전달하는 함수
+    function sendHeight() {
+        const height = document.getElementById('price-board').offsetHeight + 40; // 여백 포함 높이
+        window.parent.postMessage({ 
+            type: 'resize_iframe', 
+            height: height 
+        }, '*');
+    }
+
     async function fetchPriceData() {
         try {
             const response = await fetch(CSV_URL);
+            if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.text();
             renderPriceList(data);
         } catch (error) {
+            console.error('Fetch error:', error);
             document.getElementById('price-board').innerHTML = '<div class="loading">데이터 로드 실패</div>';
         }
     }
 
-    // [핵심 추가] 큰따옴표와 콤마를 제대로 파싱하는 함수
     function parseCSV(text) {
         const rows = [];
         const lines = text.split(/\r?\n/);
@@ -136,11 +147,6 @@
         for (let line of lines) {
             if (!line.trim()) continue;
             
-            // 정규식: 콤마로 분리하되, 큰따옴표 안에 있는 콤마는 무시
-            const pattern = /(".*?"|[^",\s]+)(?=\s*,|\s*$)/g;
-            const matches = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
-            
-            // 만약 정규식으로 잘 안 풀릴 경우를 대비한 수동 파싱
             let arr = [];
             let quote = false;
             let current = '';
@@ -161,7 +167,7 @@
     }
 
     function renderPriceList(csvData) {
-        const parsedRows = parseCSV(csvData).slice(1); // 헤더 제외
+        const parsedRows = parseCSV(csvData).slice(1); 
         
         const categories = {
             '롱폼': [],
@@ -171,7 +177,6 @@
 
         parsedRows.forEach(columns => {
             if (columns.length >= 3) {
-                // 큰따옴표 제거 로직 포함
                 let rawCat = columns[0].replace(/^"|"$/g, '').trim();
                 let name = columns[1].replace(/^"|"$/g, '').trim();
                 let price = columns[2].replace(/^"|"$/g, '').trim();
@@ -216,6 +221,9 @@
         });
 
         document.getElementById('price-board').innerHTML = htmlContent;
+        
+        // 데이터가 화면에 그려진 후 높이 측정 및 전송
+        setTimeout(sendHeight, 100); 
     }
 
     function formatPrice(price) {
@@ -223,6 +231,10 @@
         return !isNaN(num) ? num.toLocaleString() + '₩' : price;
     }
 
+    // 윈도우 크기가 바뀔 때(브라우저 리사이징, 모바일 회전 등) 높이 재계산
+    window.addEventListener('resize', sendHeight);
+
+    // 초기 실행
     fetchPriceData();
 </script>
 
