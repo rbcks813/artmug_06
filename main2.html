@@ -189,13 +189,71 @@
         .btn-action { width: 100%; margin-top: 30px; padding: 18px; background: black; color: white; border: none; font-weight: 800; border-radius: 12px; cursor: pointer; transition: var(--transition); font-size: 1rem; }
         .btn-action:hover { background: #333; transform: translateY(-2px); }
 
+        /* --- 모바일 최적화 미디어 쿼리 (완벽 보강) --- */
         @media (max-width: 900px) {
-            .process-flow { flex-wrap: wrap; }
-            .process-item { min-width: calc(33% - 10px); max-width: none; }
+            /* 1. 전체 여백 축소 */
+            section { padding: 70px 0; }
+            
+            /* 2. 상단 네비게이션 최적화 (가로 스크롤/잘림 방지) */
+            .nav-inner { flex-direction: column; height: auto; padding: 15px 0; gap: 15px; }
+            .nav-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
+            .nav-links a { font-size: 0.85rem; }
+
+            /* 3. 인트로 영역 축소 */
+            .profile-img { width: 130px; height: 130px; margin-bottom: 20px; }
+            .intro-text h1 { font-size: 2.2rem; }
+            .intro-text p { font-size: 1rem; }
+
+            /* 공통 제목 크기 조정 */
+            #guidelines h2, #process h2, #portfolio h2 { font-size: 2rem !important; margin-bottom: 30px !important; }
+
+            /* 4. 안내사항 1열로 꽉 차게 변경 (글씨 찌그러짐 방지) */
+            .guide-grid { grid-template-columns: 1fr; gap: 15px; }
+            .guide-box { padding: 25px; }
+            .guide-box.dark { grid-column: 1 / -1; }
+
+            /* 5. 포트폴리오 슬라이더 버튼 크기 축소 */
+            .swiper-button-next, .swiper-button-prev { width: 40px !important; height: 40px !important; }
+            .swiper-button-next:after, .swiper-button-prev:after { font-size: 14px !important; }
+
+            /* 6. 작업과정 2개씩 배치 (겹침 방지) */
+            .process-flow { flex-wrap: wrap; gap: 10px; }
+            .process-item { min-width: calc(50% - 10px); flex: 1 1 auto; padding: 15px 5px; }
             .process-arrow { display: none; }
+
+            /* 7. 신청양식 및 견적서 레이아웃 모바일화 */
+            .step-header { flex-direction: column; }
+            .step-tab { padding: 15px; font-size: 0.95rem; }
+            .quote-content, .form-content { padding: 20px 15px; }
+            
             .form-grid { grid-template-columns: 1fr; }
-            .quote-slider-wrap { padding: 0 10px; min-height: 600px; }
-            .table-head, .table-row { grid-template-columns: 1.5fr 1fr 0.8fr; }
+            
+            /* 견적 카테고리 버튼 줄바꿈 대응 */
+            .quote-category-nav { gap: 5px; }
+            .q-cat-btn { padding: 6px 12px; font-size: 0.75rem; }
+
+            /* 견적 테이블 스크롤/잘림 방지 최적화 */
+            .quote-slider-wrap { padding: 0 20px; min-height: 550px; }
+            .quote-nav-btn { width: 32px; height: 32px; background: rgba(0,0,0,0.05); }
+            .q-prev { left: -5px; } 
+            .q-next { right: -5px; }
+
+            .table-head, .table-row { grid-template-columns: 1.8fr 1fr 0.8fr; gap: 5px; padding: 12px 5px; }
+            .table-head div:nth-child(2) { text-align: center; padding-right: 0; }
+            .item-label { font-size: 0.85rem; word-break: keep-all; }
+            .item-desc { font-size: 0.7rem; }
+            .item-price-tag { font-size: 0.8rem; padding-right: 0; text-align: center; margin: auto 0; }
+            .input-qty { max-width: 45px; padding: 5px; font-size: 0.85rem; }
+
+            /* 총 견적 합계 박스 최적화 */
+            .total-container { flex-direction: column; gap: 10px; padding: 20px; text-align: center; }
+            .total-label { font-size: 1rem; }
+            .total-amount { font-size: 1.4rem; }
+            
+            .btn-action { padding: 15px; font-size: 0.95rem; }
+            
+            /* 비디오 모달 닫기 버튼 겹침 방지 */
+            .close-modal { top: -40px; right: 10px; font-size: 2rem; }
         }
     </style>
 </head>
@@ -404,8 +462,8 @@
                         <div class="input-group"><label>캐릭터 컨셉</label><input type="text" placeholder="설명 또는 링크" id="f4"></div>
                         <div class="input-group"><label>일러스트 작가님 연락처</label><input type="text" placeholder="아이디/닉네임" id="f5"></div>
                         <div class="input-group"><label>리깅 공개 가능 일자</label><input type="text" placeholder="작업직후 / 데뷔후 등" id="f7"></div>
-                        <div class="input-group" style="grid-column: span 2;"><label>추가 파츠 및 요청사항</label><textarea rows="3" placeholder="내용 작성" id="f6"></textarea></div>
-                        <div class="input-group" style="grid-column: span 2;"><label>참고용 영상 링크</label><input type="text" placeholder="영상 링크" id="f8"></div>
+                        <div class="input-group" style="grid-column: 1 / -1;"><label>추가 파츠 및 요청사항</label><textarea rows="3" placeholder="내용 작성" id="f6"></textarea></div>
+                        <div class="input-group" style="grid-column: 1 / -1;"><label>참고용 영상 링크</label><input type="text" placeholder="영상 링크" id="f8"></div>
                     </div>
                     <button class="btn-action" onclick="copyAll()">견적서 + 신청양식 전체 복사하기</button>
                     <button style="width:100%; border:none; background:none; color:#888; cursor:pointer; margin-top:15px; text-decoration:underline;" onclick="showStep(1)">이전 단계로 돌아가기</button>
