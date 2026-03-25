@@ -35,17 +35,13 @@
         body { background-color: var(--bg-black); color: var(--text-white); line-height: 1.6; overflow-x: hidden; }
 
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-        
-        /* 스크롤 시 상단 메뉴바 높이만큼 여백 확보 */
-        section { padding: 120px 0; border-bottom: 1px solid var(--border-color); scroll-margin-top: 70px; }
+        section { padding: 120px 0; border-bottom: 1px solid var(--border-color); }
 
-        /* --- Navigation (Sticky 적용) --- */
+        /* 수정사항: 따라오는 기능을 제거하고 상단에 배치 (Relative) */
         nav { 
-            position: sticky; 
-            top: 0; 
+            position: relative; 
             width: 100%; 
-            background: rgba(10, 10, 10, 0.95); 
-            backdrop-filter: blur(10px); 
+            background: rgba(10, 10, 10, 1); 
             z-index: 1000; 
             border-bottom: 1px solid var(--border-color); 
         }
@@ -57,13 +53,13 @@
             text-decoration: none; 
             font-size: 0.9rem; 
             font-weight: 500; 
-            transition: var(--transition); 
-            cursor: pointer;
+            transition: var(--transition);
+            cursor: pointer; /* 클릭 가능하게 변경 */
         }
         .nav-links a:hover { color: var(--accent-white); }
 
         /* --- 1. Intro --- */
-        #intro { text-align: center; padding-top: 180px; background: #ffffff; color: #000000; }
+        #intro { text-align: center; padding-top: 100px; background: #ffffff; color: #000000; }
         .profile-img { width: 170px; height: 170px; border-radius: 50%; object-fit: cover; border: 5px solid #f0f0f0; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .intro-text h1 { font-size: 3rem; font-weight: 900; margin-bottom: 10px; color: #000; }
         .intro-text p { color: #555; font-size: 1.2rem; font-weight: 500; }
@@ -178,7 +174,7 @@
         .total-label { font-size: 1.1rem; font-weight: 800; }
         .total-amount { font-size: 1.6rem; font-weight: 900; }
 
-        /* STEP 2 레이아웃 정돈 */
+        /* STEP 2 레이아웃 */
         .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px 25px; width: 100%; }
         .input-group { display: flex; flex-direction: column; gap: 10px; width: 100%; }
         .input-group label { font-size: 0.85rem; font-weight: 800; color: #000; display: block; text-align: left; }
@@ -427,11 +423,11 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        /* 수정사항: 임베드(iframe) 환경 전용 스크롤 이동 함수 */
+        /* 수정사항: 임베드(iframe) 내부에서 영역 이동을 보장하는 함수 */
         function jumpTo(id) {
             const element = document.getElementById(id);
             if (element) {
-                // 메뉴바 높이(70px)만큼 띄워서 부드럽게 이동
+                // 부드럽게 해당 요소가 있는 곳으로 내부 스크롤 이동
                 element.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
