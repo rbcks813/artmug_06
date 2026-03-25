@@ -37,7 +37,6 @@
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
         section { padding: 120px 0; border-bottom: 1px solid var(--border-color); }
 
-        /* 수정사항: 따라오는 기능을 제거하고 상단에 배치 (Relative) */
         nav { 
             position: relative; 
             width: 100%; 
@@ -54,7 +53,7 @@
             font-size: 0.9rem; 
             font-weight: 500; 
             transition: var(--transition);
-            cursor: pointer; /* 클릭 가능하게 변경 */
+            cursor: pointer;
         }
         .nav-links a:hover { color: var(--accent-white); }
 
@@ -174,7 +173,6 @@
         .total-label { font-size: 1.1rem; font-weight: 800; }
         .total-amount { font-size: 1.6rem; font-weight: 900; }
 
-        /* STEP 2 레이아웃 */
         .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px 25px; width: 100%; }
         .input-group { display: flex; flex-direction: column; gap: 10px; width: 100%; }
         .input-group label { font-size: 0.85rem; font-weight: 800; color: #000; display: block; text-align: left; }
@@ -189,70 +187,43 @@
         .btn-action { width: 100%; margin-top: 30px; padding: 18px; background: black; color: white; border: none; font-weight: 800; border-radius: 12px; cursor: pointer; transition: var(--transition); font-size: 1rem; }
         .btn-action:hover { background: #333; transform: translateY(-2px); }
 
-        /* --- 모바일 최적화 미디어 쿼리 (완벽 보강) --- */
         @media (max-width: 900px) {
-            /* 1. 전체 여백 축소 */
             section { padding: 70px 0; }
-            
-            /* 2. 상단 네비게이션 최적화 (가로 스크롤/잘림 방지) */
             .nav-inner { flex-direction: column; height: auto; padding: 15px 0; gap: 15px; }
             .nav-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
             .nav-links a { font-size: 0.85rem; }
-
-            /* 3. 인트로 영역 축소 */
             .profile-img { width: 130px; height: 130px; margin-bottom: 20px; }
             .intro-text h1 { font-size: 2.2rem; }
             .intro-text p { font-size: 1rem; }
-
-            /* 공통 제목 크기 조정 */
             #guidelines h2, #process h2, #portfolio h2 { font-size: 2rem !important; margin-bottom: 30px !important; }
-
-            /* 4. 안내사항 1열로 꽉 차게 변경 (글씨 찌그러짐 방지) */
             .guide-grid { grid-template-columns: 1fr; gap: 15px; }
             .guide-box { padding: 25px; }
             .guide-box.dark { grid-column: 1 / -1; }
-
-            /* 5. 포트폴리오 슬라이더 버튼 크기 축소 */
             .swiper-button-next, .swiper-button-prev { width: 40px !important; height: 40px !important; }
             .swiper-button-next:after, .swiper-button-prev:after { font-size: 14px !important; }
-
-            /* 6. 작업과정 2개씩 배치 (겹침 방지) */
             .process-flow { flex-wrap: wrap; gap: 10px; }
             .process-item { min-width: calc(50% - 10px); flex: 1 1 auto; padding: 15px 5px; }
             .process-arrow { display: none; }
-
-            /* 7. 신청양식 및 견적서 레이아웃 모바일화 */
             .step-header { flex-direction: column; }
             .step-tab { padding: 15px; font-size: 0.95rem; }
             .quote-content, .form-content { padding: 20px 15px; }
-            
             .form-grid { grid-template-columns: 1fr; }
-            
-            /* 견적 카테고리 버튼 줄바꿈 대응 */
             .quote-category-nav { gap: 5px; }
             .q-cat-btn { padding: 6px 12px; font-size: 0.75rem; }
-
-            /* 견적 테이블 스크롤/잘림 방지 최적화 */
             .quote-slider-wrap { padding: 0 20px; min-height: 550px; }
             .quote-nav-btn { width: 32px; height: 32px; background: rgba(0,0,0,0.05); }
             .q-prev { left: -5px; } 
             .q-next { right: -5px; }
-
             .table-head, .table-row { grid-template-columns: 1.8fr 1fr 0.8fr; gap: 5px; padding: 12px 5px; }
             .table-head div:nth-child(2) { text-align: center; padding-right: 0; }
             .item-label { font-size: 0.85rem; word-break: keep-all; }
             .item-desc { font-size: 0.7rem; }
             .item-price-tag { font-size: 0.8rem; padding-right: 0; text-align: center; margin: auto 0; }
             .input-qty { max-width: 45px; padding: 5px; font-size: 0.85rem; }
-
-            /* 총 견적 합계 박스 최적화 */
             .total-container { flex-direction: column; gap: 10px; padding: 20px; text-align: center; }
             .total-label { font-size: 1rem; }
             .total-amount { font-size: 1.4rem; }
-            
             .btn-action { padding: 15px; font-size: 0.95rem; }
-            
-            /* 비디오 모달 닫기 버튼 겹침 방지 */
             .close-modal { top: -40px; right: 10px; font-size: 2rem; }
         }
     </style>
@@ -481,11 +452,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        /* 수정사항: 임베드(iframe) 내부에서 영역 이동을 보장하는 함수 */
         function jumpTo(id) {
             const element = document.getElementById(id);
             if (element) {
-                // 부드럽게 해당 요소가 있는 곳으로 내부 스크롤 이동
                 element.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
@@ -636,6 +605,7 @@
             setTimeout(sendHeightToParent, 50);
         }
 
+        /* --- 개선된 모바일 복사 로직 --- */
         function copyAll() {
             let text = "[ Live2D 리깅 의뢰 상세 견적 ]\n";
             let hasItems = false;
@@ -653,12 +623,41 @@
             const inputs = document.querySelectorAll('#step2 input, #step2 textarea');
             const labels = document.querySelectorAll('#step2 label');
             inputs.forEach((input, i) => { text += `• ${labels[i].innerText}: ${input.value || '(미입력)'}\n`; });
-            navigator.clipboard.writeText(text).then(() => alert('견적 내역과 양식이 전체 복사되었습니다!'));
+
+            // 1. 최신 방식 (navigator.clipboard) 시도
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('견적 내역과 양식이 전체 복사되었습니다!');
+                }).catch(err => {
+                    fallbackCopy(text);
+                });
+            } else {
+                // 2. 구형/인앱 브라우저용 폴백(임시 텍스트 영역) 방식
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            textArea.style.top = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            textArea.setSelectionRange(0, 99999); // 모바일 강제 선택
+            try {
+                document.execCommand('copy');
+                alert('견적 내역과 양식이 전체 복사되었습니다!');
+            } catch (err) {
+                alert('복사 중 오류가 발생했습니다. 직접 선택하여 복사해주세요.');
+            }
+            document.body.removeChild(textArea);
         }
 
         window.onload = function() { loadPortfolioFromCSV(); };
-    </script>
-    <script>
+
         function sendHeightToParent() {
             const height = document.documentElement.scrollHeight || document.body.scrollHeight;
             window.parent.postMessage({ 'height': height }, '*');
