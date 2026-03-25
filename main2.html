@@ -95,14 +95,14 @@
         .swiper-pagination-bullet { background: #555 !important; opacity: 1; }
         .swiper-pagination-bullet-active { background: white !important; }
 
-        /* --- Video Modal (수정됨: fixed -> absolute로 임베드 갇힘 방지) --- */
+        /* --- Video Modal (수정됨: 100vh 제거 및 패딩을 주어 클릭한 위치에 팝업 영역 형성) --- */
         #videoModal { 
             display: none; 
             position: absolute; 
-            top: 0; left: 0; 
+            left: 0; 
             width: 100%; 
-            height: 100vh; 
-            background: rgba(0,0,0,0.9); 
+            padding: 60px 0; 
+            background: rgba(0,0,0,0.95); 
             z-index: 2000; 
             justify-content: center; 
             align-items: center; 
@@ -525,9 +525,10 @@
                 if(nextBtn) nextBtn.style.display = 'flex';
             }
 
+            /* 수정됨: openVideo 함수에 클릭한 요소(this)의 정보를 넘겨줍니다 */
             listContainer.innerHTML = items.map(item => `
                 <div class="swiper-slide">
-                    <div class="portfolio-card" onclick="openVideo('${item.vid}')">
+                    <div class="portfolio-card" onclick="openVideo('${item.vid}', this)">
                         <div class="thumb-wrapper">
                             <img src="https://img.youtube.com/vi/${item.vid}/mqdefault.jpg">
                             <div class="play-overlay"><i class="fas fa-play"></i></div>
@@ -553,16 +554,24 @@
             });
         }
 
-        /* --- 수정사항: 임베드 내에서도 클릭한 위치에 팝업을 띄우는 로직 --- */
-        function openVideo(id) {
+        /* --- 수정됨: 클릭한 버튼(카드)의 위치를 계산하여 팝업을 바로 그 위에 띄웁니다 --- */
+        function openVideo(id, element) {
             const modal = document.getElementById('videoModal');
-            // 현재 상세페이지 내의 스크롤 위치를 계산하여 팝업의 시작 지점을 잡습니다.
-            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-            modal.style.top = scrollY + 'px';
+            
+            // 클릭한 요소의 화면상 상대 위치와 현재 스크롤된 높이를 더해 절대 Y 좌표를 구합니다.
+            const rect = element.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // 모달이 카드보다 살짝 위쪽에 예쁘게 뜨도록 위치를 잡아줍니다.
+            let topPosition = rect.top + scrollTop - 40;
+            if (topPosition < 0) topPosition = 0;
+
+            modal.style.top = topPosition + 'px';
             
             document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
             modal.style.display = 'flex';
         }
+
         function closeVideo() {
             document.getElementById('videoModal').style.display = 'none';
             document.getElementById('videoPlayer').src = '';
