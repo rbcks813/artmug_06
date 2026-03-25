@@ -35,14 +35,16 @@
         body { background-color: var(--bg-black); color: var(--text-white); line-height: 1.6; overflow-x: hidden; }
 
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-        section { padding: 120px 0; border-bottom: 1px solid var(--border-color); }
+        
+        /* 스크롤 시 상단 메뉴바 높이만큼 여백 확보 */
+        section { padding: 120px 0; border-bottom: 1px solid var(--border-color); scroll-margin-top: 70px; }
 
-        /* 수정사항: 상단 메뉴바 Sticky 설정 (임베드 환경 최적화) */
+        /* --- Navigation (Sticky 적용) --- */
         nav { 
             position: sticky; 
             top: 0; 
             width: 100%; 
-            background: rgba(10, 10, 10, 0.9); 
+            background: rgba(10, 10, 10, 0.95); 
             backdrop-filter: blur(10px); 
             z-index: 1000; 
             border-bottom: 1px solid var(--border-color); 
@@ -55,7 +57,7 @@
             text-decoration: none; 
             font-size: 0.9rem; 
             font-weight: 500; 
-            transition: var(--transition);
+            transition: var(--transition); 
             cursor: pointer;
         }
         .nav-links a:hover { color: var(--accent-white); }
@@ -176,7 +178,7 @@
         .total-label { font-size: 1.1rem; font-weight: 800; }
         .total-amount { font-size: 1.6rem; font-weight: 900; }
 
-        /* STEP 2 레이아웃 */
+        /* STEP 2 레이아웃 정돈 */
         .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px 25px; width: 100%; }
         .input-group { display: flex; flex-direction: column; gap: 10px; width: 100%; }
         .input-group label { font-size: 0.85rem; font-weight: 800; color: #000; display: block; text-align: left; }
@@ -425,19 +427,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        /* 수정사항: 임베드 내 하이퍼링크 스크롤 처리 함수 */
+        /* 수정사항: 임베드(iframe) 환경 전용 스크롤 이동 함수 */
         function jumpTo(id) {
             const element = document.getElementById(id);
             if (element) {
-                // 메뉴바 높이를 고려한 스크롤 보정
-                const offset = 70;
-                const elementPosition = element.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: "smooth"
-                });
+                // 메뉴바 높이(70px)만큼 띄워서 부드럽게 이동
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
 
