@@ -95,8 +95,8 @@
         .swiper-pagination-bullet { background: #555 !important; opacity: 1; }
         .swiper-pagination-bullet-active { background: white !important; }
 
-        /* --- Video Modal (임베드 환경을 위한 최적화) --- */
-        #videoModal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
+        /* --- Video Modal (기존 코드 유지) --- */
+        #videoModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
         .modal-body { width: 90%; max-width: 900px; aspect-ratio: 16/9; position: relative; }
         .close-modal { position: absolute; top: -50px; right: 0; color: #fff; font-size: 2.5rem; cursor: pointer; }
 
@@ -543,16 +543,10 @@
             });
         }
 
-        /* --- Video Modal Open (임베드 환경에서 중간에 뜨도록 수정) --- */
+        /* --- 수정사항: 상세페이지(임베드) 프레임에 갇히지 않도록 영상 팝업 방식을 변경 --- */
         function openVideo(id) {
-            const modal = document.getElementById('videoModal');
-            // 클릭된 시점의 카드 위치를 계산하여 모달의 위치를 보정 (임베드 대응)
-            const triggerEl = event.currentTarget;
-            const scrollPos = triggerEl.offsetTop - 100; // 현재 요소 위치를 기준
-            modal.style.top = (scrollPos > 0 ? scrollPos : 0) + 'px';
-            
-            document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
-            modal.style.display = 'flex';
+            // 상세페이지 프레임 안에 갇힌 모달 대신, 새 창(유튜브 앱/브라우저)으로 영상을 엽니다.
+            window.open(`https://www.youtube.com/watch?v=${id}`, '_blank');
         }
         function closeVideo() {
             document.getElementById('videoModal').style.display = 'none';
