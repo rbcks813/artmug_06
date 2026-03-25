@@ -95,8 +95,18 @@
         .swiper-pagination-bullet { background: #555 !important; opacity: 1; }
         .swiper-pagination-bullet-active { background: white !important; }
 
-        /* --- Video Modal (기존 코드 유지) --- */
-        #videoModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
+        /* --- Video Modal (수정됨: fixed -> absolute로 임베드 갇힘 방지) --- */
+        #videoModal { 
+            display: none; 
+            position: absolute; 
+            top: 0; left: 0; 
+            width: 100%; 
+            height: 100vh; 
+            background: rgba(0,0,0,0.9); 
+            z-index: 2000; 
+            justify-content: center; 
+            align-items: center; 
+        }
         .modal-body { width: 90%; max-width: 900px; aspect-ratio: 16/9; position: relative; }
         .close-modal { position: absolute; top: -50px; right: 0; color: #fff; font-size: 2.5rem; cursor: pointer; }
 
@@ -543,10 +553,15 @@
             });
         }
 
-        /* --- 수정사항: 상세페이지(임베드) 프레임에 갇히지 않도록 영상 팝업 방식을 변경 --- */
+        /* --- 수정사항: 임베드 내에서도 클릭한 위치에 팝업을 띄우는 로직 --- */
         function openVideo(id) {
-            // 상세페이지 프레임 안에 갇힌 모달 대신, 새 창(유튜브 앱/브라우저)으로 영상을 엽니다.
-            window.open(`https://www.youtube.com/watch?v=${id}`, '_blank');
+            const modal = document.getElementById('videoModal');
+            // 현재 상세페이지 내의 스크롤 위치를 계산하여 팝업의 시작 지점을 잡습니다.
+            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+            modal.style.top = scrollY + 'px';
+            
+            document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+            modal.style.display = 'flex';
         }
         function closeVideo() {
             document.getElementById('videoModal').style.display = 'none';
