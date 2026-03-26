@@ -31,14 +31,23 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Paperozi', sans-serif; }
-        html { scroll-behavior: smooth; }
+        
+        /* 수정됨: 스크롤 시 상단 바 높이만큼 여유 공간 확보 */
+        html { 
+            scroll-behavior: smooth; 
+            scroll-padding-top: 70px; 
+        }
+        
         body { background-color: var(--bg-black); color: var(--text-white); line-height: 1.6; overflow-x: hidden; }
 
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
         section { padding: 120px 0; border-bottom: 1px solid var(--border-color); }
 
+        /* 수정됨: 상단 고정 설정 (sticky) */
         nav { 
-            position: relative; 
+            position: -webkit-sticky;
+            position: sticky; 
+            top: 0;
             width: 100%; 
             background: rgba(10, 10, 10, 1); 
             z-index: 1000; 
@@ -202,6 +211,10 @@
             .nav-inner { flex-direction: column; height: auto; padding: 15px 0; gap: 15px; }
             .nav-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
             .nav-links a { font-size: 0.85rem; }
+            
+            /* 수정됨: 모바일에서 네비게이션이 차지하는 높이가 커지므로 스크롤 위치 보정 */
+            html { scroll-padding-top: 130px; }
+
             .profile-img { width: 130px; height: 130px; margin-bottom: 20px; }
             .intro-text h1 { font-size: 2.2rem; }
             .intro-text p { font-size: 1rem; }
@@ -525,7 +538,6 @@
                 if(nextBtn) nextBtn.style.display = 'flex';
             }
 
-            /* 수정됨: openVideo 함수에 클릭한 요소(this)의 정보를 넘겨줍니다 */
             listContainer.innerHTML = items.map(item => `
                 <div class="swiper-slide">
                     <div class="portfolio-card" onclick="openVideo('${item.vid}', this)">
@@ -554,20 +566,15 @@
             });
         }
 
-        /* --- 수정됨: 클릭한 버튼(카드)의 위치를 계산하여 팝업을 바로 그 위에 띄웁니다 --- */
         function openVideo(id, element) {
             const modal = document.getElementById('videoModal');
-            
-            // 클릭한 요소의 화면상 상대 위치와 현재 스크롤된 높이를 더해 절대 Y 좌표를 구합니다.
             const rect = element.getBoundingClientRect();
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             
-            // 모달이 카드보다 살짝 위쪽에 예쁘게 뜨도록 위치를 잡아줍니다.
             let topPosition = rect.top + scrollTop - 40;
             if (topPosition < 0) topPosition = 0;
 
             modal.style.top = topPosition + 'px';
-            
             document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
             modal.style.display = 'flex';
         }
