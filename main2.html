@@ -37,19 +37,18 @@
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
         section { padding: 120px 0; border-bottom: 1px solid var(--border-color); }
 
+        /* 수정됨: 임베드 환경용 Sticky 대응 (JavaScript로 제어됨) */
         nav { 
-            position: -webkit-sticky;
-            position: sticky; 
+            position: absolute; /* 임베드 시 기본 위치 */
             top: 0;
             width: 100%; 
             background: rgba(10, 10, 10, 1); 
             z-index: 1000; 
-            border-bottom: 1px solid var(--border-color); 
+            border-bottom: 1px solid var(--border-color);
+            transition: none; /* 스크롤 시 덜덜거림 방지 */
         }
         .nav-inner { display: flex; justify-content: space-between; align-items: center; height: 70px; }
         .logo { font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px; }
-        
-        /* 업데이트 버전 표시 스타일 */
         .version-tag { font-size: 0.7rem; font-weight: 400; opacity: 0.4; margin-left: 8px; vertical-align: middle; }
 
         .nav-links { display: flex; gap: 30px; }
@@ -94,9 +93,9 @@
             font-size: 0.8rem; 
             color: #666; 
             font-weight: 500; 
-            white-space: pre-wrap; /* 줄바꿈 인식 */
-            height: 2.6em;         /* 2줄 분량의 고정 높이 */
-            overflow: hidden;      /* 2줄 초과 시 숨김 */
+            white-space: pre-wrap; 
+            height: 2.6em;         
+            overflow: hidden;      
             display: flex;
             align-items: center;
             justify-content: center;
@@ -260,9 +259,9 @@
 </head>
 <body>
 
-    <nav>
+    <nav id="mainNav">
         <div class="container nav-inner">
-            <div class="logo">MUMMU <span class="version-tag">Update 26.03.26</span></div>
+            <div class="logo">MUMMU <span class="version-tag">Update 26.03.26 (v4)</span></div>
             <div class="nav-links">
                 <a onclick="jumpTo('intro')">소개</a>
                 <a onclick="jumpTo('portfolio')">포트폴리오</a>
@@ -702,6 +701,26 @@
         window.addEventListener('resize', sendHeightToParent);
         const heightObserver = new MutationObserver(() => { setTimeout(sendHeightToParent, 100); });
         heightObserver.observe(document.body, { attributes: true, childList: true, subtree: true });
+
+        /* --- 아트머그 임베드 스크롤 연동 로직 --- */
+        window.addEventListener('message', function(e) {
+            if (e.data && e.data.type === 'scroll') {
+                const nav = document.getElementById('mainNav');
+                const scrollTop = e.data.scrollY; // 부모 창의 현재 스크롤 위치
+                const iframeOffset = e.data.offsetTop; // 부모 창 내 iframe의 시작 위치
+                
+                // iframe 내부에서의 상대적 스크롤 위치 계산
+                let relativeScroll = scrollTop - iframeOffset;
+                
+                if (relativeScroll > 0) {
+                    nav.style.position = 'absolute';
+                    nav.style.top = relativeScroll + 'px';
+                } else {
+                    nav.style.position = 'absolute';
+                    nav.style.top = '0px';
+                }
+            }
+        }, false);
     </script>
 </body>
 </html>
