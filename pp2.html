@@ -3,80 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Optimized Portfolio Slider</title>
+    <title>Fixed Ratio Portfolio Slider</title>
     <style>
         :root {
             --main-color: #D1C4E9;
             --main-dark: #B39DDB;
-            /* 기본 비율 설정 */
-            --pc-ratio: 16 / 9;    /* PC: 가로로 긴 형태 */
-            --mobile-ratio: 1 / 1.1; /* 모바일: 세로로 조금 더 긴 형태 */
         }
 
         body { margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; background-color: transparent; }
 
         .pf-container {
             width: 100%;
-            max-width: 850px; /* 전체 최대 너비 */
+            max-width: 800px; /* PC에서의 최대 너비 (원하는 대로 수정 가능) */
             margin: 0 auto;
+            position: relative;
         }
 
-        /* [핵심 수정] 가변 비율 및 최대 높이 제한 */
+        /* 전체 박스: 높이 설정을 지우고 슬라이드 내용물에 크기를 맡김 */
         .pf-image-box {
             position: relative;
             width: 100%;
-            aspect-ratio: var(--pc-ratio); /* PC 기본 비율 */
-            max-height: 500px; /* PC에서 높이가 500px을 넘지 않도록 제한 */
-            overflow: hidden;
             border-radius: 12px;
-            background-color: #f8f8f8;
+            background-color: #ffffff;
             box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* 모바일 환경 설정 */
-        @media (max-width: 768px) {
-            .pf-image-box {
-                aspect-ratio: var(--mobile-ratio); /* 모바일은 정사각형에 가깝게 */
-                max-height: 450px; /* 모바일 최대 높이 제한 */
-            }
+            overflow: hidden;
         }
 
         .pf-slider {
             display: flex;
-            height: 100%;
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .pf-slide {
             min-width: 100%;
-            height: 100%;
             display: flex;
             flex-direction: column;
         }
 
-        /* 이미지 영역: 이미지와 제목 바 사이 여백 최소화 */
+        /* [핵심] 이미지 구역에만 직접 비율을 지정! (화면이 줄어들면 100% 이 비율대로 같이 줄어듦) */
         .pf-img-wrapper {
-            flex: 1;
+            width: 100%;
+            aspect-ratio: 16 / 9; /* PC 기본 비율 (가로형) */
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            padding: 10px;
             background-color: #f9f9f9;
+            padding: 10px;
+            box-sizing: border-box;
         }
 
-        .pf-slide img {
+        /* 모바일에서는 약간 덜 긴 가로형이나 정사각형 비율로 자동 변경 */
+        @media (max-width: 768px) {
+            .pf-img-wrapper {
+                aspect-ratio: 4 / 3; 
+            }
+        }
+
+        .pf-img-wrapper img {
             max-width: 100%;
             max-height: 100%;
-            object-fit: contain; /* 비율 유지하며 꽉 채움 */
+            object-fit: contain; /* 어떤 이미지 크기가 와도 잘리지 않고 비율 구역 안에 맞춤 */
         }
 
-        /* 제목 바 디자인 (고정 높이) */
+        /* 제목 바 (높이 고정) */
         .pf-info-bar {
             width: 100%;
-            height: 55px; /* 제목 영역 높이 고정 */
+            height: 55px;
             padding: 0 20px;
             background: #ffffff;
             border-top: 1px solid #f0f0f0;
@@ -84,7 +76,6 @@
             align-items: center;
             justify-content: space-between;
             box-sizing: border-box;
-            flex-shrink: 0;
         }
 
         .pf-info-left { display: flex; align-items: center; overflow: hidden; }
@@ -94,50 +85,54 @@
             color: #512DA8;
             font-size: 10px;
             font-weight: bold;
-            padding: 2px 7px;
+            padding: 3px 8px;
             border-radius: 4px;
-            margin-right: 10px;
+            margin-right: 12px;
             flex-shrink: 0;
         }
 
         .pf-title {
-            color: #444;
-            font-size: 14px;
+            color: #333;
+            font-size: 15px;
             font-weight: 600;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .pf-counter { font-size: 11px; color: #aaa; flex-shrink: 0; }
+        .pf-counter { font-size: 12px; color: #aaa; flex-shrink: 0; font-weight: 500; }
 
-        /* 네비게이션 버튼: 호버 시 노출 */
+        /* 네비게이션 버튼 */
         .pf-nav-btn {
             position: absolute;
-            top: calc(50% - 27px); /* 제목 바 제외 이미지 영역 중앙 */
+            top: calc(50% - 27px); /* 제목바 포함 중앙 위치 */
             transform: translateY(-50%);
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.95);
             color: var(--main-dark);
             border: none;
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 16px;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10;
             opacity: 0;
             transition: 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .pf-image-box:hover .pf-nav-btn { opacity: 1; }
-        @media (max-width: 768px) { .pf-nav-btn { opacity: 0.8; } }
+        
+        @media (max-width: 768px) {
+            .pf-nav-btn { opacity: 0.8; width: 36px; height: 36px; }
+        }
 
-        .pf-prev { left: 10px; }
-        .pf-next { right: 10px; }
+        .pf-prev { left: 15px; }
+        .pf-next { right: 15px; }
+        .pf-nav-btn:hover { background-color: var(--main-color); color: white; }
 
         /* 하단 도트 */
         .pf-dots {
@@ -148,8 +143,8 @@
         }
 
         .pf-dot {
-            width: 6px;
-            height: 6px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
             background-color: #e5e5e5;
             cursor: pointer;
@@ -158,15 +153,17 @@
 
         .pf-dot.active {
             background-color: var(--main-color);
-            width: 18px;
-            border-radius: 3px;
+            width: 22px;
+            border-radius: 4px;
         }
 
         #pf-loading {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            color: #ccc;
+            color: var(--main-dark);
+            font-size: 14px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -176,6 +173,7 @@
         <div class="pf-image-box">
             <div id="pf-loading">Loading...</div>
             <div class="pf-slider" id="pfSlider"></div>
+            
             <button class="pf-nav-btn pf-prev" onclick="moveSlide(-1)">❮</button>
             <button class="pf-nav-btn pf-next" onclick="moveSlide(1)">❯</button>
         </div>
@@ -187,6 +185,7 @@
         const slider = document.getElementById('pfSlider');
         const dotsContainer = document.getElementById('pfDots');
         const loading = document.getElementById('pf-loading');
+        
         let currentIndex = 0;
         let totalSlides = 0;
 
@@ -195,6 +194,7 @@
                 const response = await fetch(csvUrl);
                 const data = await response.text();
                 const rows = data.split(/\r?\n/).slice(1).filter(row => row.trim() !== ""); 
+                
                 const items = rows.map(row => {
                     const parts = row.match(/(".*?"|[^,]+)(?=\s*,|\s*$)/g);
                     if (parts) {
@@ -205,16 +205,21 @@
                     }
                     return null;
                 }).filter(item => item && item.link);
+                
                 renderSlider(items);
-            } catch (e) { loading.innerText = 'Connection Error'; }
+            } catch (e) { 
+                loading.innerText = '데이터를 불러올 수 없습니다.'; 
+            }
         }
 
         function renderSlider(items) {
             loading.style.display = 'none';
             totalSlides = items.length;
+            
             items.forEach((item, i) => {
                 const slide = document.createElement('div');
                 slide.classList.add('pf-slide');
+                
                 slide.innerHTML = `
                     <div class="pf-img-wrapper"><img src="${item.link}"></div>
                     <div class="pf-info-bar">
@@ -224,7 +229,9 @@
                         </div>
                         <div class="pf-counter">${i+1} / ${totalSlides}</div>
                     </div>`;
+                    
                 slider.appendChild(slide);
+                
                 const dot = document.createElement('div');
                 dot.classList.add('pf-dot');
                 if (i === 0) dot.classList.add('active');
@@ -235,7 +242,9 @@
 
         function updateSlider() {
             slider.style.transform = `translateX(-${currentIndex * 100}%)`;
-            document.querySelectorAll('.pf-dot').forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+            document.querySelectorAll('.pf-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
         }
 
         window.moveSlide = function(direction) {
@@ -244,10 +253,14 @@
             updateSlider();
         }
 
-        function goToSlide(index) { currentIndex = index; updateSlider(); }
+        function goToSlide(index) { 
+            currentIndex = index; 
+            updateSlider(); 
+        }
 
         fetchPortfolioData();
 
+        // 모바일 터치 스와이프
         let touchStartX = 0;
         slider.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, {passive: true});
         slider.addEventListener('touchend', e => {
