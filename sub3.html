@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* 기존 스타일 유지 */
+        @font-face{font-family:'Paperozi';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+        @font-face{font-family:'Paperozi';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+
+        body { margin: 0; padding: 0; overflow: hidden; } /* 스크롤바 방지 */
+        .bevel-container {
+            font-family: 'Paperozi', sans-serif;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-bottom: 20px; /* 하단 여유 공간 */
+        }
+
+        .toggle-btn {
+            width: 100%; height: 64px; background: #EDE7F6; border: 2px dashed #B39DDB;
+            border-radius: 16px; color: #5E35B1; font-size: 17px; font-weight: 700;
+            cursor: pointer; font-family: 'Paperozi'; transition: all 0.2s ease;
+            outline: none; display: flex; align-items: center; justify-content: center;
+        }
+        .toggle-btn:hover { background: #D1C4E9; }
+
+        .content-area {
+            max-height: 0px; opacity: 0; overflow: hidden;
+            transition: all 0.5s ease; width: 100%;
+        }
+
+        .info-box {
+            background: #F3E5F5; border-radius: 16px; padding: 25px;
+            line-height: 1.7; color: #4A148C; font-size: 15px;
+            margin-top: 15px; margin-bottom: 15px; word-break: keep-all;
+        }
+
+        .content-img { width: 100%; display: block; height: auto; border-radius: 20px; }
+    </style>
+</head>
+<body>
+
+<div id="bevel-root" class="bevel-container">
+    <p style="text-align:center; color:#673AB7;">데이터 로딩 중...</p>
+</div>
+
+<script>
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ--VAhG5Z3qrGYbgfpb-oex3JV8bao0LjzXY3m1Tv1qky655f51KyPRJVPwFWbLXJEn_0MGI498vB6/pub?gid=501523222&single=true&output=csv';
+
+    // 부모 페이지로 현재 높이를 보내는 함수
+    function sendHeight() {
+        setTimeout(() => {
+            const height = document.getElementById('bevel-root').offsetHeight;
+            window.parent.postMessage({ bevelHeight: height }, '*');
+        }, 100); // 렌더링 시간을 위해 약간의 지연 부여
+    }
+
+    async function loadSheetData() {
+        try {
+            const response = await fetch(SHEET_URL);
+            const csvText = await response.text();
+            const rows = parseCSV(csvText);
+            const root = document.getElementById('bevel-root');
+            root.innerHTML = '';
+
+            for (let i = 1; i < rows.length; i++) {
+                const [btnText, imgUrl, content] = rows[i];
+                if (!btnText) continue;
+
+                const section = document.createElement('div');
+                section.innerHTML = `
+                    <button class="toggle-btn" onclick="toggleContent(this, ${i})">
+                        ${btnText}
+                    </button>
+                    <div id="area-${i}" class="content-area">
+                        <div class="info-box">${content.replace(/\n/g, '<br>')}</div>
+                        <img src="${imgUrl}" class="content-img" onload="sendHeight()">
+                    </div>
+                `;
+                root.appendChild(section);
+            }
+            sendHeight(); // 초기 로드 후 높이 전송
+        } catch (error) {
+            console.error('데이터 로드 실패:', error);
+        }
+    }
+
+    function parseCSV(text) {
+        const result = []; let row = []; let col = ""; let inQuotes = false;
+        for (let i = 0; i < text.length; i++) {
+            let char = text[i]; let nextChar = text[i+1];
+            if (inQuotes) {
+                if (char === '"' && nextChar === '"') { col += '"'; i++; }
+                else if (char === '"') { inQuotes = false; }
+                else { col += char; }
+            } else {
+                if (char === '"') { inQuotes = true; }
+                else if (char === ',') { row.push(col); col = ""; }
+                else if (char === '\r' || char === '\n') {
+                    row.push(col); if (row.length > 1 || row[0] !== "") result.push(row);
+                    row = []; col = ""; if (char === '\r' && nextChar === '\n') i++;
+                } else { col += char; }
+            }
+        }
+        if (row.length > 0 || col !== "") { row.push(col); result.push(row); }
+        return result;
+    }
+
+    function toggleContent(btn, id) {
+        const target = document.getElementById(`area-${id}`);
+        if (target.style.maxHeight === '0px' || target.style.maxHeight === '') {
+            target.style.maxHeight = '5000px';
+            target.style.opacity = '1';
+        } else {
+            target.style.maxHeight = '0px';
+            target.style.opacity = '0';
+        }
+        // 애니메이션이 끝날 때쯤 높이를 다시 계산해서 부모에게 알림
+        setTimeout(sendHeight, 500);
+    }
+
+    loadSheetData();
+</script>
+
+</body>
+</html>
