@@ -37,15 +37,14 @@
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
         section { padding: 120px 0; border-bottom: 1px solid var(--border-color); }
 
-        /* 수정됨: 임베드 환경용 Sticky 대응 (JavaScript로 제어됨) */
         nav { 
-            position: absolute; /* 임베드 시 기본 위치 */
+            position: absolute; 
             top: 0;
             width: 100%; 
             background: rgba(10, 10, 10, 1); 
             z-index: 1000; 
             border-bottom: 1px solid var(--border-color);
-            transition: none; /* 스크롤 시 덜덜거림 방지 */
+            transition: none;
         }
         .nav-inner { display: flex; justify-content: space-between; align-items: center; height: 70px; }
         .logo { font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px; }
@@ -88,7 +87,6 @@
         .card-info { padding: 20px 15px; text-align: center; background: #ffffff; color: #000000; }
         .card-info h3 { font-size: 1rem; font-weight: 800; margin-bottom: 8px; color: #000; }
         
-        /* 설명란 수정: 2줄 높이 고정 및 줄바꿈 인식 */
         .card-info p { 
             font-size: 0.8rem; 
             color: #666; 
@@ -140,7 +138,6 @@
         .guide-box.dark { background: black; color: white; grid-column: span 2; }
         .guide-box.dark h3 { color: white; border-color: white; }
         .guide-box.dark li { color: #ccc; }
-        .guide-box.dark li::before { color: white; }
 
         /* --- 3. Process --- */
         #process { background-color: var(--bg-black); text-align: center; }
@@ -261,7 +258,7 @@
 
     <nav id="mainNav">
         <div class="container nav-inner">
-            <div class="logo">MUMMU <span class="version-tag">Update 26.03.26 (v4)</span></div>
+            <div class="logo">MUMMU <span class="version-tag">Update 26.03.26 (v5)</span></div>
             <div class="nav-links">
                 <a onclick="jumpTo('intro')">소개</a>
                 <a onclick="jumpTo('portfolio')">포트폴리오</a>
@@ -392,58 +389,16 @@
                         <button class="q-cat-btn" onclick="setQuotePage(2)">손 & 동물</button>
                         <button class="q-cat-btn" onclick="setQuotePage(3)">의상 & 소품</button>
                         <button class="q-cat-btn" onclick="setQuotePage(4)">IOS & VB</button>
-                        <button class="q-cat-btn" onclick="setQuotePage(5)">헤어 & 기타</button>
+                        <button class="q-cat-btn" onclick="setQuotePage(5)">헤어</button>
                     </div>
                     <div class="quote-slider-wrap">
                         <button class="quote-nav-btn q-prev" onclick="moveQuotePage(-1)"><i class="fas fa-chevron-left"></i></button>
-                        <div class="category-page active">
-                            <div class="table-head"><div>항목</div><div>단가</div><div>수량</div></div>
-                            <div class="table-row" data-price="500000"><div class="item-label-group"><span class="item-label">[LD] 흉상</span><span class="item-desc">얼굴 ~ 가슴</span></div><div class="item-price-tag">500,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="600000"><div class="item-label-group"><span class="item-label">[LD] 반신</span><span class="item-desc">얼굴 ~ 골반 시작점</span></div><div class="item-price-tag">600,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="750000"><div class="item-label-group"><span class="item-label">[LD] 전신</span><span class="item-desc">얼굴 ~ 발</span></div><div class="item-price-tag">750,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="300000"><div class="item-label-group"><span class="item-label">[SD] 전신</span><span class="item-desc">전신 리깅</span></div><div class="item-price-tag">300,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="100000"><div class="item-label-group"><span class="item-label">타 작가 분리비</span><span class="item-desc">별도의 검수 비용 발생</span></div><div class="item-price-tag">100,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                        </div>
-                        <div class="category-page">
-                            <div class="table-head"><div>항목</div><div>단가</div><div>수량</div></div>
-                            <div class="table-row" data-price="15000"><div class="item-label-group"><span class="item-label">[표정] 단순</span><span class="item-desc">동공 변환, 단순 파츠 온/오프</span></div><div class="item-price-tag">15,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="30000"><div class="item-label-group"><span class="item-label">[표정] 복잡</span><span class="item-desc">표정 연동 눈 근육 추가</span></div><div class="item-price-tag">30,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="50000"><div class="item-label-group"><span class="item-label">[표정] 애니메이션</span><span class="item-desc">눈물, 땀 등 애니메이션</span></div><div class="item-price-tag">50,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                        </div>
-                        <div class="category-page">
-                            <div class="table-head"><div>항목</div><div>단가</div><div>수량</div></div>
-                            <div class="table-row" data-price="50000"><div class="item-label-group"><span class="item-label">[손] 한 손</span><span class="item-desc">양손일 경우 수량 2</span></div><div class="item-price-tag">50,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="120000"><div class="item-label-group"><span class="item-label">[손] 게임기</span><span class="item-desc">마우스 클릭 기능 추가</span></div><div class="item-price-tag">120,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="5000"><div class="item-label-group"><span class="item-label">[손] 오브젝트</span><span class="item-desc">손 위 오브젝트 개당 추가</span></div><div class="item-price-tag">5,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="60000"><div class="item-label-group"><span class="item-label">[동물] 귀</span><span class="item-desc">물리 연산 포함</span></div><div class="item-price-tag">60,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="50000"><div class="item-label-group"><span class="item-label">[동물] 꼬리</span><span class="item-desc">물리 연산 포함</span></div><div class="item-price-tag">50,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="100000"><div class="item-label-group"><span class="item-label">[동물] 귀+꼬리 세트</span><span class="item-desc">세트 할인 적용</span></div><div class="item-price-tag">100,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                        </div>
-                        <div class="category-page">
-                            <div class="table-head"><div>항목</div><div>단가</div><div>수량</div></div>
-                            <div class="table-row" data-price="100000"><div class="item-label-group"><span class="item-label">신의상 기본금</span><span class="item-desc">기존 바디 미의뢰 시</span></div><div class="item-price-tag">100,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="50000"><div class="item-label-group"><span class="item-label">자켓 온/오프</span><span class="item-desc">단순 탈착 가능</span></div><div class="item-price-tag">50,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="50000"><div class="item-label-group"><span class="item-label">복잡한 의상</span><span class="item-desc">난이도에 따른 추가</span></div><div class="item-price-tag">50,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="50000"><div class="item-label-group"><span class="item-label">[소품] 간단</span><span class="item-desc">모자, 마스크 등</span></div><div class="item-price-tag">50,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="70000"><div class="item-label-group"><span class="item-label">[소품] 복잡</span><span class="item-desc">마스코트, 가방 등 전체 연동</span></div><div class="item-price-tag">70,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                        </div>
-                        <div class="category-page">
-                            <div class="table-head"><div>항목</div><div>단가</div><div>수량</div></div>
-                            <div class="table-row" data-price="70000"><div class="item-label-group"><span class="item-label">[IOS] 혀 내밀기</span><span class="item-desc">-</span></div><div class="item-price-tag">70,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="30000"><div class="item-label-group"><span class="item-label">[IOS] 볼 빵빵</span><span class="item-desc">-</span></div><div class="item-price-tag">30,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="30000"><div class="item-label-group"><span class="item-label">[IOS] 입 X</span><span class="item-desc">-</span></div><div class="item-price-tag">30,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="120000"><div class="item-label-group"><span class="item-label">[IOS] 세트</span><span class="item-desc">세트 할인 적용</span></div><div class="item-price-tag">120,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="300000"><div class="item-label-group"><span class="item-label">브이브릿저</span><span class="item-desc">복합 입 모양 리깅 (IOS 별도)</span></div><div class="item-price-tag">300,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                        </div>
-                        <div class="category-page">
-                            <div class="table-head"><div>항목</div><div>단가</div><div>수량</div></div>
-                            <div class="table-row" data-price="50000"><div class="item-label-group"><span class="item-label">기장 추가</span><span class="item-desc">땅에 닿는 경우 (5단위 기준)</span></div><div class="item-price-tag">50,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="70000"><div class="item-label-group"><span class="item-label">[뒷머리] 단발</span><span class="item-desc">목 선 기준</span></div><div class="item-price-tag">70,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="150000"><div class="item-label-group"><span class="item-label">[뒷머리] 중발</span><span class="item-desc">어깨 기준</span></div><div class="item-price-tag">150,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="300000"><div class="item-label-group"><span class="item-label">[뒷머리] 장발</span><span class="item-desc">허리 기준</span></div><div class="item-price-tag">300,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="100000"><div class="item-label-group"><span class="item-label">앞머리/옆머리 추가</span><span class="item-desc">-</span></div><div class="item-price-tag">100,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                            <div class="table-row" data-price="50000"><div class="item-label-group"><span class="item-label">작업 과정 공개</span><span class="item-desc">-</span></div><div class="item-price-tag">50,000</div><div><input type="number" class="input-qty" value="0" min="0"></div></div>
-                        </div>
+                        <div class="category-page active"></div>
+                        <div class="category-page"></div>
+                        <div class="category-page"></div>
+                        <div class="category-page"></div>
+                        <div class="category-page"></div>
+                        <div class="category-page"></div>
                         <button class="quote-nav-btn q-next" onclick="moveQuotePage(1)"><i class="fas fa-chevron-right"></i></button>
                     </div>
                     <div class="page-indicator" id="qPageNum">1 / 6</div>
@@ -488,14 +443,16 @@
             }
         }
 
-        /* --- 2. Portfolio --- */
+        /* --- 2. Portfolio & Pricing CSV --- */
+        const portfolioCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQfQvcx4v77SwWmdML0YHYCXxgK2XgI0IuXPnshKnsLP8EqL8gl5qagyx9DF-2r7yf-jgmvsTjkkdY7/pub?gid=0&single=true&output=csv';
+        const priceCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQfQvcx4v77SwWmdML0YHYCXxgK2XgI0IuXPnshKnsLP8EqL8gl5qagyx9DF-2r7yf-jgmvsTjkkdY7/pub?gid=683062311&single=true&output=csv';
+        
         let portfolioData = {};
-        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQfQvcx4v77SwWmdML0YHYCXxgK2XgI0IuXPnshKnsLP8EqL8gl5qagyx9DF-2r7yf-jgmvsTjkkdY7/pub?gid=0&single=true&output=csv';
         let swiperInstance = null;
 
         async function loadPortfolioFromCSV() {
             try {
-                const response = await fetch(csvUrl);
+                const response = await fetch(portfolioCsvUrl);
                 const csvText = await response.text();
                 Papa.parse(csvText, {
                     header: true,
@@ -512,7 +469,51 @@
                         setCategory('여캐');
                     }
                 });
-            } catch (error) { console.error('CSV 로드 실패:', error); }
+            } catch (error) { console.error('Portfolio CSV 로드 실패:', error); }
+        }
+
+        async function loadPricingFromCSV() {
+            try {
+                const response = await fetch(priceCsvUrl);
+                const csvText = await response.text();
+                Papa.parse(csvText, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        const data = results.data;
+                        const categories = ['바디 & 작가', '표정', '손 & 동물', '의상 & 소품', 'IOS & VB', '헤어'];
+                        const pageContainers = document.querySelectorAll('.quote-content .category-page');
+                        
+                        pageContainers.forEach(container => {
+                            container.innerHTML = '<div class="table-head"><div>항목</div><div>단가</div><div>수량</div></div>';
+                        });
+
+                        data.forEach(item => {
+                            const catIndex = categories.indexOf(item['카테고리']);
+                            if (catIndex !== -1) {
+                                const rawPrice = item['가격'] ? item['가격'].toString().replace(/,/g, '') : '';
+                                const priceVal = (rawPrice && !isNaN(rawPrice)) ? parseInt(rawPrice) : 0;
+                                const priceDisplay = rawPrice ? parseInt(rawPrice).toLocaleString() : '-';
+                                
+                                const rowHtml = `
+                                    <div class="table-row" data-price="${priceVal}">
+                                        <div class="item-label-group">
+                                            <span class="item-label">${item['상품명']}</span>
+                                            <span class="item-desc">${item['설명'] || ''}</span>
+                                        </div>
+                                        <div class="item-price-tag">${priceDisplay}</div>
+                                        <div><input type="number" class="input-qty" value="0" min="0"></div>
+                                    </div>`;
+                                pageContainers[catIndex].insertAdjacentHTML('beforeend', rowHtml);
+                            }
+                        });
+
+                        document.querySelectorAll('.input-qty').forEach(input => {
+                            input.addEventListener('input', calculateTotal);
+                        });
+                    }
+                });
+            } catch (error) { console.error('Pricing CSV 로드 실패:', error); }
         }
 
         function setCategory(cat) {
@@ -576,10 +577,8 @@
             const modal = document.getElementById('videoModal');
             const rect = element.getBoundingClientRect();
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
             let topPosition = rect.top + scrollTop - 40;
             if (topPosition < 0) topPosition = 0;
-
             modal.style.top = topPosition + 'px';
             document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
             modal.style.display = 'flex';
@@ -592,9 +591,9 @@
 
         /* --- Quotation Logic --- */
         let currentQuotePage = 0;
-        const quotePages = document.querySelectorAll('.category-page');
-        const quoteCatBtns = document.querySelectorAll('.q-cat-btn');
         function setQuotePage(n) {
+            const quotePages = document.querySelectorAll('.category-page');
+            const quoteCatBtns = document.querySelectorAll('.q-cat-btn');
             quotePages[currentQuotePage].classList.remove('active');
             quoteCatBtns[currentQuotePage].classList.remove('active');
             currentQuotePage = n;
@@ -603,6 +602,7 @@
             document.getElementById('qPageNum').innerText = (currentQuotePage + 1) + " / " + quotePages.length;
         }
         function moveQuotePage(dir) {
+            const quotePages = document.querySelectorAll('.category-page');
             let next = currentQuotePage + dir;
             if (next < 0) next = quotePages.length - 1;
             if (next >= quotePages.length) next = 0;
@@ -617,28 +617,18 @@
             });
             document.getElementById('totalPriceDisplay').innerText = total.toLocaleString() + " 원";
         }
-        document.querySelectorAll('.input-qty').forEach(input => input.addEventListener('input', calculateTotal));
 
         function showStep(n) {
             const s1 = document.getElementById('step1');
             const s2 = document.getElementById('step2');
             const t1 = document.getElementById('tab1');
             const t2 = document.getElementById('tab2');
-
             if (n === 1) {
-                s2.style.display = 'none';
-                s1.style.display = 'block';
-                s1.classList.add('fade-in-up');
-                s2.classList.remove('fade-in-up');
-                t1.className = 'step-tab active';
-                t2.className = 'step-tab';
+                s2.style.display = 'none'; s1.style.display = 'block';
+                s1.classList.add('fade-in-up'); t1.className = 'step-tab active'; t2.className = 'step-tab';
             } else {
-                s1.style.display = 'none';
-                s2.style.display = 'block';
-                s2.classList.add('fade-in-up');
-                s1.classList.remove('fade-in-up');
-                t1.className = 'step-tab';
-                t2.className = 'step-tab active';
+                s1.style.display = 'none'; s2.style.display = 'block';
+                s2.classList.add('fade-in-up'); t1.className = 'step-tab'; t2.className = 'step-tab active';
             }
             setTimeout(sendHeightToParent, 50);
         }
@@ -662,36 +652,17 @@
             inputs.forEach((input, i) => { text += `• ${labels[i].innerText}: ${input.value || '(미입력)'}\n`; });
 
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).then(() => {
-                    alert('견적 내역과 양식이 전체 복사되었습니다!');
-                }).catch(err => {
-                    fallbackCopy(text);
-                });
-            } else {
-                fallbackCopy(text);
-            }
+                navigator.clipboard.writeText(text).then(() => { alert('견적 내역과 양식이 전체 복사되었습니다!'); }).catch(err => { fallbackCopy(text); });
+            } else { fallbackCopy(text); }
         }
 
         function fallbackCopy(text) {
             const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.left = "-9999px";
-            textArea.style.top = "0";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            textArea.setSelectionRange(0, 99999);
-            try {
-                document.execCommand('copy');
-                alert('견적 내역과 양식이 전체 복사되었습니다!');
-            } catch (err) {
-                alert('복사 중 오류가 발생했습니다. 직접 선택하여 복사해주세요.');
-            }
+            textArea.value = text; textArea.style.position = "fixed"; textArea.style.left = "-9999px"; textArea.style.top = "0";
+            document.body.appendChild(textArea); textArea.focus(); textArea.select();
+            try { document.execCommand('copy'); alert('견적 내역과 양식이 전체 복사되었습니다!'); } catch (err) { alert('복사 중 오류가 발생했습니다.'); }
             document.body.removeChild(textArea);
         }
-
-        window.onload = function() { loadPortfolioFromCSV(); };
 
         function sendHeightToParent() {
             const height = document.documentElement.scrollHeight || document.body.scrollHeight;
@@ -702,25 +673,19 @@
         const heightObserver = new MutationObserver(() => { setTimeout(sendHeightToParent, 100); });
         heightObserver.observe(document.body, { attributes: true, childList: true, subtree: true });
 
-        /* --- 아트머그 임베드 스크롤 연동 로직 --- */
         window.addEventListener('message', function(e) {
             if (e.data && e.data.type === 'scroll') {
                 const nav = document.getElementById('mainNav');
-                const scrollTop = e.data.scrollY; // 부모 창의 현재 스크롤 위치
-                const iframeOffset = e.data.offsetTop; // 부모 창 내 iframe의 시작 위치
-                
-                // iframe 내부에서의 상대적 스크롤 위치 계산
-                let relativeScroll = scrollTop - iframeOffset;
-                
-                if (relativeScroll > 0) {
-                    nav.style.position = 'absolute';
-                    nav.style.top = relativeScroll + 'px';
-                } else {
-                    nav.style.position = 'absolute';
-                    nav.style.top = '0px';
-                }
+                let relativeScroll = e.data.scrollY - e.data.offsetTop;
+                nav.style.position = 'absolute';
+                nav.style.top = (relativeScroll > 0 ? relativeScroll : 0) + 'px';
             }
         }, false);
+
+        window.onload = function() { 
+            loadPortfolioFromCSV(); 
+            loadPricingFromCSV();
+        };
     </script>
 </body>
 </html>
