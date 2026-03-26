@@ -32,19 +32,22 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Paperozi', sans-serif; }
         html { scroll-behavior: smooth; scroll-padding-top: 70px; }
-        body { background-color: var(--bg-black); color: var(--text-white); line-height: 1.6; overflow-x: hidden; }
+        body { background-color: var(--bg-black); color: var(--text-white); line-height: 1.6; overflow-x: hidden; position: relative; }
 
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
         section { padding: 120px 0; border-bottom: 1px solid var(--border-color); }
 
+        /* 네비게이션 스타일: JS로 top 위치를 조정함 */
         nav { 
             position: absolute; 
             top: 0;
+            left: 0;
             width: 100%; 
-            background: rgba(10, 10, 10, 1); 
+            background: rgba(10, 10, 10, 0.9); 
+            backdrop-filter: blur(10px);
             z-index: 1000; 
             border-bottom: 1px solid var(--border-color);
-            transition: none;
+            transition: top 0.1s ease-out; /* 이동을 부드럽게 */
         }
         .nav-inner { display: flex; justify-content: space-between; align-items: center; height: 70px; }
         .logo { font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px; }
@@ -86,7 +89,6 @@
         
         .card-info { padding: 20px 15px; text-align: center; background: #ffffff; color: #000000; }
         .card-info h3 { font-size: 1rem; font-weight: 800; margin-bottom: 8px; color: #000; }
-        
         .card-info p { 
             font-size: 0.8rem; 
             color: #666; 
@@ -138,6 +140,7 @@
         .guide-box.dark { background: black; color: white; grid-column: span 2; }
         .guide-box.dark h3 { color: white; border-color: white; }
         .guide-box.dark li { color: #ccc; }
+        .guide-box.dark li::before { color: white; }
 
         /* --- 3. Process --- */
         #process { background-color: var(--bg-black); text-align: center; }
@@ -258,7 +261,7 @@
 
     <nav id="mainNav">
         <div class="container nav-inner">
-            <div class="logo">MUMMU <span class="version-tag">Update 26.03.26 (v5)</span></div>
+            <div class="logo">MUMMU <span class="version-tag">Update 26.03.26 (v6)</span></div>
             <div class="nav-links">
                 <a onclick="jumpTo('intro')">소개</a>
                 <a onclick="jumpTo('portfolio')">포트폴리오</a>
@@ -383,25 +386,15 @@
                 </div>
                 
                 <div class="quote-content" id="step1">
-                    <div class="quote-category-nav">
-                        <button class="q-cat-btn active" onclick="setQuotePage(0)">바디 & 작가</button>
-                        <button class="q-cat-btn" onclick="setQuotePage(1)">표정</button>
-                        <button class="q-cat-btn" onclick="setQuotePage(2)">손 & 동물</button>
-                        <button class="q-cat-btn" onclick="setQuotePage(3)">의상 & 소품</button>
-                        <button class="q-cat-btn" onclick="setQuotePage(4)">IOS & VB</button>
-                        <button class="q-cat-btn" onclick="setQuotePage(5)">헤어</button>
+                    <div class="quote-category-nav" id="quoteCategoryNav">
                     </div>
                     <div class="quote-slider-wrap">
                         <button class="quote-nav-btn q-prev" onclick="moveQuotePage(-1)"><i class="fas fa-chevron-left"></i></button>
-                        <div class="category-page active"></div>
-                        <div class="category-page"></div>
-                        <div class="category-page"></div>
-                        <div class="category-page"></div>
-                        <div class="category-page"></div>
-                        <div class="category-page"></div>
+                        <div id="quotePagesContainer" style="width: 100%;">
+                        </div>
                         <button class="quote-nav-btn q-next" onclick="moveQuotePage(1)"><i class="fas fa-chevron-right"></i></button>
                     </div>
-                    <div class="page-indicator" id="qPageNum">1 / 6</div>
+                    <div class="page-indicator" id="qPageNum">1 / 1</div>
                     <div class="total-container">
                         <div class="total-label">전체 견적 합계</div>
                         <div class="total-amount" id="totalPriceDisplay">0 원</div>
@@ -438,113 +431,72 @@
     <script>
         function jumpTo(id) {
             const element = document.getElementById(id);
+            const navHeight = 70;
             if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                window.scrollTo({
+                    top: elementPosition - navHeight,
+                    behavior: 'smooth'
+                });
             }
         }
 
-        /* --- 2. Portfolio & Pricing CSV --- */
-        const portfolioCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQfQvcx4v77SwWmdML0YHYCXxgK2XgI0IuXPnshKnsLP8EqL8gl5qagyx9DF-2r7yf-jgmvsTjkkdY7/pub?gid=0&single=true&output=csv';
-        const priceCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQfQvcx4v77SwWmdML0YHYCXxgK2XgI0IuXPnshKnsLP8EqL8gl5qagyx9DF-2r7yf-jgmvsTjkkdY7/pub?gid=683062311&single=true&output=csv';
-        
+        /* --- Data Loading --- */
         let portfolioData = {};
+        let pricingData = {};
+        let pricingCategories = [];
+        const csvPortfolioUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQfQvcx4v77SwWmdML0YHYCXxgK2XgI0IuXPnshKnsLP8EqL8gl5qagyx9DF-2r7yf-jgmvsTjkkdY7/pub?gid=0&single=true&output=csv';
+        const csvPricingUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQfQvcx4v77SwWmdML0YHYCXxgK2XgI0IuXPnshKnsLP8EqL8gl5qagyx9DF-2r7yf-jgmvsTjkkdY7/pub?gid=683062311&single=true&output=csv';
         let swiperInstance = null;
 
-        async function loadPortfolioFromCSV() {
+        async function loadDataFromCSV() {
             try {
-                const response = await fetch(portfolioCsvUrl);
-                const csvText = await response.text();
-                Papa.parse(csvText, {
-                    header: true,
-                    skipEmptyLines: true,
-                    complete: function(results) {
-                        const data = results.data;
-                        const grouped = {};
-                        data.forEach(item => {
+                const resP = await fetch(csvPortfolioUrl);
+                const textP = await resP.text();
+                Papa.parse(textP, {
+                    header: true, skipEmptyLines: true,
+                    complete: function(r) {
+                        r.data.forEach(item => {
                             const cat = item['카테고리'] || '기타';
-                            if (!grouped[cat]) grouped[cat] = [];
-                            grouped[cat].push({ title: item['제목'], vid: item['아이디'], desc: item['설명'] });
+                            if (!portfolioData[cat]) portfolioData[cat] = [];
+                            portfolioData[cat].push({ title: item['제목'], vid: item['아이디'], desc: item['설명'] });
                         });
-                        portfolioData = grouped;
                         setCategory('여캐');
                     }
                 });
-            } catch (error) { console.error('Portfolio CSV 로드 실패:', error); }
-        }
 
-        async function loadPricingFromCSV() {
-            try {
-                const response = await fetch(priceCsvUrl);
-                const csvText = await response.text();
-                Papa.parse(csvText, {
-                    header: true,
-                    skipEmptyLines: true,
-                    complete: function(results) {
-                        const data = results.data;
-                        const categories = ['바디 & 작가', '표정', '손 & 동물', '의상 & 소품', 'IOS & VB', '헤어'];
-                        const pageContainers = document.querySelectorAll('.quote-content .category-page');
-                        
-                        pageContainers.forEach(container => {
-                            container.innerHTML = '<div class="table-head"><div>항목</div><div>단가</div><div>수량</div></div>';
+                const resQ = await fetch(csvPricingUrl);
+                const textQ = await resQ.text();
+                Papa.parse(textQ, {
+                    header: true, skipEmptyLines: true,
+                    complete: function(r) {
+                        const grouped = {};
+                        r.data.forEach(item => {
+                            let cat = item['카테고리'] || '기타';
+                            if (cat === '헤어 & 기타') cat = '헤어';
+                            if (!grouped[cat]) grouped[cat] = [];
+                            grouped[cat].push({ name: item['상품명'], desc: item['설명'], price: item['가격'] });
                         });
-
-                        data.forEach(item => {
-                            const catIndex = categories.indexOf(item['카테고리']);
-                            if (catIndex !== -1) {
-                                const rawPrice = item['가격'] ? item['가격'].toString().replace(/,/g, '') : '';
-                                const priceVal = (rawPrice && !isNaN(rawPrice)) ? parseInt(rawPrice) : 0;
-                                const priceDisplay = rawPrice ? parseInt(rawPrice).toLocaleString() : '-';
-                                
-                                const rowHtml = `
-                                    <div class="table-row" data-price="${priceVal}">
-                                        <div class="item-label-group">
-                                            <span class="item-label">${item['상품명']}</span>
-                                            <span class="item-desc">${item['설명'] || ''}</span>
-                                        </div>
-                                        <div class="item-price-tag">${priceDisplay}</div>
-                                        <div><input type="number" class="input-qty" value="0" min="0"></div>
-                                    </div>`;
-                                pageContainers[catIndex].insertAdjacentHTML('beforeend', rowHtml);
-                            }
-                        });
-
-                        document.querySelectorAll('.input-qty').forEach(input => {
-                            input.addEventListener('input', calculateTotal);
-                        });
+                        pricingData = grouped;
+                        pricingCategories = Object.keys(grouped);
+                        renderPricingUI();
                     }
                 });
-            } catch (error) { console.error('Pricing CSV 로드 실패:', error); }
+            } catch (error) { console.error('Data Load Error:', error); }
         }
 
         function setCategory(cat) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText === cat));
             initSlider(cat);
         }
-
         function initSlider(cat) {
             const listContainer = document.getElementById('slider');
             const items = portfolioData[cat] || [];
-            const pagination = document.querySelector('.swiper-pagination');
-            const prevBtn = document.querySelector('.swiper-button-prev');
-            const nextBtn = document.querySelector('.swiper-button-next');
-
-            if (swiperInstance) {
-                swiperInstance.destroy(true, true);
-                swiperInstance = null;
-            }
-
+            if (swiperInstance) { swiperInstance.destroy(true, true); swiperInstance = null; }
             if (items.length === 0) {
                 listContainer.innerHTML = '<p style="padding:50px; color:#555; text-align:center; width:100%;">해당 카테고리에 작업물이 없습니다.</p>';
-                if(pagination) pagination.style.display = 'none';
-                if(prevBtn) prevBtn.style.display = 'none';
-                if(nextBtn) nextBtn.style.display = 'none';
                 return;
-            } else {
-                if(pagination) pagination.style.display = 'block';
-                if(prevBtn) prevBtn.style.display = 'flex';
-                if(nextBtn) nextBtn.style.display = 'flex';
             }
-
             listContainer.innerHTML = items.map(item => `
                 <div class="swiper-slide">
                     <div class="portfolio-card" onclick="openVideo('${item.vid}', this)">
@@ -559,55 +511,63 @@
                     </div>
                 </div>
             `).join('');
-
             swiperInstance = new Swiper('.swiper', {
-                slidesPerView: 1,
-                spaceBetween: 20,
-                loop: items.length > 3,
+                slidesPerView: 1, spaceBetween: 20, loop: items.length > 3,
                 pagination: { el: '.swiper-pagination', clickable: true },
                 navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                breakpoints: {
-                    640: { slidesPerView: 2 },
-                    1024: { slidesPerView: 3 }
-                }
+                breakpoints: { 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
             });
         }
 
-        function openVideo(id, element) {
-            const modal = document.getElementById('videoModal');
-            const rect = element.getBoundingClientRect();
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            let topPosition = rect.top + scrollTop - 40;
-            if (topPosition < 0) topPosition = 0;
-            modal.style.top = topPosition + 'px';
-            document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
-            modal.style.display = 'flex';
-        }
-
-        function closeVideo() {
-            document.getElementById('videoModal').style.display = 'none';
-            document.getElementById('videoPlayer').src = '';
-        }
-
-        /* --- Quotation Logic --- */
         let currentQuotePage = 0;
-        function setQuotePage(n) {
-            const quotePages = document.querySelectorAll('.category-page');
-            const quoteCatBtns = document.querySelectorAll('.q-cat-btn');
-            quotePages[currentQuotePage].classList.remove('active');
-            quoteCatBtns[currentQuotePage].classList.remove('active');
-            currentQuotePage = n;
-            quotePages[currentQuotePage].classList.add('active');
-            quoteCatBtns[currentQuotePage].classList.add('active');
-            document.getElementById('qPageNum').innerText = (currentQuotePage + 1) + " / " + quotePages.length;
+        function renderPricingUI() {
+            const nav = document.getElementById('quoteCategoryNav');
+            const container = document.getElementById('quotePagesContainer');
+            nav.innerHTML = pricingCategories.map((cat, i) => `
+                <button class="q-cat-btn ${i === 0 ? 'active' : ''}" onclick="setQuotePage(${i})">${cat}</button>
+            `).join('');
+            container.innerHTML = pricingCategories.map((cat, i) => `
+                <div class="category-page ${i === 0 ? 'active' : ''}">
+                    <div class="table-head"><div>항목</div><div>단가</div><div>수량</div></div>
+                    ${pricingData[cat].map(item => {
+                        const isPriceNum = item.price && item.price.trim() !== "";
+                        const displayPrice = isPriceNum ? parseInt(item.price).toLocaleString() : "-";
+                        const rowPrice = isPriceNum ? item.price : "0";
+                        const inputDisabled = !isPriceNum ? "disabled style='opacity:0.3;'" : "";
+                        return `
+                        <div class="table-row" data-price="${rowPrice}">
+                            <div class="item-label-group">
+                                <span class="item-label">${item.name}</span>
+                                <span class="item-desc">${item.desc || '-'}</span>
+                            </div>
+                            <div class="item-price-tag">${displayPrice}</div>
+                            <div><input type="number" class="input-qty" value="0" min="0" oninput="calculateTotal()" ${inputDisabled}></div>
+                        </div>`;
+                    }).join('')}
+                </div>
+            `).join('');
+            setQuotePage(0);
         }
+
+        function setQuotePage(n) {
+            const pages = document.querySelectorAll('.category-page');
+            const btns = document.querySelectorAll('.q-cat-btn');
+            if (pages.length === 0) return;
+            pages[currentQuotePage].classList.remove('active');
+            btns[currentQuotePage].classList.remove('active');
+            currentQuotePage = n;
+            pages[currentQuotePage].classList.add('active');
+            btns[currentQuotePage].classList.add('active');
+            document.getElementById('qPageNum').innerText = (currentQuotePage + 1) + " / " + pricingCategories.length;
+        }
+
         function moveQuotePage(dir) {
-            const quotePages = document.querySelectorAll('.category-page');
             let next = currentQuotePage + dir;
-            if (next < 0) next = quotePages.length - 1;
-            if (next >= quotePages.length) next = 0;
+            if (next < 0) next = pricingCategories.length - 1;
+            if (next >= pricingCategories.length) next = 0;
             setQuotePage(next);
         }
+
         function calculateTotal() {
             let total = 0;
             document.querySelectorAll('.table-row').forEach(row => {
@@ -625,10 +585,10 @@
             const t2 = document.getElementById('tab2');
             if (n === 1) {
                 s2.style.display = 'none'; s1.style.display = 'block';
-                s1.classList.add('fade-in-up'); t1.className = 'step-tab active'; t2.className = 'step-tab';
+                t1.className = 'step-tab active'; t2.className = 'step-tab';
             } else {
                 s1.style.display = 'none'; s2.style.display = 'block';
-                s2.classList.add('fade-in-up'); t1.className = 'step-tab'; t2.className = 'step-tab active';
+                t1.className = 'step-tab'; t2.className = 'step-tab active';
             }
             setTimeout(sendHeightToParent, 50);
         }
@@ -652,17 +612,34 @@
             inputs.forEach((input, i) => { text += `• ${labels[i].innerText}: ${input.value || '(미입력)'}\n`; });
 
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).then(() => { alert('견적 내역과 양식이 전체 복사되었습니다!'); }).catch(err => { fallbackCopy(text); });
+                navigator.clipboard.writeText(text).then(() => { alert('복사되었습니다!'); }).catch(e => { fallbackCopy(text); });
             } else { fallbackCopy(text); }
         }
 
         function fallbackCopy(text) {
             const textArea = document.createElement("textarea");
-            textArea.value = text; textArea.style.position = "fixed"; textArea.style.left = "-9999px"; textArea.style.top = "0";
-            document.body.appendChild(textArea); textArea.focus(); textArea.select();
-            try { document.execCommand('copy'); alert('견적 내역과 양식이 전체 복사되었습니다!'); } catch (err) { alert('복사 중 오류가 발생했습니다.'); }
+            textArea.value = text;
+            textArea.style.position = "fixed"; textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.select();
+            try { document.execCommand('copy'); alert('복사되었습니다!'); } catch (err) { alert('복사 실패'); }
             document.body.removeChild(textArea);
         }
+
+        function openVideo(id, element) {
+            const modal = document.getElementById('videoModal');
+            const rect = element.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            modal.style.top = (rect.top + scrollTop - 40) + 'px';
+            document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+            modal.style.display = 'flex';
+        }
+        function closeVideo() {
+            document.getElementById('videoModal').style.display = 'none';
+            document.getElementById('videoPlayer').src = '';
+        }
+
+        window.onload = loadDataFromCSV;
 
         function sendHeightToParent() {
             const height = document.documentElement.scrollHeight || document.body.scrollHeight;
@@ -673,19 +650,21 @@
         const heightObserver = new MutationObserver(() => { setTimeout(sendHeightToParent, 100); });
         heightObserver.observe(document.body, { attributes: true, childList: true, subtree: true });
 
+        /* --- 아트머그 임베드 스크롤 연동 로직 --- */
         window.addEventListener('message', function(e) {
             if (e.data && e.data.type === 'scroll') {
                 const nav = document.getElementById('mainNav');
-                let relativeScroll = e.data.scrollY - e.data.offsetTop;
-                nav.style.position = 'absolute';
-                nav.style.top = (relativeScroll > 0 ? relativeScroll : 0) + 'px';
+                // 부모 창의 헤더나 UI와 겹치지 않도록 offset 조절 (기본 0~50px 추천)
+                const marginOffset = 0; 
+                const relativeScroll = e.data.scrollY - e.data.offsetTop + marginOffset;
+                
+                if (relativeScroll > 0) {
+                    nav.style.top = relativeScroll + 'px';
+                } else {
+                    nav.style.top = '0px';
+                }
             }
         }, false);
-
-        window.onload = function() { 
-            loadPortfolioFromCSV(); 
-            loadPricingFromCSV();
-        };
     </script>
 </body>
 </html>
