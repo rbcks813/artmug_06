@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live2D 리깅 커미션</title>
+    <style>
+        /* 폰트 설정: Paperozi (Paperlogy) */
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight: 100; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2'); font-weight: 200; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2'); font-weight: 800; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --main-purple: #b39ddb;
+            --main-pink: #f48fb1;
+            --text-black: #333;
+            --soft-purple: #f8f4ff;
+            --shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Paperozi', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-black); padding: 20px 0; }
+        .container { max-width: 850px; margin: 0 auto; padding: 0 15px; }
+
+        section { 
+            background-color: var(--card-bg); 
+            margin-bottom: 30px; 
+            padding: 50px 30px; 
+            border-radius: 25px; 
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .section-title { 
+            text-align: center; font-size: 1.8rem; font-weight: 800; 
+            color: var(--main-purple); margin-bottom: 35px; letter-spacing: -1px; 
+        }
+
+        /* 메인 슬라이더 */
+        .header-section { text-align: center; background: linear-gradient(to bottom, #fff, var(--soft-purple)); }
+        .main-slider { position: relative; width: 100%; aspect-ratio: 16/9; margin-top: 30px; border-radius: 20px; overflow: hidden; background: #f9f9f9; }
+        .slider-wrapper { display: flex; transition: transform 0.5s ease; height: 100%; }
+        .slide { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        .slide img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* 공통 네비게이션 버튼 */
+        .slider-nav button { 
+            position: absolute; top: 50%; transform: translateY(-50%); 
+            background: rgba(255,255,255,0.8); border: none; width: 40px; height: 40px; 
+            border-radius: 50%; cursor: pointer; color: var(--main-purple); 
+            font-weight: bold; z-index: 5; opacity: 0; transition: opacity 0.3s ease, background 0.3s; 
+        }
+        .slider-nav button:hover { background: var(--main-purple); color: #fff; }
+        .main-slider:hover .slider-nav button, 
+        .model-media-area:hover .slider-nav button,
+        .portfolio-slider-container:hover .slider-nav button { opacity: 1; }
+
+        /* 공통 페이지네이션 도트 */
+        .dots-container { display: flex; justify-content: center; gap: 8px; margin: 15px 0 30px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: #ddd; cursor: pointer; transition: 0.3s; }
+        .dot.active { background: var(--main-purple); width: 24px; border-radius: 10px; }
+
+        /* 동적 슬롯 탭 시스템 */
+        .slot-tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 25px; flex-wrap: wrap; }
+        .slot-tab-btn { padding: 10px 18px; border: 2px solid var(--main-purple); background: #fff; color: var(--main-purple); border-radius: 30px; cursor: pointer; font-weight: 800; font-size: 0.9rem; transition: 0.3s; }
+        .slot-tab-btn.active { background: var(--main-purple); color: #fff; box-shadow: 0 4px 10px rgba(179, 157, 219, 0.3); }
+        
+        #slot-display-area { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; min-height: 100px; align-items: center; }
+        .slot { width: clamp(90px, 30%, 120px); padding: 18px 0; border: 2px solid var(--main-pink); border-radius: 18px; font-weight: 800; background: #fff; font-size: 1rem; text-align: center; animation: fadeIn 0.4s; }
+        .slot.closed { background: #f5f5f5; border-color: #ddd; color: #bbb; }
+        .slot.open { background: var(--soft-purple); color: var(--main-pink); }
+
+        /* 가격표 좌우 배치 */
+        .price-grid { display: flex; gap: 20px; align-items: flex-start; }
+        .price-table { flex: 1; border-collapse: collapse; margin-bottom: 10px; border-radius: 15px; overflow: hidden; border: 1px solid #f0f0f0; width: 100%; }
+        .price-table th { background: var(--main-purple); color: #fff; padding: 15px; text-align: left; }
+        .price-table td { padding: 18px 15px; border-bottom: 1px solid #f9f9f9; background: #fff; word-break: keep-all; }
+        .price-table .price { text-align: right; font-weight: 800; color: var(--main-pink); font-size: 1.1rem; white-space: nowrap; }
+
+        /* 모델 판매 슬라이더 */
+        .model-sale-container { position: relative; overflow: hidden; border-radius: 20px; background: #fafafa; padding: 20px; }
+        .model-media-area { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; background: #eee; }
+        .model-wrapper { display: flex; transition: transform 0.5s ease; height: 100%; }
+        .model-card { min-width: 100%; display: flex; flex-direction: column; height: 100%; }
+        .model-media-content { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .model-media-content iframe, .model-media-content img { width: 100%; height: 100%; border: none; object-fit: cover; }
+        .model-info { padding: 25px 10px 10px; text-align: center; }
+        .model-desc { font-size: 1rem; color: #666; margin-bottom: 15px; line-height: 1.6; word-break: keep-all; font-weight: 500; }
+        .model-price { font-size: 1.5rem; font-weight: 900; color: var(--main-pink); }
+
+        /* 포트폴리오 슬라이더 */
+        .portfolio-slider-container { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; background: #f9f9f9; margin-bottom: 15px; }
+        .portfolio-wrapper { display: flex; transition: transform 0.5s ease; height: 100%; }
+        .portfolio-slide { min-width: 100%; height: 100%; }
+        .portfolio-slide iframe, .portfolio-slide img { width: 100%; height: 100%; border: none; object-fit: contain; background: #000; }
+
+        /* 포트폴리오 미리보기(썸네일) 목록 중앙 정렬 */
+        .portfolio-thumbnails { display: flex; gap: 10px; overflow-x: auto; padding: 5px 0 15px; scrollbar-width: thin; scrollbar-color: var(--main-purple) transparent; justify-content: center; }
+        .portfolio-thumbnails::-webkit-scrollbar { height: 6px; }
+        .portfolio-thumbnails::-webkit-scrollbar-thumb { background: var(--main-purple); border-radius: 10px; }
+        .portfolio-thumb { 
+            flex: 0 0 100px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; 
+            cursor: pointer; border: 2px solid transparent; transition: 0.3s; opacity: 0.6;
+        }
+        .portfolio-thumb.active { border-color: var(--main-purple); opacity: 1; transform: scale(1.05); }
+        .portfolio-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* 협업 작가 섹션 */
+        .partner-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .partner-banner-card { background: #fff; border-radius: 20px; overflow: hidden; border: 1px solid #eee; transition: 0.3s; display: flex; flex-direction: column; }
+        .partner-banner-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .partner-banner-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #f0f0f0; display: block; }
+        .partner-banner-info { padding: 20px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .partner-name { font-size: 1.15rem; font-weight: 800; color: var(--main-pink); margin-bottom: 8px; }
+        .partner-work { font-size: 0.9rem; color: #666; margin-bottom: 15px; word-break: keep-all; line-height: 1.5; font-weight: 500; }
+        .partner-link-btn { display: inline-block; padding: 10px 20px; background: var(--soft-purple); color: var(--main-purple); text-decoration: none; border-radius: 10px; font-weight: 800; font-size: 0.8rem; transition: 0.3s; }
+        .partner-link-btn:hover { background: var(--main-purple); color: #fff; }
+
+        /* 공지사항 스타일 */
+        .notice-list { list-style: none; }
+        .notice-item { 
+            position: relative; padding-left: 25px; margin-bottom: 12px; 
+            font-size: 0.95rem; line-height: 1.6; color: #555; font-weight: 500;
+            word-break: keep-all;
+        }
+        .notice-item::before { 
+            content: '•'; position: absolute; left: 0; 
+            color: var(--main-purple); font-weight: bold; font-size: 1.2rem;
+        }
+
+        /* 기본 제공 옵션 & 작업과정 공통 리스트 */
+        .standard-list { list-style: none; padding: 0; }
+        .standard-item {
+            padding: 12px 15px; margin-bottom: 8px; background: var(--soft-purple);
+            border-radius: 12px; font-size: 0.95rem; color: #555; font-weight: 600;
+        }
+        
+        /* 작업과정 한 줄 고정 및 중앙 정렬 (절대 잘리지 않도록 개선) */
+        .process-flow-wrapper { 
+            display: flex; flex-wrap: nowrap; justify-content: center; align-items: center; 
+            gap: clamp(2px, 0.8vw, 10px); font-weight: 800; color: var(--main-purple); 
+            width: 100%; padding: 0 5px; box-sizing: border-box;
+        }
+        .process-flow-wrapper span { 
+            background: #fff; border: 1px solid var(--main-purple); 
+            padding: clamp(3px, 0.8vw, 8px) clamp(5px, 1.2vw, 15px); 
+            border-radius: 50px; white-space: nowrap; 
+            font-size: clamp(0.55rem, 1.7vw, 0.85rem); /* 모바일 폭에 따라 글자 크기 축소 */
+            line-height: 1;
+        }
+        .process-arrow { color: var(--main-pink); flex-shrink: 0; font-size: clamp(0.45rem, 1.3vw, 0.8rem); }
+
+        /* 신청 양식 */
+        .apply-container { background: #fff; border: 2px dashed var(--main-purple); padding: 30px; border-radius: 20px; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 0.95rem; font-weight: 800; margin-bottom: 8px; color: var(--main-purple); }
+        .input-group input, .input-group textarea { width: 100%; padding: 14px; border: 1px solid #eee; border-radius: 12px; font-size: 1rem; outline: none; background: #fafafa; }
+        
+        .input-group textarea { 
+            resize: none; 
+            overflow-y: auto; 
+            height: 120px; 
+        }
+
+        .select-group { display: flex; gap: 10px; }
+        .select-btn { 
+            flex: 1; padding: 12px; border: 1px solid #eee; background: #fafafa; 
+            border-radius: 12px; cursor: pointer; font-weight: 800; color: #aaa; transition: 0.3s;
+        }
+        .select-btn.active { background: var(--main-purple); color: #fff; border-color: var(--main-purple); }
+
+        .copy-btn { width: 100%; padding: 20px; background: var(--main-purple); color: #fff; border: none; border-radius: 15px; font-weight: 900; cursor: pointer; transition: 0.3s; font-size: 1.1rem; box-shadow: 0 5px 15px rgba(179, 157, 219, 0.4); }
+
+        /* 모바일 최적화 반응형 설정 추가 */
+        @media (max-width: 768px) {
+            section { padding: 40px 20px; }
+            .section-title { font-size: 1.5rem; margin-bottom: 25px; }
+            .partner-grid { grid-template-columns: 1fr; }
+            .price-grid { flex-direction: column; gap: 15px; }
+            .header-section h1 { font-size: 1.5rem !important; }
+        }
+        @media (max-width: 480px) {
+            section { padding: 30px 15px; border-radius: 20px; }
+            .slot { width: 31%; font-size: 0.85rem; padding: 14px 0; }
+            .price-table td, .price-table th { padding: 12px 10px; font-size: 0.9rem; }
+            .price-table .price { font-size: 0.95rem; }
+            .apply-container { padding: 20px 15px; }
+            .input-group input, .input-group textarea { padding: 12px; font-size: 0.95rem; }
+            .portfolio-thumb { flex: 0 0 80px; }
+            .process-flow-wrapper span { padding: 3px 4px; font-size: 0.5rem; border-width: 1px; } /* 가장 좁은 화면에서의 작업과정 축소 */
+            .process-arrow { font-size: 0.4rem; }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .loading-text { color: #aaa; font-size: 0.9rem; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <section class="header-section">
+        <h1 style="color: var(--main-pink); font-size: 1.8rem; font-weight: 900; margin-bottom: 30px;">Live2D Rigging Commissions</h1>
+        <div class="main-slider" id="mainSlider">
+            <div class="slider-wrapper" id="sheet-slider-content">
+                <div class="slide"><p class="loading-text">샘플 로딩 중...</p></div>
+            </div>
+            <div class="slider-nav">
+                <button style="left:15px" onclick="moveSlide(-1)">&#10094;</button>
+                <button style="right:15px" onclick="moveSlide(1)">&#10095;</button>
+            </div>
+        </div>
+        <div class="dots-container" id="gif-dots"></div>
+        
+        <div class="slot-tabs" id="slot-tabs-container"></div>
+        <div id="slot-display-area">
+            <p class="loading-text">슬롯 정보를 불러오는 중...</p>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">공지사항</h2>
+        <ul class="notice-list">
+            <li class="notice-item">Live2D 리깅 커미션으로 일러스트는 작업하지 않습니다. 파츠 분리가 된 일러스트 PSD 파일을 준비해주셔야 합니다.</li>
+            <li class="notice-item">아이폰, VTube Studio를 기준으로 작업합니다. 웹캠을 사용하실 경우 따로 말씀 부탁드립니다.</li>
+            <li class="notice-item">작업물은 포트폴리오, 샘플 등으로 사용될 수 있습니다. 일러스트 작가님과 사전 협의 바랍니다.</li>
+            <li class="notice-item">샘플 비공개 기간이 필요하신 경우, 따로 말씀 부탁드립니다.</li>
+            <li class="notice-item">구현용 파일(.moc3 등) 외에 원본 파일(.cmo3)은 제공하지 않습니다.</li>
+            <li class="notice-item">작업 기간은 최소 3주에서 최대 6주입니다.</li>
+            <li class="notice-item">작업 완료 후 오류가 생길 경우, 기간에 상관없이 수정해드립니다.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2 class="section-title">작업과정</h2>
+        <div class="process-flow-wrapper">
+            <span>문의</span>
+            <div class="process-arrow">▶</div>
+            <span>결제</span>
+            <div class="process-arrow">▶</div>
+            <span>1차 작업</span>
+            <div class="process-arrow">▶</div>
+            <span>중간 수정</span>
+            <div class="process-arrow">▶</div>
+            <span>2차 작업</span>
+            <div class="process-arrow">▶</div>
+            <span>최종 수정</span>
+            <div class="process-arrow">▶</div>
+            <span>완성</span>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title" style="margin-bottom: 10px;">타입 및 가격표</h2>
+        <p style="text-align: right; font-size: 0.85rem; color: #888; margin-bottom: 20px; font-weight: 600;">(단위: 만원)</p>
+        <div id="price-display-area" class="price-grid"></div>
+    </section>
+
+    <section>
+        <h2 class="section-title">판매 모델</h2>
+        <div class="model-sale-container">
+            <div class="model-media-area">
+                <div class="model-wrapper" id="model-list-content"></div>
+                <div class="slider-nav">
+                    <button style="left:15px" onclick="moveModelSlide(-1)">&#10094;</button>
+                    <button style="right:15px" onclick="moveModelSlide(1)">&#10095;</button>
+                </div>
+            </div>
+            <div id="model-info-area"></div>
+            <div class="dots-container" id="model-dots"></div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">협업 작가님</h2>
+        <div class="partner-grid" id="partner-display-area"></div>
+    </section>
+
+    <section>
+        <h2 class="section-title">포트폴리오</h2>
+        <div class="portfolio-slider-container">
+            <div class="portfolio-wrapper" id="portfolio-list-content">
+                <div class="portfolio-slide"><p class="loading-text" style="text-align:center; padding-top:20%;">데이터를 불러오는 중...</p></div>
+            </div>
+            <div class="slider-nav">
+                <button style="left:15px" onclick="movePortfolioSlide(-1)">&#10094;</button>
+                <button style="right:15px" onclick="movePortfolioSlide(1)">&#10095;</button>
+            </div>
+        </div>
+        <div class="dots-container" id="port-dots"></div>
+        <div class="portfolio-thumbnails" id="portfolio-thumb-list"></div>
+    </section>
+
+    <section>
+        <h2 class="section-title">기본 제공 옵션</h2>
+        <ul class="standard-list">
+            <li class="standard-item">머리 XYZ / 몸 XYZ</li>
+            <li class="standard-item">눈썹 위아래, 각도, 변형</li>
+            <li class="standard-item">눈동자 XY / 눈 깜빡임 / 눈웃음 / 놀란 눈</li>
+            <li class="standard-item">입 모양 15~가지</li>
+            <li class="standard-item">눈동자, 머리카락, 기타(의상, 액세사리 등) 세세한 물리</li>
+            <li class="standard-item">호흡</li>
+            <li class="standard-item">간단표정 3개 포함 (파츠 필요)</li>
+            <li class="standard-item">그외 세부 디테일</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2 class="section-title">신청 양식 작성</h2>
+        <div class="apply-container">
+            <div class="input-group"><label>1. 닉네임</label><input type="text" id="form-name"></div>
+            <div class="input-group"><label>2. 신청 타입 (흉상, 반신, 전신, 전신 세트)</label><input type="text" id="form-type"></div>
+            <div class="input-group"><label>3. 원하시는 기능 및 추가 옵션</label><input type="text" id="form-option"></div>
+            <div class="input-group"><label>4. 일러스트 PSD 파일 첨부</label><input type="text" id="form-file-check" placeholder="준비 여부를 적어주세요"></div>
+            <div class="input-group"><label>5. 일러스트 작가님 닉네임</label><input type="text" id="form-artist"></div>
+            
+            <div class="input-group">
+                <label>6. 작업 과정 SNS 공개 여부</label>
+                <div class="select-group">
+                    <button class="select-btn" onclick="selectSNS('O', this)">O</button>
+                    <button class="select-btn" onclick="selectSNS('X', this)">X</button>
+                </div>
+                <input type="hidden" id="form-sns" value="">
+            </div>
+
+            <div class="input-group"><label>7. 기타 문의</label><textarea id="form-etc" placeholder="추가 요청 사항을 입력해주세요"></textarea></div>
+            
+            <button class="copy-btn" onclick="copyForm()">양식 복사하기</button>
+            <p id="copy-msg" style="text-align:center; font-size:0.9rem; color:var(--main-pink); margin-top:15px; display:none; font-weight:700;">✅ 복사되었습니다!</p>
+        </div>
+    </section>
+</div>
+
+<script>
+    const GIF_SHEET = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRD1qrOvlWwAx6Nl9tKoHA3WfMDYEwTndyISTFEXMqpuY2pb7Y4mKUAcBJbPu1XEHDxjEidf9Ve0aR8/pub?gid=0&single=true&output=csv';
+    const SLOT_SHEET = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRD1qrOvlWwAx6Nl9tKoHA3WfMDYEwTndyISTFEXMqpuY2pb7Y4mKUAcBJbPu1XEHDxjEidf9Ve0aR8/pub?gid=59262874&single=true&output=csv';
+    const PRICE_SHEET = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRD1qrOvlWwAx6Nl9tKoHA3WfMDYEwTndyISTFEXMqpuY2pb7Y4mKUAcBJbPu1XEHDxjEidf9Ve0aR8/pub?gid=44520548&single=true&output=csv';
+    const MODEL_SHEET = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRD1qrOvlWwAx6Nl9tKoHA3WfMDYEwTndyISTFEXMqpuY2pb7Y4mKUAcBJbPu1XEHDxjEidf9Ve0aR8/pub?gid=1912351949&single=true&output=csv';
+    const PARTNER_SHEET = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRD1qrOvlWwAx6Nl9tKoHA3WfMDYEwTndyISTFEXMqpuY2pb7Y4mKUAcBJbPu1XEHDxjEidf9Ve0aR8/pub?gid=831721224&single=true&output=csv';
+    const PORTFOLIO_SHEET = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRD1qrOvlWwAx6Nl9tKoHA3WfMDYEwTndyISTFEXMqpuY2pb7Y4mKUAcBJbPu1XEHDxjEidf9Ve0aR8/pub?gid=537455232&single=true&output=csv';
+
+    let allSlotData = [];
+    let curSlide = 0, curModelSlide = 0, curPortSlide = 0;
+    let totalModelCount = 0, totalGifCount = 0, totalPortCount = 0;
+
+    function parseCSV(str) {
+        const result = [];
+        let row = [], cell = "", inQuotes = false;
+        for (let i = 0; i < str.length; i++) {
+            const char = str[i];
+            if (char === '"') { if (inQuotes && str[i + 1] === '"') { cell += '"'; i++; } else { inQuotes = !inQuotes; } }
+            else if (char === ',' && !inQuotes) { row.push(cell.trim()); cell = ""; }
+            else if (char === '\n' && !inQuotes) { row.push(cell.trim()); result.push(row); row = []; cell = ""; }
+            else if (char !== '\r') { cell += char; }
+        }
+        if (cell || row.length) { row.push(cell.trim()); result.push(row); }
+        return result;
+    }
+
+    function getYoutubeId(url) {
+        if (!url || (!url.includes('youtube.com') && !url.includes('youtu.be'))) return null;
+        if (url.includes('v=')) return url.split('v=')[1].split('&')[0];
+        if (url.includes('youtu.be/')) return url.split('youtu.be/')[1].split('?')[0];
+        return null;
+    }
+
+    function selectSNS(val, btn) {
+        document.getElementById('form-sns').value = val;
+        const btns = document.querySelectorAll('.select-btn');
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    async function loadPortfolio() {
+        try {
+            const res = await fetch(PORTFOLIO_SHEET);
+            const csv = await res.text();
+            const rows = parseCSV(csv).slice(1).filter(r => r[0]);
+            const wrapper = document.getElementById('portfolio-list-content');
+            const thumbList = document.getElementById('portfolio-thumb-list');
+            wrapper.innerHTML = ''; thumbList.innerHTML = '';
+            totalPortCount = rows.length;
+
+            rows.forEach((row, idx) => {
+                const url = row[0];
+                const youtubeId = getYoutubeId(url);
+                const slide = document.createElement('div');
+                slide.className = 'portfolio-slide';
+                slide.innerHTML = youtubeId 
+                    ? `<iframe src="https://www.youtube.com/embed/${youtubeId}?autoplay=0&mute=1" allowfullscreen></iframe>`
+                    : `<img src="${url}" alt="포트폴리오">`;
+                wrapper.appendChild(slide);
+
+                const thumb = document.createElement('div');
+                thumb.className = 'portfolio-thumb' + (idx === 0 ? ' active' : '');
+                const thumbImg = youtubeId ? `https://img.youtube.com/vi/${youtubeId}/mqdefault.jpg` : url;
+                thumb.innerHTML = `<img src="${thumbImg}">`;
+                thumb.onclick = () => { curPortSlide = idx; updatePortfolioView(); };
+                thumbList.appendChild(thumb);
+            });
+            createDots('port-dots', totalPortCount, (idx) => { curPortSlide = idx; updatePortfolioView(); });
+        } catch(e) { console.error(e); }
+    }
+
+    function updatePortfolioView() {
+        document.getElementById('portfolio-list-content').style.transform = `translateX(-${curPortSlide * 100}%)`;
+        const thumbs = document.querySelectorAll('.portfolio-thumb');
+        thumbs.forEach((t, i) => t.classList.toggle('active', i === curPortSlide));
+        updateDots('port-dots', curPortSlide);
+        if(thumbs[curPortSlide]) thumbs[curPortSlide].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+
+    function movePortfolioSlide(n) {
+        if (totalPortCount === 0) return;
+        curPortSlide = (curPortSlide + n + totalPortCount) % totalPortCount;
+        updatePortfolioView();
+    }
+
+    async function loadPartners() {
+        try {
+            const res = await fetch(PARTNER_SHEET);
+            const rows = parseCSV(await res.text()).slice(1);
+            const area = document.getElementById('partner-display-area'); area.innerHTML = '';
+            rows.forEach(row => {
+                if (row.length < 4) return;
+                area.innerHTML += `
+                    <div class="partner-banner-card">
+                        <img src="${row[2]}" class="partner-banner-img">
+                        <div class="partner-banner-info">
+                            <div>
+                                <p class="partner-name">${row[0]}</p>
+                                <p class="partner-work">${row[1]}</p>
+                            </div>
+                            <a href="${row[3]}" target="_blank" class="partner-link-btn">작가님 페이지 이동</a>
+                        </div>
+                    </div>`;
+            });
+        } catch(e) { console.error(e); }
+    }
+
+    function createDots(containerId, count, clickFn) {
+        const container = document.getElementById(containerId); container.innerHTML = '';
+        for (let i = 0; i < count; i++) {
+            const dot = document.createElement('div'); dot.className = 'dot' + (i === 0 ? ' active' : ''); dot.onclick = () => clickFn(i); container.appendChild(dot);
+        }
+    }
+
+    function updateDots(containerId, index) { 
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === index));
+        }
+    }
+
+    async function loadGifs() {
+        try {
+            const lines = (await (await fetch(GIF_SHEET)).text()).split('\n').slice(1).map(l => l.trim()).filter(l => l);
+            const wrapper = document.getElementById('sheet-slider-content'); wrapper.innerHTML = ''; totalGifCount = lines.length;
+            lines.forEach(url => { wrapper.innerHTML += `<div class="slide"><img src="${url}"></div>`; });
+            createDots('gif-dots', totalGifCount, (idx) => { curSlide = idx; wrapper.style.transform = `translateX(-${curSlide * 100}%)`; updateDots('gif-dots', curSlide); });
+        } catch(e) { console.error(e); }
+    }
+
+    async function loadModels() {
+        try {
+            const rows = parseCSV(await (await fetch(MODEL_SHEET)).text()).slice(1);
+            const wrapper = document.getElementById('model-list-content'), infoArea = document.getElementById('model-info-area');
+            wrapper.innerHTML = ''; infoArea.innerHTML = ''; totalModelCount = rows.length;
+            rows.forEach((row, idx) => {
+                const youtubeId = getYoutubeId(row[0]);
+                const mediaContent = youtubeId ? `<iframe src="https://www.youtube.com/embed/${youtubeId}?autoplay=0&mute=1" allowfullscreen></iframe>` : `<img src="${row[0]}">`;
+                wrapper.innerHTML += `<div class="model-card"><div class="model-media-content">${mediaContent}</div></div>`;
+                infoArea.innerHTML += `<div class="model-info" id="model-info-${idx}" style="display: ${idx === 0 ? 'block' : 'none'}"><p class="model-desc">${row[1].replace(/\n/g, '<br>')}</p><p class="model-price">${(parseInt(row[2].replace(/,/g, '')) / 10000).toFixed(1)} 만원</p></div>`;
+            });
+            createDots('model-dots', totalModelCount, (idx) => { curModelSlide = idx; updateModelView(); });
+        } catch(e) { console.error(e); }
+    }
+
+    function updateModelView() {
+        document.getElementById('model-list-content').style.transform = `translateX(-${curModelSlide * 100}%)`;
+        for (let i = 0; i < totalModelCount; i++) { document.getElementById(`model-info-${i}`).style.display = (i === curModelSlide ? 'block' : 'none'); }
+        updateDots('model-dots', curModelSlide);
+    }
+
+    function moveModelSlide(n) { if (totalModelCount > 0) { curModelSlide = (curModelSlide + n + totalModelCount) % totalModelCount; updateModelView(); } }
+    function moveSlide(n) { if (totalGifCount > 0) { curSlide = (curSlide + n + totalGifCount) % totalGifCount; document.getElementById('sheet-slider-content').style.transform = `translateX(-${curSlide * 100}%)`; updateDots('gif-dots', curSlide); } }
+
+    async function loadSlots() {
+        try {
+            const dataRows = (await (await fetch(SLOT_SHEET)).text()).split('\n').map(row => row.split(',')).slice(1);
+            const tabContainer = document.getElementById('slot-tabs-container'); tabContainer.innerHTML = ''; allSlotData = [];
+            dataRows.forEach((row, idx) => {
+                const month = row[0]?.trim(); if(!month) return;
+                const btn = document.createElement('button'); btn.className = 'slot-tab-btn' + (idx === 0 ? ' active' : ''); btn.innerText = `${month}월 슬롯`;
+                btn.onclick = () => { document.querySelectorAll('.slot-tab-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); displaySlots(idx); };
+                tabContainer.appendChild(btn);
+                allSlotData.push({ month: month, slots: [row[1]?.trim(), row[2]?.trim(), row[3]?.trim()] });
+            });
+            if(allSlotData.length > 0) displaySlots(0);
+        } catch(e) { console.error(e); }
+    }
+
+    function displaySlots(index) {
+        const display = document.getElementById('slot-display-area'); display.innerHTML = '';
+        allSlotData[index].slots.forEach((status, i) => {
+            const isClosed = (status === '마감'); const slotDiv = document.createElement('div'); slotDiv.className = `slot ${isClosed ? 'closed' : 'open'}`;
+            slotDiv.innerHTML = `${i+1}번 슬롯<br><span style="font-size:0.75rem">${isClosed ? '마감' : '가능'}</span>`; display.appendChild(slotDiv);
+        });
+    }
+
+    async function loadPrices() {
+        try {
+            const rows = parseCSV(await (await fetch(PRICE_SHEET)).text()).slice(1);
+            const categories = {};
+            rows.forEach(row => {
+                if (row.length < 3) return;
+                const cat = row[0], name = row[1]; let price = row[2];
+                if (!cat) return;
+                if (price.includes('~')) { price = price.split('~').map(p => { let n = parseFloat(p.trim()); return isNaN(n) ? p.trim() : n.toFixed(1); }).join(' ~ '); } 
+                else if (!isNaN(price) && price !== '') { price = parseFloat(price).toFixed(1); }
+                if (!categories[cat]) categories[cat] = []; categories[cat].push({ name, price });
+            });
+            const display = document.getElementById('price-display-area'); display.innerHTML = '';
+            for (const [cat, items] of Object.entries(categories)) {
+                const theadStyle = cat.includes('추가') ? ' style="background: var(--main-pink);"' : '';
+                let tableHtml = `<table class="price-table"><thead><tr><th colspan="2"${theadStyle}>${cat}</th></tr></thead><tbody>`;
+                items.forEach(item => { tableHtml += `<tr><td>${item.name}</td><td class="price">${item.price}</td></tr>`; });
+                display.innerHTML += tableHtml + `</tbody></table>`;
+            }
+        } catch(e) { console.error(e); }
+    }
+
+    function copyForm() {
+        const fields = [
+            { id: 'name', label: '닉네임' },
+            { id: 'type', label: '신청 타입 (흉상, 반신, 전신, 전신 세트)' },
+            { id: 'option', label: '원하시는 기능 및 추가 옵션' },
+            { id: 'file-check', label: '일러스트 PSD 파일 첨부' },
+            { id: 'artist', label: '일러스트 작가님 닉네임' },
+            { id: 'sns', label: '작업 과정 SNS 공개 여부 O/X' },
+            { id: 'etc', label: '기타 문의' }
+        ];
+        let text = "[신청 양식]\n";
+        fields.forEach((f) => { 
+            const val = document.getElementById(`form-${f.id}`).value || "(미입력)";
+            text += `${f.label}: ${val}\n`; 
+        });
+        navigator.clipboard.writeText(text).then(() => { const msg = document.getElementById('copy-msg'); msg.style.display = 'block'; setTimeout(() => msg.style.display = 'none', 2000); });
+    }
+
+    window.onload = () => { loadGifs(); loadSlots(); loadPrices(); loadModels(); loadPartners(); loadPortfolio(); };
+
+    // --- iframe 높이 조절 부모창으로 보내는 스크립트 ---
+    function sendHeightToParent() {
+        const height = document.documentElement.scrollHeight || document.body.scrollHeight;
+        // 부모 창으로 데이터 전송
+        window.parent.postMessage({ type: 'resize_iframe', height: height }, '*');
+    }
+
+    // 초기 로딩 및 창 크기 조절 시 이벤트 등록
+    window.addEventListener('load', sendHeightToParent);
+    window.addEventListener('resize', sendHeightToParent);
+
+    // 데이터가 비동기로 로드되어 DOM 내용(높이)이 변경될 때 자동으로 감지하여 전송
+    const resizeObserver = new ResizeObserver(() => {
+        sendHeightToParent();
+    });
+    resizeObserver.observe(document.body);
+</script>
+
+</body>
+</html>
