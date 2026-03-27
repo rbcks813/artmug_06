@@ -27,6 +27,8 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Paperozi', sans-serif; }
+        /* 빈 공간 방지를 위해 html, body 높이를 자동으로 설정 */
+        html, body { height: auto !important; overflow: hidden; } 
         body { background-color: var(--bg-color); color: var(--text-black); padding: 20px 0; }
         .container { max-width: 850px; margin: 0 auto; padding: 0 15px; }
 
@@ -38,6 +40,9 @@
             box-shadow: var(--shadow);
             border: 1px solid rgba(0,0,0,0.03);
         }
+
+        /* 빈 공간 해결 핵심: 마지막 섹션의 아래 여백 제거 */
+        section:last-of-type { margin-bottom: 0 !important; }
 
         .section-title { 
             text-align: center; font-size: 1.8rem; font-weight: 800; 
@@ -566,13 +571,18 @@
 
     // --- iframe 높이 조절 부모창으로 보내는 스크립트 ---
     function sendHeightToParent() {
-        const height = document.documentElement.scrollHeight || document.body.scrollHeight;
-        window.parent.postMessage({ type: 'resize_iframe', height: height }, '*');
+        const container = document.querySelector('.container');
+        if (container) {
+            // 정밀한 높이 계산을 위해getBoundingClientRect 사용
+            const height = container.getBoundingClientRect().height + 40; // 상하 padding(20px * 2) 고려
+            window.parent.postMessage({ type: 'resize_iframe', height: height }, '*');
+        }
     }
     window.addEventListener('load', sendHeightToParent);
     window.addEventListener('resize', sendHeightToParent);
     const resizeObserver = new ResizeObserver(() => { sendHeightToParent(); });
-    resizeObserver.observe(document.body);
+    // body 전체가 아닌 실제 내용이 담긴 container를 감시하여 빈 공간 방지
+    resizeObserver.observe(document.querySelector('.container'));
 </script>
 
 </body>
