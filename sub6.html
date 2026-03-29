@@ -186,13 +186,26 @@
 <script>
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBQtd81Ch1XD9iTV6me_YRFPxEBOJpHnG27HYi5aS0OTCFYJ9NRTUWs_gtpwyq79svXPc_x4GITWlH/pub?gid=866561416&single=true&output=csv';
 
+    // [수정] 무한 늘어남을 방지하기 위해 이전 높이값을 저장하는 변수
+    let lastHeight = 0;
+
     // [요청 반영] 부모 페이지로 높이 정보를 보내는 함수 (새로운 아이디: resize-collab)
     function sendHeightToParent() {
         const wrapper = document.querySelector('.collab-wrapper');
         if (wrapper) {
-            // 여백(body padding 등)을 고려하여 계산된 높이값 전송
-            const totalHeight = wrapper.offsetHeight + 100; // body 상하 padding 50px*2
-            window.parent.postMessage({ type: 'resize-collab', height: totalHeight }, '*');
+            // [수정] 미디어 쿼리(PC/모바일)에 따라 유동적으로 변하는 body padding을 동적으로 계산 (UI 여백 오류 해결)
+            const bodyStyle = window.getComputedStyle(document.body);
+            const paddingTop = parseInt(bodyStyle.paddingTop) || 0;
+            const paddingBottom = parseInt(bodyStyle.paddingBottom) || 0;
+            
+            // 실제 콘텐츠 높이 + 동적 상하 여백
+            const totalHeight = wrapper.offsetHeight + paddingTop + paddingBottom; 
+            
+            // [수정] 계산된 높이가 이전과 다를 때만 전송 (무한 루프 방지)
+            if (lastHeight !== totalHeight) {
+                window.parent.postMessage({ type: 'resize-collab', height: totalHeight }, '*');
+                lastHeight = totalHeight;
+            }
         }
     }
 
@@ -265,8 +278,6 @@
             }
 
             // [요청 반영] 데이터 로딩 및 카드 생성이 완료된 후 높이값 전송
-            // (이미지 로딩 시간을 고려하여 약간의 지연을 주거나, 카드 이미지에 onload 이벤트를 다는 것이 더 확실하지만,
-            // 현 구조에서는 일단 requestAnimationFrame으로 렌더링 직후를 노립니다.)
             requestAnimationFrame(sendHeightToParent);
 
         } catch (error) {
