@@ -13,7 +13,7 @@
         }
 
         :root {
-            --main-pink: #FEEEEE; /* [전 단계 요청 반영] 배경색 변경 */
+            --main-pink: #FEEEEE; 
             --card-white: #FFFFFF;
             --text-dark: #555555;
             --title-white: #FFFFFF;
@@ -26,15 +26,20 @@
             font-family: 'DnfBitbeatV2', sans-serif;
             display: flex;
             justify-content: center;
+            /* [수정] 화면 밖으로 넘치는 현상을 막아 쏠림 방지 */
+            overflow-x: hidden; 
+            width: 100%; 
+            box-sizing: border-box;
         }
 
         .collab-wrapper {
             background-color: var(--main-pink);
             width: 1180px;
+            max-width: 95%; /* [수정] PC 환경에서도 창이 좁아질 때 대비 */
+            margin: 0 auto; /* [수정] 강제 중앙 정렬 보장 */
             border-radius: 50px;
             padding: 60px;
             box-sizing: border-box;
-            /* 높이 조절 함수를 위해 overflow 속성 추가 (불필요한 스크롤 방지) */
             overflow: hidden; 
         }
 
@@ -45,13 +50,12 @@
         }
 
         .header h1 {
-            font-size: 50px; /* [요청 반영] 폰트 크기 변경 */
+            font-size: 50px; 
             color: var(--title-white);
             margin: 0;
             letter-spacing: 2px;
         }
 
-        /* [요청 반영] 제목 내 하트 크기 조절 */
         .header h1 .heart-icon {
             font-size: 0.8em;
         }
@@ -131,7 +135,6 @@
             transform: translateY(-2px);
         }
 
-        /* [수정] white-space 추가하여 3줄 강제 고정 */
         .footer-text {
             display: flex;
             align-items: flex-start;
@@ -148,22 +151,27 @@
             .collab-wrapper { width: 95%; padding: 40px; }
         }
         
-        /* [전 단계 요청 반영] 모바일 최적화 세부 조정 */
+        /* [수정] 모바일 최적화 및 쏠림 방지 세부 조정 */
         @media (max-width: 768px) {
             body { padding: 20px 0; }
             .collab-wrapper { 
-                width: 95%; 
-                padding: 30px 20px; 
-                border-radius: 30px; /* 모바일에 맞게 둥글기 축소 */
+                width: 90%; /* 모바일에서 좌우 여백을 조금 더 확보 */
+                padding: 30px 15px; /* 안쪽 여백 축소 */
+                border-radius: 30px; 
             }
             .header { margin-bottom: 30px; padding-left: 0; }
-            /* [요청 반영] 모바일에서 제목 크기 조정 시 하트 비율 유지 */
-            .header h1 { font-size: 36px; }
+            .header h1 { font-size: 32px; } /* 텍스트 겹침 방지 축소 */
             .header h1 .heart-icon { font-size: 0.8em; } 
-            .header p { font-size: 18px; } /* 폰트 크기 축소 */
+            .header p { font-size: 16px; } 
             .collab-grid { grid-template-columns: 1fr; gap: 20px; }
             .info-area { padding: 20px; }
-            .footer-text { padding: 0 10px 10px 10px; } /* 여백 축소 */
+            
+            /* [핵심] 3줄 유지 시 모바일 화면을 찢고 나가지 않도록 조정 */
+            .footer-text { 
+                padding: 0; /* 불필요한 좌우 여백 제거 */
+                font-size: 11px; /* 글씨 크기 축소 */
+                letter-spacing: -0.5px; /* 자간 축소 */
+            } 
         }
     </style>
 </head>
@@ -189,7 +197,6 @@
 
     let lastHeight = 0;
 
-    // 부모 페이지로 높이 정보를 보내는 함수 (무한 증식 해결 버전)
     function sendHeightToParent() {
         const wrapper = document.querySelector('.collab-wrapper');
         if (wrapper) {
@@ -199,7 +206,7 @@
             
             const totalHeight = wrapper.offsetHeight + paddingTop + paddingBottom; 
             
-            if (Math.abs(lastHeight - totalHeight) > 5) { // 미세한 오차 무시 및 무한 루프 방지
+            if (Math.abs(lastHeight - totalHeight) > 5) { 
                 window.parent.postMessage({ type: 'resize-collab', height: totalHeight }, '*');
                 lastHeight = totalHeight;
             }
