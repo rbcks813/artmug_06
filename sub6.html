@@ -21,25 +21,26 @@
 
         body {
             margin: 0;
-            padding: 0; /* 임베드 시 불필요한 패딩 제거 */
-            background-color: transparent; /* 배경 투명화 */
+            padding: 0; 
+            background-color: transparent; 
             font-family: 'DnfBitbeatV2', sans-serif;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* 상단 정렬 */
-            min-height: auto; /* 높이 자동 조절용 */
-            overflow: hidden; /* 스크롤바 방지 */
+            align-items: flex-start;
+            min-height: auto;
+            overflow: hidden; /* iframe 내 스크롤바 방지 */
         }
 
-        /* 높이 측정을 위해 ID 추가 */
         .collab-wrapper {
             background-color: var(--main-pink);
-            width: 1180px;
+            /* 너비 설정을 반응형으로 변경하여 잘림 방지 */
+            width: 95%;
+            max-width: 1180px; 
             border-radius: 50px;
             padding: 60px;
             box-sizing: border-box;
             overflow: hidden; 
-            margin: 10px auto; /* 상하 여백 살짝 부여 */
+            margin: 20px auto; /* 상하 여백을 주어 잘림 방지 */
         }
 
         .header {
@@ -146,12 +147,11 @@
         }
 
         @media (max-width: 1200px) {
-            .collab-wrapper { width: 95%; padding: 40px; }
+            .collab-wrapper { padding: 40px; }
         }
         
         @media (max-width: 768px) {
             .collab-wrapper { 
-                width: 95%; 
                 padding: 30px 20px; 
                 border-radius: 30px;
             }
@@ -184,13 +184,15 @@
 <script>
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBQtd81Ch1XD9iTV6me_YRFPxEBOJpHnG27HYi5aS0OTCFYJ9NRTUWs_gtpwyq79svXPc_x4GITWlH/pub?gid=866561416&single=true&output=csv';
 
-    // 다른 갤러리들과 동일한 높이 전송 방식
+    // 높이 전송 함수 강화
     function sendHeight() {
-        const container = document.getElementById('collabGalleryContainer');
-        if (container) {
-            const height = container.offsetHeight + 40; 
-            window.parent.postMessage({ type: 'resize-collab', height: height }, '*');
-        }
+        // body 전체의 높이를 측정하여 잘림 현상 방지
+        const scrollHeight = document.documentElement.scrollHeight;
+        const offsetHeight = document.getElementById('collabGalleryContainer').offsetHeight;
+        
+        // 더 큰 값을 기준으로 여유 공간(+60px)을 더해 전송
+        const finalHeight = Math.max(scrollHeight, offsetHeight + 40) + 20;
+        window.parent.postMessage({ type: 'resize-collab', height: finalHeight }, '*');
     }
 
     function getYoutubeId(url) {
@@ -226,12 +228,8 @@
         
         try {
             const response = await fetch(sheetUrl);
-            if (!response.ok) throw new Error('데이터 응답 에러');
-            
             const rawData = await response.text();
-            
             grid.querySelectorAll('.card').forEach(c => c.remove());
-
             const rows = parseCSV(rawData);
             
             for (let i = 1; i < rows.length; i++) {
@@ -242,7 +240,6 @@
                 const benefit = columns[1].trim().replace(/\n/g, '<br>');
                 const videoUrl = columns[2].trim();
                 const link = columns[3].trim();
-
                 const videoId = getYoutubeId(videoUrl);
                 
                 const card = document.createElement('div');
@@ -257,12 +254,11 @@
                         <a href="${link}" target="_blank" class="link-btn">작가 페이지 이동</a>
                     </div>
                 `;
-                
                 grid.insertBefore(card, footer);
             }
 
-            // 렌더링 완료 후 높이 전송
-            setTimeout(sendHeight, 100);
+            // 모든 이미지/영역이 그려진 후 높이 조절이 확실히 되도록 약간의 지연 후 실행
+            setTimeout(sendHeight, 300);
 
         } catch (error) {
             console.error('오류 발생:', error);
@@ -270,8 +266,9 @@
     }
 
     fetchCollabData();
-
     window.addEventListener('resize', sendHeight);
+    // 추가로 이미지 로드 등이 끝날 때를 대비해 한 번 더 체크
+    window.addEventListener('load', sendHeight);
 </script>
 
 </body>
