@@ -131,7 +131,7 @@
             transform: translateY(-2px);
         }
 
-        /* 안내 문구 상단 정렬 유지 및 크기 축소 */
+        /* [수정] white-space 추가하여 3줄 강제 고정 */
         .footer-text {
             display: flex;
             align-items: flex-start;
@@ -141,6 +141,7 @@
             line-height: 1.8;
             text-align: left;
             padding: 0 20px 20px 20px;
+            white-space: nowrap; 
         }
 
         @media (max-width: 1200px) {
@@ -186,23 +187,19 @@
 <script>
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBQtd81Ch1XD9iTV6me_YRFPxEBOJpHnG27HYi5aS0OTCFYJ9NRTUWs_gtpwyq79svXPc_x4GITWlH/pub?gid=866561416&single=true&output=csv';
 
-    // [수정] 무한 늘어남을 방지하기 위해 이전 높이값을 저장하는 변수
     let lastHeight = 0;
 
-    // [요청 반영] 부모 페이지로 높이 정보를 보내는 함수 (새로운 아이디: resize-collab)
+    // 부모 페이지로 높이 정보를 보내는 함수 (무한 증식 해결 버전)
     function sendHeightToParent() {
         const wrapper = document.querySelector('.collab-wrapper');
         if (wrapper) {
-            // [수정] 미디어 쿼리(PC/모바일)에 따라 유동적으로 변하는 body padding을 동적으로 계산 (UI 여백 오류 해결)
             const bodyStyle = window.getComputedStyle(document.body);
             const paddingTop = parseInt(bodyStyle.paddingTop) || 0;
             const paddingBottom = parseInt(bodyStyle.paddingBottom) || 0;
             
-            // 실제 콘텐츠 높이 + 동적 상하 여백
             const totalHeight = wrapper.offsetHeight + paddingTop + paddingBottom; 
             
-            // [수정] 계산된 높이가 이전과 다를 때만 전송 (무한 루프 방지)
-            if (lastHeight !== totalHeight) {
+            if (Math.abs(lastHeight - totalHeight) > 5) { // 미세한 오차 무시 및 무한 루프 방지
                 window.parent.postMessage({ type: 'resize-collab', height: totalHeight }, '*');
                 lastHeight = totalHeight;
             }
@@ -277,7 +274,6 @@
                 grid.insertBefore(card, footer);
             }
 
-            // [요청 반영] 데이터 로딩 및 카드 생성이 완료된 후 높이값 전송
             requestAnimationFrame(sendHeightToParent);
 
         } catch (error) {
@@ -285,10 +281,7 @@
         }
     }
 
-    // 초기 실행
     fetchCollabData();
-
-    // 창 크기가 변경될 때도 높이값 다시 전송
     window.addEventListener('resize', sendHeightToParent);
 </script>
 
