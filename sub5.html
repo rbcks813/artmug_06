@@ -127,7 +127,8 @@
         }
 
         .thumb-item {
-            width: calc((1180px - 150px - 120px - 45px) / 4); /* 계산식 보정 */
+            /* 1180px(최대) - 40px(컨테이너패딩) - 150px(섹션마진) - 120px(버튼공간) - 45px(간격 3개) 를 4로 나눔 */
+            width: calc((min(1180px, 95vw) - 40px - 150px - 120px - 45px) / 4);
             flex: 0 0 auto;
             aspect-ratio: var(--aspect-ratio);
             background-color: var(--white);
