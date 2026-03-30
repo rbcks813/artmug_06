@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrated Gallery & Collab</title>
+    <style>
+        /* ==========================================
+           공통 및 통합 폰트/변수 설정
+        ========================================== */
+        @font-face {
+            font-family: 'DnfBitbeatV2';
+            src: url('//cdn.df.nexon.com/img/common/font/DNFBitBitv2.otf') format('opentype');
+            font-weight: 400;
+            font-display: swap;
+        }
+
+        :root {
+            --bg-pink: #FEEEEE;
+            --main-pink: #FEEEEE; 
+            --image-gray: #D9D9D9;
+            --white: #FFFFFF;
+            --card-white: #FFFFFF;
+            --main-font: 'DnfBitbeatV2', sans-serif;
+            --accent-pink: #FFB5B5;
+            --desc-color: #AD8997;
+            --text-dark: #555555;
+            --title-white: #FFFFFF;
+            
+            --aspect-ratio-1: 3174 / 2250; 
+            --aspect-ratio-2: 4000 / 2250; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--main-font); }
+
+        body {
+            background-color: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 50px; 
+            min-height: auto;
+            overflow-x: hidden;
+            width: 100%;
+            padding: 50px 0;
+        }
+
+        /* ==========================================
+           1번 & 2번 코드 (Gallery) 공통 스타일
+        ========================================== */
+        .container {
+            width: 95%;
+            max-width: 1180px; 
+            background-color: var(--bg-pink);
+            border-radius: 50px;
+            padding: 30px 20px 50px 20px; 
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .container .header {
+            color: var(--white);
+            font-size: 50px; 
+            margin-bottom: 15px;
+            margin-left: 75px; 
+            letter-spacing: 1px;
+            user-select: none;
+            line-height: 1.2;
+        }
+
+        .main-wrapper {
+            position: relative;
+            margin: 0 75px;
+            margin-bottom: 35px;
+        }
+
+        .main-display {
+            width: 100%;
+            background-color: var(--image-gray);
+            border-radius: 0; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        #mainDisplay1 { aspect-ratio: var(--aspect-ratio-1); }
+        #mainDisplay2 { aspect-ratio: var(--aspect-ratio-2); }
+
+        .main-image { width: 100%; height: 100%; object-fit: cover; }
+
+        .nav-btn {
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            background-color: var(--white);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            color: var(--accent-pink);
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .thumb-section {
+            position: relative;
+            margin: 0 75px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .thumb-nav-prev { left: 0; position: absolute; top: 50%; transform: translateY(-50%); }
+        .thumb-nav-next { right: 0; position: absolute; top: 50%; transform: translateY(-50%); }
+
+        .thumb-container {
+            width: calc(100% - 120px);
+            overflow: hidden;
+        }
+
+        .loading { color: var(--white); font-size: 18px; }
+
+        #galleryContainer .main-wrapper .prev-btn { left: -65px; top: 50%; transform: translateY(-50%); }
+        #galleryContainer .main-wrapper .next-btn { right: -65px; top: 50%; transform: translateY(-50%); }
+
+        #galleryContainer .thumb-list {
+            display: flex;
+            gap: 15px; 
+            list-style: none;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .thumb-item {
+            background-color: var(--white);
+            border-radius: 12px;
+            cursor: pointer;
+            overflow: hidden;
+            border: 4px solid transparent; 
+            transition: border-color 0.3s;
+        }
+
+        #galleryContainer .thumb-item {
+            flex: 0 0 calc((100% - 45px) / 4); 
+            aspect-ratio: var(--aspect-ratio-1);
+        }
+
+        #extraGalleryContainer .main-wrapper .prev-btn { left: -65px; top: calc(50% - 15px); transform: translateY(-50%); }
+        #extraGalleryContainer .main-wrapper .next-btn { right: -65px; top: calc(50% - 15px); transform: translateY(-50%); }
+
+        .image-desc {
+            margin-top: 12px;
+            color: var(--desc-color);
+            font-size: 18px;
+            text-align: left;
+            min-height: 1.2em;
+            word-break: keep-all;
+        }
+
+        #extraGalleryContainer .thumb-list {
+            display: flex;
+            gap: 15px; 
+            list-style: none;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            width: max-content; 
+        }
+
+        #extraGalleryContainer .thumb-item {
+            width: calc((min(1180px, 95vw) - 40px - 150px - 120px - 45px) / 4);
+            flex: 0 0 auto;
+            aspect-ratio: var(--aspect-ratio-2);
+        }
+
+        .thumb-item.active { border-color: var(--accent-pink); } 
+        .thumb-item img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* ==========================================
+           3번 코드 (Collab) 스타일
+        ========================================== */
+        .collab-wrapper {
+            background-color: var(--main-pink);
+            width: 1180px;
+            max-width: 95%; 
+            margin: 0 auto; 
+            border-radius: 50px;
+            padding: 30px 60px 60px 60px; 
+            box-sizing: border-box;
+            overflow: hidden; 
+        }
+
+        .collab-wrapper .header {
+            text-align: left;
+            margin-bottom: 20px; 
+            padding-left: 10px;
+        }
+
+        .collab-wrapper .header h1 {
+            font-size: 50px; 
+            color: var(--title-white);
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        .collab-wrapper .header h1 .heart-icon {
+            font-size: 0.7em; 
+            display: inline-block; 
+            transform: scaleY(0.85); 
+            vertical-align: middle; 
+            margin-right: 2px;
+        }
+
+        .collab-wrapper .header p {
+            font-size: 26px;
+            color: var(--title-white);
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        .collab-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            background-color: var(--card-white);
+            border-radius: 30px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            background-color: #000;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .info-area {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .author-name {
+            margin: 0;
+            font-size: 28px; 
+            color: #756271;
+        }
+
+        .description {
+            font-size: 15px;
+            color: var(--text-dark);
+            line-height: 1.6;
+            word-break: keep-all;
+            min-height: 48px;
+        }
+
+        .link-btn {
+            background-color: #FEEEEE;
+            color: #756271;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.2s;
+            border: none; 
+        }
+
+        .link-btn:hover {
+            background-color: #fddddd;
+            transform: translateY(-2px);
+        }
+
+        .footer-text {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            font-size: 14px; 
+            color: #756271;
+            line-height: 1.8;
+            text-align: left;
+            padding: 30px 20px 20px 20px; 
+            white-space: nowrap; 
+        }
+
+        /* ==========================================
+           반응형 모바일 최적화 (통합)
+        ========================================== */
+        @media (max-width: 1200px) {
+            .collab-wrapper { width: 95%; padding: 30px 40px 40px 40px; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 20px 0; gap: 30px; }
+            .container { width: 100%; padding: 20px 10px 30px 10px; border-radius: 30px; margin: 0 auto; }
+            .container .header { font-size: 34px; margin-left: 0; margin-bottom: 10px; text-align: center; }
+            .main-wrapper { margin: 0 0 20px 0; }
+            .thumb-section { margin: 0 10px; } 
+            .nav-btn { width: 32px; height: 32px; font-size: 14px; }
+            .thumb-container { width: calc(100% - 74px); }
+            
+            #galleryContainer .main-wrapper .prev-btn { left: 5px; }
+            #galleryContainer .main-wrapper .next-btn { right: 5px; }
+            #galleryContainer .thumb-list { gap: 6px; }
+            #galleryContainer .thumb-item { flex: 0 0 calc((100% - 18px) / 4); border-radius: 8px; border-width: 2px; }
+
+            #extraGalleryContainer .image-desc { font-size: 15px; margin-top: 8px; padding: 0 5px; }
+            #extraGalleryContainer .main-wrapper .prev-btn { left: 5px; top: calc(50% - 12px); transform: translateY(-50%); }
+            #extraGalleryContainer .main-wrapper .next-btn { right: 5px; top: calc(50% - 12px); transform: translateY(-50%); }
+            #extraGalleryContainer .thumb-section { margin: 0 5px; }
+            #extraGalleryContainer .thumb-list { gap: 6px; }
+            #extraGalleryContainer .thumb-item { width: calc((100vw - 20px - 10px - 74px - 18px) / 4); flex: 0 0 auto; border-radius: 8px; border-width: 2px; }
+
+            /* [수정 요청 반영] COLLAB 모바일 너비 100% 및 패딩 통일 */
+            .collab-wrapper { width: 100%; padding: 15px 10px 30px 10px; border-radius: 30px; }
+            .collab-wrapper .header { margin-bottom: 15px; padding-left: 0; text-align: center; } 
+            .collab-wrapper .header h1 { font-size: 32px; } 
+            .collab-wrapper .header h1 .heart-icon { font-size: 0.7em; } 
+            .collab-wrapper .header p { font-size: 16px; } 
+            .collab-grid { grid-template-columns: 1fr; gap: 20px; }
+            .info-area { padding: 20px; }
+            .footer-text { padding: 15px 0 0 0; font-size: 11px; letter-spacing: -0.5px; } 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="galleryContainer">
+    <div class="header">
+        <span style="font-size: 0.7em; display: inline-block; transform: scaleY(0.85); vertical-align: middle; margin-right: 2px;">♥</span> ILLUST
+    </div>
+
+    <div class="main-wrapper">
+        <button class="nav-btn prev-btn" onclick="changeSlide1(-1)">&#10094;</button>
+        <div class="main-display" id="mainDisplay1">
+            <span class="loading">LOADING...</span>
+        </div>
+        <button class="nav-btn next-btn" onclick="changeSlide1(1)">&#10095;</button>
+    </div>
+
+    <div class="thumb-section">
+        <button class="nav-btn thumb-nav-prev" onclick="moveThumb1(-1)">&#10094;</button>
+        <div class="thumb-container">
+            <ul class="thumb-list" id="thumbContainer1"></ul>
+        </div>
+        <button class="nav-btn thumb-nav-next" onclick="moveThumb1(1)">&#10095;</button>
+    </div>
+</div>
+
+<div class="container" id="extraGalleryContainer">
+    <div class="header">
+        <span style="font-size: 0.7em; display: inline-block; transform: scaleY(0.85); vertical-align: middle; margin-right: 2px;">♥</span> EXTRA
+    </div>
+
+    <div class="main-wrapper">
+        <button class="nav-btn prev-btn" onclick="changeSlide2(-1)">&#10094;</button>
+        <div class="main-display" id="mainDisplay2">
+            <span class="loading">LOADING...</span>
+        </div>
+        <div class="image-desc" id="imageDesc2"></div>
+        <button class="nav-btn next-btn" onclick="changeSlide2(1)">&#10095;</button>
+    </div>
+
+    <div class="thumb-section">
+        <button class="nav-btn thumb-nav-prev" onclick="moveThumb2(-1)">&#10094;</button>
+        <div class="thumb-container">
+            <ul class="thumb-list" id="thumbContainer2"></ul>
+        </div>
+        <button class="nav-btn thumb-nav-next" onclick="moveThumb2(1)">&#10095;</button>
+    </div>
+</div>
+
+<div class="collab-wrapper">
+    <div class="header">
+        <h1><span class="heart-icon">♥</span> COLLAB</h1>
+        <p>일러스트 5만원 할인 + 표정 3종</p>
+    </div>
+
+    <div class="collab-grid" id="collab-grid">
+        <div class="footer-text" id="static-footer">
+            리깅 작가님과 협력하여,<br>
+            캐릭터의 매력이 돋보이는 모델이 나올 수 있도록<br>
+            컨펌에 함께 참여하고 있습니다 ♥
+        </div>
+    </div>
+</div>
+
+<script>
+    // 통합 리사이즈 코드
+    let lastUnifiedHeight = 0;
+    function sendUnifiedHeight() {
+        setTimeout(() => {
+            const totalHeight = document.documentElement.scrollHeight;
+            if (Math.abs(lastUnifiedHeight - totalHeight) > 5) {
+                window.parent.postMessage({ type: 'resize', height: totalHeight }, '*');
+                lastUnifiedHeight = totalHeight;
+            }
+        }, 50);
+    }
+    window.addEventListener('resize', sendUnifiedHeight);
+    const observer = new MutationObserver(sendUnifiedHeight);
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+
+    // 1번 영역 (ILLUST)
+    const sheetUrl1 = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBQtd81Ch1XD9iTV6me_YRFPxEBOJpHnG27HYi5aS0OTCFYJ9NRTUWs_gtpwyq79svXPc_x4GITWlH/pub?gid=0&single=true&output=csv';
+    let images1 = [];
+    let currentIndex1 = 0;
+    let thumbOffset1 = 0;
+
+    async function loadSheetData1() {
+        try {
+            const response = await fetch(sheetUrl1);
+            const data = await response.text();
+            const rows = data.split('\n').map(row => row.trim()).filter(row => row !== "");
+            images1 = rows.slice(1).map(row => row.split(',')[0].replace(/"/g, ""));
+            if(images1.length > 0) renderGallery1();
+        } catch (e) { console.error('Load Error 1'); }
+    }
+
+    function renderGallery1() {
+        const mainDisplay = document.getElementById('mainDisplay1');
+        const thumbContainer = document.getElementById('thumbContainer1');
+        mainDisplay.innerHTML = `<img src="${images1[currentIndex1]}" class="main-image" onload="sendUnifiedHeight()">`;
+        thumbContainer.innerHTML = '';
+        images1.forEach((img, index) => {
+            const li = document.createElement('li');
+            li.className = `thumb-item ${index === currentIndex1 ? 'active' : ''}`;
+            li.innerHTML = `<img src="${img}">`;
+            li.onclick = () => { currentIndex1 = index; syncThumbOffset1(); renderGallery1(); };
+            thumbContainer.appendChild(li);
+        });
+        updateThumbPosition1();
+    }
+
+    function changeSlide1(direction) {
+        if(images1.length === 0) return;
+        currentIndex1 = (currentIndex1 + direction + images1.length) % images1.length;
+        syncThumbOffset1();
+        renderGallery1();
+    }
+
+    function syncThumbOffset1() {
+        if (currentIndex1 < thumbOffset1) thumbOffset1 = currentIndex1;
+        else if (currentIndex1 >= thumbOffset1 + 4) thumbOffset1 = currentIndex1 - 3;
+    }
+
+    function moveThumb1(direction) {
+        if (images1.length <= 4) return;
+        const maxOffset = images1.length - 4;
+        if (direction > 0) { 
+            if (thumbOffset1 >= maxOffset) thumbOffset1 = 0; 
+            else thumbOffset1 = Math.min(thumbOffset1 + 4, maxOffset);
+        } else { 
+            if (thumbOffset1 <= 0) thumbOffset1 = maxOffset; 
+            else thumbOffset1 = Math.max(thumbOffset1 - 4, 0);
+        }
+        updateThumbPosition1();
+    }
+
+    function updateThumbPosition1() {
+        const list = document.getElementById('thumbContainer1');
+        if(!list || !list.children.length) return;
+        const itemWidth = list.children[0].offsetWidth;
+        const gap = parseInt(window.getComputedStyle(list).gap) || 15; 
+        list.style.transform = `translateX(-${thumbOffset1 * (itemWidth + gap)}px)`;
+        sendUnifiedHeight();
+    }
+    loadSheetData1();
+
+    // 2번 영역 (EXTRA)
+    const sheetUrl2 = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBQtd81Ch1XD9iTV6me_YRFPxEBOJpHnG27HYi5aS0OTCFYJ9NRTUWs_gtpwyq79svXPc_x4GITWlH/pub?gid=298296551&single=true&output=csv';
+    let imageData2 = [];
+    let currentIndex2 = 0;
+    let thumbOffset2 = 0;
+
+    async function loadSheetData2() {
+        try {
+            const response = await fetch(sheetUrl2);
+            const data = await response.text();
+            const rows = data.split('\n').map(row => row.trim()).filter(row => row !== "");
+            imageData2 = rows.slice(1).map(row => {
+                const cols = row.split(',');
+                return { url: cols[0].replace(/"/g, ""), desc: cols[1] ? cols[1].replace(/"/g, "") : "" };
+            });
+            if(imageData2.length > 0) renderGallery2();
+        } catch (e) { console.error('Load Error 2'); }
+    }
+
+    function renderGallery2() {
+        const mainDisplay = document.getElementById('mainDisplay2');
+        const thumbContainer = document.getElementById('thumbContainer2');
+        const imageDesc = document.getElementById('imageDesc2');
+        mainDisplay.innerHTML = `<img src="${imageData2[currentIndex2].url}" class="main-image" onload="sendUnifiedHeight()">`;
+        imageDesc.innerText = imageData2[currentIndex2].desc;
+        thumbContainer.innerHTML = '';
+        imageData2.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.className = `thumb-item ${index === currentIndex2 ? 'active' : ''}`;
+            li.innerHTML = `<img src="${item.url}">`;
+            li.onclick = () => { currentIndex2 = index; syncThumbOffset2(); renderGallery2(); };
+            thumbContainer.appendChild(li);
+        });
+        setTimeout(updateThumbPosition2, 50);
+    }
+
+    function changeSlide2(direction) {
+        if(imageData2.length === 0) return;
+        currentIndex2 = (currentIndex2 + direction + imageData2.length) % imageData2.length;
+        syncThumbOffset2();
+        renderGallery2();
+    }
+
+    function syncThumbOffset2() {
+        if (currentIndex2 < thumbOffset2) thumbOffset2 = currentIndex2;
+        else if (currentIndex2 >= thumbOffset2 + 4) thumbOffset2 = currentIndex2 - 3;
+    }
+
+    function moveThumb2(direction) {
+        if (imageData2.length <= 4) return;
+        const maxOffset = imageData2.length - 4;
+        if (direction > 0) { 
+            if (thumbOffset2 >= maxOffset) thumbOffset2 = 0; 
+            else thumbOffset2 = Math.min(thumbOffset2 + 4, maxOffset);
+        } else { 
+            if (thumbOffset2 <= 0) thumbOffset2 = maxOffset; 
+            else thumbOffset2 = Math.max(thumbOffset2 - 4, 0);
+        }
+        updateThumbPosition2();
+    }
+
+    function updateThumbPosition2() {
+        const list = document.getElementById('thumbContainer2');
+        if(!list || !list.children.length) return;
+        const itemWidth = list.children[0].getBoundingClientRect().width;
+        const gap = parseFloat(window.getComputedStyle(list).gap) || 6; 
+        list.style.transform = `translateX(-${thumbOffset2 * (itemWidth + gap)}px)`;
+        sendUnifiedHeight();
+    }
+    loadSheetData2();
+
+    // 3번 영역 (COLLAB)
+    const sheetUrl3 = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBQtd81Ch1XD9iTV6me_YRFPxEBOJpHnG27HYi5aS0OTCFYJ9NRTUWs_gtpwyq79svXPc_x4GITWlH/pub?gid=866561416&single=true&output=csv';
+    function getYoutubeId(url) {
+        if (!url) return null;
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.trim().match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    }
+    function parseCSV(text) {
+        const result = []; let row = []; let col = ""; let insideQuotes = false;
+        for (let i = 0; i < text.length; i++) {
+            let char = text[i]; let next = text[i+1];
+            if (char === '"' && insideQuotes && next === '"') { col += '"'; i++; }
+            else if (char === '"') { insideQuotes = !insideQuotes; }
+            else if (char === ',' && !insideQuotes) { row.push(col); col = ""; }
+            else if (char === '\n' && !insideQuotes) { row.push(col); result.push(row); row = []; col = ""; }
+            else if (char !== '\r') { col += char; }
+        }
+        if (col || row.length > 0) { row.push(col); result.push(row); }
+        return result;
+    }
+
+    async function fetchCollabData() {
+        const grid = document.getElementById('collab-grid');
+        const footer = document.getElementById('static-footer');
+        try {
+            const response = await fetch(sheetUrl3);
+            const rawData = await response.text();
+            grid.querySelectorAll('.card').forEach(c => c.remove());
+            const rows = parseCSV(rawData);
+            for (let i = 1; i < rows.length; i++) {
+                const columns = rows[i];
+                if (columns.length < 4 || !columns[0].trim()) continue;
+                const name = columns[0].trim();
+                const benefit = columns[1].trim().replace(/\n/g, '<br>');
+                const videoUrl = columns[2].trim();
+                const link = columns[3].trim();
+                const videoId = getYoutubeId(videoUrl);
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="video-container">
+                        ${videoId ? `<iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>` : `<div style="position:absolute; top:0; left:0; width:100%; height:100%; color:#ccc; display:flex; align-items:center; justify-content:center; background:#000; font-size:16px;">영상 준비 중</div>`}
+                    </div>
+                    <div class="info-area">
+                        <h3 class="author-name">${name}</h3>
+                        <p class="description">${benefit}</p>
+                        <a href="${link}" target="_blank" class="link-btn">작가 페이지 이동</a>
+                    </div>
+                `;
+                grid.insertBefore(card, footer);
+            }
+        } catch (error) { console.error('Collab Error:', error); }
+    }
+    fetchCollabData();
+</script>
+
+</body>
+</html>
