@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주루마블 신청 상세페이지</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* 폰트 설정 */
+        @font-face {
+            font-family: 'TMoneyDungunbaram';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/TmoneyRoundWindRegular.woff') format('woff');
+            font-weight: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'TMoneyDungunbaram';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/TmoneyRoundWindExtraBold.woff') format('800');
+            font-weight: 800;
+            font-display: swap;
+        }
+
+        /* 기본 설정 및 색상 변수 */
+        :root {
+            --bg-base: #FFF5F9;
+            --color-base1: #FFD0E4;
+            --color-base2: #FEB1D1;
+            --color-point1: #FF94C2;
+            --color-point2: #8E6175;
+        }
+
+        body {
+            font-family: 'TMoneyDungunbaram', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--color-point2);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(255, 148, 194, 0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--color-base1), var(--color-point1));
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        .header h1 {
+            margin: 0;
+            font-weight: 800;
+            font-size: 28px;
+            text-shadow: 1px 1px 2px rgba(142, 97, 117, 0.2);
+        }
+
+        .section {
+            padding: 30px;
+            border-bottom: 2px dashed var(--color-base1);
+        }
+        .section:last-child {
+            border-bottom: none;
+        }
+        .section-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--color-point1);
+            margin-top: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+        label {
+            display: block;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: var(--color-point2);
+        }
+        .help-text {
+            font-size: 13px;
+            color: #b08d9e;
+            margin-bottom: 8px;
+            display: block;
+            margin-top: -4px;
+        }
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--color-base1);
+            border-radius: 12px;
+            font-family: 'TMoneyDungunbaram', sans-serif;
+            font-size: 15px;
+            color: var(--color-point2);
+            box-sizing: border-box;
+            transition: all 0.3s;
+            background-color: #fafafa;
+        }
+        textarea {
+            resize: none;
+        }
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--color-point1);
+            box-shadow: 0 0 0 3px rgba(255, 148, 194, 0.2);
+            background-color: #fff;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 15px;
+        }
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-weight: normal;
+        }
+        .radio-label input[type="radio"] {
+            accent-color: var(--color-point1);
+            width: 18px;
+            height: 18px;
+        }
+
+        .color-picker-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .color-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        input[type="color"] {
+            appearance: none;
+            -webkit-appearance: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+            background: none;
+            flex-shrink: 0;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border: 2px solid var(--color-base2);
+            border-radius: 50%;
+        }
+        .hex-input {
+            width: 120px !important;
+            padding: 8px !important;
+            font-size: 14px !important;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        /* 3번 모바일 최적화: 가로 스크롤 허용 및 찌그러짐 방지 */
+        .board-wrapper {
+            overflow-x: auto;
+            padding: 10px;
+            background: var(--bg-base);
+            border-radius: 16px;
+            border: 2px dashed var(--color-base2);
+            margin-top: 10px;
+        }
+        .board-grid {
+            display: grid;
+            gap: 6px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 100%;
+            min-width: 550px; /* 모바일에서 칸이 찌그러지지 않도록 최소 너비 보장 */
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        .board-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            padding: 5px;
+            box-sizing: border-box;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            aspect-ratio: 1 / 1;
+        }
+        .board-cell.corner {
+            border: 3px solid var(--color-point2);
+            border-radius: 50%;
+            transform: scale(1.02);
+        }
+        .board-cell input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: 'TMoneyDungunbaram', sans-serif;
+            font-size: clamp(10px, 1.5vw, 13px);
+            text-align: center;
+            color: inherit;
+            outline: none;
+            font-weight: 800;
+        }
+
+        .submit-wrapper {
+            position: relative;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .check-notice-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+        .check-notice-group input[type="checkbox"] {
+            accent-color: var(--color-point1);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .check-notice-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .tooltip-bubble {
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--color-point2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 800;
+            white-space: nowrap;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+        }
+        .tooltip-bubble::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: var(--color-point2) transparent transparent transparent;
+        }
+
+        .tooltip-bubble.animate {
+            animation: fadeInOut 2.5s ease forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, 10px); visibility: visible; }
+            15% { opacity: 1; transform: translate(-50%, 0); }
+            85% { opacity: 1; transform: translate(-50%, 0); }
+            100% { opacity: 0; transform: translate(-50%, -10px); visibility: hidden; }
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--color-point1);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 800;
+            font-family: 'TMoneyDungunbaram', sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        .submit-btn:hover {
+            background-color: #ff7bac;
+        }
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        input[type="file"]::file-selector-button {
+            background-color: var(--color-base1);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: var(--color-point2);
+            font-family: 'TMoneyDungunbaram', sans-serif;
+            font-weight: 800;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .notice-box {
+            background-color: var(--bg-base);
+            border: 2px dashed var(--color-base2);
+            border-radius: 16px;
+            padding: 25px;
+            color: var(--color-point2);
+            font-size: 14px;
+            line-height: 2;
+        }
+        
+        .notice-num {
+            font-weight: 800;
+            color: var(--color-point1);
+            margin-right: 5px;
+        }
+
+        .portfolio-container {
+            position: relative;
+            width: 100%;
+        }
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .category-btn {
+            padding: 8px 20px;
+            border: 2px solid var(--color-base1);
+            background: white;
+            border-radius: 20px;
+            color: var(--color-point2);
+            font-family: 'TMoneyDungunbaram', sans-serif;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .category-btn.active {
+            background: var(--color-point1);
+            color: white;
+            border-color: var(--color-point1);
+        }
+        .slider-viewport {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            border-radius: 16px;
+            background: #eee;
+            position: relative;
+        }
+        .slider-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.4s ease-out;
+        }
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            flex-shrink: 0;
+        }
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        /* 2번 포트폴리오 마우스 오버 시 버튼 나타남 */
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 15px;
+            box-sizing: border-box;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .slider-viewport:hover .slider-nav {
+            opacity: 1;
+        }
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: auto;
+            color: var(--color-point1);
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--color-base1);
+            cursor: pointer;
+        }
+        .dot.active {
+            background: var(--color-point1);
+        }
+
+        /* 3번 모바일 최적화 미디어 쿼리 추가 */
+        @media screen and (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .header {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 22px;
+            }
+            .section {
+                padding: 20px;
+            }
+            .section-title {
+                font-size: 18px;
+            }
+            input[type="text"], textarea, select {
+                font-size: 16px; /* iOS 자동 확대 방지 */
+            }
+            .radio-group {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .color-picker-group {
+                gap: 15px;
+            }
+            .category-tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="mainContainer">
+    <div class="header">
+        <h1>커스텀 주루마블 신청</h1>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">신청서 작성</h2>
+        <form id="requestForm">
+            
+            <div class="form-group">
+                <label for="nickname">1. 방송 닉네임</label>
+                <input type="text" id="nickname" name="nickname" placeholder="닉네임을 입력해주세요">
+            </div>
+
+            <div class="form-group">
+                <label>2. 신청 주루마블 타입</label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="boardType" value="VER.1" checked onchange="drawBoard()"> VER.1 (총 26칸)
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="boardType" value="VER.2" onchange="drawBoard()"> VER.2 (총 22칸)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>6. 원하시는 주루마블 색상 선택 (2가지)</label>
+                <div class="color-picker-group">
+                    <div class="color-item">
+                        <span>색상 1:</span>
+                        <input type="color" id="color1" name="color1" value="#FFD0E4" oninput="syncColor('color1', 'hex1')">
+                        <input type="text" id="hex1" class="hex-input" value="#FFD0E4" maxlength="7" oninput="syncColor('hex1', 'color1')">
+                    </div>
+                    <div class="color-item">
+                        <span>색상 2:</span>
+                        <input type="color" id="color2" name="color2" value="#FEB1D1" oninput="syncColor('color2', 'hex2')">
+                        <input type="text" id="hex2" class="hex-input" value="#FEB1D1" maxlength="7" oninput="syncColor('hex2', 'color2')">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>3. 주루마블 칸 문구 작성</label>
+                <span class="help-text">* 동그란 칸은 모서리 칸입니다. (모바일은 좌우로 밀어서 볼 수 있습니다)</span>
+                <div class="board-wrapper">
+                    <div id="boardGrid" class="board-grid"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="menuText">4. 주루마블 메뉴판 문구 작성</label>
+                <textarea id="menuText" name="menuText" rows="4" placeholder="메뉴판에 들어갈 문구를 적어주세요."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="cornerShape">5. 위아래 모서리 모양 작성</label>
+                <input type="text" id="cornerShape" name="cornerShape" placeholder="EX: 하트, 별, 고양이 등">
+            </div>
+
+            <div class="form-group">
+                <label for="charImage">7. 캐릭터 이미지 첨부</label>
+                <input type="file" id="charImage" accept="image/*">
+            </div>
+
+            <div class="form-group">
+                <label for="extraNotes">8. 그 외 추가사항</label>
+                <textarea id="extraNotes" name="extraNotes" rows="3" placeholder="기타 요청사항을 적어주세요."></textarea>
+            </div>
+
+            <div class="submit-wrapper">
+                <div id="statusTooltip" class="tooltip-bubble">공지사항 확인을 체크해주세요</div>
+                <div class="check-notice-group">
+                    <input type="checkbox" id="noticeCheck">
+                    <label for="noticeCheck">공지사항을 확인했습니다</label>
+                </div>
+                <button type="button" class="submit-btn" id="copyBtn" onclick="copyFormData()">양식 복사하기</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">공지사항</h2>
+        <div class="notice-box">
+            <span class="notice-num">01.</span> 주루마블 디자인 저작권은 메이디에게 있습니다.<br>
+            <span class="notice-num">02.</span> 신청양식 전달 후 다음날로부터 4일내로 전달드립니다.<br>
+            <span class="notice-num">03.</span> 주루마블 디자인 특성상 같은색감,같은디자인이 제작 될 수도 있습니다.<br>
+            <span class="notice-num">04.</span> 제작 전 환불은 가능하며 제작 후 환불은 불가능합니다.<br>
+            <span class="notice-num">05.</span> 예약 시 미리 결제 해주셔야됩니다.<br>
+            <span class="notice-num">06.</span> 최종 완성 후 전체 수정 시 재결제 해주셔야됩니다.<br>
+            <span class="notice-num">07.</span> 양식 및 공지사항 확인 후 제대로 작성 부탁드립니다. 추후 발생하는 문제는 책임지지 않습니다.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">포트폴리오</h2>
+        <div class="portfolio-container">
+            <div class="category-tabs">
+                <button class="category-btn active" onclick="filterPortfolio('버전1', this)">버전 1</button>
+                <button class="category-btn" onclick="filterPortfolio('버전2', this)">버전 2</button>
+            </div>
+            <div class="slider-viewport">
+                <div id="sliderTrack" class="slider-track"></div>
+                <div class="slider-nav">
+                    <button class="nav-btn" onclick="moveSlider(-1)">&lt;</button>
+                    <button class="nav-btn" onclick="moveSlider(1)">&gt;</button>
+                </div>
+            </div>
+            <div id="sliderDots" class="slider-dots"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ---------------- [ 임베드 높이 자동 감지 로직 추가 ] ----------------
+    function sendHeight() {
+        if (window.parent && window.parent !== window) {
+            const height = document.documentElement.scrollHeight || document.body.scrollHeight;
+            window.parent.postMessage({ type: 'setHeight', height: height }, '*');
+        }
+    }
+    // 창 크기 변경 시 실행
+    window.addEventListener('resize', sendHeight);
+    // 콘텐츠 변경 감지 (ResizeObserver 사용)
+    if (window.ResizeObserver) {
+        const ro = new ResizeObserver(sendHeight);
+        ro.observe(document.body);
+    }
+    // ----------------------------------------------------------------
+
+    // ---------------- [ 포트폴리오 연동 로직 ] ----------------
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSvCNLWPH7eJa3TetSQ1IdzXF2fxWN6DqoNlyVP1tplEht_JJInhgmsN2vuAXdLXJbS6oyAoV_UL5FY/pub?gid=0&single=true&output=csv';
+    let portfolioData = [];
+    let currentFilteredData = [];
+    let currentSlide = 0;
+
+    async function fetchPortfolio() {
+        try {
+            const response = await fetch(CSV_URL);
+            const csvText = await response.text();
+            const rows = csvText.split('\r\n').slice(1);
+            portfolioData = rows.map(row => {
+                const [category, link] = row.split(',');
+                return { category: category.trim(), link: link.trim() };
+            }).filter(item => item.link);
+
+            filterPortfolio('버전1', document.querySelector('.category-btn'));
+        } catch (error) {
+            console.error('포트폴리오 로드 실패:', error);
+        }
+    }
+
+    function filterPortfolio(category, btn) {
+        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilteredData = portfolioData.filter(item => item.category === category);
+        currentSlide = 0;
+        renderSlider();
+    }
+
+    function renderSlider() {
+        const track = document.getElementById('sliderTrack');
+        const dots = document.getElementById('sliderDots');
+        track.innerHTML = currentFilteredData.map(item => `<div class="slide"><img src="${item.link}" alt="포트폴리오"></div>`).join('');
+        dots.innerHTML = currentFilteredData.map((_, i) => `<div class="dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>`).join('');
+        updateSliderPosition();
+    }
+
+    function moveSlider(dir) {
+        currentSlide = (currentSlide + dir + currentFilteredData.length) % currentFilteredData.length;
+        updateSliderPosition();
+    }
+
+    function goToSlide(index) {
+        currentSlide = index;
+        updateSliderPosition();
+    }
+
+    function updateSliderPosition() {
+        const track = document.getElementById('sliderTrack');
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        const dots = document.querySelectorAll('.dot');
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === currentSlide));
+    }
+
+    // ---------------- [ 말풍선 안내 로직 ] ----------------
+    function showTooltip(message) {
+        const tooltip = document.getElementById('statusTooltip');
+        tooltip.innerText = message;
+        
+        // 이전 애니메이션 강제 종료 및 재시작 (reflow)
+        tooltip.classList.remove('animate');
+        void tooltip.offsetWidth; 
+        tooltip.classList.add('animate');
+    }
+
+    // ---------------- [ 기존 신청서 로직 ] ----------------
+    function getContrastColor(hexcolor) {
+        if (!hexcolor || hexcolor.length < 7) return "#000000";
+        const r = parseInt(hexcolor.substring(1, 3), 16);
+        const g = parseInt(hexcolor.substring(3, 5), 16);
+        const b = parseInt(hexcolor.substring(5, 7), 16);
+        const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+        return (yiq >= 128) ? '#000000' : '#ffffff';
+    }
+
+    function syncColor(fromId, toId) {
+        const fromEl = document.getElementById(fromId);
+        const toEl = document.getElementById(toId);
+        let val = fromEl.value;
+        if (fromId.includes('hex')) {
+            if (!val.startsWith('#')) val = '#' + val;
+            if (!/^#[0-9A-F]{6}$/i.test(val)) return;
+        }
+        toEl.value = val.toUpperCase();
+        updateBoardColors();
+    }
+
+    function drawBoard() {
+        const type = document.querySelector('input[name="boardType"]:checked').value;
+        const grid = document.getElementById('boardGrid');
+        grid.innerHTML = '';
+        let cols, rows;
+        if (type === 'VER.1') { cols = 9; rows = 6; } else { cols = 8; rows = 5; }
+        grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+        const path = [];
+        for (let x = 0; x < cols; x++) path.push({x, y: 0});
+        for (let y = 1; y < rows - 1; y++) path.push({x: cols - 1, y});
+        for (let x = cols - 1; x >= 0; x--) path.push({x, y: rows - 1});
+        for (let y = rows - 2; y > 0; y--) path.push({x: 0, y});
+        const color1 = document.getElementById('color1').value;
+        const color2 = document.getElementById('color2').value;
+        const corners = [0, cols - 1, cols + (rows - 2), (cols * 2) + (rows - 2) - 1];
+        path.forEach((pos, index) => {
+            const cell = document.createElement('div');
+            const bgColor = (index % 2 === 0) ? color1 : color2;
+            cell.className = 'board-cell';
+            cell.style.gridColumn = pos.x + 1; cell.style.gridRow = pos.y + 1;
+            cell.style.backgroundColor = bgColor; cell.style.color = getContrastColor(bgColor);
+            if (corners.includes(index)) { cell.classList.add('corner'); }
+            cell.innerHTML = `<input type="text" placeholder="입력" class="board-input" style="color: inherit;">`;
+            grid.appendChild(cell);
+        });
+    }
+
+    function updateBoardColors() {
+        const color1 = document.getElementById('color1').value;
+        const color2 = document.getElementById('color2').value;
+        document.querySelectorAll('.board-cell').forEach((cell, i) => {
+            const bgColor = (i % 2 === 0) ? color1 : color2;
+            cell.style.backgroundColor = bgColor; cell.style.color = getContrastColor(bgColor);
+        });
+    }
+
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+
+    async function copyFormData() {
+        const btn = document.getElementById('copyBtn');
+        const noticeCheck = document.getElementById('noticeCheck');
+
+        if (!noticeCheck.checked) {
+            showTooltip("공지사항 확인을 체크해주세요");
+            return;
+        }
+
+        btn.innerText = "복사 중...";
+        // 1번: 브라우저가 UI(버튼 텍스트 변경 등)를 먼저 업데이트하도록 약간의 대기 시간을 부여하여 속도 지연 체감을 줄입니다.
+        await new Promise(resolve => setTimeout(resolve, 50)); 
+
+        try {
+            const nickname = document.getElementById('nickname').value || '(공백)';
+            const type = document.querySelector('input[name="boardType"]:checked').value;
+            const color1 = document.getElementById('color1').value;
+            const color2 = document.getElementById('color2').value;
+            const menu = document.getElementById('menuText').value || '(공백)';
+            const shape = document.getElementById('cornerShape').value || '(공백)';
+            const extra = document.getElementById('extraNotes').value || '(공백)';
+            const charInput = document.getElementById('charImage');
+
+            let charImageBase64 = null;
+            if (charInput.files.length > 0) charImageBase64 = await toBase64(charInput.files[0]);
+
+            // 1번: html2canvas 스케일을 조정하여 렌더링(복사) 속도를 대폭 최적화합니다.
+            const boardCanvas = await html2canvas(document.getElementById('boardGrid'), { 
+                backgroundColor: "#ffffff", 
+                scale: 1 
+            });
+            const boardImageBase64 = boardCanvas.toDataURL("image/png");
+
+            const plainText = `[주루마블 신청 양식]\n1. 방송 닉네임: ${nickname}\n2. 신청 타입: ${type}\n4. 메뉴판 문구: ${menu}\n5. 모서리 모양: ${shape}\n6. 선택 색상: ${color1}, ${color2}\n8. 추가 요청사항: ${extra}`;
+            const htmlContent = `<div style="font-family: sans-serif;"><h3>주루마블 신청서</h3><p><b>1. 방송 닉네임:</b> ${nickname}</p><p><b>2. 신청 타입:</b> ${type}</p><p><b>4. 메뉴판 문구:</b> ${menu}</p><p><b>5. 모서리 모양:</b> ${shape}</p><p><b>6. 선택 색상:</b> ${color1}, ${color2}</p><p><b>8. 추가 요청사항:</b> ${extra}</p><br><p><b>[캐릭터 이미지]</b></p>${charImageBase64 ? `<img src="${charImageBase64}" width="200" />` : '<p>첨부 없음</p>'}<br><p><b>[작성된 보드판 이미지]</b></p><img src="${boardImageBase64}" style="max-width: 100%; border: 1px solid #eee;" /></div>`;
+
+            const clipboardData = [
+                new ClipboardItem({ "text/plain": new Blob([plainText], { type: "text/plain" }), "text/html": new Blob([htmlContent], { type: "text/html" }) })
+            ];
+            await navigator.clipboard.write(clipboardData);
+            
+            showTooltip("복사되었습니다");
+            btn.innerText = "양식 복사하기";
+
+        } catch (err) {
+            console.error(err);
+            showTooltip("복사 중 오류가 발생했습니다");
+            btn.innerText = "양식 복사하기";
+        }
+    }
+
+    window.onload = () => { drawBoard(); fetchPortfolio(); sendHeight(); };
+</script>
+
+</body>
+</html>
