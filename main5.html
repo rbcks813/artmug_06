@@ -213,17 +213,44 @@
             border-radius: 50%;
             transform: scale(1.02);
         }
-        .board-cell input {
+
+        /* ---------------- 보드판 글자 잘림 및 placeholder 해결 로직 ---------------- */
+        .board-cell .board-input {
             width: 100%;
             border: none;
             background: transparent;
             font-family: 'TMoneyDungunbaram', sans-serif;
-            font-size: clamp(10px, 1.5vw, 13px);
+            font-size: clamp(10px, 1.4vw, 13px);
             text-align: center;
             color: inherit;
             outline: none;
             font-weight: 800;
+            word-break: break-all;
+            padding: 0 2px;
+            box-sizing: border-box;
+            max-height: 100%;
+            overflow: hidden;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
+        .board-cell .board-input:empty::before {
+            content: attr(placeholder);
+            opacity: 0.5;
+            pointer-events: none;
+            display: block;
+        }
+        
+        .board-cell .board-input:has(> br:only-child)::before {
+            content: attr(placeholder);
+            opacity: 0.5;
+            pointer-events: none;
+            display: block;
+            position: absolute;
+        }
+        /* ----------------------------------------------------------- */
 
         .submit-wrapper {
             position: relative;
@@ -593,14 +620,11 @@
             window.parent.postMessage({ type: 'setHeight', height: height }, '*');
         }
     }
-    // 창 크기 변경 시 실행
     window.addEventListener('resize', sendHeight);
-    // 콘텐츠 변경 감지 (ResizeObserver 사용)
     if (window.ResizeObserver) {
         const ro = new ResizeObserver(sendHeight);
         ro.observe(document.body);
     }
-    // ----------------------------------------------------------------
 
     // ---------------- [ 포트폴리오 연동 로직 ] ----------------
     const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSvCNLWPH7eJa3TetSQ1IdzXF2fxWN6DqoNlyVP1tplEht_JJInhgmsN2vuAXdLXJbS6oyAoV_UL5FY/pub?gid=0&single=true&output=csv';
@@ -617,7 +641,6 @@
                 const [category, link] = row.split(',');
                 return { category: category.trim(), link: link.trim() };
             }).filter(item => item.link);
-
             filterPortfolio('버전1', document.querySelector('.category-btn'));
         } catch (error) {
             console.error('포트폴리오 로드 실패:', error);
@@ -657,18 +680,14 @@
         dots.forEach((dot, i) => dot.classList.toggle('active', i === currentSlide));
     }
 
-    // ---------------- [ 말풍선 안내 로직 ] ----------------
     function showTooltip(message) {
         const tooltip = document.getElementById('statusTooltip');
         tooltip.innerText = message;
-        
-        // 이전 애니메이션 강제 종료 및 재시작 (reflow)
         tooltip.classList.remove('animate');
         void tooltip.offsetWidth; 
         tooltip.classList.add('animate');
     }
 
-    // ---------------- [ 기존 신청서 로직 ] ----------------
     function getContrastColor(hexcolor) {
         if (!hexcolor || hexcolor.length < 7) return "#000000";
         const r = parseInt(hexcolor.substring(1, 3), 16);
@@ -723,7 +742,10 @@
             cell.style.gridColumn = pos.x + 1; cell.style.gridRow = pos.y + 1;
             cell.style.backgroundColor = bgColor; cell.style.color = getContrastColor(bgColor);
             if (isCorner) { cell.classList.add('corner'); }
-            cell.innerHTML = `<input type="text" placeholder="입력" class="board-input" style="color: inherit;">`;
+            
+            // 변경된 부분: 띄어쓰기/줄바꿈 없이 한 줄로 작성
+            cell.innerHTML = `<div contenteditable="true" class="board-input" placeholder="입력" style="color: inherit;" onkeydown="if(event.key==='Enter') event.preventDefault();" onpaste="event.preventDefault(); const text = (event.originalEvent || event).clipboardData.getData('text/plain'); document.execCommand('insertText', false, text);"></div>`;
+            
             grid.appendChild(cell);
         });
     }
@@ -735,14 +757,12 @@
         document.querySelectorAll('.board-cell').forEach((cell, i) => {
             const isCorner = cell.classList.contains('corner');
             let bgColor;
-            
             if (isCorner) {
                 bgColor = "#ffffff";
             } else {
                 bgColor = (normalCellCount % 2 === 0) ? color1 : color2;
                 normalCellCount++;
             }
-            
             cell.style.backgroundColor = bgColor; cell.style.color = getContrastColor(bgColor);
         });
     }
@@ -757,15 +777,12 @@
     async function copyFormData() {
         const btn = document.getElementById('copyBtn');
         const noticeCheck = document.getElementById('noticeCheck');
-
         if (!noticeCheck.checked) {
             showTooltip("공지사항 확인을 체크해주세요");
             return;
         }
-
         btn.innerText = "복사 중...";
         await new Promise(resolve => setTimeout(resolve, 50)); 
-
         try {
             const nickname = document.getElementById('nickname').value || '(공백)';
             const type = document.querySelector('input[name="boardType"]:checked').value;
@@ -775,34 +792,27 @@
             const shape = document.getElementById('cornerShape').value || '(공백)';
             const extra = document.getElementById('extraNotes').value || '(공백)';
             const charInput = document.getElementById('charImage');
-
             let charImageBase64 = null;
             if (charInput.files.length > 0) charImageBase64 = await toBase64(charInput.files[0]);
-
             const boardCanvas = await html2canvas(document.getElementById('boardGrid'), { 
                 backgroundColor: "#ffffff", 
                 scale: 1 
             });
             const boardImageBase64 = boardCanvas.toDataURL("image/png");
-
             const plainText = `[주루마블 신청 양식]\n1. 방송 닉네임: ${nickname}\n2. 신청 타입: ${type}\n3. 선택 색상: ${color1}, ${color2}\n5. 메뉴판 문구: ${menu}\n6. 모서리 모양: ${shape}\n8. 추가 요청사항: ${extra}`;
             const htmlContent = `<div style="font-family: sans-serif;"><h3>주루마블 신청서</h3><p><b>1. 방송 닉네임:</b> ${nickname}</p><p><b>2. 신청 타입:</b> ${type}</p><p><b>3. 선택 색상:</b> ${color1}, ${color2}</p><p><b>5. 메뉴판 문구:</b> ${menu}</p><p><b>6. 모서리 모양:</b> ${shape}</p><p><b>8. 추가 요청사항:</b> ${extra}</p><br><p><b>[캐릭터 이미지]</b></p>${charImageBase64 ? `<img src="${charImageBase64}" width="200" />` : '<p>첨부 없음</p>'}<br><p><b>[작성된 보드판 이미지]</b></p><img src="${boardImageBase64}" style="max-width: 100%; border: 1px solid #eee;" /></div>`;
-
             const clipboardData = [
                 new ClipboardItem({ "text/plain": new Blob([plainText], { type: "text/plain" }), "text/html": new Blob([htmlContent], { type: "text/html" }) })
             ];
             await navigator.clipboard.write(clipboardData);
-            
             showTooltip("복사되었습니다");
             btn.innerText = "양식 복사하기";
-
         } catch (err) {
             console.error(err);
             showTooltip("복사 중 오류가 발생했습니다");
             btn.innerText = "양식 복사하기";
         }
     }
-
     window.onload = () => { drawBoard(); fetchPortfolio(); sendHeight(); };
 </script>
 
