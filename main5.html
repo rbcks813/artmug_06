@@ -23,8 +23,8 @@
         /* 기본 설정 및 색상 변수 */
         :root {
             --bg-base: #ffffff;
-            --color-base1: #FFD0E4;
-            --color-base2: #FEB1D1;
+            --color-base1: #FEB1D1;
+            --color-base2: #FFD0E4;
             --color-point1: #FF94C2;
             --color-point2: #8E6175;
         }
@@ -499,23 +499,23 @@
             </div>
 
             <div class="form-group">
-                <label>6. 원하시는 주루마블 색상 선택 (2가지)</label>
+                <label>3. 원하시는 주루마블 색상 선택 (2가지)</label>
                 <div class="color-picker-group">
                     <div class="color-item">
                         <span>색상 1:</span>
-                        <input type="color" id="color1" name="color1" value="#FFD0E4" oninput="syncColor('color1', 'hex1')">
-                        <input type="text" id="hex1" class="hex-input" value="#FFD0E4" maxlength="7" oninput="syncColor('hex1', 'color1')">
+                        <input type="color" id="color1" name="color1" value="#FEB1D1" oninput="syncColor('color1', 'hex1')">
+                        <input type="text" id="hex1" class="hex-input" value="#FEB1D1" maxlength="7" oninput="syncColor('hex1', 'color1')">
                     </div>
                     <div class="color-item">
                         <span>색상 2:</span>
-                        <input type="color" id="color2" name="color2" value="#FEB1D1" oninput="syncColor('color2', 'hex2')">
-                        <input type="text" id="hex2" class="hex-input" value="#FEB1D1" maxlength="7" oninput="syncColor('hex2', 'color2')">
+                        <input type="color" id="color2" name="color2" value="#FFD0E4" oninput="syncColor('color2', 'hex2')">
+                        <input type="text" id="hex2" class="hex-input" value="#FFD0E4" maxlength="7" oninput="syncColor('hex2', 'color2')">
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>3. 주루마블 칸 문구 작성</label>
+                <label>4. 주루마블 칸 문구 작성</label>
                 <span class="help-text">* 동그란 칸은 모서리 칸입니다. (모바일은 좌우로 밀어서 볼 수 있습니다)</span>
                 <div class="board-wrapper">
                     <div id="boardGrid" class="board-grid"></div>
@@ -523,12 +523,12 @@
             </div>
 
             <div class="form-group">
-                <label for="menuText">4. 주루마블 메뉴판 문구 작성</label>
+                <label for="menuText">5. 주루마블 메뉴판 문구 작성</label>
                 <textarea id="menuText" name="menuText" rows="4" placeholder="메뉴판에 들어갈 문구를 적어주세요."></textarea>
             </div>
 
             <div class="form-group">
-                <label for="cornerShape">5. 위아래 모서리 모양 작성</label>
+                <label for="cornerShape">6. 위아래 모서리 모양 작성</label>
                 <input type="text" id="cornerShape" name="cornerShape" placeholder="EX: 하트, 별, 고양이 등">
             </div>
 
@@ -705,13 +705,24 @@
         const color1 = document.getElementById('color1').value;
         const color2 = document.getElementById('color2').value;
         const corners = [0, cols - 1, cols + (rows - 2), (cols * 2) + (rows - 2) - 1];
+        
+        let normalCellCount = 0;
         path.forEach((pos, index) => {
             const cell = document.createElement('div');
-            const bgColor = (index % 2 === 0) ? color1 : color2;
+            const isCorner = corners.includes(index);
+            let bgColor;
+            
+            if (isCorner) {
+                bgColor = "#ffffff";
+            } else {
+                bgColor = (normalCellCount % 2 === 0) ? color1 : color2;
+                normalCellCount++;
+            }
+            
             cell.className = 'board-cell';
             cell.style.gridColumn = pos.x + 1; cell.style.gridRow = pos.y + 1;
             cell.style.backgroundColor = bgColor; cell.style.color = getContrastColor(bgColor);
-            if (corners.includes(index)) { cell.classList.add('corner'); }
+            if (isCorner) { cell.classList.add('corner'); }
             cell.innerHTML = `<input type="text" placeholder="입력" class="board-input" style="color: inherit;">`;
             grid.appendChild(cell);
         });
@@ -720,8 +731,18 @@
     function updateBoardColors() {
         const color1 = document.getElementById('color1').value;
         const color2 = document.getElementById('color2').value;
+        let normalCellCount = 0;
         document.querySelectorAll('.board-cell').forEach((cell, i) => {
-            const bgColor = (i % 2 === 0) ? color1 : color2;
+            const isCorner = cell.classList.contains('corner');
+            let bgColor;
+            
+            if (isCorner) {
+                bgColor = "#ffffff";
+            } else {
+                bgColor = (normalCellCount % 2 === 0) ? color1 : color2;
+                normalCellCount++;
+            }
+            
             cell.style.backgroundColor = bgColor; cell.style.color = getContrastColor(bgColor);
         });
     }
@@ -743,7 +764,6 @@
         }
 
         btn.innerText = "복사 중...";
-        // 1번: 브라우저가 UI(버튼 텍스트 변경 등)를 먼저 업데이트하도록 약간의 대기 시간을 부여하여 속도 지연 체감을 줄입니다.
         await new Promise(resolve => setTimeout(resolve, 50)); 
 
         try {
@@ -759,15 +779,14 @@
             let charImageBase64 = null;
             if (charInput.files.length > 0) charImageBase64 = await toBase64(charInput.files[0]);
 
-            // 1번: html2canvas 스케일을 조정하여 렌더링(복사) 속도를 대폭 최적화합니다.
             const boardCanvas = await html2canvas(document.getElementById('boardGrid'), { 
                 backgroundColor: "#ffffff", 
                 scale: 1 
             });
             const boardImageBase64 = boardCanvas.toDataURL("image/png");
 
-            const plainText = `[주루마블 신청 양식]\n1. 방송 닉네임: ${nickname}\n2. 신청 타입: ${type}\n4. 메뉴판 문구: ${menu}\n5. 모서리 모양: ${shape}\n6. 선택 색상: ${color1}, ${color2}\n8. 추가 요청사항: ${extra}`;
-            const htmlContent = `<div style="font-family: sans-serif;"><h3>주루마블 신청서</h3><p><b>1. 방송 닉네임:</b> ${nickname}</p><p><b>2. 신청 타입:</b> ${type}</p><p><b>4. 메뉴판 문구:</b> ${menu}</p><p><b>5. 모서리 모양:</b> ${shape}</p><p><b>6. 선택 색상:</b> ${color1}, ${color2}</p><p><b>8. 추가 요청사항:</b> ${extra}</p><br><p><b>[캐릭터 이미지]</b></p>${charImageBase64 ? `<img src="${charImageBase64}" width="200" />` : '<p>첨부 없음</p>'}<br><p><b>[작성된 보드판 이미지]</b></p><img src="${boardImageBase64}" style="max-width: 100%; border: 1px solid #eee;" /></div>`;
+            const plainText = `[주루마블 신청 양식]\n1. 방송 닉네임: ${nickname}\n2. 신청 타입: ${type}\n3. 선택 색상: ${color1}, ${color2}\n5. 메뉴판 문구: ${menu}\n6. 모서리 모양: ${shape}\n8. 추가 요청사항: ${extra}`;
+            const htmlContent = `<div style="font-family: sans-serif;"><h3>주루마블 신청서</h3><p><b>1. 방송 닉네임:</b> ${nickname}</p><p><b>2. 신청 타입:</b> ${type}</p><p><b>3. 선택 색상:</b> ${color1}, ${color2}</p><p><b>5. 메뉴판 문구:</b> ${menu}</p><p><b>6. 모서리 모양:</b> ${shape}</p><p><b>8. 추가 요청사항:</b> ${extra}</p><br><p><b>[캐릭터 이미지]</b></p>${charImageBase64 ? `<img src="${charImageBase64}" width="200" />` : '<p>첨부 없음</p>'}<br><p><b>[작성된 보드판 이미지]</b></p><img src="${boardImageBase64}" style="max-width: 100%; border: 1px solid #eee;" /></div>`;
 
             const clipboardData = [
                 new ClipboardItem({ "text/plain": new Blob([plainText], { type: "text/plain" }), "text/html": new Blob([htmlContent], { type: "text/html" }) })
