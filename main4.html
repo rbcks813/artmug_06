@@ -189,6 +189,8 @@
             padding: 30px 60px 60px 60px; 
             box-sizing: border-box;
             overflow: hidden; 
+            /* Firefox border-radius clipping fix */
+            transform: translateZ(0);
         }
 
         .collab-wrapper .header {
@@ -232,6 +234,8 @@
             display: flex;
             flex-direction: column;
             box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+            /* Firefox border-radius clipping fix */
+            transform: translateZ(0);
         }
 
         .video-container {
