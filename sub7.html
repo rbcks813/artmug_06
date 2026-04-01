@@ -8,7 +8,7 @@
         /* [1. 중앙 정렬 및 배경 삭제] */
         html, body {
             width: 100%;
-            height: auto; /* 높이 조절을 위해 auto로 변경 */
+            height: auto; /* 고정 높이 제거 */
             margin: 0 !important;
             padding: 0 !important;
             display: flex; 
@@ -16,7 +16,7 @@
             align-items: flex-start; 
             background: transparent; /* 배경색 삭제 */
             font-family: 'Pretendard', sans-serif;
-            overflow-x: hidden;
+            overflow: hidden; /* 스크롤바 방지 */
             -webkit-text-size-adjust: none;
         }
         
@@ -50,6 +50,7 @@
             max-width: 900px; 
             padding: 30px 15px; 
             margin: 0 auto; 
+            display: inline-block; /* 높이 감지 최적화 */
         } 
         
         /* [제목 스타일 수정] */
@@ -145,7 +146,7 @@
 </head>
 <body>
 
-    <div class="calendarSection">
+    <div class="calendarSection" id="heightWrapper">
         <div class="statusHeader">
             <div class="statusTitlePill">
                 <span class="dot"></span>
@@ -167,8 +168,10 @@
 
             // 높이 전송 함수 추가
             function sendHeight() {
-                const height = document.body.scrollHeight;
-                window.parent.postMessage({ height: height }, '*');
+                setTimeout(() => {
+                    const height = document.getElementById('heightWrapper').offsetHeight;
+                    window.parent.postMessage({ calendarHeight: height }, "*");
+                }, 100); // 렌더링 완료를 위한 미세 지연
             }
 
             function normalizeDate(dateStr) {
@@ -202,10 +205,8 @@
 
                     const settingsData = parseCSV(sRes);
                     const datesData = parseCSV(dRes);
-
                     const settings = {};
                     settingsData.forEach(d => { if(d.key) settings[d.key] = d.value; });
-
                     const dateMap = new Map();
                     datesData.forEach(item => {
                         const normalized = normalizeDate(item.date);
@@ -214,7 +215,6 @@
 
                     const baseMonth = settings.active_month || new Date().toISOString().slice(0, 7);
                     const [startY, startM] = baseMonth.split('-').map(Number);
-                    
                     const months = [];
                     for(let i=0; i<CONFIG.monthTabCount; i++) {
                         months.push(new Date(startY, startM - 1 + i, 1));
@@ -244,7 +244,6 @@
                         const totalDaysInMonth = lastDay.getDate(); 
                         const rowsNeeded = Math.ceil((startDayOfWeek + totalDaysInMonth) / 7);
                         const loopCount = rowsNeeded * 7; 
-
                         const start = new Date(firstDay);
                         start.setDate(firstDay.getDate() - startDayOfWeek);
 
@@ -253,10 +252,8 @@
                             d.setDate(start.getDate() + i);
                             const dateKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
                             const status = dateMap.get(dateKey) || "";
-                            
                             const isOutside = d.getMonth() !== month ? 'is-outside' : '';
                             const isToday = dateKey === new Date().toISOString().slice(0, 10) ? 'is-today' : '';
-                            
                             let stateClass = "";
                             let badgeClass = "";
                             if (status.includes("마감")) { stateClass = "is-closed"; badgeClass = "closed"; }
@@ -271,22 +268,22 @@
 
                         html += `</div><div class="scalendar__footer">${settings.available_text || ""}</div></div>`;
                         mount.innerHTML = html;
-
-                        // 렌더링 후 높이 계산 전송
-                        setTimeout(sendHeight, 100);
+                        
+                        // 렌더링 후 높이 재측정 전송
+                        sendHeight();
                     }
 
                     window._renderCal = render;
                     render(0);
-
-                    // 창 크기 조절 시 높이 재전송
-                    window.addEventListener('resize', sendHeight);
 
                 } catch (e) {
                     mount.innerHTML = "데이터 로딩 오류";
                 }
             }
             init();
+            
+            // 창 크기 조절 시 대응
+            window.addEventListener('resize', sendHeight);
         })();
     </script>
 </body>
