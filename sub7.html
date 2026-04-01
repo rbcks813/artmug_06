@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>현서이님-작업 캘린더</title>
+    <style>
+        /* [1. 중앙 정렬 및 배경 삭제] */
+        html, body {
+            width: 100%;
+            height: auto; /* 높이 조절을 위해 auto로 변경 */
+            margin: 0 !important;
+            padding: 0 !important;
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; 
+            background: transparent; /* 배경색 삭제 */
+            font-family: 'Pretendard', sans-serif;
+            overflow-x: hidden;
+            -webkit-text-size-adjust: none;
+        }
+        
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* [폰트 설정] */
+        @font-face {
+            font-family: 'Paperozi';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2');
+            font-weight: 900; font-display: swap;
+        }
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2');
+            font-weight: 400; font-display: swap;
+        }
+
+        :root {
+            --bg: #fff8cc; --line: #f2bd2f; --cell: #fffae5; --cell-outside: #fff1cf;
+            --today-bg: #fffbe8; --today-line: #ffa600; --text-strong: #3f2d21; --text-soft: #8b7347;
+            --closed-bg: #ffeeb0; --closed-text: #8a5a05; --closed-border: #ff9a26;
+            --holiday-bg: #ffdfdf; --holiday-text: #d32f2f; --holiday-border: #f44336;
+        }
+
+        /* [2. 메인 컨테이너] */
+        .calendarSection { 
+            width: 100%; 
+            max-width: 900px; 
+            padding: 30px 15px; 
+            margin: 0 auto; 
+        } 
+        
+        /* [제목 스타일 수정] */
+        .statusHeader { 
+            width: 100%;
+            display: flex; 
+            justify-content: center; 
+        }
+        .statusTitlePill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 12px 24px;
+            border-radius: 999px;
+            background: #ffd64f;
+            width: fit-content;
+            margin: 0 auto 20px;
+            font-family: 'Paperozi', sans-serif;
+            font-weight: 900;
+            font-size: clamp(22px, 5vw, 32px);
+            letter-spacing: -0.02em;
+            color: #2f231d;
+        }
+        .statusTitlePill .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #fff;
+            flex-shrink: 0;
+        }
+
+        /* [3. 캘린더 본체] */
+        .scalendar {
+            width: 100%; 
+            padding: 20px; 
+            border-radius: 24px; 
+            background: var(--bg);
+            box-shadow: inset 0 0 0 4px #ffd95e, inset 0 0 0 6px #f1b300, 0 12px 25px rgba(255, 214, 79, 0.15);
+        }
+        
+        .scalendar__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+        .scalendar__tabs { display: flex; gap: 8px; }
+        .scalendar__tab { 
+            padding: 8px 16px; border-radius: 999px; border: 1px solid #ebc75c; 
+            background: #fff6d8; cursor: pointer; font-weight: 800; font-size: 14px; color: var(--text-strong);
+        }
+        .scalendar__tab.is-active { background: #ffd84f; border-color: #e2ae28; }
+        .scalendar__title { font-size: 22px; font-weight: 800; color: var(--text-strong); font-family: 'Paperozi'; }
+
+        .scalendar__weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 10px; text-align: center; font-weight: 800; color: var(--text-soft); font-size: 13px; }
+        .scalendar__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; width: 100%; }
+        
+        .scalendar__cell { 
+            min-width: 0; 
+            min-height: 50px; padding: 8px; border-radius: 14px; border: 1px solid #f4d879; 
+            background: var(--cell); display: flex; flex-direction: row; align-items: center; justify-content: space-between; position: relative;
+        }
+        .scalendar__cell.is-outside { background: var(--cell-outside); opacity: 0.4; }
+        .scalendar__cell.is-today { border: 2px solid var(--today-line); background: var(--today-bg); }
+        .scalendar__cell.is-closed { background: #fff0ba; }
+        .scalendar__cell.is-holiday { background: #ffeaea; }
+
+        .scalendar__date { font-size: 14px; font-weight: 800; flex-shrink: 0; }
+        .is-sun { color: #ee8a6d; }
+
+        .scalendar__badge { 
+            padding: 3px 6px; border-radius: 6px; font-size: 11px; font-weight: 800; 
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            max-width: 65%; 
+            text-align: center;
+        }
+        .scalendar__badge.closed { background: var(--closed-bg); color: var(--closed-text); border: 1px solid var(--closed-border); }
+        .scalendar__badge.holiday { background: var(--holiday-bg); color: var(--holiday-text); border: 1px solid var(--holiday-border); }
+        
+        .scalendar__footer { margin-top: 20px; padding-top: 12px; border-top: 1px dashed #efd36a; font-size: 14px; text-align: center; color: var(--text-soft); width: 100%; }
+
+        /* [4. 모바일 최적화] */
+        @media screen and (max-width: 600px) {
+            .calendarSection { padding: 15px 8px; }
+            .scalendar { padding: 12px; border-radius: 18px; }
+            .scalendar__grid { gap: 4px; }
+            .scalendar__cell { 
+                min-height: 45px; padding: 6px 4px; flex-direction: column; 
+                align-items: center; justify-content: center; gap: 4px;
+            }
+            .scalendar__date { font-size: 12px; }
+            .scalendar__badge { font-size: 9px; max-width: 100%; width: 100%; }
+            .scalendar__title { font-size: 18px; }
+            .scalendar__tab { padding: 6px 10px; font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calendarSection">
+        <div class="statusHeader">
+            <div class="statusTitlePill">
+                <span class="dot"></span>
+                <span>작업 예약 현황</span>
+                <span class="dot"></span>
+            </div>
+        </div>
+        <div id="scheduleCalendar"></div>
+    </div>
+
+    <script>
+        (() => {
+            const CONFIG = {
+                mountSelector: "#scheduleCalendar",
+                settingsCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQH8jUVjx9wTBIhjeeMpSD1g3F_HFetxJ11UvBqk30U8XVYurBlovsadmXPhYsEaTh-fNeKZCSuLf1K/pub?gid=1605197333&single=true&output=csv",
+                datesCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQH8jUVjx9wTBIhjeeMpSD1g3F_HFetxJ11UvBqk30U8XVYurBlovsadmXPhYsEaTh-fNeKZCSuLf1K/pub?gid=1856773656&single=true&output=csv",
+                monthTabCount: 2
+            };
+
+            // 높이 전송 함수 추가
+            function sendHeight() {
+                const height = document.body.scrollHeight;
+                window.parent.postMessage({ height: height }, '*');
+            }
+
+            function normalizeDate(dateStr) {
+                if (!dateStr) return "";
+                const parts = dateStr.replace(/[^0-9]/g, '-').split('-').filter(p => p !== "");
+                if (parts.length < 3) return "";
+                const y = parts[0];
+                const m = parts[1].padStart(2, '0');
+                const d = parts[2].padStart(2, '0');
+                return `${y}-${m}-${d}`;
+            }
+
+            function parseCSV(text) {
+                const rows = text.split(/\r?\n/).map(row => row.split(','));
+                if (rows.length < 1) return [];
+                const headers = rows[0].map(h => h.trim().toLowerCase());
+                return rows.slice(1).map(row => {
+                    const obj = {};
+                    headers.forEach((h, i) => { if (row[i]) obj[h] = row[i].trim(); });
+                    return obj;
+                });
+            }
+
+            async function init() {
+                const mount = document.querySelector(CONFIG.mountSelector);
+                try {
+                    const [sRes, dRes] = await Promise.all([
+                        fetch(CONFIG.settingsCsvUrl + "&cache=" + Date.now()).then(r => r.text()),
+                        fetch(CONFIG.datesCsvUrl + "&cache=" + Date.now()).then(r => r.text())
+                    ]);
+
+                    const settingsData = parseCSV(sRes);
+                    const datesData = parseCSV(dRes);
+
+                    const settings = {};
+                    settingsData.forEach(d => { if(d.key) settings[d.key] = d.value; });
+
+                    const dateMap = new Map();
+                    datesData.forEach(item => {
+                        const normalized = normalizeDate(item.date);
+                        if (normalized) dateMap.set(normalized, item.status || "");
+                    });
+
+                    const baseMonth = settings.active_month || new Date().toISOString().slice(0, 7);
+                    const [startY, startM] = baseMonth.split('-').map(Number);
+                    
+                    const months = [];
+                    for(let i=0; i<CONFIG.monthTabCount; i++) {
+                        months.push(new Date(startY, startM - 1 + i, 1));
+                    }
+
+                    function render(idx) {
+                        const target = months[idx];
+                        const year = target.getFullYear();
+                        const month = target.getMonth();
+                        
+                        let html = `
+                        <div class="scalendar">
+                            <div class="scalendar__head">
+                                <div class="scalendar__tabs">
+                                    ${months.map((m, i) => `<button class="scalendar__tab ${i===idx?'is-active':''}" onclick="window._renderCal(${i})">${m.getMonth()+1}월</button>`).join('')}
+                                </div>
+                                <div class="scalendar__title">${year}.${String(month+1).padStart(2, '0')}</div>
+                            </div>
+                            <div class="scalendar__weekdays">
+                                <div class="is-sun">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
+                            </div>
+                            <div class="scalendar__grid">`;
+
+                        const firstDay = new Date(year, month, 1);
+                        const lastDay = new Date(year, month + 1, 0);
+                        const startDayOfWeek = firstDay.getDay(); 
+                        const totalDaysInMonth = lastDay.getDate(); 
+                        const rowsNeeded = Math.ceil((startDayOfWeek + totalDaysInMonth) / 7);
+                        const loopCount = rowsNeeded * 7; 
+
+                        const start = new Date(firstDay);
+                        start.setDate(firstDay.getDate() - startDayOfWeek);
+
+                        for (let i = 0; i < loopCount; i++) {
+                            const d = new Date(start);
+                            d.setDate(start.getDate() + i);
+                            const dateKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+                            const status = dateMap.get(dateKey) || "";
+                            
+                            const isOutside = d.getMonth() !== month ? 'is-outside' : '';
+                            const isToday = dateKey === new Date().toISOString().slice(0, 10) ? 'is-today' : '';
+                            
+                            let stateClass = "";
+                            let badgeClass = "";
+                            if (status.includes("마감")) { stateClass = "is-closed"; badgeClass = "closed"; }
+                            else if (status.includes("휴무")) { stateClass = "is-holiday"; badgeClass = "holiday"; }
+
+                            html += `
+                            <div class="scalendar__cell ${isOutside} ${isToday} ${stateClass}">
+                                <span class="scalendar__date ${d.getDay()===0?'is-sun':''}">${d.getDate()}</span>
+                                ${status ? `<div class="scalendar__badge ${badgeClass}" title="${status}">${status}</div>` : ''}
+                            </div>`;
+                        }
+
+                        html += `</div><div class="scalendar__footer">${settings.available_text || ""}</div></div>`;
+                        mount.innerHTML = html;
+
+                        // 렌더링 후 높이 계산 전송
+                        setTimeout(sendHeight, 100);
+                    }
+
+                    window._renderCal = render;
+                    render(0);
+
+                    // 창 크기 조절 시 높이 재전송
+                    window.addEventListener('resize', sendHeight);
+
+                } catch (e) {
+                    mount.innerHTML = "데이터 로딩 오류";
+                }
+            }
+            init();
+        })();
+    </script>
+</body>
+</html>
