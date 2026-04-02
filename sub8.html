@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포트폴리오</title>
+    <style>
+        /* Paperozi 폰트 설정 */
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight: 100; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2'); font-weight: 200; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2'); font-weight: 800; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+
+        :root {
+            --main-pink: #E38AA6;
+            --light-pink: #FDF4F6;
+            --bg-white: #FFFFFF;
+            --text-dark: #4A4A4A;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px 20px;
+            font-family: 'Paperozi', sans-serif;
+            background-color: var(--light-pink);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+        }
+
+        .portfolio-wrapper {
+            width: 100%;
+            max-width: 960px;
+            background: var(--bg-white);
+            border-radius: 40px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(227, 138, 166, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 배경 꾸미기 요소 */
+        .portfolio-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: var(--light-pink);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .header {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-weight: 800;
+            font-size: 2.2rem;
+            color: var(--main-pink);
+            margin: 0;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            font-weight: 300;
+            font-size: 1rem;
+            color: #999;
+            margin-top: 8px;
+        }
+
+        /* 메인 영상 컨테이너 */
+        .main-display {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .video-frame {
+            flex-grow: 1;
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            background: #000;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 8px solid var(--bg-white);
+            outline: 2px solid var(--light-pink);
+        }
+
+        .video-frame iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%; border: none;
+        }
+
+        /* 네비게이션 버튼 스타일 */
+        .nav-btn {
+            background: var(--bg-white);
+            color: var(--main-pink);
+            border: 2px solid var(--light-pink);
+            width: 54px;
+            height: 54px;
+            border-radius: 18px;
+            cursor: pointer;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+        }
+
+        .nav-btn:hover {
+            background: var(--main-pink);
+            color: white;
+            border-color: var(--main-pink);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(227, 138, 166, 0.3);
+        }
+
+        /* 하단 썸네일 리스트 */
+        .thumbnail-section {
+            position: relative;
+            z-index: 1;
+        }
+
+        .thumbnail-container {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding: 10px 5px 20px 5px;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE */
+        }
+
+        .thumbnail-container::-webkit-scrollbar {
+            display: none; /* Chrome */
+        }
+
+        .thumb-card {
+            flex: 0 0 170px;
+            height: 100px;
+            border-radius: 20px;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            transition: var(--transition);
+            border: 4px solid var(--bg-white);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+
+        .thumb-card img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .thumb-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--main-pink);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .thumb-card.active {
+            transform: scale(1.05) translateY(-5px);
+            border-color: var(--main-pink);
+            box-shadow: 0 12px 25px rgba(227, 138, 166, 0.25);
+        }
+
+        .thumb-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .thumb-card.active::after {
+            opacity: 0.1;
+        }
+
+        /* 로딩 상태 */
+        .loading-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-white);
+            color: var(--main-pink);
+            font-weight: 600;
+        }
+
+        /* 반응형 */
+        @media (max-width: 600px) {
+            .portfolio-wrapper { padding: 25px; border-radius: 30px; }
+            .nav-btn { width: 40px; height: 40px; border-radius: 12px; font-size: 16px; }
+            .header h1 { font-size: 1.6rem; }
+            .thumb-card { flex: 0 0 130px; height: 80px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="portfolio-wrapper">
+    <div class="header">
+        <h1>포트폴리오</h1>
+        <p>Design & Motion Work</p>
+    </div>
+    
+    <div class="main-display">
+        <button class="nav-btn" onclick="changeVideoStep(-1)" aria-label="이전 영상">◀</button>
+        
+        <div class="video-frame" id="mainViewer">
+            <div class="loading-overlay">감각적인 영상을 불러오고 있어요...</div>
+        </div>
+
+        <button class="nav-btn" onclick="changeVideoStep(1)" aria-label="다음 영상">▶</button>
+    </div>
+
+    <div class="thumbnail-section">
+        <div class="thumbnail-container" id="thumbSlider">
+            </div>
+    </div>
+</div>
+
+<script>
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMP35aIuQ6YC4tokgQpcNDlHBF8fAUd-qAbvytXflz5esxQWHLpazaldrBFmzDfbYkDJKVP8D21i--/pub?gid=608523771&single=true&output=csv';
+    
+    let videoList = [];
+    let currentIndex = 0;
+
+    function getYoutubeId(url) {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.trim().match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    function selectVideo(index) {
+        if (index < 0 || index >= videoList.length) return;
+        
+        currentIndex = index;
+        const videoId = videoList[currentIndex];
+        const viewer = document.getElementById('mainViewer');
+        
+        // 메인 영상 교체 (자동재생 없음)
+        viewer.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen title="Portfolio Video"></iframe>`;
+        
+        // 썸네일 활성화 시각적 피드백
+        const cards = document.querySelectorAll('.thumb-card');
+        cards.forEach((card, i) => {
+            if(i === currentIndex) {
+                card.classList.add('active');
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            } else {
+                card.classList.remove('active');
+            }
+        });
+    }
+
+    function changeVideoStep(step) {
+        let newIndex = currentIndex + step;
+        if (newIndex < 0) newIndex = videoList.length - 1;
+        if (newIndex >= videoList.length) newIndex = 0;
+        selectVideo(newIndex);
+    }
+
+    async function loadPortfolio() {
+        try {
+            const response = await fetch(sheetUrl);
+            const data = await response.text();
+            const rows = data.split(/\r?\n/).slice(1);
+            const thumbSlider = document.getElementById('thumbSlider');
+            
+            rows.forEach((row) => {
+                const videoId = getYoutubeId(row);
+                if (videoId) videoList.push(videoId);
+            });
+
+            if (videoList.length > 0) {
+                thumbSlider.innerHTML = ''; // 초기 로딩 메시지 제거
+                videoList.forEach((videoId, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'thumb-card';
+                    if (index === 0) card.classList.add('active');
+                    
+                    // 고화질 썸네일 이미지
+                    card.innerHTML = `<img src="https://img.youtube.com/vi/${videoId}/mqdefault.jpg" loading="lazy" alt="thumbnail">`;
+                    card.onclick = () => selectVideo(index);
+                    thumbSlider.appendChild(card);
+                });
+                selectVideo(0);
+            }
+        } catch (error) {
+            console.error('Data Load Error:', error);
+            document.getElementById('mainViewer').innerHTML = '<div class="loading-overlay">데이터를 가져오는데 실패했습니다.</div>';
+        }
+    }
+
+    loadPortfolio();
+</script>
+
+</body>
+</html>
