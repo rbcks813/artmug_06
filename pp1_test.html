@@ -22,7 +22,7 @@
         /* 카테고리 버튼 */
         .filter-container {
             display: flex;
-            flex-direction: column; /* 줄바꿈을 위해 컬럼 방향 설정 */
+            flex-direction: column; 
             align-items: center;
             gap: 15px;
             margin-bottom: 40px;
@@ -69,7 +69,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: auto; /* 내용물(영상) 너비에 맞춤 */
+            width: auto; 
             opacity: 0.3;
             transition: opacity 0.4s;
         }
@@ -78,17 +78,15 @@
             opacity: 1;
         }
 
-        /* ⭐ 세로 높이 통일 설정 */
         .video-container {
             position: relative;
-            height: 450px; /* 데스크탑 기준 세로 높이 고정 */
+            height: 450px; 
             border-radius: 16px;
             overflow: hidden;
             background: #000;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        /* 롱폼/숏폼 비율에 따른 너비 자동 조절 */
         .ratio-long { aspect-ratio: 16 / 9; }
         .ratio-short { aspect-ratio: 9 / 16; }
 
@@ -98,7 +96,6 @@
             border: none;
         }
 
-        /* 태그 */
         .tag-box {
             margin-top: 15px;
             display: flex;
@@ -114,7 +111,6 @@
             font-weight: 600;
         }
 
-        /* 화살표 버튼 */
         .swiper-button-next, .swiper-button-prev {
             width: 44px !important;
             height: 44px !important;
@@ -122,7 +118,7 @@
             border: 1px solid var(--main-beige);
             border-radius: 50%;
             color: var(--dark-beige) !important;
-            top: 225px !important; /* 영상 높이(450px)의 중앙 */
+            top: 225px !important; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             z-index: 10;
         }
@@ -137,13 +133,12 @@
 
         .swiper-pagination-bullet-active { background: var(--main-beige) !important; }
 
-        /* 모바일 대응 */
         @media (max-width: 768px) {
             .video-container {
-                height: 380px; /* 모바일에서는 높이를 조금 줄임 */
+                height: 380px; 
             }
             .swiper-button-next, .swiper-button-prev {
-                top: 190px !important; /* 줄어든 높이의 중앙 */
+                top: 190px !important; 
                 width: 36px !important;
                 height: 36px !important;
             }
@@ -198,6 +193,12 @@
         let allVideos = [];
         let swiperInstance = null;
 
+        // [추가] 부모 페이지로 높이 정보를 보내는 함수
+        function sendHeightToParent() {
+            const height = document.body.scrollHeight;
+            window.parent.postMessage({ portfolioHeight: height }, '*');
+        }
+
         function getEmbedUrl(url) {
             if (!url) return '';
             url = url.trim();
@@ -230,7 +231,7 @@
                         tags: cols[2]?.replace(/"/g, '').trim() || ""
                     };
                 }).filter(v => v && v.url);
-                renderVideos('롱폼'); // 초기 로딩 시 롱폼 전체를 보여줌
+                renderVideos('롱폼');
             } catch (e) {
                 document.getElementById('no-data').style.display = 'block';
             }
@@ -249,7 +250,6 @@
             if (filtered.length === 0) {
                 noData.style.display = 'block';
                 sliderWrapper.style.display = 'none';
-                return;
             } else {
                 noData.style.display = 'none';
                 sliderWrapper.style.display = 'block';
@@ -282,17 +282,22 @@
                 navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
                 keyboard: { enabled: true },
             });
+
+            // [추가] 렌더링 후 높이 다시 계산
+            setTimeout(sendHeightToParent, 300);
         }
 
         function filterContent(category) {
             document.querySelectorAll('.filter-btn').forEach(btn => {
-                // 버튼의 onclick 속성에 할당된 category 값과 일치하는지 확인하여 활성화
                 const btnAttr = btn.getAttribute('onclick');
                 btn.classList.toggle('active', btnAttr.includes(`'${category}'`));
             });
             renderVideos(category);
         }
 
+        // [추가] 윈도우 리사이즈 시 높이 다시 보내기
+        window.addEventListener('resize', sendHeightToParent);
+        
         init();
     </script>
 </body>
