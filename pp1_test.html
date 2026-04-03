@@ -22,9 +22,16 @@
         /* 카테고리 버튼 */
         .filter-container {
             display: flex;
+            flex-direction: column; /* 줄바꿈을 위해 컬럼 방향 설정 */
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .filter-row {
+            display: flex;
             justify-content: center;
             gap: 10px;
-            margin-bottom: 40px;
             flex-wrap: wrap;
         }
 
@@ -160,15 +167,18 @@
 <body>
 
     <div class="filter-container">
-        <button class="filter-btn active" onclick="filterContent('전체')">전체보기</button>
-        <button class="filter-btn" onclick="filterContent('롱폼')">롱폼</button>
-        <button class="filter-btn" onclick="filterContent('롱폼 게임')">롱폼 게임</button>
-        <button class="filter-btn" onclick="filterContent('롱폼 토크')">롱폼 토크</button>
-        <button class="filter-btn" onclick="filterContent('롱폼 그외')">롱폼 그외</button>
-        <button class="filter-btn" onclick="filterContent('숏폼')">숏폼</button>
-        <button class="filter-btn" onclick="filterContent('숏폼 게임')">숏폼 게임</button>
-        <button class="filter-btn" onclick="filterContent('숏폼 토크')">숏폼 토크</button>
-        <button class="filter-btn" onclick="filterContent('숏폼 그외')">숏폼 그외</button>
+        <div class="filter-row">
+            <button class="filter-btn active" onclick="filterContent('롱폼')">전체</button>
+            <button class="filter-btn" onclick="filterContent('롱폼 게임')">롱폼 게임</button>
+            <button class="filter-btn" onclick="filterContent('롱폼 토크')">롱폼 토크</button>
+            <button class="filter-btn" onclick="filterContent('롱폼 그외')">롱폼 그외</button>
+        </div>
+        <div class="filter-row">
+            <button class="filter-btn" onclick="filterContent('숏폼')">전체</button>
+            <button class="filter-btn" onclick="filterContent('숏폼 게임')">숏폼 게임</button>
+            <button class="filter-btn" onclick="filterContent('숏폼 토크')">숏폼 토크</button>
+            <button class="filter-btn" onclick="filterContent('숏폼 그외')">숏폼 그외</button>
+        </div>
     </div>
 
     <div id="slider-wrapper" class="swiper-container-wrapper">
@@ -220,7 +230,7 @@
                         tags: cols[2]?.replace(/"/g, '').trim() || ""
                     };
                 }).filter(v => v && v.url);
-                renderVideos('전체');
+                renderVideos('롱폼'); // 초기 로딩 시 롱폼 전체를 보여줌
             } catch (e) {
                 document.getElementById('no-data').style.display = 'block';
             }
@@ -234,7 +244,7 @@
             if (swiperInstance) swiperInstance.destroy(true, true);
             listContainer.innerHTML = '';
 
-            const filtered = category === '전체' ? allVideos : allVideos.filter(v => v.type === category);
+            const filtered = allVideos.filter(v => v.type === category);
 
             if (filtered.length === 0) {
                 noData.style.display = 'block';
@@ -246,7 +256,6 @@
             }
 
             filtered.forEach(video => {
-                // '숏폼'이 포함된 타입은 모두 세로 비율로 설정
                 const ratioClass = video.type.includes('숏폼') ? 'ratio-short' : 'ratio-long';
                 const tagHtml = video.tags.split(',')
                     .filter(t => t.trim() !== "")
@@ -277,8 +286,9 @@
 
         function filterContent(category) {
             document.querySelectorAll('.filter-btn').forEach(btn => {
-                const btnText = btn.innerText.replace(' 영상', '').replace('보기', '');
-                btn.classList.toggle('active', btnText === category);
+                // 버튼의 onclick 속성에 할당된 category 값과 일치하는지 확인하여 활성화
+                const btnAttr = btn.getAttribute('onclick');
+                btn.classList.toggle('active', btnAttr.includes(`'${category}'`));
             });
             renderVideos(category);
         }
