@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        :root {
+            --main-beige: #D2B48C;
+            --dark-beige: #A68A64;
+            --bg-light: #FDFBF8;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px 0;
+            background: transparent;
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* 카테고리 버튼 */
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 24px;
+            border: 1.5px solid var(--main-beige);
+            background: #fff;
+            color: var(--dark-beige);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .filter-btn.active {
+            background: var(--main-beige);
+            color: white;
+        }
+
+        /* 슬라이더 영역 */
+        .swiper-container-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .swiper {
+            width: 100%;
+            padding-bottom: 60px !important;
+        }
+
+        .swiper-slide {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: auto; /* 내용물(영상) 너비에 맞춤 */
+            opacity: 0.3;
+            transition: opacity 0.4s;
+        }
+
+        .swiper-slide-active {
+            opacity: 1;
+        }
+
+        /* ⭐ 세로 높이 통일 설정 */
+        .video-container {
+            position: relative;
+            height: 450px; /* 데스크탑 기준 세로 높이 고정 */
+            border-radius: 16px;
+            overflow: hidden;
+            background: #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* 롱폼/숏폼 비율에 따른 너비 자동 조절 */
+        .ratio-long { aspect-ratio: 16 / 9; }
+        .ratio-short { aspect-ratio: 9 / 16; }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: none;
+        }
+
+        /* 태그 */
+        .tag-box {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            max-width: 100%;
+        }
+
+        .tag-item {
+            color: var(--dark-beige);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* 화살표 버튼 */
+        .swiper-button-next, .swiper-button-prev {
+            width: 44px !important;
+            height: 44px !important;
+            background: #fff;
+            border: 1px solid var(--main-beige);
+            border-radius: 50%;
+            color: var(--dark-beige) !important;
+            top: 225px !important; /* 영상 높이(450px)의 중앙 */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .swiper-button-next:after, .swiper-button-prev:after {
+            font-size: 16px !important;
+            font-weight: bold;
+        }
+
+        .swiper-button-prev { left: 10px !important; }
+        .swiper-button-next { right: 10px !important; }
+
+        .swiper-pagination-bullet-active { background: var(--main-beige) !important; }
+
+        /* 모바일 대응 */
+        @media (max-width: 768px) {
+            .video-container {
+                height: 380px; /* 모바일에서는 높이를 조금 줄임 */
+            }
+            .swiper-button-next, .swiper-button-prev {
+                top: 190px !important; /* 줄어든 높이의 중앙 */
+                width: 36px !important;
+                height: 36px !important;
+            }
+            .swiper-button-next:after, .swiper-button-prev:after {
+                font-size: 14px !important;
+            }
+            .filter-btn { padding: 8px 18px; font-size: 13px; }
+        }
+
+        #no-data {
+            display: none;
+            text-align: center;
+            padding: 60px;
+            color: var(--dark-beige);
+            border: 2px dashed var(--main-beige);
+            margin: 0 20px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="filter-container">
+        <button class="filter-btn active" onclick="filterContent('전체')">전체보기</button>
+        <button class="filter-btn" onclick="filterContent('롱폼')">롱폼</button>
+        <button class="filter-btn" onclick="filterContent('롱폼 게임')">롱폼 게임</button>
+        <button class="filter-btn" onclick="filterContent('롱폼 토크')">롱폼 토크</button>
+        <button class="filter-btn" onclick="filterContent('롱폼 그외')">롱폼 그외</button>
+        <button class="filter-btn" onclick="filterContent('숏폼')">숏폼</button>
+        <button class="filter-btn" onclick="filterContent('숏폼 게임')">숏폼 게임</button>
+        <button class="filter-btn" onclick="filterContent('숏폼 토크')">숏폼 토크</button>
+        <button class="filter-btn" onclick="filterContent('숏폼 그외')">숏폼 그외</button>
+    </div>
+
+    <div id="slider-wrapper" class="swiper-container-wrapper">
+        <div class="swiper">
+            <div class="swiper-wrapper" id="video-list"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+    </div>
+
+    <div id="no-data">등록된 포트폴리오 영상이 없습니다.</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSG_Lqcb6PVuS3aRdwOzzAK9a7q9_BgTm_Hih063KyRXtYLc7KIIO85xk7nfuGi8IzRJiuJKVmNZmyU/pub?gid=0&single=true&output=csv';
+        let allVideos = [];
+        let swiperInstance = null;
+
+        function getEmbedUrl(url) {
+            if (!url) return '';
+            url = url.trim();
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                let videoId = '';
+                if (url.includes('v=')) videoId = url.split('v=')[1].split('&')[0];
+                else if (url.includes('shorts/')) videoId = url.split('shorts/')[1].split('?')[0];
+                else if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1].split('?')[0];
+                return `https://www.youtube.com/embed/${videoId}`;
+            }
+            if (url.includes('sooplive.co.kr')) {
+                const parts = url.split('/');
+                const vodId = parts[parts.length - 1].split('?')[0];
+                return `https://vod.sooplive.co.kr/player/${vodId}/embed`;
+            }
+            return url;
+        }
+
+        async function init() {
+            try {
+                const response = await fetch(SHEET_URL);
+                const csvData = await response.text();
+                const rows = csvData.split('\n').slice(1);
+                allVideos = rows.map(row => {
+                    const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                    if (cols.length < 2) return null;
+                    return {
+                        type: cols[0]?.replace(/"/g, '').trim(),
+                        url: cols[1]?.replace(/"/g, '').trim(),
+                        tags: cols[2]?.replace(/"/g, '').trim() || ""
+                    };
+                }).filter(v => v && v.url);
+                renderVideos('전체');
+            } catch (e) {
+                document.getElementById('no-data').style.display = 'block';
+            }
+        }
+
+        function renderVideos(category) {
+            const listContainer = document.getElementById('video-list');
+            const noData = document.getElementById('no-data');
+            const sliderWrapper = document.getElementById('slider-wrapper');
+            
+            if (swiperInstance) swiperInstance.destroy(true, true);
+            listContainer.innerHTML = '';
+
+            const filtered = category === '전체' ? allVideos : allVideos.filter(v => v.type === category);
+
+            if (filtered.length === 0) {
+                noData.style.display = 'block';
+                sliderWrapper.style.display = 'none';
+                return;
+            } else {
+                noData.style.display = 'none';
+                sliderWrapper.style.display = 'block';
+            }
+
+            filtered.forEach(video => {
+                // '숏폼'이 포함된 타입은 모두 세로 비율로 설정
+                const ratioClass = video.type.includes('숏폼') ? 'ratio-short' : 'ratio-long';
+                const tagHtml = video.tags.split(',')
+                    .filter(t => t.trim() !== "")
+                    .map(t => `<span class="tag-item">#${t.trim()}</span>`)
+                    .join(' ');
+
+                const slide = `
+                    <div class="swiper-slide">
+                        <div class="video-container ${ratioClass}">
+                            <iframe src="${getEmbedUrl(video.url)}" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+                        </div>
+                        <div class="tag-box">${tagHtml}</div>
+                    </div>
+                `;
+                listContainer.insertAdjacentHTML('beforeend', slide);
+            });
+
+            swiperInstance = new Swiper('.swiper', {
+                slidesPerView: 'auto',
+                spaceBetween: 30,
+                centeredSlides: true,
+                loop: filtered.length > 1,
+                pagination: { el: '.swiper-pagination', clickable: true },
+                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                keyboard: { enabled: true },
+            });
+        }
+
+        function filterContent(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                const btnText = btn.innerText.replace(' 영상', '').replace('보기', '');
+                btn.classList.toggle('active', btnText === category);
+            });
+            renderVideos(category);
+        }
+
+        init();
+    </script>
+</body>
+</html>
