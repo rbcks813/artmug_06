@@ -163,16 +163,16 @@
 
     <div class="filter-container">
         <div class="filter-row">
-            <button class="filter-btn active" onclick="filterContent('롱폼')">전체</button>
-            <button class="filter-btn" onclick="filterContent('롱폼 게임')">롱폼 게임</button>
-            <button class="filter-btn" onclick="filterContent('롱폼 토크')">롱폼 토크</button>
-            <button class="filter-btn" onclick="filterContent('롱폼 그외')">롱폼 그외</button>
+            <button class="filter-btn active" onclick="filterContent('롱폼')">롱폼</button>
+            <button class="filter-btn" onclick="filterContent('롱폼 게임')">게임</button>
+            <button class="filter-btn" onclick="filterContent('롱폼 토크')">토크</button>
+            <button class="filter-btn" onclick="filterContent('롱폼 그 외')">그 외</button>
         </div>
         <div class="filter-row">
-            <button class="filter-btn" onclick="filterContent('숏폼')">전체</button>
-            <button class="filter-btn" onclick="filterContent('숏폼 게임')">숏폼 게임</button>
-            <button class="filter-btn" onclick="filterContent('숏폼 토크')">숏폼 토크</button>
-            <button class="filter-btn" onclick="filterContent('숏폼 그외')">숏폼 그외</button>
+            <button class="filter-btn" onclick="filterContent('숏폼')">숏폼</button>
+            <button class="filter-btn" onclick="filterContent('숏폼 게임')">게임</button>
+            <button class="filter-btn" onclick="filterContent('숏폼 토크')">토크</button>
+            <button class="filter-btn" onclick="filterContent('숏폼 그 외')">그 외</button>
         </div>
     </div>
 
@@ -193,7 +193,6 @@
         let allVideos = [];
         let swiperInstance = null;
 
-        // [추가] 부모 페이지로 높이 정보를 보내는 함수
         function sendHeightToParent() {
             const height = document.body.scrollHeight;
             window.parent.postMessage({ portfolioHeight: height }, '*');
@@ -225,8 +224,16 @@
                 allVideos = rows.map(row => {
                     const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     if (cols.length < 2) return null;
+                    
+                    let type = cols[0]?.replace(/"/g, '').trim();
+                    
+                    // 구글 시트 데이터 전처리 (띄어쓰기 및 카테고리 보정)
+                    if (type.includes('그외')) type = type.replace('그외', '그 외');
+                    if (type === '롱폼') type = '롱폼 그 외';
+                    if (type === '숏폼') type = '숏폼 그 외';
+
                     return {
-                        type: cols[0]?.replace(/"/g, '').trim(),
+                        type: type,
                         url: cols[1]?.replace(/"/g, '').trim(),
                         tags: cols[2]?.replace(/"/g, '').trim() || ""
                     };
@@ -245,7 +252,10 @@
             if (swiperInstance) swiperInstance.destroy(true, true);
             listContainer.innerHTML = '';
 
-            const filtered = allVideos.filter(v => v.type === category);
+            // '롱폼' 혹은 '숏폼' 메인 버튼인 경우 전체 출력, 아니면 상세 매칭
+            const filtered = (category === '롱폼' || category === '숏폼')
+                ? allVideos.filter(v => v.type.includes(category))
+                : allVideos.filter(v => v.type === category);
 
             if (filtered.length === 0) {
                 noData.style.display = 'block';
@@ -283,7 +293,6 @@
                 keyboard: { enabled: true },
             });
 
-            // [추가] 렌더링 후 높이 다시 계산
             setTimeout(sendHeightToParent, 300);
         }
 
@@ -295,9 +304,7 @@
             renderVideos(category);
         }
 
-        // [추가] 윈도우 리사이즈 시 높이 다시 보내기
         window.addEventListener('resize', sendHeightToParent);
-        
         init();
     </script>
 </body>
