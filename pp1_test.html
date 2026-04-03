@@ -135,10 +135,11 @@
 
         @media (max-width: 768px) {
             .video-container {
-                height: 380px; 
+                /* 모바일 화면 너비에 맞춰 롱폼 너비가 짤리지 않도록 높이 동적 조절 (숏폼도 동일한 높이로 맞춰짐) */
+                height: 50vw; 
             }
             .swiper-button-next, .swiper-button-prev {
-                top: 190px !important; 
+                top: 25vw !important; /* 바뀐 영상 높이(50vw)의 중앙으로 버튼 위치 조정 */
                 width: 36px !important;
                 height: 36px !important;
             }
