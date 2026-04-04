@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>디자인 신청 페이지</title>
+    <style>
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight: 100; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2'); font-weight: 200; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2'); font-weight: 800; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+
+        :root {
+            --base1: #FEB1D1;
+            --base2: #FFD0E4;
+            --point1: #FF94C2;
+            --point2: #8E6175;
+            --bg: #FFF9FB;
+        }
+
+        body {
+            font-family: 'Paperozi', sans-serif;
+            color: var(--point2);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(254, 177, 209, 0.15);
+            padding: 30px;
+            border: 2px solid var(--base2);
+        }
+
+        section { margin-bottom: 50px; padding-bottom: 20px; }
+
+        h2 {
+            color: var(--point1);
+            text-align: center;
+            font-weight: 800;
+            margin-bottom: 25px;
+            display: block;
+            font-size: 1.5em;
+        }
+
+        .new-notice {
+            background: linear-gradient(135deg, var(--base2) 0%, #ffffff 100%);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 5px 5px 15px rgba(255, 148, 194, 0.1);
+            text-align: center;
+            border: 1px solid var(--base2);
+        }
+        .new-notice .title { font-size: 1.4em; font-weight: 800; margin-bottom: 15px; color: var(--point2); }
+        .new-notice .warning { color: #E74C3C; font-weight: 800; margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--base1); }
+
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .calendar-btn { background: var(--point1); color: #fff; border: none; padding: 8px 15px; border-radius: 10px; cursor: pointer; font-family: 'Paperozi'; font-weight: 600; }
+        .calendar-btn:disabled { background: #eee; cursor: not-allowed; color: #999; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; text-align: center; }
+        .cal-day-header { font-weight: 700; padding: 10px 0; color: var(--point1); }
+        .cal-day { background: #fff; border: 1px solid var(--base2); border-radius: 10px; font-weight: 500; aspect-ratio: 1 / 1.1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; overflow: hidden; }
+        .cal-day.today { background-color: var(--base1); color: #fff; border-color: var(--point1); font-weight: 800; }
+        .status-badge { font-size: 0.7em; padding: 2px 6px; border-radius: 4px; color: #fff; white-space: nowrap; }
+        .status-closed { background: #ccc; }
+        .status-open { background: var(--point1); }
+        .status-vacation { background: var(--point2); }
+
+        .portfolio-tabs-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px; width: 100%; position: relative; }
+        .tab-nav-btn { background: #fff; border: 2px solid var(--base2); border-radius: 50%; color: var(--point1); width: 36px; height: 36px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: 0.2s; font-size: 1.2em; box-shadow: 0 3px 8px rgba(254, 177, 209, 0.1); outline: none; z-index: 2; }
+        .tab-nav-btn:hover { background: var(--base1); color: #fff; border-color: var(--base1); }
+
+        .portfolio-tabs {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 10px;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            padding: 5px 2px;
+            flex-grow: 1;
+            scroll-snap-type: x mandatory;
+        }
+        .portfolio-tabs::-webkit-scrollbar { display: none; }
+
+        .portfolio-tab {
+            padding: 10px 20px;
+            background: #fff;
+            border: 2px solid var(--base2);
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Paperozi';
+            font-weight: 700;
+            color: var(--point2);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+            box-shadow: 0 3px 8px rgba(254, 177, 209, 0.1);
+            flex-shrink: 0;
+            scroll-snap-align: start;
+        }
+        .portfolio-tab:hover { border-color: var(--point1); transform: translateY(-2px); }
+        .portfolio-tab.active { background: var(--point1); color: #fff; border-color: var(--point1); box-shadow: 0 5px 15px rgba(255, 148, 194, 0.4); }
+
+        .portfolio-slider-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            position: relative;
+            background: #fafafa;
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid var(--base2);
+        }
+        .img-nav-btn {
+            background: var(--point1);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            flex-shrink: 0;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(255, 148, 194, 0.3);
+            z-index: 5;
+        }
+        .img-nav-btn:hover { background: var(--point2); transform: scale(1.1); }
+        .img-nav-btn:disabled { background: #ddd; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .portfolio-main-display {
+            flex-grow: 1;
+            height: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            min-width: 0;
+        }
+
+        /* ── 최적화: 단일 img 태그 재사용, fade 트랜지션 ── */
+        #current-portfolio-img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            object-fit: contain;
+            background: #fff;
+            transition: opacity 0.2s ease;
+            display: none; /* 로드 전 숨김 */
+        }
+
+        /* ── 로딩 스피너 ── */
+        .port-spinner {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            position: absolute;
+        }
+        .port-spinner.show { display: flex; }
+        .spinner-ring {
+            width: 48px;
+            height: 48px;
+            border: 5px solid var(--base2);
+            border-top-color: var(--point1);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        .spinner-text { font-weight: 700; color: var(--point1); font-size: 0.9em; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── 이미지 없음 메시지 ── */
+        .port-empty {
+            display: none;
+            color: #aaa;
+            font-weight: 700;
+            position: absolute;
+        }
+        .port-empty.show { display: block; }
+
+        /* ── 이미지 에러 메시지 ── */
+        .port-error {
+            display: none;
+            color: #e74c3c;
+            font-weight: 700;
+            text-align: center;
+            position: absolute;
+        }
+        .port-error.show { display: block; }
+
+        .img-counter {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 800;
+            color: var(--point1);
+            font-size: 1.1em;
+        }
+
+        .color-list { display: flex; flex-wrap: nowrap; gap: 10px; align-items: center; overflow-x: auto; padding: 5px 0 10px 0; }
+        .color-list::-webkit-scrollbar { height: 4px; }
+        .color-list::-webkit-scrollbar-thumb { background: var(--base1); border-radius: 10px; }
+        .color-item { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--base1); padding: 6px 10px; border-radius: 10px; flex-shrink: 0; }
+        .color-box { width: 32px; height: 32px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.1); cursor: pointer; padding: 0; overflow: hidden; flex-shrink: 0; }
+        .color-box input[type="color"] { width: 150%; height: 150%; margin: -25%; cursor: pointer; border: none; }
+        .hex-input { width: 78px !important; flex: none !important; padding: 0 4px !important; border: none !important; font-family: 'Paperozi' !important; font-size: 0.9em !important; outline: none !important; background: transparent !important; text-transform: uppercase !important; text-align: center !important; margin: 0 !important; }
+
+        .package-wrapper { display: flex; gap: 15px; margin-bottom: 25px; }
+        .package-card { flex: 1; background: #ffffff; border: 2px solid var(--base1); border-radius: 25px; padding: 0; display: flex; flex-direction: column; overflow: hidden; transition: transform 0.3s ease; box-shadow: 0 5px 15px rgba(254, 177, 209, 0.1); }
+        .package-card:hover { transform: translateY(-5px); }
+        .package-card .card-header { background: var(--base2); padding: 20px 15px; text-align: center; }
+        .package-card h3 { color: var(--point1); font-weight: 800; margin: 0 0 5px; font-size: 1.05em; }
+        .package-desc { font-size: 0.75em; color: var(--point2); font-weight: 500; opacity: 0.9; }
+        .package-items { padding: 20px; flex-grow: 1; font-size: 0.78em; line-height: 1.8; color: var(--point2); text-align: left; }
+        .item-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 2px; }
+        .item-dot { color: var(--point1); font-weight: 900; }
+        .package-price-area { background: var(--bg); padding: 20px 15px; text-align: center; border-top: 1px dashed var(--base1); }
+        .price-label { font-size: 0.75em; font-weight: 800; color: #999; display: block; margin-bottom: 5px; }
+        .package-price { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+        .price-old { text-decoration: line-through; color: #bbb; font-size: 0.95em; font-weight: 600; }
+        .price-new { color: var(--point1); font-size: 1.3em; font-weight: 900; }
+        .package-notice { background: var(--bg); padding: 15px 20px; border-radius: 15px; border: 2px solid var(--base2); font-size: 0.85em; font-weight: 600; text-align: center; line-height: 1.6; }
+        .package-notice span { color: var(--point1); font-weight: 800; }
+
+        .detail-notice-box { background: #fff; border: 2px solid var(--base2); border-radius: 20px; padding: 25px; box-shadow: 0 5px 15px rgba(254, 177, 209, 0.1); }
+        .notice-item { margin-bottom: 15px; font-size: 0.9em; line-height: 1.6; }
+        .notice-item:last-child { margin-bottom: 0; }
+        .notice-num { color: var(--point1); font-weight: 900; margin-right: 5px; font-size: 1.1em; }
+        .notice-sub { display: block; color: #888; font-size: 0.9em; margin-left: 25px; margin-top: 3px; }
+        .hl { color: var(--point1); font-weight: 800; }
+
+        textarea { width: 100%; height: 120px; padding: 12px; border: 2px solid var(--base2); border-radius: 12px; box-sizing: border-box; font-family: 'Paperozi'; outline: none; resize: none; overflow-y: auto; }
+        textarea:focus { border-color: var(--point1); }
+        .btn-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; }
+        .select-btn { padding: 10px 18px; border: 2px solid var(--base2); background: white; border-radius: 10px; cursor: pointer; font-family: 'Paperozi'; font-weight: 600; transition: 0.2s; color: var(--point2); }
+        .select-btn.active { background: var(--point1); color: white; border-color: var(--point1); }
+        .form-group { margin-bottom: 25px; }
+        label { display: block; font-weight: 800; margin-bottom: 8px; color: var(--point2); font-size: 1.05em; }
+        input[type="text"], input[type="date"] { width: 100%; padding: 12px; border: 2px solid var(--base2); border-radius: 12px; box-sizing: border-box; font-family: 'Paperozi'; outline: none; }
+
+        .custom-file-label { display: inline-block; padding: 10px 20px; background: var(--base2); color: var(--point2); font-weight: 700; border-radius: 10px; cursor: pointer; border: 2px solid var(--base1); transition: 0.2s; }
+        .custom-file-label:hover { background: var(--base1); color: white; }
+        input[type="file"] { display: none; }
+
+        .preview-wrap { position: relative; display: none; width: fit-content; margin-top: 15px; }
+        #img-preview { max-width: 180px; border-radius: 10px; border: 2px solid var(--base2); display: block; }
+        #del-img-btn { position: absolute; top: -10px; right: -10px; width: 26px; height: 26px; background: #e74c3c; color: white; border: none; border-radius: 50%; cursor: pointer; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 10; }
+
+        .checkbox-group { background: var(--bg); padding: 20px; border-radius: 15px; border: 2px solid var(--base1); margin: 30px 0; font-weight: 700; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .checkbox-group input { width: 20px; height: 20px; accent-color: var(--point1); }
+
+        .bottom-actions { display: flex; gap: 12px; }
+        .copy-btn { flex: 3; padding: 18px; background: var(--point1); color: white; font-size: 1.2em; font-weight: 800; border: none; border-radius: 15px; cursor: pointer; font-family: 'Paperozi'; }
+        .copy-btn:disabled { background: #eee; color: #999; cursor: not-allowed; }
+        .reset-btn { flex: 1; padding: 18px; background: #fff; color: var(--point2); font-size: 1.1em; font-weight: 800; border: 2px solid var(--base2); border-radius: 15px; cursor: pointer; font-family: 'Paperozi'; transition: 0.2s; }
+        .reset-btn:hover { background: var(--bg); border-color: var(--point1); }
+
+        #collab-list { display: flex; flex-direction: column; gap: 15px; }
+        .collab-banner { display: block; width: 100%; border-radius: 15px; overflow: hidden; border: 2px solid var(--base2); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .collab-banner:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(254, 177, 209, 0.4); }
+        .collab-banner img { width: 100%; aspect-ratio: 1180 / 328; object-fit: cover; display: block; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <section>
+        <div class="new-notice">
+            <div class="title" id="notice-title">✨ Current Work Status ✨</div>
+            <div id="notice-content" style="font-weight: 500; line-height: 1.8;"></div>
+            <div class="warning">
+                🚫 모든 디자인 스타일 참고 및 도용 금지 🚫<br>
+                <span style="font-size: 0.9em; font-weight: 500;">공지사항 숙지 후 양식에 맞춰 신청 부탁드립니다.</span>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Schedule</h2>
+        <div class="calendar-header">
+            <button class="calendar-btn" id="prev-btn" onclick="changeMonth(-1)" disabled>이번달</button>
+            <h3 id="cal-month-title" style="margin: 0; font-weight: 800;"></h3>
+            <button class="calendar-btn" id="next-btn" onclick="changeMonth(1)">다음달</button>
+        </div>
+        <div class="calendar-grid" id="cal-grid"></div>
+    </section>
+
+    <section>
+        <h2>Collaboration</h2>
+        <div id="collab-list"></div>
+    </section>
+
+    <section>
+        <h2>Package Guide</h2>
+        <div class="package-wrapper">
+            <div class="package-card">
+                <div class="card-header">
+                    <h3>1. 일반 버츄얼 패키지</h3>
+                    <div class="package-desc">데뷔 필수 디자인 ALL-IN-ONE</div>
+                </div>
+                <div class="package-items">
+                    <div class="item-row"><span class="item-dot">✔</span> 게임화면 + 홍보포스터 + RT포스터 + PPT</div>
+                    <div class="item-row"><span class="item-dot">✔</span> 숲타이틀배너 (또는 치지직배너)</div>
+                    <div class="item-row"><span class="item-dot">✔</span> 유튜브 채널아트 + 스케줄표 대형&소형</div>
+                    <div class="item-row"><span class="item-dot">✔</span> 데뷔 썸네일 + 다시보기틀 + 쇼츠틀</div>
+                    <div class="item-row"><span class="item-dot">✔</span> 인생네컷대형&소형 + 핫클립로고</div>
+                    <div class="item-row"><span class="item-dot">✔</span> 숲시그니처풍 3종 (또는 주루마블)</div>
+                </div>
+                <div class="package-price-area">
+                    <span class="price-label">Total (VAT included)</span>
+                    <div class="package-price">
+                        <span class="price-old">626,000원</span>
+                        <span class="price-new">450,000원</span>
+                    </div>
+                </div>
+            </div>
+            <div class="package-card">
+                <div class="card-header">
+                    <h3>2. 협업 버츄얼 패키지</h3>
+                    <div class="package-desc">협업 특별가로 더 저렴하게!</div>
+                </div>
+                <div class="package-items">
+                    <div class="item-row"><span class="item-dot">✔</span> 게임화면 + 홍보포스터 + RT포스터 + PPT</div>
+                    <div class="item-row"><span class="item-dot">✔</span> 숲타이틀배너 (또는 치지직배너)</div>
+                    <div class="item-row"><span class="item-dot">✔</span> 유튜브 채널아트 + 스케줄표 대형&소형</div>
+                    <div class="item-row"><span class="item-dot">✔</span> 데뷔 썸네일 + 다시보기틀 + 쇼츠틀</div>
+                    <div class="item-row"><span class="item-dot">✔</span> 인생네컷대형&소형 + 핫클립로고</div>
+                    <div class="item-row"><span class="item-dot">✔</span> 숲시그니처풍 3종 (또는 주루마블)</div>
+                </div>
+                <div class="package-price-area">
+                    <span class="price-label">Total (VAT included)</span>
+                    <div class="package-price">
+                        <span class="price-old">626,000원</span>
+                        <span class="price-new">350,000원</span>
+                    </div>
+                </div>
+            </div>
+            <div class="package-card">
+                <div class="card-header">
+                    <h3>3. 심플 버츄얼 패키지</h3>
+                    <div class="package-desc">간단하게 데뷔하고싶을때!</div>
+                </div>
+                <div class="package-items">
+                    <div class="item-row"><span class="item-dot">✔</span> 홍보포스터 + RT포스터 + PPT</div>
+                    <div class="item-row"><span class="item-dot">✔</span> 스케줄표 대형 + 데뷔썸네일</div>
+                    <div class="item-row"><span class="item-dot">✔</span> 다시보기썸네일 + 쇼츠틀</div>
+                </div>
+                <div class="package-price-area">
+                    <span class="price-label">Total (VAT included)</span>
+                    <div class="package-price">
+                        <span class="price-old">304,500원</span>
+                        <span class="price-new">280,000원</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="package-notice">
+            📢 버츄얼 패키지는 양식 전달 받은 후로부터 <span>30일내</span>로 전달드립니다.<br>
+            적어도 필요하신 날짜 <span>40일전</span>에 신청 부탁드립니다.
+        </div>
+    </section>
+
+    <section>
+        <h2>Notice</h2>
+        <div class="detail-notice-box">
+            <div class="notice-item"><span class="notice-num">01.</span>작업기간은 사전 안내 후로부터 <span class="hl">~14일 이내</span>로 전달드립니다<span class="notice-sub">*작업기간은 신청 갯수 및 일정에 따라 변동 될 수 있습니다</span></div>
+            <div class="notice-item"><span class="notice-num">02.</span>모든 작업물은 <span class="hl">방송용 기준</span>입니다.<span class="notice-sub">*상업용/기업용은 <span class="hl">X2배</span></span></div>
+            <div class="notice-item"><span class="notice-num">03.</span>모든 작업물은 허락없이 <span class="hl">제 3자에게 판매 및 제공을</span> 무단으로 하실 수 없습니다<span class="notice-sub">EX) <span class="hl">버츄얼판매</span>로 인한 디자인작업물을 제3자제공등등</span></div>
+            <div class="notice-item"><span class="notice-num">04.</span>환불은 디자인 <span class="hl">제작전 100%환불 가능</span>하며 1차 시안 제작 후 환불은 전체 금액 중 <span class="hl">시안비 50% 금액제외</span> 환불해드립니다<span class="notice-sub">*작업상황에 따라 <span class="hl">30%~50%</span> 환불 측정</span></div>
+            <div class="notice-item"><span class="notice-num">05.</span>예약 시 일정관리를 위해 <span class="hl">미리결제</span> 해주셔야됩니다. (분할결제X)</div>
+            <div class="notice-item"><span class="notice-num">06.</span>컨펌단계 <span class="hl">수정 최대 3회</span> + 디자인 일부 <span class="hl">수정 1회</span> 무료<span class="notice-sub">*텍스트,이미지,간단한수정(색변경,요소일부변경등)은 무료<br>디자인을 새로 다시 제작하거나 갈아엎을 시에는 금액의 <span class="hl">60% 추가금</span>이 발생합니다.</span></div>
+            <div class="notice-item"><span class="notice-num">07.</span>디자인 컨셉 및 스타일이 <span class="hl">작가 역량</span>으로 중간에 불가능 할 시 <span class="hl">작업 취소 및 환불</span>을 해드릴 수 있습니다.<span class="notice-sub">*제가 먼저 작업도중 취소 시 시안비 없이 <span class="hl">전체 환불</span> 해드리며,<br>의뢰자분이 작업도중 취소 시 <span class="hl">시안비 30%</span> 제외 환불해드립니다</span></div>
+            <div class="notice-item"><span class="notice-num">08.</span>작가 역량으로 인해 버츄얼 남캐는 <span class="hl">[키치/사이버펑크/펑크/동양풍/레트로/귀여움]</span> 스타일만 작업이 가능합니다<span class="notice-sub">EX) 세련된,심플,고급,귀족,마법사등등 스타일은 <span class="hl">만족스러운 결과를 보장드리기 어렵습니다</span></span></div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Order Form</h2>
+
+        <div class="form-group">
+            <label>1. 방송 닉네임</label>
+            <input type="text" id="f_name" placeholder="닉네임을 입력해주세요">
+        </div>
+        <div class="form-group">
+            <label>2. 신청하시는 디자인 종류</label>
+            <input type="text" id="f_type" placeholder="EX) 홍보포스터, 다시보기틀 등">
+        </div>
+        <div class="form-group">
+            <label>3. 원하시는 디자인 컨셉/스타일 설명</label>
+            <textarea id="f_concept" placeholder="디자인의 분위기나 상세 요청사항을 적어주세요."></textarea>
+        </div>
+        <div class="form-group">
+            <label>4. 원하시는 색감 선택</label>
+            <div class="color-list" id="color-list">
+                <div class="color-item">
+                    <div class="color-box"><input type="color" value="#FEB1D1" oninput="syncColor(this, 'hex')"></div>
+                    <input type="text" class="hex-input" value="#FEB1D1" maxlength="7" oninput="syncColor(this, 'picker')">
+                </div>
+                <button class="select-btn" onclick="addColor()" style="padding: 5px 12px; font-size: 0.9em; flex-shrink: 0;">+ 추가</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>5. 들어가는 문구 및 내용 작성</label>
+            <textarea id="f_content" placeholder="디자인에 포함될 텍스트 내용을 모두 적어주세요."></textarea>
+        </div>
+        <div class="form-group">
+            <label>6. 이미지 파일 첨부</label>
+            <label for="f_file" class="custom-file-label">📷 이미지 업로드</label>
+            <input type="file" id="f_file" accept="image/*" onchange="handleImage(this)">
+            <div class="preview-wrap" id="preview-wrap">
+                <img id="img-preview">
+                <button id="del-img-btn" onclick="removeImage()">✕</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>7. 그 외 추가사항 (품목당)</label>
+            <div class="btn-group category-group">
+                <button class="select-btn" onclick="selectOnlyInCategory(this)">바로마감</button>
+                <button class="select-btn" onclick="selectOnlyInCategory(this)">당일마감</button>
+                <button class="select-btn" onclick="selectOnlyInCategory(this)">빠른마감 (3일이내)</button>
+            </div>
+            <div class="btn-group category-group" style="margin-top: 10px;">
+                <button class="select-btn" onclick="selectOnlyInCategory(this)">PSD 파일 추가 ver.1</button>
+                <button class="select-btn" onclick="selectOnlyInCategory(this)">PSD 파일 추가 ver.2</button>
+            </div>
+            <div class="btn-group category-group" style="margin-top: 10px;">
+                <button class="select-btn" onclick="selectOnlyInCategory(this)">포트폴리오 영구 비공개</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>8. 최종 필요하신 날짜</label>
+            <input type="date" id="f_date">
+        </div>
+        <label class="checkbox-group">
+            <input type="checkbox" id="notice-agree" onchange="document.getElementById('copy-btn').disabled = !this.checked">
+            <span>공지사항을 확인하였으며 이에 동의합니다.</span>
+        </label>
+        <div class="bottom-actions">
+            <button class="copy-btn" id="copy-btn" onclick="copyForm()" disabled>양식 복사하기</button>
+            <button class="reset-btn" onclick="resetForm()">초기화</button>
+        </div>
+    </section>
+
+    <section>
+        <h2>Portfolio</h2>
+        <div class="portfolio-tabs-container">
+            <button class="tab-nav-btn prev" onclick="scrollTabs(-1)">&#10094;</button>
+            <div class="portfolio-tabs" id="portfolio-tabs"></div>
+            <button class="tab-nav-btn next" onclick="scrollTabs(1)">&#10095;</button>
+        </div>
+
+        <div class="portfolio-slider-wrapper">
+            <button class="img-nav-btn" id="port-prev-btn" onclick="moveImg(-1)">&#10094;</button>
+            <div class="portfolio-main-display" id="portfolio-main-display">
+                <!-- 스피너 -->
+                <div class="port-spinner" id="port-spinner">
+                    <div class="spinner-ring"></div>
+                    <div class="spinner-text">이미지 불러오는 중...</div>
+                </div>
+                <!-- 이미지 없음 -->
+                <div class="port-empty" id="port-empty">등록된 이미지가 없습니다.</div>
+                <!-- 이미지 로드 에러 -->
+                <div class="port-error" id="port-error">⚠️ 이미지를 불러오지 못했습니다.</div>
+                <!-- 단일 재사용 img -->
+                <img id="current-portfolio-img" alt="포트폴리오 이미지">
+            </div>
+            <button class="img-nav-btn" id="port-next-btn" onclick="moveImg(1)">&#10095;</button>
+        </div>
+        <div class="img-counter" id="img-counter">0 / 0</div>
+    </section>
+</div>
+
+<script>
+/* =====================================================================
+   CSV 파서
+   ===================================================================== */
+function parseCSV(text) {
+    const rows = [];
+    let row = [], field = '', inQuotes = false;
+    for (let i = 0; i < text.length; i++) {
+        const char = text[i], next = text[i + 1];
+        if (inQuotes) {
+            if (char === '"' && next === '"') { field += '"'; i++; }
+            else if (char === '"') { inQuotes = false; }
+            else { field += char; }
+        } else {
+            if (char === '"') { inQuotes = true; }
+            else if (char === ',') { row.push(field); field = ''; }
+            else if (char === '\r' || char === '\n') {
+                row.push(field);
+                if (row.length > 0) rows.push(row);
+                row = []; field = '';
+                if (char === '\r' && next === '\n') i++;
+            } else { field += char; }
+        }
+    }
+    if (row.length > 0 || field !== '') { row.push(field); rows.push(row); }
+    return rows;
+}
+
+/* =====================================================================
+   캘린더
+   ===================================================================== */
+const today = new Date();
+let showingNextMonth = false;
+let sheetData = {};
+
+function renderCalendar() {
+    const targetDate = new Date(today.getFullYear(), today.getMonth() + (showingNextMonth ? 1 : 0), 1);
+    const year = targetDate.getFullYear(), month = targetDate.getMonth();
+    document.getElementById('cal-month-title').innerText = `${year}년 ${month + 1}월`;
+    const grid = document.getElementById('cal-grid');
+    grid.innerHTML = '';
+    ['일','월','화','수','목','금','토'].forEach(d => grid.innerHTML += `<div class="cal-day-header">${d}</div>`);
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    for (let i = 0; i < firstDay; i++) grid.innerHTML += `<div></div>`;
+    for (let i = 1; i <= daysInMonth; i++) {
+        const isToday = !showingNextMonth && i === today.getDate();
+        const dateKey = `${year}-${month + 1}-${i}`;
+        const status = sheetData[dateKey];
+        let badgeHtml = `<div class="status-badge status-open">신청가능</div>`;
+        if (status === '마감') badgeHtml = `<div class="status-badge status-closed">마감</div>`;
+        else if (status === '휴가') badgeHtml = `<div class="status-badge status-vacation">휴가</div>`;
+        else if (status) badgeHtml = `<div class="status-badge status-closed">${status}</div>`;
+        grid.innerHTML += `<div class="cal-day ${isToday ? 'today' : ''}"><span>${i}</span>${badgeHtml}</div>`;
+    }
+    document.getElementById('prev-btn').disabled = !showingNextMonth;
+    document.getElementById('next-btn').disabled = showingNextMonth;
+}
+function changeMonth(dir) { showingNextMonth = (dir === 1); renderCalendar(); }
+
+/* =====================================================================
+   포트폴리오 — 핵심 최적화 영역
+   ===================================================================== */
+const portfolioCategories = [
+    "일반 홍보포스터","RT포스터","데뷔썸네일","다시보기틀","쇼츠틀",
+    "숲타이틀배너","숲하단배너","숲플로팅배너","스케줄표 대형","스케줄표 소형",
+    "PPT","인생네컷 대형","인생네컷 소형","닉네임로고","핫클립로고","유튜브 채널아트"
+];
+
+let portfolioData   = {};   // { 카테고리: [url, url, ...] }
+let currentCategory = '';
+let currentImgIdx   = 0;
+
+// ── 브라우저 내장 캐시를 활용하는 경량 프리로더 ──────────────────────
+// Image() 객체를 변수에 저장해 GC에 의해 캐시가 파기되는 것을 방지
+const preloadCache = {};
+function preloadAround(images, idx) {
+    const toLoad = [
+        images[idx],                                    // 현재
+        images[(idx + 1) % images.length],              // 다음
+        images[(idx - 1 + images.length) % images.length] // 이전
+    ].filter(Boolean);
+
+    toLoad.forEach(src => {
+        if (preloadCache[src]) return;   // 이미 캐싱된 URL은 건너뜀
+        const img = new Image();
+        img.src = src;
+        preloadCache[src] = img;         // 참조 유지 → GC 방지
+    });
+}
+
+// ── 포트폴리오 표시 상태 전환 헬퍼 ──────────────────────────────────
+function setPortState(state) {
+    // state: 'loading' | 'empty' | 'error' | 'show'
+    const imgEl    = document.getElementById('current-portfolio-img');
+    const spinner  = document.getElementById('port-spinner');
+    const empty    = document.getElementById('port-empty');
+    const error    = document.getElementById('port-error');
+    const prevBtn  = document.getElementById('port-prev-btn');
+    const nextBtn  = document.getElementById('port-next-btn');
+
+    imgEl.style.display   = (state === 'show')    ? 'block' : 'none';
+    spinner.classList.toggle('show', state === 'loading');
+    empty.classList.toggle('show',   state === 'empty');
+    error.classList.toggle('show',   state === 'error');
+
+    const hasNav = (state === 'show');
+    prevBtn.disabled = !hasNav;
+    nextBtn.disabled = !hasNav;
+}
+
+// ── 실제 이미지 전환 (단일 img 태그 재사용) ─────────────────────────
+function updatePortfolioDisplay() {
+    const images = portfolioData[currentCategory] || [];
+    const counter = document.getElementById('img-counter');
+
+    if (images.length === 0) {
+        setPortState('empty');
+        counter.innerText = '0 / 0';
+        return;
+    }
+
+    // 인덱스 범위 보정
+    currentImgIdx = Math.max(0, Math.min(currentImgIdx, images.length - 1));
+
+    const imgEl = document.getElementById('current-portfolio-img');
+    const src   = images[currentImgIdx];
+
+    // 이미 캐싱된 이미지 → 즉시 표시 (complete 체크)
+    if (preloadCache[src] && preloadCache[src].complete && preloadCache[src].naturalWidth > 0) {
+        imgEl.src = src;
+        imgEl.style.opacity = '1';
+        setPortState('show');
+        counter.innerText = `${currentImgIdx + 1} / ${images.length}`;
+        preloadAround(images, currentImgIdx);
+        sendHeightToParent();
+        return;
+    }
+
+    // 미캐싱 이미지 → 스피너 표시 후 로드
+    setPortState('loading');
+    counter.innerText = `${currentImgIdx + 1} / ${images.length}`;
+
+    imgEl.style.opacity = '0';
+    imgEl.onload = () => {
+        imgEl.style.opacity = '1';
+        setPortState('show');
+        preloadAround(images, currentImgIdx);
+        sendHeightToParent();
+    };
+    imgEl.onerror = () => {
+        setPortState('error');
+    };
+    imgEl.src = src;
+    preloadCache[src] = imgEl; // 로드 중인 img도 캐시 등록
+}
+
+function showPortfolioCategory(cat, btn) {
+    document.querySelectorAll('.portfolio-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentCategory = cat;
+    currentImgIdx   = 0;
+    updatePortfolioDisplay();
+}
+
+function moveImg(direction) {
+    const images = portfolioData[currentCategory] || [];
+    if (images.length <= 1) return;
+    currentImgIdx = (currentImgIdx + direction + images.length) % images.length;
+    updatePortfolioDisplay();
+}
+
+function scrollTabs(direction) {
+    const tabs = document.getElementById('portfolio-tabs');
+    tabs.scrollBy({ left: direction * tabs.clientWidth, behavior: 'smooth' });
+}
+
+function renderPortfolio() {
+    const tabsContainer = document.getElementById('portfolio-tabs');
+    tabsContainer.innerHTML = '';
+    let firstSet = false;
+
+    portfolioCategories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'portfolio-tab';
+        btn.innerText  = cat;
+        btn.onclick    = () => showPortfolioCategory(cat, btn);
+        tabsContainer.appendChild(btn);
+
+        if (!firstSet) {
+            btn.classList.add('active');
+            currentCategory = cat;
+            firstSet = true;
+        }
+    });
+
+    // 첫 카테고리의 이미지 1장만 프리로드
+    const firstImages = portfolioData[currentCategory] || [];
+    if (firstImages.length > 0) preloadAround(firstImages, 0);
+
+    updatePortfolioDisplay();
+}
+
+/* =====================================================================
+   데이터 로드 (병렬 fetch)
+   ===================================================================== */
+async function loadSheetData() {
+    const BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQySVlQBMqlL7tguFKcH3yqvzfr2hic0llevvFPC0v2Bc-ipA1ZZrHHSwmv-MLrAJYUUIOq9xJU_LVk/pub';
+    const urls = {
+        cal:       `${BASE}?gid=0&single=true&output=csv`,
+        collab:    `${BASE}?gid=374369761&single=true&output=csv`,
+        notice:    `${BASE}?gid=556599998&single=true&output=csv`,
+        portfolio: `${BASE}?gid=756653649&single=true&output=csv`,
+    };
+
+    // 4개 CSV를 동시에 요청 (기존엔 순차 await → 전체 대기시간 합산)
+    const [noticeRes, calRes, collabRes, portRes] = await Promise.allSettled([
+        fetch(urls.notice),
+        fetch(urls.cal),
+        fetch(urls.collab),
+        fetch(urls.portfolio),
+    ]);
+
+    /* ── 공지 ── */
+    try {
+        const rows = parseCSV(await noticeRes.value.text());
+        if (rows.length > 1) {
+            const [active, content, highlight] = [rows[1][0].trim().toUpperCase(), rows[1][1], rows[1][2]];
+            const titleEl   = document.getElementById('notice-title');
+            const contentEl = document.getElementById('notice-content');
+            if (active === 'TRUE') {
+                titleEl.style.display   = 'block';
+                contentEl.style.display = 'block';
+                let processed = content.replace(/\n/g, '<br>');
+                if (highlight) {
+                    highlight.split(',').map(k => k.trim()).forEach(kw => {
+                        if (kw) {
+                            const re = new RegExp(kw.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g');
+                            processed = processed.replace(re, `<span style="font-weight:800;color:var(--point1);">${kw}</span>`);
+                        }
+                    });
+                }
+                contentEl.innerHTML = processed;
+            } else {
+                titleEl.style.display   = 'none';
+                contentEl.style.display = 'none';
+            }
+        }
+    } catch(e) { console.warn('공지 로드 실패', e); }
+
+    /* ── 캘린더 ── */
+    try {
+        const text = await calRes.value.text();
+        text.split('\n').slice(1).forEach(row => {
+            const cols = row.split(',');
+            if (cols.length >= 2) sheetData[cols[0].trim()] = cols[1].trim();
+        });
+    } catch(e) { console.warn('캘린더 로드 실패', e); }
+    renderCalendar();
+
+    /* ── 협업 ── */
+    try {
+        const text = await collabRes.value.text();
+        const list = document.getElementById('collab-list');
+        list.innerHTML = '';
+        text.split('\n').slice(1).forEach(row => {
+            const cols = row.split(',');
+            if (cols.length >= 2) {
+                list.innerHTML += `<a href="${cols[0].trim()}" target="_blank" class="collab-banner"><img src="${cols[1].trim()}" alt="협업 작가" loading="lazy"></a>`;
+            }
+        });
+    } catch(e) { console.warn('협업 로드 실패', e); }
+
+    /* ── 포트폴리오 ── */
+    try {
+        const rows = parseCSV(await portRes.value.text());
+        // URL만 파싱해서 배열에 저장 — Image() 객체는 아직 생성 X
+        rows.slice(1).forEach(row => {
+            if (row.length >= 2) {
+                const cat = row[0].trim(), img = row[1].trim();
+                if (cat && img) {
+                    if (!portfolioData[cat]) portfolioData[cat] = [];
+                    portfolioData[cat].push(img);
+                }
+            }
+        });
+    } catch(e) { console.warn('포트폴리오 로드 실패', e); }
+
+    renderPortfolio();
+}
+
+/* =====================================================================
+   폼 관련
+   ===================================================================== */
+function syncColor(el, type) {
+    const parent = el.closest('.color-item');
+    if (type === 'hex') {
+        parent.querySelector('.hex-input').value = el.value.toUpperCase();
+    } else {
+        let val = el.value;
+        if (!val.startsWith('#')) val = '#' + val;
+        if (/^#[0-9A-F]{6}$/i.test(val)) parent.querySelector('input[type="color"]').value = val;
+    }
+}
+
+function addColor() {
+    const item = document.createElement('div');
+    item.className = 'color-item';
+    item.innerHTML = `
+        <div class="color-box"><input type="color" value="#FFFFFF" oninput="syncColor(this,'hex')"></div>
+        <input type="text" class="hex-input" value="#FFFFFF" maxlength="7" oninput="syncColor(this,'picker')">
+        <span style="cursor:pointer;font-size:10px;margin-left:2px;color:#999;" onclick="this.parentElement.remove()">✕</span>`;
+    document.getElementById('color-list').insertBefore(item, document.querySelector('#color-list .select-btn'));
+}
+
+function selectOnlyInCategory(btn) {
+    const parent = btn.parentElement;
+    const isActive = btn.classList.contains('active');
+    parent.querySelectorAll('.select-btn').forEach(b => b.classList.remove('active'));
+    if (!isActive) btn.classList.add('active');
+}
+
+let base64Image = '';
+function handleImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            base64Image = e.target.result;
+            document.getElementById('img-preview').src = base64Image;
+            document.getElementById('preview-wrap').style.display = 'block';
+            setTimeout(sendHeightToParent, 100);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+function removeImage() {
+    document.getElementById('f_file').value = '';
+    document.getElementById('preview-wrap').style.display = 'none';
+    base64Image = '';
+    setTimeout(sendHeightToParent, 100);
+}
+
+function resetForm() {
+    if (!confirm('작성하신 모든 내용을 초기화할까요?')) return;
+    ['f_name','f_type','f_concept','f_content','f_date'].forEach(id => document.getElementById(id).value = '');
+    document.querySelectorAll('.btn-group button').forEach(b => b.classList.remove('active'));
+    removeImage();
+    const colorList = document.getElementById('color-list');
+    const items = colorList.querySelectorAll('.color-item');
+    for (let i = 1; i < items.length; i++) items[i].remove();
+    items[0].querySelector('input[type="color"]').value = '#FEB1D1';
+    items[0].querySelector('.hex-input').value = '#FEB1D1';
+    document.getElementById('notice-agree').checked = false;
+    document.getElementById('copy-btn').disabled = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function copyForm() {
+    const name    = document.getElementById('f_name').value    || '미작성';
+    const type    = document.getElementById('f_type').value    || '미작성';
+    const concept = document.getElementById('f_concept').value || '미작성';
+    const colors  = Array.from(document.querySelectorAll('.hex-input')).map(i => i.value).join(', ');
+    const content = document.getElementById('f_content').value || '미작성';
+    const date    = document.getElementById('f_date').value    || '미정';
+    const extras  = Array.from(document.querySelectorAll('.category-group .active')).map(b => b.innerText);
+    const imgHtml = base64Image ? `<br><img src="${base64Image}" style="max-width:300px;border-radius:10px;"><br>` : '첨부파일 없음';
+
+    const text = `[신청양식]
+1. 닉네임: ${name}
+2. 종류: ${type}
+3. 컨셉: ${concept}
+4. 색상: ${colors}
+5. 내용: ${content}
+6. 첨부이미지: ${imgHtml}
+7. 추가사항: ${extras.join(', ') || '없음'}
+8. 희망날짜: ${date}`;
+
+    const blobHtml = new Blob([text.replace(/\n/g, '<br>')], { type: 'text/html' });
+    const blobText = new Blob([text], { type: 'text/plain' });
+    navigator.clipboard.write([new ClipboardItem({ 'text/html': blobHtml, 'text/plain': blobText })])
+        .then(() => alert('양식이 복사되었습니다!'));
+}
+
+/* =====================================================================
+   높이 전달 (iframe 임베드 대응)
+   ===================================================================== */
+function sendHeightToParent() {
+    window.parent.postMessage({ type: 'resize', height: document.documentElement.scrollHeight }, '*');
+}
+window.addEventListener('load', sendHeightToParent);
+window.addEventListener('resize', sendHeightToParent);
+new ResizeObserver(sendHeightToParent).observe(document.body);
+
+/* =====================================================================
+   초기 실행
+   ===================================================================== */
+loadSheetData();
+</script>
+</body>
+</html>
