@@ -279,6 +279,37 @@
         .collab-banner { display: block; width: 100%; border-radius: 15px; overflow: hidden; border: 2px solid var(--base2); transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .collab-banner:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(254, 177, 209, 0.4); }
         .collab-banner img { width: 100%; aspect-ratio: 1180 / 328; object-fit: cover; display: block; }
+
+        /* =====================================================================
+           모바일 UI 최적화 추가 (기존 디자인 및 기능 변경 없음)
+           ===================================================================== */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 15px; border-radius: 15px; }
+            section { margin-bottom: 40px; }
+            h2 { font-size: 1.3em; margin-bottom: 20px; }
+            
+            /* 공지사항 여백 최적화 */
+            .new-notice { padding: 20px 15px; }
+            
+            /* 패키지 카드 세로 정렬 */
+            .package-wrapper { flex-direction: column; gap: 20px; }
+            
+            /* 캘린더 폰트 및 여백 최적화 */
+            .cal-day { font-size: 0.9em; }
+            .status-badge { font-size: 0.65em; padding: 2px 4px; }
+            
+            /* 상세 공지 여백 최적화 */
+            .detail-notice-box { padding: 15px; }
+            .notice-sub { margin-left: 0; margin-top: 5px; }
+            
+            /* 포트폴리오 높이 최적화 (모바일 화면 밖으로 밀려나지 않게 조절) */
+            .portfolio-main-display { height: 300px; }
+            
+            /* 하단 버튼 세로 정렬 및 크기 최적화 */
+            .bottom-actions { flex-direction: column; }
+            .copy-btn, .reset-btn { width: 100%; flex: none; padding: 15px; }
+        }
     </style>
 </head>
 <body>
@@ -473,16 +504,12 @@
         <div class="portfolio-slider-wrapper">
             <button class="img-nav-btn" id="port-prev-btn" onclick="moveImg(-1)">&#10094;</button>
             <div class="portfolio-main-display" id="portfolio-main-display">
-                <!-- 스피너 -->
                 <div class="port-spinner" id="port-spinner">
                     <div class="spinner-ring"></div>
                     <div class="spinner-text">이미지 불러오는 중...</div>
                 </div>
-                <!-- 이미지 없음 -->
                 <div class="port-empty" id="port-empty">등록된 이미지가 없습니다.</div>
-                <!-- 이미지 로드 에러 -->
                 <div class="port-error" id="port-error">⚠️ 이미지를 불러오지 못했습니다.</div>
-                <!-- 단일 재사용 img -->
                 <img id="current-portfolio-img" alt="포트폴리오 이미지">
             </div>
             <button class="img-nav-btn" id="port-next-btn" onclick="moveImg(1)">&#10095;</button>
