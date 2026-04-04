@@ -257,6 +257,87 @@
     </section>
 
     <section>
+        <h2>Order Form</h2>
+
+        <div class="form-group">
+            <label>1. 방송 닉네임</label>
+            <input type="text" id="f_name" placeholder="닉네임을 입력해주세요">
+        </div>
+        <div class="form-group">
+            <label>2. 신청하시는 디자인 종류</label>
+            <input type="text" id="f_type" placeholder="EX) 홍보포스터, 다시보기틀 등">
+        </div>
+        <div class="form-group">
+            <label>3. 원하시는 디자인 컨셉/스타일 설명</label>
+            <textarea id="f_concept" placeholder="디자인의 분위기나 상세 요청사항을 적어주세요."></textarea>
+        </div>
+        <div class="form-group">
+            <label>4. 원하시는 색감 선택</label>
+            <div class="color-list" id="color-list">
+                <div class="color-item">
+                    <div class="color-box"><input type="color" value="#FEB1D1" oninput="syncColor(this, 'hex')"></div>
+                    <input type="text" class="hex-input" value="#FEB1D1" maxlength="7" oninput="syncColor(this, 'picker')">
+                </div>
+                <button class="select-btn" onclick="addColor()" style="padding: 5px 12px; font-size: 0.9em; flex-shrink: 0;">+ 추가</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>5. 들어가는 문구 및 내용 작성</label>
+            <textarea id="f_content" placeholder="디자인에 포함될 텍스트 내용을 모두 적어주세요."></textarea>
+        </div>
+        <div class="form-group">
+            <label>6. 이미지 파일 첨부</label>
+            <label for="f_file" class="custom-file-label">📷 이미지 업로드</label>
+            <input type="file" id="f_file" accept="image/*" onchange="handleImage(this)">
+            <div class="preview-wrap" id="preview-wrap">
+                <img id="img-preview">
+                <button id="del-img-btn" onclick="removeImage()">✕</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>7. 그 외 추가사항 (품목당)</label>
+            <div class="btn-group category-group">
+                <button class="select-btn" onclick="selectOnlyInCategory(this)">바로마감</button>
+                <button class="select-btn" onclick="selectOnlyInCategory(this)">당일마감</button>
+                <button class="select-btn" onclick="selectOnlyInCategory(this)">빠른마감 (3일이내)</button>
+            </div>
+            <div class="btn-group category-group" style="margin-top: 10px;">
+                <button class="select-btn" onclick="selectOnlyInCategory(this)">PSD 파일 추가 ver.1</button>
+                <button class="select-btn" onclick="selectOnlyInCategory(this)">PSD 파일 추가 ver.2</button>
+            </div>
+            <div class="btn-group category-group" style="margin-top: 10px;">
+                <button class="select-btn" onclick="selectOnlyInCategory(this)">포트폴리오 영구 비공개</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>8. 최종 필요하신 날짜</label>
+            <input type="date" id="f_date">
+        </div>
+        <label class="checkbox-group">
+            <input type="checkbox" id="notice-agree" onchange="document.getElementById('copy-btn').disabled = !this.checked">
+            <span>공지사항을 확인하였으며 이에 동의합니다.</span>
+        </label>
+        <div class="bottom-actions">
+            <button class="copy-btn" id="copy-btn" onclick="copyForm()" disabled>양식 복사하기</button>
+            <button class="reset-btn" onclick="resetForm()">초기화</button>
+        </div>
+    </section>
+
+    <section>
+        <h2>Notice</h2>
+        <div class="detail-notice-box">
+            <div class="notice-item"><span class="notice-num">01.</span>작업기간은 사전 안내 후로부터 <span class="hl">~14일 이내</span>로 전달드립니다<span class="notice-sub">*작업기간은 신청 갯수 및 일정에 따라 변동 될 수 있습니다</span></div>
+            <div class="notice-item"><span class="notice-num">02.</span>모든 작업물은 <span class="hl">방송용 기준</span>입니다.<span class="notice-sub">*상업용/기업용은 <span class="hl">X2배</span></span></div>
+            <div class="notice-item"><span class="notice-num">03.</span>모든 작업물은 허락없이 <span class="hl">제 3자에게 판매 및 제공을</span> 무단으로 하실 수 없습니다<span class="notice-sub">EX) <span class="hl">버츄얼판매</span>로 인한 디자인작업물을 제3자제공등등</span></div>
+            <div class="notice-item"><span class="notice-num">04.</span>환불은 디자인 <span class="hl">제작전 100%환불 가능</span>하며 1차 시안 제작 후 환불은 전체 금액 중 <span class="hl">시안비 50% 금액제외</span> 환불해드립니다<span class="notice-sub">*작업상황에 따라 <span class="hl">30%~50%</span> 환불 측정</span></div>
+            <div class="notice-item"><span class="notice-num">05.</span>예약 시 일정관리를 위해 <span class="hl">미리결제</span> 해주셔야됩니다. (분할결제X)</div>
+            <div class="notice-item"><span class="notice-num">06.</span>컨펌단계 <span class="hl">수정 최대 3회</span> + 디자인 일부 <span class="hl">수정 1회</span> 무료<span class="notice-sub">*텍스트,이미지,간단한수정(색변경,요소일부변경등)은 무료<br>디자인을 새로 다시 제작하거나 갈아엎을 시에는 금액의 <span class="hl">60% 추가금</span>이 발생합니다.</span></div>
+            <div class="notice-item"><span class="notice-num">07.</span>디자인 컨셉 및 스타일이 <span class="hl">작가 역량</span>으로 중간에 불가능 할 시 <span class="hl">작업 취소 및 환불</span>을 해드릴 수 있습니다.<span class="notice-sub">*제가 먼저 작업도중 취소 시 시안비 없이 <span class="hl">전체 환불</span> 해드리며,<br>의뢰자분이 작업도중 취소 시 <span class="hl">시안비 30%</span> 제외 환불해드립니다</span></div>
+            <div class="notice-item"><span class="notice-num">08.</span>작가 역량으로 인해 버츄얼 남캐는 <span class="hl">[키치/사이버펑크/펑크/동양풍/레트로/귀여움]</span> 스타일만 작업이 가능합니다<span class="notice-sub">EX) 세련된,심플,고급,귀족,마법사등등 스타일은 <span class="hl">만족스러운 결과를 보장드리기 어렵습니다</span></span></div>
+        </div>
+    </section>
+
+    <section>
         <h2>Collaboration</h2>
         <div id="collab-list"></div>
     </section>
@@ -328,87 +409,6 @@
         <div class="package-notice">
             📢 버츄얼 패키지는 양식 전달 받은 후로부터 <span>30일내</span>로 전달드립니다.<br>
             적어도 필요하신 날짜 <span>40일전</span>에 신청 부탁드립니다.
-        </div>
-    </section>
-
-    <section>
-        <h2>Notice</h2>
-        <div class="detail-notice-box">
-            <div class="notice-item"><span class="notice-num">01.</span>작업기간은 사전 안내 후로부터 <span class="hl">~14일 이내</span>로 전달드립니다<span class="notice-sub">*작업기간은 신청 갯수 및 일정에 따라 변동 될 수 있습니다</span></div>
-            <div class="notice-item"><span class="notice-num">02.</span>모든 작업물은 <span class="hl">방송용 기준</span>입니다.<span class="notice-sub">*상업용/기업용은 <span class="hl">X2배</span></span></div>
-            <div class="notice-item"><span class="notice-num">03.</span>모든 작업물은 허락없이 <span class="hl">제 3자에게 판매 및 제공을</span> 무단으로 하실 수 없습니다<span class="notice-sub">EX) <span class="hl">버츄얼판매</span>로 인한 디자인작업물을 제3자제공등등</span></div>
-            <div class="notice-item"><span class="notice-num">04.</span>환불은 디자인 <span class="hl">제작전 100%환불 가능</span>하며 1차 시안 제작 후 환불은 전체 금액 중 <span class="hl">시안비 50% 금액제외</span> 환불해드립니다<span class="notice-sub">*작업상황에 따라 <span class="hl">30%~50%</span> 환불 측정</span></div>
-            <div class="notice-item"><span class="notice-num">05.</span>예약 시 일정관리를 위해 <span class="hl">미리결제</span> 해주셔야됩니다. (분할결제X)</div>
-            <div class="notice-item"><span class="notice-num">06.</span>컨펌단계 <span class="hl">수정 최대 3회</span> + 디자인 일부 <span class="hl">수정 1회</span> 무료<span class="notice-sub">*텍스트,이미지,간단한수정(색변경,요소일부변경등)은 무료<br>디자인을 새로 다시 제작하거나 갈아엎을 시에는 금액의 <span class="hl">60% 추가금</span>이 발생합니다.</span></div>
-            <div class="notice-item"><span class="notice-num">07.</span>디자인 컨셉 및 스타일이 <span class="hl">작가 역량</span>으로 중간에 불가능 할 시 <span class="hl">작업 취소 및 환불</span>을 해드릴 수 있습니다.<span class="notice-sub">*제가 먼저 작업도중 취소 시 시안비 없이 <span class="hl">전체 환불</span> 해드리며,<br>의뢰자분이 작업도중 취소 시 <span class="hl">시안비 30%</span> 제외 환불해드립니다</span></div>
-            <div class="notice-item"><span class="notice-num">08.</span>작가 역량으로 인해 버츄얼 남캐는 <span class="hl">[키치/사이버펑크/펑크/동양풍/레트로/귀여움]</span> 스타일만 작업이 가능합니다<span class="notice-sub">EX) 세련된,심플,고급,귀족,마법사등등 스타일은 <span class="hl">만족스러운 결과를 보장드리기 어렵습니다</span></span></div>
-        </div>
-    </section>
-
-    <section>
-        <h2>Order Form</h2>
-
-        <div class="form-group">
-            <label>1. 방송 닉네임</label>
-            <input type="text" id="f_name" placeholder="닉네임을 입력해주세요">
-        </div>
-        <div class="form-group">
-            <label>2. 신청하시는 디자인 종류</label>
-            <input type="text" id="f_type" placeholder="EX) 홍보포스터, 다시보기틀 등">
-        </div>
-        <div class="form-group">
-            <label>3. 원하시는 디자인 컨셉/스타일 설명</label>
-            <textarea id="f_concept" placeholder="디자인의 분위기나 상세 요청사항을 적어주세요."></textarea>
-        </div>
-        <div class="form-group">
-            <label>4. 원하시는 색감 선택</label>
-            <div class="color-list" id="color-list">
-                <div class="color-item">
-                    <div class="color-box"><input type="color" value="#FEB1D1" oninput="syncColor(this, 'hex')"></div>
-                    <input type="text" class="hex-input" value="#FEB1D1" maxlength="7" oninput="syncColor(this, 'picker')">
-                </div>
-                <button class="select-btn" onclick="addColor()" style="padding: 5px 12px; font-size: 0.9em; flex-shrink: 0;">+ 추가</button>
-            </div>
-        </div>
-        <div class="form-group">
-            <label>5. 들어가는 문구 및 내용 작성</label>
-            <textarea id="f_content" placeholder="디자인에 포함될 텍스트 내용을 모두 적어주세요."></textarea>
-        </div>
-        <div class="form-group">
-            <label>6. 이미지 파일 첨부</label>
-            <label for="f_file" class="custom-file-label">📷 이미지 업로드</label>
-            <input type="file" id="f_file" accept="image/*" onchange="handleImage(this)">
-            <div class="preview-wrap" id="preview-wrap">
-                <img id="img-preview">
-                <button id="del-img-btn" onclick="removeImage()">✕</button>
-            </div>
-        </div>
-        <div class="form-group">
-            <label>7. 그 외 추가사항 (품목당)</label>
-            <div class="btn-group category-group">
-                <button class="select-btn" onclick="selectOnlyInCategory(this)">바로마감</button>
-                <button class="select-btn" onclick="selectOnlyInCategory(this)">당일마감</button>
-                <button class="select-btn" onclick="selectOnlyInCategory(this)">빠른마감 (3일이내)</button>
-            </div>
-            <div class="btn-group category-group" style="margin-top: 10px;">
-                <button class="select-btn" onclick="selectOnlyInCategory(this)">PSD 파일 추가 ver.1</button>
-                <button class="select-btn" onclick="selectOnlyInCategory(this)">PSD 파일 추가 ver.2</button>
-            </div>
-            <div class="btn-group category-group" style="margin-top: 10px;">
-                <button class="select-btn" onclick="selectOnlyInCategory(this)">포트폴리오 영구 비공개</button>
-            </div>
-        </div>
-        <div class="form-group">
-            <label>8. 최종 필요하신 날짜</label>
-            <input type="date" id="f_date">
-        </div>
-        <label class="checkbox-group">
-            <input type="checkbox" id="notice-agree" onchange="document.getElementById('copy-btn').disabled = !this.checked">
-            <span>공지사항을 확인하였으며 이에 동의합니다.</span>
-        </label>
-        <div class="bottom-actions">
-            <button class="copy-btn" id="copy-btn" onclick="copyForm()" disabled>양식 복사하기</button>
-            <button class="reset-btn" onclick="resetForm()">초기화</button>
         </div>
     </section>
 
