@@ -280,33 +280,18 @@
         .collab-banner:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(254, 177, 209, 0.4); }
         .collab-banner img { width: 100%; aspect-ratio: 1180 / 328; object-fit: cover; display: block; }
 
-        /* =====================================================================
-           모바일 UI 최적화 추가 (기존 디자인 및 기능 변경 없음)
-           ===================================================================== */
         @media (max-width: 768px) {
             body { padding: 10px; }
             .container { padding: 15px; border-radius: 15px; }
             section { margin-bottom: 40px; }
             h2 { font-size: 1.3em; margin-bottom: 20px; }
-            
-            /* 공지사항 여백 최적화 */
             .new-notice { padding: 20px 15px; }
-            
-            /* 패키지 카드 세로 정렬 */
             .package-wrapper { flex-direction: column; gap: 20px; }
-            
-            /* 캘린더 폰트 및 여백 최적화 */
             .cal-day { font-size: 0.9em; }
             .status-badge { font-size: 0.65em; padding: 2px 4px; }
-            
-            /* 상세 공지 여백 최적화 */
             .detail-notice-box { padding: 15px; }
             .notice-sub { margin-left: 0; margin-top: 5px; }
-            
-            /* 포트폴리오 높이 최적화 (모바일 화면 밖으로 밀려나지 않게 조절) */
             .portfolio-main-display { height: 300px; }
-            
-            /* 하단 버튼 세로 정렬 및 크기 최적화 */
             .bottom-actions { flex-direction: column; }
             .copy-btn, .reset-btn { width: 100%; flex: none; padding: 15px; }
         }
@@ -579,7 +564,7 @@ function renderCalendar() {
 function changeMonth(dir) { showingNextMonth = (dir === 1); renderCalendar(); }
 
 /* =====================================================================
-   포트폴리오 — 핵심 최적화 영역
+   포트폴리오
    ===================================================================== */
 const portfolioCategories = [
     "일반 홍보포스터","RT포스터","데뷔썸네일","다시보기틀","쇼츠틀",
@@ -587,31 +572,27 @@ const portfolioCategories = [
     "PPT","인생네컷 대형","인생네컷 소형","닉네임로고","핫클립로고","유튜브 채널아트"
 ];
 
-let portfolioData   = {};   // { 카테고리: [url, url, ...] }
+let portfolioData   = {};
 let currentCategory = '';
 let currentImgIdx   = 0;
 
-// ── 브라우저 내장 캐시를 활용하는 경량 프리로더 ──────────────────────
-// Image() 객체를 변수에 저장해 GC에 의해 캐시가 파기되는 것을 방지
 const preloadCache = {};
 function preloadAround(images, idx) {
     const toLoad = [
-        images[idx],                                    // 현재
-        images[(idx + 1) % images.length],              // 다음
-        images[(idx - 1 + images.length) % images.length] // 이전
+        images[idx],
+        images[(idx + 1) % images.length],
+        images[(idx - 1 + images.length) % images.length]
     ].filter(Boolean);
 
     toLoad.forEach(src => {
-        if (preloadCache[src]) return;   // 이미 캐싱된 URL은 건너뜀
+        if (preloadCache[src]) return;
         const img = new Image();
         img.src = src;
-        preloadCache[src] = img;         // 참조 유지 → GC 방지
+        preloadCache[src] = img;
     });
 }
 
-// ── 포트폴리오 표시 상태 전환 헬퍼 ──────────────────────────────────
 function setPortState(state) {
-    // state: 'loading' | 'empty' | 'error' | 'show'
     const imgEl    = document.getElementById('current-portfolio-img');
     const spinner  = document.getElementById('port-spinner');
     const empty    = document.getElementById('port-empty');
@@ -629,7 +610,6 @@ function setPortState(state) {
     nextBtn.disabled = !hasNav;
 }
 
-// ── 실제 이미지 전환 (단일 img 태그 재사용) ─────────────────────────
 function updatePortfolioDisplay() {
     const images = portfolioData[currentCategory] || [];
     const counter = document.getElementById('img-counter');
@@ -640,13 +620,11 @@ function updatePortfolioDisplay() {
         return;
     }
 
-    // 인덱스 범위 보정
     currentImgIdx = Math.max(0, Math.min(currentImgIdx, images.length - 1));
 
     const imgEl = document.getElementById('current-portfolio-img');
     const src   = images[currentImgIdx];
 
-    // 이미 캐싱된 이미지 → 즉시 표시 (complete 체크)
     if (preloadCache[src] && preloadCache[src].complete && preloadCache[src].naturalWidth > 0) {
         imgEl.src = src;
         imgEl.style.opacity = '1';
@@ -657,7 +635,6 @@ function updatePortfolioDisplay() {
         return;
     }
 
-    // 미캐싱 이미지 → 스피너 표시 후 로드
     setPortState('loading');
     counter.innerText = `${currentImgIdx + 1} / ${images.length}`;
 
@@ -672,7 +649,7 @@ function updatePortfolioDisplay() {
         setPortState('error');
     };
     imgEl.src = src;
-    preloadCache[src] = imgEl; // 로드 중인 img도 캐시 등록
+    preloadCache[src] = imgEl;
 }
 
 function showPortfolioCategory(cat, btn) {
@@ -714,7 +691,6 @@ function renderPortfolio() {
         }
     });
 
-    // 첫 카테고리의 이미지 1장만 프리로드
     const firstImages = portfolioData[currentCategory] || [];
     if (firstImages.length > 0) preloadAround(firstImages, 0);
 
@@ -722,7 +698,7 @@ function renderPortfolio() {
 }
 
 /* =====================================================================
-   데이터 로드 (병렬 fetch)
+   데이터 로드 (제목 동적화 적용)
    ===================================================================== */
 async function loadSheetData() {
     const BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQySVlQBMqlL7tguFKcH3yqvzfr2hic0llevvFPC0v2Bc-ipA1ZZrHHSwmv-MLrAJYUUIOq9xJU_LVk/pub';
@@ -733,7 +709,6 @@ async function loadSheetData() {
         portfolio: `${BASE}?gid=756653649&single=true&output=csv`,
     };
 
-    // 4개 CSV를 동시에 요청 (기존엔 순차 await → 전체 대기시간 합산)
     const [noticeRes, calRes, collabRes, portRes] = await Promise.allSettled([
         fetch(urls.notice),
         fetch(urls.cal),
@@ -741,16 +716,28 @@ async function loadSheetData() {
         fetch(urls.portfolio),
     ]);
 
-    /* ── 공지 ── */
+    /* ── 공지 (제목 실시간 반영) ── */
     try {
         const rows = parseCSV(await noticeRes.value.text());
         if (rows.length > 1) {
-            const [active, content, highlight] = [rows[1][0].trim().toUpperCase(), rows[1][1], rows[1][2]];
+            // [활성화, 내용, 강조할 단어, 제목] 순서 (rows[1][3]이 제목)
+            const [active, content, highlight, titleVal] = [
+                rows[1][0].trim().toUpperCase(), 
+                rows[1][1], 
+                rows[1][2], 
+                rows[1][3]
+            ];
+            
             const titleEl   = document.getElementById('notice-title');
             const contentEl = document.getElementById('notice-content');
+            
             if (active === 'TRUE') {
                 titleEl.style.display   = 'block';
                 contentEl.style.display = 'block';
+                
+                // 시트에서 가져온 제목 설정
+                if (titleVal) titleEl.innerText = titleVal;
+                
                 let processed = content.replace(/\n/g, '<br>');
                 if (highlight) {
                     highlight.split(',').map(k => k.trim()).forEach(kw => {
@@ -768,7 +755,6 @@ async function loadSheetData() {
         }
     } catch(e) { console.warn('공지 로드 실패', e); }
 
-    /* ── 캘린더 ── */
     try {
         const text = await calRes.value.text();
         text.split('\n').slice(1).forEach(row => {
@@ -778,7 +764,6 @@ async function loadSheetData() {
     } catch(e) { console.warn('캘린더 로드 실패', e); }
     renderCalendar();
 
-    /* ── 협업 ── */
     try {
         const text = await collabRes.value.text();
         const list = document.getElementById('collab-list');
@@ -791,10 +776,8 @@ async function loadSheetData() {
         });
     } catch(e) { console.warn('협업 로드 실패', e); }
 
-    /* ── 포트폴리오 ── */
     try {
         const rows = parseCSV(await portRes.value.text());
-        // URL만 파싱해서 배열에 저장 — Image() 객체는 아직 생성 X
         rows.slice(1).forEach(row => {
             if (row.length >= 2) {
                 const cat = row[0].trim(), img = row[1].trim();
@@ -810,7 +793,7 @@ async function loadSheetData() {
 }
 
 /* =====================================================================
-   폼 관련
+   폼 관련 및 기타 함수들 (기존과 동일)
    ===================================================================== */
 function syncColor(el, type) {
     const parent = el.closest('.color-item');
@@ -901,9 +884,6 @@ function copyForm() {
         .then(() => alert('양식이 복사되었습니다!'));
 }
 
-/* =====================================================================
-   높이 전달 (iframe 임베드 대응)
-   ===================================================================== */
 function sendHeightToParent() {
     window.parent.postMessage({ type: 'resize', height: document.documentElement.scrollHeight }, '*');
 }
@@ -911,9 +891,6 @@ window.addEventListener('load', sendHeightToParent);
 window.addEventListener('resize', sendHeightToParent);
 new ResizeObserver(sendHeightToParent).observe(document.body);
 
-/* =====================================================================
-   초기 실행
-   ===================================================================== */
 loadSheetData();
 </script>
 </body>
