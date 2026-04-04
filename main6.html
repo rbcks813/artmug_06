@@ -113,108 +113,41 @@
         .portfolio-tab:hover { border-color: var(--point1); transform: translateY(-2px); }
         .portfolio-tab.active { background: var(--point1); color: #fff; border-color: var(--point1); box-shadow: 0 5px 15px rgba(255, 148, 194, 0.4); }
 
-        .portfolio-slider-wrapper {
+        /* ── 수정된 부분: 가로 스크롤 갤러리 ── */
+        .portfolio-gallery {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
+            flex-wrap: nowrap;
+            overflow-x: auto;
             gap: 15px;
-            position: relative;
+            padding: 20px;
             background: #fafafa;
             border-radius: 20px;
-            padding: 20px;
             border: 2px solid var(--base2);
+            scroll-behavior: smooth;
         }
-        .img-nav-btn {
-            background: var(--point1);
-            border: none;
-            border-radius: 50%;
-            color: #fff;
-            width: 40px;
-            height: 40px;
-            min-width: 40px;
-            flex-shrink: 0;
-            cursor: pointer;
-            font-size: 1.2em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
-            box-shadow: 0 4px 10px rgba(255, 148, 194, 0.3);
-            z-index: 5;
-        }
-        .img-nav-btn:hover { background: var(--point2); transform: scale(1.1); }
-        .img-nav-btn:disabled { background: #ddd; cursor: not-allowed; transform: none; box-shadow: none; }
-
-        .portfolio-main-display {
-            flex-grow: 1;
-            height: 450px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
-            min-width: 0;
-        }
-
-        /* ── 최적화: 단일 img 태그 재사용, fade 트랜지션 ── */
-        #current-portfolio-img {
-            max-width: 100%;
-            max-height: 100%;
+        .portfolio-gallery::-webkit-scrollbar { height: 8px; }
+        .portfolio-gallery::-webkit-scrollbar-thumb { background: var(--base1); border-radius: 10px; }
+        
+        .portfolio-item {
+            height: 350px;
             width: auto;
-            height: auto;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 100%;
+            border-radius: 15px;
+            border: 2px solid var(--base2);
+            box-shadow: 0 5px 15px rgba(254, 177, 209, 0.15);
             object-fit: contain;
             background: #fff;
-            transition: opacity 0.2s ease;
-            display: none; /* 로드 전 숨김 */
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
         }
+        .portfolio-item:hover { transform: translateY(-5px); }
 
-        /* ── 로딩 스피너 ── */
-        .port-spinner {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            position: absolute;
-        }
-        .port-spinner.show { display: flex; }
-        .spinner-ring {
-            width: 48px;
-            height: 48px;
-            border: 5px solid var(--base2);
-            border-top-color: var(--point1);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        .spinner-text { font-weight: 700; color: var(--point1); font-size: 0.9em; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ── 이미지 없음 메시지 ── */
         .port-empty {
-            display: none;
+            width: 100%;
+            text-align: center;
             color: #aaa;
             font-weight: 700;
-            position: absolute;
-        }
-        .port-empty.show { display: block; }
-
-        /* ── 이미지 에러 메시지 ── */
-        .port-error {
-            display: none;
-            color: #e74c3c;
-            font-weight: 700;
-            text-align: center;
-            position: absolute;
-        }
-        .port-error.show { display: block; }
-
-        .img-counter {
-            text-align: center;
-            margin-top: 15px;
-            font-weight: 800;
-            color: var(--point1);
-            font-size: 1.1em;
+            padding: 50px 0;
         }
 
         .color-list { display: flex; flex-wrap: nowrap; gap: 10px; align-items: center; overflow-x: auto; padding: 5px 0 10px 0; }
@@ -291,7 +224,8 @@
             .status-badge { font-size: 0.65em; padding: 2px 4px; }
             .detail-notice-box { padding: 15px; }
             .notice-sub { margin-left: 0; margin-top: 5px; }
-            .portfolio-main-display { height: 300px; }
+            .portfolio-gallery { height: auto; }
+            .portfolio-item { height: 250px; }
             .bottom-actions { flex-direction: column; }
             .copy-btn, .reset-btn { width: 100%; flex: none; padding: 15px; }
         }
@@ -486,20 +420,8 @@
             <button class="tab-nav-btn next" onclick="scrollTabs(1)">&#10095;</button>
         </div>
 
-        <div class="portfolio-slider-wrapper">
-            <button class="img-nav-btn" id="port-prev-btn" onclick="moveImg(-1)">&#10094;</button>
-            <div class="portfolio-main-display" id="portfolio-main-display">
-                <div class="port-spinner" id="port-spinner">
-                    <div class="spinner-ring"></div>
-                    <div class="spinner-text">이미지 불러오는 중...</div>
-                </div>
-                <div class="port-empty" id="port-empty">등록된 이미지가 없습니다.</div>
-                <div class="port-error" id="port-error">⚠️ 이미지를 불러오지 못했습니다.</div>
-                <img id="current-portfolio-img" alt="포트폴리오 이미지">
+        <div class="portfolio-gallery" id="portfolio-gallery">
             </div>
-            <button class="img-nav-btn" id="port-next-btn" onclick="moveImg(1)">&#10095;</button>
-        </div>
-        <div class="img-counter" id="img-counter">0 / 0</div>
     </section>
 </div>
 
@@ -564,7 +486,7 @@ function renderCalendar() {
 function changeMonth(dir) { showingNextMonth = (dir === 1); renderCalendar(); }
 
 /* =====================================================================
-   포트폴리오
+   수정된 포트폴리오 로직 (가로 스크롤 방식)
    ===================================================================== */
 const portfolioCategories = [
     "일반 홍보포스터","RT포스터","데뷔썸네일","다시보기틀","쇼츠틀",
@@ -572,105 +494,7 @@ const portfolioCategories = [
     "PPT","인생네컷 대형","인생네컷 소형","닉네임로고","핫클립로고","유튜브 채널아트"
 ];
 
-let portfolioData   = {};
-let currentCategory = '';
-let currentImgIdx   = 0;
-
-const preloadCache = {};
-function preloadAround(images, idx) {
-    const toLoad = [
-        images[idx],
-        images[(idx + 1) % images.length],
-        images[(idx - 1 + images.length) % images.length]
-    ].filter(Boolean);
-
-    toLoad.forEach(src => {
-        if (preloadCache[src]) return;
-        const img = new Image();
-        img.src = src;
-        preloadCache[src] = img;
-    });
-}
-
-function setPortState(state) {
-    const imgEl    = document.getElementById('current-portfolio-img');
-    const spinner  = document.getElementById('port-spinner');
-    const empty    = document.getElementById('port-empty');
-    const error    = document.getElementById('port-error');
-    const prevBtn  = document.getElementById('port-prev-btn');
-    const nextBtn  = document.getElementById('port-next-btn');
-
-    imgEl.style.display   = (state === 'show')    ? 'block' : 'none';
-    spinner.classList.toggle('show', state === 'loading');
-    empty.classList.toggle('show',   state === 'empty');
-    error.classList.toggle('show',   state === 'error');
-
-    const hasNav = (state === 'show');
-    prevBtn.disabled = !hasNav;
-    nextBtn.disabled = !hasNav;
-}
-
-function updatePortfolioDisplay() {
-    const images = portfolioData[currentCategory] || [];
-    const counter = document.getElementById('img-counter');
-
-    if (images.length === 0) {
-        setPortState('empty');
-        counter.innerText = '0 / 0';
-        return;
-    }
-
-    currentImgIdx = Math.max(0, Math.min(currentImgIdx, images.length - 1));
-
-    const imgEl = document.getElementById('current-portfolio-img');
-    const src   = images[currentImgIdx];
-
-    if (preloadCache[src] && preloadCache[src].complete && preloadCache[src].naturalWidth > 0) {
-        imgEl.src = src;
-        imgEl.style.opacity = '1';
-        setPortState('show');
-        counter.innerText = `${currentImgIdx + 1} / ${images.length}`;
-        preloadAround(images, currentImgIdx);
-        sendHeightToParent();
-        return;
-    }
-
-    setPortState('loading');
-    counter.innerText = `${currentImgIdx + 1} / ${images.length}`;
-
-    imgEl.style.opacity = '0';
-    imgEl.onload = () => {
-        imgEl.style.opacity = '1';
-        setPortState('show');
-        preloadAround(images, currentImgIdx);
-        sendHeightToParent();
-    };
-    imgEl.onerror = () => {
-        setPortState('error');
-    };
-    imgEl.src = src;
-    preloadCache[src] = imgEl;
-}
-
-function showPortfolioCategory(cat, btn) {
-    document.querySelectorAll('.portfolio-tab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentCategory = cat;
-    currentImgIdx   = 0;
-    updatePortfolioDisplay();
-}
-
-function moveImg(direction) {
-    const images = portfolioData[currentCategory] || [];
-    if (images.length <= 1) return;
-    currentImgIdx = (currentImgIdx + direction + images.length) % images.length;
-    updatePortfolioDisplay();
-}
-
-function scrollTabs(direction) {
-    const tabs = document.getElementById('portfolio-tabs');
-    tabs.scrollBy({ left: direction * tabs.clientWidth, behavior: 'smooth' });
-}
+let portfolioData = {};
 
 function renderPortfolio() {
     const tabsContainer = document.getElementById('portfolio-tabs');
@@ -686,19 +510,43 @@ function renderPortfolio() {
 
         if (!firstSet) {
             btn.classList.add('active');
-            currentCategory = cat;
+            showPortfolioCategory(cat, btn);
             firstSet = true;
         }
     });
+}
 
-    const firstImages = portfolioData[currentCategory] || [];
-    if (firstImages.length > 0) preloadAround(firstImages, 0);
+function showPortfolioCategory(cat, btn) {
+    document.querySelectorAll('.portfolio-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    const gallery = document.getElementById('portfolio-gallery');
+    gallery.innerHTML = '';
+    
+    const images = portfolioData[cat] || [];
+    
+    if (images.length === 0) {
+        gallery.innerHTML = '<div class="port-empty">등록된 이미지가 없습니다.</div>';
+    } else {
+        images.forEach(src => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.className = 'portfolio-item';
+            img.loading = 'lazy';
+            img.onclick = () => window.open(src, '_blank'); // 클릭 시 원본 보기 (옵션)
+            gallery.appendChild(img);
+        });
+    }
+    setTimeout(sendHeightToParent, 100);
+}
 
-    updatePortfolioDisplay();
+function scrollTabs(direction) {
+    const tabs = document.getElementById('portfolio-tabs');
+    tabs.scrollBy({ left: direction * tabs.clientWidth, behavior: 'smooth' });
 }
 
 /* =====================================================================
-   데이터 로드 (제목 동적화 적용)
+   데이터 로드
    ===================================================================== */
 async function loadSheetData() {
     const BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQySVlQBMqlL7tguFKcH3yqvzfr2hic0llevvFPC0v2Bc-ipA1ZZrHHSwmv-MLrAJYUUIOq9xJU_LVk/pub';
@@ -716,28 +564,14 @@ async function loadSheetData() {
         fetch(urls.portfolio),
     ]);
 
-    /* ── 공지 (제목 실시간 반영) ── */
     try {
         const rows = parseCSV(await noticeRes.value.text());
         if (rows.length > 1) {
-            // [활성화, 내용, 강조할 단어, 제목] 순서 (rows[1][3]이 제목)
-            const [active, content, highlight, titleVal] = [
-                rows[1][0].trim().toUpperCase(), 
-                rows[1][1], 
-                rows[1][2], 
-                rows[1][3]
-            ];
-            
-            const titleEl   = document.getElementById('notice-title');
+            const [active, content, highlight, titleVal] = [rows[1][0].trim().toUpperCase(), rows[1][1], rows[1][2], rows[1][3]];
+            const titleEl = document.getElementById('notice-title');
             const contentEl = document.getElementById('notice-content');
-            
             if (active === 'TRUE') {
-                titleEl.style.display   = 'block';
-                contentEl.style.display = 'block';
-                
-                // 시트에서 가져온 제목 설정
                 if (titleVal) titleEl.innerText = titleVal;
-                
                 let processed = content.replace(/\n/g, '<br>');
                 if (highlight) {
                     highlight.split(',').map(k => k.trim()).forEach(kw => {
@@ -749,11 +583,10 @@ async function loadSheetData() {
                 }
                 contentEl.innerHTML = processed;
             } else {
-                titleEl.style.display   = 'none';
-                contentEl.style.display = 'none';
+                titleEl.style.display = 'none'; contentEl.style.display = 'none';
             }
         }
-    } catch(e) { console.warn('공지 로드 실패', e); }
+    } catch(e) {}
 
     try {
         const text = await calRes.value.text();
@@ -761,7 +594,7 @@ async function loadSheetData() {
             const cols = row.split(',');
             if (cols.length >= 2) sheetData[cols[0].trim()] = cols[1].trim();
         });
-    } catch(e) { console.warn('캘린더 로드 실패', e); }
+    } catch(e) {}
     renderCalendar();
 
     try {
@@ -771,10 +604,10 @@ async function loadSheetData() {
         text.split('\n').slice(1).forEach(row => {
             const cols = row.split(',');
             if (cols.length >= 2) {
-                list.innerHTML += `<a href="${cols[0].trim()}" target="_blank" class="collab-banner"><img src="${cols[1].trim()}" alt="협업 작가" loading="lazy"></a>`;
+                list.innerHTML += `<a href="${cols[0].trim()}" target="_blank" class="collab-banner"><img src="${cols[1].trim()}"></a>`;
             }
         });
-    } catch(e) { console.warn('협업 로드 실패', e); }
+    } catch(e) {}
 
     try {
         const rows = parseCSV(await portRes.value.text());
@@ -787,42 +620,33 @@ async function loadSheetData() {
                 }
             }
         });
-    } catch(e) { console.warn('포트폴리오 로드 실패', e); }
+    } catch(e) {}
 
     renderPortfolio();
 }
 
 /* =====================================================================
-   폼 관련 및 기타 함수들 (기존과 동일)
+   폼 관련 및 기타 함수들
    ===================================================================== */
 function syncColor(el, type) {
     const parent = el.closest('.color-item');
-    if (type === 'hex') {
-        parent.querySelector('.hex-input').value = el.value.toUpperCase();
-    } else {
-        let val = el.value;
-        if (!val.startsWith('#')) val = '#' + val;
+    if (type === 'hex') { parent.querySelector('.hex-input').value = el.value.toUpperCase(); }
+    else {
+        let val = el.value; if (!val.startsWith('#')) val = '#' + val;
         if (/^#[0-9A-F]{6}$/i.test(val)) parent.querySelector('input[type="color"]').value = val;
     }
 }
-
 function addColor() {
     const item = document.createElement('div');
     item.className = 'color-item';
-    item.innerHTML = `
-        <div class="color-box"><input type="color" value="#FFFFFF" oninput="syncColor(this,'hex')"></div>
-        <input type="text" class="hex-input" value="#FFFFFF" maxlength="7" oninput="syncColor(this,'picker')">
-        <span style="cursor:pointer;font-size:10px;margin-left:2px;color:#999;" onclick="this.parentElement.remove()">✕</span>`;
+    item.innerHTML = `<div class="color-box"><input type="color" value="#FFFFFF" oninput="syncColor(this,'hex')"></div><input type="text" class="hex-input" value="#FFFFFF" maxlength="7" oninput="syncColor(this,'picker')"><span style="cursor:pointer;font-size:10px;margin-left:2px;color:#999;" onclick="this.parentElement.remove()">✕</span>`;
     document.getElementById('color-list').insertBefore(item, document.querySelector('#color-list .select-btn'));
 }
-
 function selectOnlyInCategory(btn) {
-    const parent = btn.parentElement;
-    const isActive = btn.classList.contains('active');
+    const parent = btn.parentElement; const isActive = btn.classList.contains('active');
     parent.querySelectorAll('.select-btn').forEach(b => b.classList.remove('active'));
     if (!isActive) btn.classList.add('active');
 }
-
 let base64Image = '';
 function handleImage(input) {
     if (input.files && input.files[0]) {
@@ -837,12 +661,9 @@ function handleImage(input) {
     }
 }
 function removeImage() {
-    document.getElementById('f_file').value = '';
-    document.getElementById('preview-wrap').style.display = 'none';
-    base64Image = '';
+    document.getElementById('f_file').value = ''; document.getElementById('preview-wrap').style.display = 'none'; base64Image = '';
     setTimeout(sendHeightToParent, 100);
 }
-
 function resetForm() {
     if (!confirm('작성하신 모든 내용을 초기화할까요?')) return;
     ['f_name','f_type','f_concept','f_content','f_date'].forEach(id => document.getElementById(id).value = '');
@@ -857,36 +678,21 @@ function resetForm() {
     document.getElementById('copy-btn').disabled = true;
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
 function copyForm() {
-    const name    = document.getElementById('f_name').value    || '미작성';
-    const type    = document.getElementById('f_type').value    || '미작성';
+    const name = document.getElementById('f_name').value || '미작성';
+    const type = document.getElementById('f_type').value || '미작성';
     const concept = document.getElementById('f_concept').value || '미작성';
-    const colors  = Array.from(document.querySelectorAll('.hex-input')).map(i => i.value).join(', ');
+    const colors = Array.from(document.querySelectorAll('.hex-input')).map(i => i.value).join(', ');
     const content = document.getElementById('f_content').value || '미작성';
-    const date    = document.getElementById('f_date').value    || '미정';
-    const extras  = Array.from(document.querySelectorAll('.category-group .active')).map(b => b.innerText);
+    const date = document.getElementById('f_date').value || '미정';
+    const extras = Array.from(document.querySelectorAll('.category-group .active')).map(b => b.innerText);
     const imgHtml = base64Image ? `<br><img src="${base64Image}" style="max-width:300px;border-radius:10px;"><br>` : '첨부파일 없음';
-
-    const text = `[신청양식]
-1. 닉네임: ${name}
-2. 종류: ${type}
-3. 컨셉: ${concept}
-4. 색상: ${colors}
-5. 내용: ${content}
-6. 첨부이미지: ${imgHtml}
-7. 추가사항: ${extras.join(', ') || '없음'}
-8. 희망날짜: ${date}`;
-
+    const text = `[신청양식]\n1. 닉네임: ${name}\n2. 종류: ${type}\n3. 컨셉: ${concept}\n4. 색상: ${colors}\n5. 내용: ${content}\n6. 첨부이미지: ${imgHtml}\n7. 추가사항: ${extras.join(', ') || '없음'}\n8. 희망날짜: ${date}`;
     const blobHtml = new Blob([text.replace(/\n/g, '<br>')], { type: 'text/html' });
     const blobText = new Blob([text], { type: 'text/plain' });
-    navigator.clipboard.write([new ClipboardItem({ 'text/html': blobHtml, 'text/plain': blobText })])
-        .then(() => alert('양식이 복사되었습니다!'));
+    navigator.clipboard.write([new ClipboardItem({ 'text/html': blobHtml, 'text/plain': blobText })]).then(() => alert('양식이 복사되었습니다!'));
 }
-
-function sendHeightToParent() {
-    window.parent.postMessage({ type: 'resize', height: document.documentElement.scrollHeight }, '*');
-}
+function sendHeightToParent() { window.parent.postMessage({ type: 'resize', height: document.documentElement.scrollHeight }, '*'); }
 window.addEventListener('load', sendHeightToParent);
 window.addEventListener('resize', sendHeightToParent);
 new ResizeObserver(sendHeightToParent).observe(document.body);
