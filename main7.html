@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사김장 커미션</title>
+
+<style>
+/* ===== 폰트 설정 ===== */
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight: 100; font-display: swap; }
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2'); font-weight: 200; font-display: swap; }
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2'); font-weight: 800; font-display: swap; }
+@font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+
+/* ===== 전체 레이아웃 ===== */
+body {
+  margin: 0; padding: 0;
+  font-family: 'Paperozi', sans-serif;
+  background-color: #fff; color: #333;
+  word-break: keep-all; overflow-x: hidden;
+}
+
+.container { display: flex; justify-content: center; width: 100%; }
+.content { width: 100%; max-width: 900px; padding: 40px 20px; box-sizing: border-box; }
+
+img { max-width: 100%; height: auto; display: block; }
+
+/* ===== 섹션 디자인 ===== */
+.section { margin-bottom: 120px; width: 100%; }
+.section h2 {
+  font-size: 28px; font-weight: 800; color: #222; text-align: left; /* 왼쪽 정렬 */
+  margin-bottom: 50px; padding-left: 20px; letter-spacing: -0.5px; position: relative;
+}
+.section h2::after {
+  content: ''; display: block; width: 5px; height: 1.1em; background: #ff4d6d; 
+  position: absolute; left: 0; top: 50%; transform: translateY(-50%); border-radius: 2px;
+}
+
+/* ===== 상단 헤더 ===== */
+.top-center { text-align: center; margin-top: 20px; }
+.logo img { width: 100%; max-width: 600px; margin: 0 auto 20px; }
+.title-main { font-size: 52px; font-weight: 900; color: #ff4d6d; margin: 10px 0; letter-spacing: -1.5px; }
+
+/* ===== 실시간 슬롯 디자인 ===== */
+.slot-container {
+  background: #fdfdfd; border: 1.5px solid #eee; border-radius: 24px;
+  padding: 40px 20px; margin: 40px 0; text-align: center;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.02);
+}
+.slot-box { font-size: 20px; font-weight: 800; color: #8a3ffc; margin-bottom: 20px; letter-spacing: 3px; }
+.slot-box2 { font-size: 24px; font-weight: 500; color: #444; line-height: 1.6; }
+.slot-row { margin-bottom: 25px; }
+.slot-status-text {
+  font-size: 14px; font-weight: 700; color: #ff4d6d; margin-top: 8px;
+  background: #fff0f3; display: inline-block; padding: 4px 16px; border-radius: 50px;
+}
+
+.divider {
+  width: 100%; height: 1px;
+  background: radial-gradient(circle, #eee 0%, rgba(255,255,255,0) 100%);
+  margin: 80px 0;
+}
+
+/* ===== 이미지 그리드 ===== */
+.image-grid-vertical { display: flex; flex-direction: column; align-items: center; gap: 30px; }
+.image-grid-vertical img { border-radius: 15px; width: 100%; }
+.image-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 30px; }
+.image-grid img { border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+
+/* ===== 슬라이더 프레임 ===== */
+.slider-frame {
+  width: 100%; background: #fff; border: 1px solid #f0f0f0; border-radius: 24px; padding: 40px 20px;
+  box-sizing: border-box; box-shadow: 0 15px 40px rgba(0,0,0,0.04); margin: 40px 0; text-align: center;
+}
+.frame-title { font-size: 20px; font-weight: 700; color: #ff4d6d; margin-bottom: 30px; }
+
+.main-slider { display: flex; align-items: center; justify-content: center; width: 100%; gap: 15px; }
+.main-slider img { 
+  border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); 
+  max-width: calc(100% - 130px);
+}
+
+.main-btn {
+  background: #fff; color: #ff4d6d; border: 1px solid #eee;
+  width: 45px; height: 45px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  cursor: pointer; font-size: 24px; transition: 0.3s;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.main-btn:hover { background: #ff4d6d; color: #fff; }
+
+.thumb-container { margin-top: 30px; display: flex; align-items: center; justify-content: center; padding: 0 10px; }
+.thumbnail-wrapper { 
+    display: flex; gap: 12px; overflow-x: auto; scroll-behavior: smooth; padding: 10px 5px; 
+    scrollbar-width: none; width: 100%; justify-content: flex-start;
+}
+.thumbnail-wrapper::-webkit-scrollbar { display: none; }
+.thumbnail-wrapper img { width: 75px; height: 75px; flex: 0 0 auto; object-fit: cover; border-radius: 10px; cursor: pointer; opacity: 0.5; transition: 0.3s; border: 2px solid transparent; }
+.thumbnail-wrapper img.active { opacity: 1; border-color: #ff4d6d; transform: translateY(-3px); }
+
+.thumb-btn { background: #fff; border: 1px solid #eee; width: 30px; height: 30px; border-radius: 50%; font-size: 18px; color: #ff4d6d; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.thumb-btn:hover { background: #ff4d6d; color: #fff; }
+.thumb-prev { margin-right: 8px; }
+.thumb-next { margin-left: 8px; }
+
+#notice img { margin: 0 auto 10px; width: 100%; max-width: 750px; border-radius: 0; }
+html { scroll-behavior: smooth; }
+
+/* ===== 모바일 최적화 ===== */
+@media (max-width: 600px) {
+  .content { padding: 20px 15px; }
+  .section { margin-bottom: 60px; }
+  .section h2 { font-size: 22px; margin-bottom: 30px; }
+  .title-main { font-size: 32px; }
+  .divider { margin: 40px 0; }
+  
+  .slot-container { padding: 30px 15px; }
+  .slot-box { font-size: 16px; letter-spacing: 1px; }
+  .slot-box2 { font-size: 16px; }
+
+  .slider-frame { padding: 25px 10px; border-radius: 16px; }
+  .main-slider { gap: 8px; }
+  .main-slider img { max-width: calc(100% - 86px); }
+  .main-btn { width: 35px; height: 35px; font-size: 18px; }
+  
+  .thumbnail-wrapper img { width: 55px; height: 55px; }
+  .thumb-btn { display: none; } 
+  .thumb-container { padding: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<div class="content">
+
+  <div id="top" class="section top-center">
+    <div class="logo">
+      <img src="https://i.postimg.cc/dtwKMWMc/1-1.png">
+      <p class="title-main">사김장 커미션</p>
+    </div>
+    
+    <div class="slot-container">
+      <div class="slot-box">COMMISSION SLOT</div>
+      <div class="slot-box2" id="live-slot-display">
+        <p>현황을 불러오는 중...</p>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: center;">
+      <img src="https://i.postimg.cc/KvPvBkb2/1-2.png" style="width: 100%; max-width: 750px;">
+    </div>
+    <div class="divider"></div>
+  </div>
+
+  <div id="sub" class="section">
+    <h2>구독티콘</h2>
+    <div class="image-grid-vertical">
+      <img src="https://i.postimg.cc/m2Y2Cz4b/2-1.png" style="max-width: 90%;">
+    </div>
+    <div class="image-grid">
+      <img src="https://i.postimg.cc/xTvTMJQJ/2-2.png">
+    </div>
+
+    <h2 style="margin-top:100px;">움짤티콘</h2>
+    <div class="image-grid">
+      <img src="https://i.postimg.cc/tCkG9hyt/2-3.gif">
+    </div>
+    <div class="divider"></div>
+  </div>
+
+  <div id="donation" class="section">
+    <h2>후원움짤</h2>
+    <div class="image-grid-vertical">
+      <img src="https://i.postimg.cc/yYmYcgK7/3-a.png" style="max-width: 90%;">
+      <img src="https://i.postimg.cc/02Y2DMvw/3-e.png" style="max-width: 500px;">
+    </div>
+
+    <div class="slider-frame" style="margin-top: 10px;">
+      <h3 class="frame-title">#1 치즈냠!🧀</h3>
+      <div class="main-slider">
+        <button class="main-btn" onclick="prevSlide()">‹</button>
+        <img id="mainImage" src="">
+        <button class="main-btn" onclick="nextSlide()">›</button>
+      </div>
+      <div class="thumb-container">
+        <button class="thumb-btn thumb-prev" onclick="thumbLeft()">‹</button>
+        <div class="thumbnail-wrapper" id="thumbnails">
+          </div>
+        <button class="thumb-btn thumb-next" onclick="thumbRight()">›</button>
+      </div>
+    </div>
+
+    <div class="image-grid-vertical" style="margin-top:100px;">
+      <img src="https://i.postimg.cc/ZKPKWL2Z/3-d.png" style="max-width: 500px;">
+    </div>
+    <div class="divider"></div>
+  </div>
+
+  <div id="avatar" class="section">
+    <h2>채팅아바타</h2>
+    <div class="image-grid">
+      <img src="https://i.postimg.cc/bNxNkDPP/4-a.png" style="max-width: 90%; border-radius: 0; box-shadow: none;">
+    </div>
+
+    <div class="slider-frame">
+      <h3 class="frame-title">#1 팬캐릭터</h3>
+      <div class="main-slider">
+        <button class="main-btn" onclick="avatarPrev()">‹</button>
+        <img id="avatarMainImage" src="">
+        <button class="main-btn" onclick="avatarNext()">›</button>
+      </div>
+      <div class="thumb-container">
+        <button class="thumb-btn thumb-prev" onclick="avatarThumbLeft()">‹</button>
+        <div class="thumbnail-wrapper" id="avatarThumbnails">
+          </div>
+        <button class="thumb-btn thumb-next" onclick="avatarThumbRight()">›</button>
+      </div>
+    </div>
+
+    <div class="slider-frame">
+      <h3 class="frame-title">#2 사람형태</h3>
+      <div class="main-slider">
+        <button class="main-btn" onclick="peoplePrev()">‹</button>
+        <img id="peopleMainImage" src="">
+        <button class="main-btn" onclick="peopleNext()">›</button>
+      </div>
+      <div class="thumb-container">
+        <button class="thumb-btn thumb-prev" onclick="peopleThumbLeft()">‹</button>
+        <div class="thumbnail-wrapper" id="peopleThumbnails">
+          </div>
+        <button class="thumb-btn thumb-next" onclick="peopleThumbRight()">›</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div id="notice" class="section">
+      <h2 style="margin-bottom:80px;">신청양식 및 공지사항</h2>
+      <img src="https://i.postimg.cc/3JXJm4h5/z-1.png">
+      <img src="https://i.postimg.cc/VkH13Z2L/z-2.png">
+      <img src="https://i.postimg.cc/Cx6YWr9x/z-3.png">
+      <img src="https://i.postimg.cc/P5FhBV0X/z-4.png">
+      <img src="https://i.postimg.cc/cLJ0kGk1/z-5.png">
+      <img src="https://i.postimg.cc/pL1xgc3r/z-6.png">
+      <img src="https://i.postimg.cc/zBzjKpXK/z-7.png">
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+/* 구글 시트 연동 */
+async function fetchSlotData() {
+  const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1at9oIfDbzBF-RDm4cWg-28HXKBXQ0jiXoI--vwojSZaiNHcWzkwDRUhnkHVHZxvyBwFrK_rhg9MK/pub?gid=0&single=true&output=csv";
+  const displayArea = document.getElementById('live-slot-display');
+
+  try {
+    const response = await fetch(sheetUrl);
+    const csvData = await response.text();
+    const rows = csvData.trim().split('\n').map(row => row.split(','));
+    
+    let htmlContent = "";
+    for (let i = 1; i < rows.length; i++) {
+      if (rows[i].length < 2) continue;
+      let month = rows[i][0].replace(/"/g, '').trim();
+      if (!month) continue;
+      if (!isNaN(month)) month += "월";
+      const usedSlots = parseInt(rows[i][1].replace(/"/g, '').trim()) || 0;
+      const maxSlots = 7;
+      const remainingSlots = Math.max(0, maxSlots - usedSlots);
+      const filled = "●".repeat(Math.min(usedSlots, maxSlots));
+      const empty = "○".repeat(remainingSlots);
+      const statusText = remainingSlots === 0 ? "마감되었습니다" : `현재 ${remainingSlots}개 슬롯 남음`;
+      htmlContent += `<div class="slot-row"><p>${month} ${filled}${empty}</p><div class="slot-status-text">${statusText}</div></div>`;
+    }
+    displayArea.innerHTML = htmlContent || "<p>등록된 슬롯이 없습니다.</p>";
+  } catch (e) {
+    displayArea.innerHTML = "<p>슬롯 정보를 불러오지 못했습니다.</p>";
+  }
+}
+
+/* 자동 높이 조절 지원 코드 */
+function sendHeight() {
+  const height = document.body.scrollHeight;
+  window.parent.postMessage({ height: height }, '*');
+}
+
+/* 외부 슬라이더 이미지 연동 로직 */
+async function loadExternalSlider(url, arrayRef, thumbId, clickFn, updateFn) {
+  try {
+    const response = await fetch(url);
+    const text = await response.text();
+    const urls = text.trim().split('\n').slice(1).map(row => row.trim().replace(/"/g, ''));
+    
+    arrayRef.length = 0;
+    arrayRef.push(...urls);
+    
+    const wrapper = document.getElementById(thumbId);
+    if (wrapper) {
+      wrapper.innerHTML = urls.map((src, idx) => 
+        `<img src="${src}" onclick="${clickFn}(${idx})" loading="lazy">`
+      ).join('');
+    }
+    updateFn();
+  } catch (error) {
+    console.error("Slider load failed:", error);
+  }
+}
+
+/* 썸네일 활성화 */
+function syncThumbScroll(containerId, index) {
+  const container = document.getElementById(containerId);
+  const thumbs = container.querySelectorAll("img");
+  thumbs.forEach((img, i) => img.classList.toggle("active", i === index));
+  const activeThumb = thumbs[index];
+  if (activeThumb) {
+    const targetX = activeThumb.offsetLeft - (container.clientWidth / 2) + (activeThumb.clientWidth / 2);
+    container.scrollTo({ left: targetX, behavior: 'smooth' });
+  }
+}
+
+/* 슬라이더 제어 변수 및 함수 */
+let images = [];
+let current = 0;
+function updateSlider() { if(images.length > 0) { document.getElementById("mainImage").src = images[current]; syncThumbScroll("thumbnails", current); } }
+function nextSlide() { current = (current + 1) % images.length; updateSlider(); }
+function prevSlide() { current = (current - 1 + images.length) % images.length; updateSlider(); }
+function setSlide(i) { current = i; updateSlider(); }
+function thumbLeft() { document.getElementById("thumbnails").scrollBy({ left: -200, behavior: "smooth" }); }
+function thumbRight() { document.getElementById("thumbnails").scrollBy({ left: 200, behavior: "smooth" }); }
+
+let avatarImages = [];
+let avatarCurrent = 0;
+function updateAvatarSlider() { if(avatarImages.length > 0) { document.getElementById("avatarMainImage").src = avatarImages[avatarCurrent]; syncThumbScroll("avatarThumbnails", avatarCurrent); } }
+function avatarNext() { avatarCurrent = (avatarCurrent + 1) % avatarImages.length; updateAvatarSlider(); }
+function avatarPrev() { avatarCurrent = (avatarCurrent - 1 + avatarImages.length) % avatarImages.length; updateAvatarSlider(); }
+function avatarSet(i) { avatarCurrent = i; updateAvatarSlider(); }
+function avatarThumbLeft() { document.getElementById("avatarThumbnails").scrollBy({ left: -200, behavior: "smooth" }); }
+function avatarThumbRight() { document.getElementById("avatarThumbnails").scrollBy({ left: 200, behavior: "smooth" }); }
+
+let peopleImages = [];
+let peopleCurrent = 0;
+function updatePeopleSlider() { if(peopleImages.length > 0) { document.getElementById("peopleMainImage").src = peopleImages[peopleCurrent]; syncThumbScroll("peopleThumbnails", peopleCurrent); } }
+function peopleNext() { peopleCurrent = (peopleCurrent + 1) % peopleImages.length; updatePeopleSlider(); }
+function peoplePrev() { peopleCurrent = (peopleCurrent - 1 + peopleImages.length) % peopleImages.length; updatePeopleSlider(); }
+function peopleSet(i) { peopleCurrent = i; updatePeopleSlider(); }
+function peopleThumbLeft() { document.getElementById("peopleThumbnails").scrollBy({ left: -200, behavior: "smooth" }); }
+function peopleThumbRight() { document.getElementById("peopleThumbnails").scrollBy({ left: 200, behavior: "smooth" }); }
+
+window.onload = async () => { 
+  fetchSlotData(); 
+  
+  const cheeseUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1at9oIfDbzBF-RDm4cWg-28HXKBXQ0jiXoI--vwojSZaiNHcWzkwDRUhnkHVHZxvyBwFrK_rhg9MK/pub?gid=782464752&single=true&output=csv";
+  const fanUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1at9oIfDbzBF-RDm4cWg-28HXKBXQ0jiXoI--vwojSZaiNHcWzkwDRUhnkHVHZxvyBwFrK_rhg9MK/pub?gid=139715570&single=true&output=csv";
+  const peopleUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1at9oIfDbzBF-RDm4cWg-28HXKBXQ0jiXoI--vwojSZaiNHcWzkwDRUhnkHVHZxvyBwFrK_rhg9MK/pub?gid=1452525423&single=true&output=csv";
+
+  await Promise.all([
+    loadExternalSlider(cheeseUrl, images, 'thumbnails', 'setSlide', updateSlider),
+    loadExternalSlider(fanUrl, avatarImages, 'avatarThumbnails', 'avatarSet', updateAvatarSlider),
+    loadExternalSlider(peopleUrl, peopleImages, 'peopleThumbnails', 'peopleSet', updatePeopleSlider)
+  ]);
+
+  // 데이터 로드 완료 후 높이 전송 및 자동 감지 시작
+  sendHeight();
+  window.addEventListener('resize', sendHeight);
+  if (window.ResizeObserver) {
+    new ResizeObserver(sendHeight).observe(document.body);
+  }
+};
+</script>
+
+</body>
+</html>
