@@ -292,7 +292,7 @@ function sendHeight() {
   window.parent.postMessage({ height: height }, '*');
 }
 
-/* 외부 슬라이더 이미지 연동 로직 */
+/* 외부 슬라이더 이미지 연동 로직 (로딩 최적화 적용) */
 async function loadExternalSlider(url, arrayRef, thumbId, clickFn, updateFn) {
   try {
     const response = await fetch(url);
@@ -304,11 +304,21 @@ async function loadExternalSlider(url, arrayRef, thumbId, clickFn, updateFn) {
     
     const wrapper = document.getElementById(thumbId);
     if (wrapper) {
+      // 렌더링 병목 방지를 위해 decoding="async" 추가
       wrapper.innerHTML = urls.map((src, idx) => 
-        `<img src="${src}" onclick="${clickFn}(${idx})" loading="lazy">`
+        `<img src="${src}" onclick="${clickFn}(${idx})" loading="lazy" decoding="async">`
       ).join('');
     }
     updateFn();
+
+    // 백그라운드 프리로딩: 사용자가 다음 슬라이드로 넘기기 전에 이미지를 미리 캐싱하여 로딩 시간 제거
+    setTimeout(() => {
+      urls.forEach(src => {
+        const prefetchImg = new Image();
+        prefetchImg.src = src;
+      });
+    }, 500);
+
   } catch (error) {
     console.error("Slider load failed:", error);
   }
@@ -354,7 +364,9 @@ function peopleSet(i) { peopleCurrent = i; updatePeopleSlider(); }
 function peopleThumbLeft() { document.getElementById("peopleThumbnails").scrollBy({ left: -200, behavior: "smooth" }); }
 function peopleThumbRight() { document.getElementById("peopleThumbnails").scrollBy({ left: 200, behavior: "smooth" }); }
 
-window.onload = async () => { 
+
+// DOMContentLoaded 적용: 페이지 고정 이미지가 다 로드되기 전에 시트 데이터를 즉시 가져오기 시작함
+document.addEventListener("DOMContentLoaded", async () => { 
   fetchSlotData(); 
   
   const cheeseUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1at9oIfDbzBF-RDm4cWg-28HXKBXQ0jiXoI--vwojSZaiNHcWzkwDRUhnkHVHZxvyBwFrK_rhg9MK/pub?gid=782464752&single=true&output=csv";
@@ -373,7 +385,7 @@ window.onload = async () => {
   if (window.ResizeObserver) {
     new ResizeObserver(sendHeight).observe(document.body);
   }
-};
+});
 </script>
 
 </body>
