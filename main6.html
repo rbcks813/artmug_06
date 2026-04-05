@@ -194,7 +194,6 @@
         .custom-file-label:hover { background: var(--base1); color: white; }
         input[type="file"] { display: none; }
 
-        /* 다중 이미지 미리보기용 스타일 수정 */
         #preview-container { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 15px; }
         .preview-wrap { position: relative; width: 100px; height: 100px; }
         .preview-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; border: 2px solid var(--base2); }
@@ -287,7 +286,7 @@
             <textarea id="f_content" placeholder="디자인에 포함될 텍스트 내용을 모두 적어주세요."></textarea>
         </div>
         <div class="form-group">
-            <label>6. 이미지 파일 첨부</label>
+            <label>6. 이미지 파일 첨부 (다중 선택 가능)</label>
             <label for="f_file" class="custom-file-label">📷 이미지 업로드</label>
             <input type="file" id="f_file" accept="image/*" onchange="handleImage(this)" multiple>
             <div id="preview-container"></div>
@@ -531,7 +530,7 @@ function showPortfolioCategory(cat, btn) {
             img.src = src;
             img.className = 'portfolio-item';
             img.loading = 'lazy';
-            img.onclick = () => window.open(src, '_blank'); // 클릭 시 원본 보기 (옵션)
+            // img.onclick 이벤트 삭제 (클릭 시 다운로드/새창 열림 방지)
             gallery.appendChild(img);
         });
     }
@@ -646,7 +645,6 @@ function selectOnlyInCategory(btn) {
     if (!isActive) btn.classList.add('active');
 }
 
-// 이미지 다중 관리를 위한 배열로 변경
 let base64Images = [];
 
 function handleImage(input) {
@@ -663,7 +661,6 @@ function handleImage(input) {
     }
 }
 
-// 미리보기 렌더링 함수 추가
 function renderImagePreviews() {
     const container = document.getElementById('preview-container');
     container.innerHTML = '';
@@ -680,7 +677,6 @@ function renderImagePreviews() {
     setTimeout(sendHeightToParent, 100);
 }
 
-// 인덱스를 인자로 받는 삭제 함수로 변경
 function removeImage(index) {
     base64Images.splice(index, 1);
     renderImagePreviews();
@@ -694,7 +690,6 @@ function resetForm() {
     ['f_name','f_type','f_concept','f_content','f_date'].forEach(id => document.getElementById(id).value = '');
     document.querySelectorAll('.btn-group button').forEach(b => b.classList.remove('active'));
     
-    // 이미지 초기화 로직 수정
     base64Images = [];
     renderImagePreviews();
     document.getElementById('f_file').value = '';
@@ -718,7 +713,6 @@ function copyForm() {
     const date = document.getElementById('f_date').value || '미정';
     const extras = Array.from(document.querySelectorAll('.category-group .active')).map(b => b.innerText);
     
-    // 다중 이미지 복사 로직 수정
     const imgHtml = base64Images.length > 0 
         ? base64Images.map(img => `<br><img src="${img}" style="max-width:300px;border-radius:10px;margin-bottom:10px;"><br>`).join('') 
         : '첨부파일 없음';
