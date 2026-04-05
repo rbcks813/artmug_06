@@ -113,7 +113,6 @@
         .portfolio-tab:hover { border-color: var(--point1); transform: translateY(-2px); }
         .portfolio-tab.active { background: var(--point1); color: #fff; border-color: var(--point1); box-shadow: 0 5px 15px rgba(255, 148, 194, 0.4); }
 
-        /* ── 수정된 부분: 가로 스크롤 갤러리 ── */
         .portfolio-gallery {
             display: flex;
             flex-wrap: nowrap;
@@ -195,9 +194,11 @@
         .custom-file-label:hover { background: var(--base1); color: white; }
         input[type="file"] { display: none; }
 
-        .preview-wrap { position: relative; display: none; width: fit-content; margin-top: 15px; }
-        #img-preview { max-width: 180px; border-radius: 10px; border: 2px solid var(--base2); display: block; }
-        #del-img-btn { position: absolute; top: -10px; right: -10px; width: 26px; height: 26px; background: #e74c3c; color: white; border: none; border-radius: 50%; cursor: pointer; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 10; }
+        /* 다중 이미지 미리보기용 스타일 수정 */
+        #preview-container { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 15px; }
+        .preview-wrap { position: relative; width: 100px; height: 100px; }
+        .preview-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; border: 2px solid var(--base2); }
+        .del-img-btn { position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; background: #e74c3c; color: white; border: none; border-radius: 50%; cursor: pointer; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 10; font-size: 12px; }
 
         .checkbox-group { background: var(--bg); padding: 20px; border-radius: 15px; border: 2px solid var(--base1); margin: 30px 0; font-weight: 700; display: flex; align-items: center; gap: 12px; cursor: pointer; }
         .checkbox-group input { width: 20px; height: 20px; accent-color: var(--point1); }
@@ -288,11 +289,8 @@
         <div class="form-group">
             <label>6. 이미지 파일 첨부</label>
             <label for="f_file" class="custom-file-label">📷 이미지 업로드</label>
-            <input type="file" id="f_file" accept="image/*" onchange="handleImage(this)">
-            <div class="preview-wrap" id="preview-wrap">
-                <img id="img-preview">
-                <button id="del-img-btn" onclick="removeImage()">✕</button>
-            </div>
+            <input type="file" id="f_file" accept="image/*" onchange="handleImage(this)" multiple>
+            <div id="preview-container"></div>
         </div>
         <div class="form-group">
             <label>7. 그 외 추가사항 (품목당)</label>
@@ -647,28 +645,60 @@ function selectOnlyInCategory(btn) {
     parent.querySelectorAll('.select-btn').forEach(b => b.classList.remove('active'));
     if (!isActive) btn.classList.add('active');
 }
-let base64Image = '';
+
+// 이미지 다중 관리를 위한 배열로 변경
+let base64Images = [];
+
 function handleImage(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-            base64Image = e.target.result;
-            document.getElementById('img-preview').src = base64Image;
-            document.getElementById('preview-wrap').style.display = 'block';
-            setTimeout(sendHeightToParent, 100);
-        };
-        reader.readAsDataURL(input.files[0]);
+    if (input.files) {
+        const files = Array.from(input.files);
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                base64Images.push(e.target.result);
+                renderImagePreviews();
+            };
+            reader.readAsDataURL(file);
+        });
     }
 }
-function removeImage() {
-    document.getElementById('f_file').value = ''; document.getElementById('preview-wrap').style.display = 'none'; base64Image = '';
+
+// 미리보기 렌더링 함수 추가
+function renderImagePreviews() {
+    const container = document.getElementById('preview-container');
+    container.innerHTML = '';
+    
+    base64Images.forEach((src, index) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'preview-wrap';
+        wrap.innerHTML = `
+            <img src="${src}">
+            <button class="del-img-btn" onclick="removeImage(${index})">✕</button>
+        `;
+        container.appendChild(wrap);
+    });
     setTimeout(sendHeightToParent, 100);
 }
+
+// 인덱스를 인자로 받는 삭제 함수로 변경
+function removeImage(index) {
+    base64Images.splice(index, 1);
+    renderImagePreviews();
+    if (base64Images.length === 0) {
+        document.getElementById('f_file').value = '';
+    }
+}
+
 function resetForm() {
     if (!confirm('작성하신 모든 내용을 초기화할까요?')) return;
     ['f_name','f_type','f_concept','f_content','f_date'].forEach(id => document.getElementById(id).value = '');
     document.querySelectorAll('.btn-group button').forEach(b => b.classList.remove('active'));
-    removeImage();
+    
+    // 이미지 초기화 로직 수정
+    base64Images = [];
+    renderImagePreviews();
+    document.getElementById('f_file').value = '';
+
     const colorList = document.getElementById('color-list');
     const items = colorList.querySelectorAll('.color-item');
     for (let i = 1; i < items.length; i++) items[i].remove();
@@ -678,6 +708,7 @@ function resetForm() {
     document.getElementById('copy-btn').disabled = true;
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
 function copyForm() {
     const name = document.getElementById('f_name').value || '미작성';
     const type = document.getElementById('f_type').value || '미작성';
@@ -686,12 +717,19 @@ function copyForm() {
     const content = document.getElementById('f_content').value || '미작성';
     const date = document.getElementById('f_date').value || '미정';
     const extras = Array.from(document.querySelectorAll('.category-group .active')).map(b => b.innerText);
-    const imgHtml = base64Image ? `<br><img src="${base64Image}" style="max-width:300px;border-radius:10px;"><br>` : '첨부파일 없음';
+    
+    // 다중 이미지 복사 로직 수정
+    const imgHtml = base64Images.length > 0 
+        ? base64Images.map(img => `<br><img src="${img}" style="max-width:300px;border-radius:10px;margin-bottom:10px;"><br>`).join('') 
+        : '첨부파일 없음';
+
     const text = `[신청양식]\n1. 닉네임: ${name}\n2. 종류: ${type}\n3. 컨셉: ${concept}\n4. 색상: ${colors}\n5. 내용: ${content}\n6. 첨부이미지: ${imgHtml}\n7. 추가사항: ${extras.join(', ') || '없음'}\n8. 희망날짜: ${date}`;
+    
     const blobHtml = new Blob([text.replace(/\n/g, '<br>')], { type: 'text/html' });
     const blobText = new Blob([text], { type: 'text/plain' });
     navigator.clipboard.write([new ClipboardItem({ 'text/html': blobHtml, 'text/plain': blobText })]).then(() => alert('양식이 복사되었습니다!'));
 }
+
 function sendHeightToParent() { window.parent.postMessage({ type: 'resize', height: document.documentElement.scrollHeight }, '*'); }
 window.addEventListener('load', sendHeightToParent);
 window.addEventListener('resize', sendHeightToParent);
