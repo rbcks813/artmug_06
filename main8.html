@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goyu Live2D 상세페이지</title>
+    <style>
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight: 100; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2'); font-weight: 200; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2'); font-weight: 800; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        :root {
+            --blue: #1a73e8;
+            --blue-light: #e8f0fe;
+            --blue-mid: #d0e4fd;
+            --dark: #1e293b;
+            --mid: #475569;
+            --muted: #64748b;
+            --surface: #f8fafc;
+            --border: #e2e8f0;
+            --white: #ffffff;
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 22px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 6px 24px rgba(0,0,0,0.06);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background: #f0f4f9;
+            font-family: 'Paperozi', sans-serif;
+            color: var(--dark);
+        }
+
+        .container {
+            width: 100%; max-width: 860px;
+            margin: 0 auto;
+            padding: 20px 14px 60px;
+        }
+
+        /* ── 카드 공통 ── */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 28px 28px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 14px;
+            border: 1px solid rgba(226,232,240,0.6);
+        }
+
+        /* ── 히어로 섹션 ── */
+        .hero-card {
+            text-align: center;
+            padding: 50px 32px 44px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-card::after {
+            content: '';
+            position: absolute;
+            bottom: -85%;
+            right: -18%;
+            width: 62%;
+            aspect-ratio: 1 / 1;
+            background-image: url('https://www.dropbox.com/scl/fi/hx1nrfhslz65fixwua2w9/.png?rlkey=wv1v6i1y4wwksti1trq6i5m7x&st=6i7ygvrm&dl=1');
+            background-size: cover;
+            background-position: center center;
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .hero-card > * { position: relative; z-index: 1; }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 14px;
+            background: var(--blue-light);
+            color: var(--blue);
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            letter-spacing: 2px;
+        }
+        .title-main {
+            margin: 0 0 18px;
+            font-size: 30px;
+            letter-spacing: -1.5px;
+            color: var(--dark);
+            font-weight: 900;
+        }
+        .hero-desc {
+            max-width: 640px;
+            margin: 0 auto;
+            line-height: 1.85;
+            color: var(--mid);
+            font-size: 15px;
+            word-break: keep-all;
+        }
+
+        /* ── 필독 안내 ── */
+        .notice-card {
+            border-left: 5px solid var(--blue);
+        }
+        .notice-header {
+            display: flex; align-items: center; gap: 10px;
+            margin: 0 0 6px;
+            font-size: 18px; font-weight: 800; color: var(--dark);
+        }
+        .notice-warn {
+            font-size: 12px; color: #e74c3c;
+            font-weight: 600; margin-bottom: 18px;
+            padding: 8px 12px;
+            background: #fff5f5;
+            border-radius: 8px;
+            border-left: 3px solid #e74c3c;
+        }
+        .notice-list {
+            display: flex; flex-direction: column; gap: 11px;
+            list-style: none; padding: 0; margin: 0;
+        }
+        .notice-list li {
+            font-size: 13.5px; color: var(--mid);
+            line-height: 1.65;
+            position: relative; padding-left: 16px;
+        }
+        .notice-list li::before {
+            content: '▸';
+            position: absolute; left: 0;
+            color: var(--blue); font-size: 10px;
+            top: 3px;
+        }
+        .notice-list li strong { color: var(--dark); font-weight: 700; }
+        .refund-box {
+            margin-top: 7px; padding: 10px 14px;
+            background: var(--surface);
+            border-radius: 8px;
+            font-size: 13px; color: var(--muted);
+            border: 1px solid var(--border);
+            line-height: 1.8;
+        }
+
+        /* ── 가격표 ── */
+        .section-title {
+            text-align: center;
+            font-size: 19px; font-weight: 800; color: var(--dark);
+            margin: 0 0 22px;
+        }
+        .price-hero {
+            background: var(--blue-light);
+            padding: 20px 24px;
+            border-radius: var(--radius-md);
+            margin-bottom: 14px;
+            display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid var(--blue-mid);
+        }
+        .price-hero-label { font-size: 15px; font-weight: 800; color: var(--dark); }
+        .price-hero-sub { font-size: 11px; color: var(--blue); margin-top: 3px; font-weight: 600; }
+        .price-hero-amount { font-size: 22px; font-weight: 900; color: var(--blue); }
+
+        /* 기본 포함 항목 */
+        .include-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px;
+            margin-bottom: 20px;
+        }
+        .include-item {
+            display: flex; align-items: flex-start; gap: 8px;
+            padding: 10px 13px;
+            background: var(--surface);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            font-size: 12.5px; color: var(--mid);
+            line-height: 1.45;
+        }
+        .include-check {
+            flex-shrink: 0;
+            width: 16px; height: 16px;
+            background: var(--blue-light);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 9px; color: var(--blue); font-weight: 900;
+            margin-top: 1px;
+        }
+
+        /* 옵션 테이블 */
+        .price-table-wrap {
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+        }
+        .price-table thead tr { background: var(--dark); color: var(--white); }
+        .price-table thead th {
+            padding: 12px 18px;
+            font-weight: 700; font-size: 11.5px;
+            letter-spacing: 0.8px; text-align: left;
+            text-transform: uppercase;
+        }
+        .price-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+        .price-table tbody tr:last-child { border-bottom: none; }
+        .price-table tbody tr:nth-child(even) { background: #fafbfd; }
+        .price-table tbody tr:hover { background: var(--blue-light); }
+        .price-table tbody td {
+            padding: 13px 18px;
+            vertical-align: middle;
+            line-height: 1.5;
+        }
+        .price-table tbody td:first-child { font-weight: 800; color: var(--dark); }
+        .price-table tbody td.price-amt { font-weight: 800; color: var(--blue); white-space: nowrap; }
+        .price-table tbody td.price-desc { font-size: 12.5px; color: var(--muted); }
+        .price-sub { display: block; font-size: 11px; font-weight: 400; color: var(--muted); margin-top: 2px; }
+        .urgent-row td { background: #fff8f0 !important; }
+        .urgent-row:hover td { background: var(--blue-light) !important; }
+        .urgent-row td:first-child { color: #c45b00 !important; }
+        .urgent-row td.price-amt { color: #c45b00 !important; }
+
+        .price-label { font-size: 13px; font-weight: 700; color: var(--dark); }
+        .price-tag { font-size: 13.5px; font-weight: 800; color: var(--blue); white-space: nowrap; margin-left: 8px; }
+
+        /* ── 당부의 말씀 ── */
+        .message-card {
+            background: var(--surface);
+            border: 1px dashed #cbd5e1;
+        }
+        .message-card .section-title { margin-bottom: 16px; }
+        .message-accent {
+            font-weight: 800; color: var(--blue);
+            margin-bottom: 10px; font-size: 14.5px;
+        }
+        .message-body {
+            color: var(--mid); font-size: 14px;
+            line-height: 1.85; text-align: center;
+            word-break: keep-all;
+        }
+        .message-quote {
+            margin: 18px auto;
+            padding: 16px 20px;
+            background: var(--white);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            display: inline-block;
+            width: 90%;
+            font-size: 14px; line-height: 1.8;
+            color: var(--dark);
+        }
+
+        /* ── 협업 작가 ── */
+        .collab-container { display: flex; flex-direction: column; gap: 0; margin-top: -60px; }
+        .collab-link {
+            display: block; width: 88%; margin: -52px auto 0;
+            text-decoration: none;
+            border: none; background: transparent; padding: 0;
+            border-radius: var(--radius-md); overflow: hidden;
+            transition: transform 0.22s ease, filter 0.22s ease;
+        }
+        .collab-link:first-child { margin-top: 0; }
+        .collab-link:hover {
+            transform: scale(1.02);
+            filter: brightness(1.06);
+        }
+        .collab-img { width: 100%; height: auto; display: block; }
+
+        /* ── 견적 계산기 ── */
+        .calc-section-badge {
+            text-align: center; margin-bottom: 22px;
+        }
+        .calc-yellow-box {
+            background: #fefce8;
+            border: 1px solid #fef08a;
+            padding: 18px 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 14px;
+        }
+        .calc-label {
+            display: block; font-size: 12.5px; font-weight: 800;
+            margin-bottom: 10px; color: #854d0e;
+        }
+        .calc-input {
+            width: 80px; padding: 10px;
+            border: 1.5px solid #facc15;
+            border-radius: var(--radius-sm);
+            text-align: center;
+            font-family: 'Paperozi'; font-weight: 800;
+            font-size: 15px; outline: none;
+            transition: border-color 0.2s;
+        }
+        .calc-input:focus { border-color: #eab308; }
+
+        .options-label {
+            display: block; font-size: 12.5px; font-weight: 800;
+            margin-bottom: 12px; color: var(--dark);
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px; margin-bottom: 20px;
+        }
+        .opt-item {
+            font-size: 13px; cursor: pointer;
+            display: flex; align-items: center; gap: 9px;
+            padding: 10px 12px;
+            background: var(--surface);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            transition: border-color 0.2s, background 0.2s;
+            font-weight: 600; color: var(--mid);
+        }
+        .opt-item:hover { border-color: #93c5fd; background: var(--blue-light); }
+        .opt-item input[type="checkbox"] { accent-color: var(--blue); width: 15px; height: 15px; }
+        .opt-item.full { grid-column: span 2; }
+
+        .result-box {
+            background: var(--blue);
+            padding: 28px;
+            border-radius: var(--radius-lg);
+            color: var(--white);
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(26,115,232,0.25);
+        }
+        .result-label { font-size: 13px; opacity: 0.85; font-weight: 500; }
+        .result-price { font-size: 36px; font-weight: 900; margin-top: 6px; letter-spacing: -1px; }
+
+        .btn-copy {
+            flex: 2;
+            height: 56px;
+            background: var(--blue);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 15px; font-weight: 800;
+            cursor: pointer;
+            font-family: 'Paperozi';
+            transition: background 0.2s, transform 0.15s, opacity 0.2s;
+            letter-spacing: -0.3px;
+        }
+        .btn-copy:hover:not(:disabled) { background: #1565c0; transform: translateY(-1px); }
+        .btn-copy:active:not(:disabled) { transform: translateY(0); }
+        .btn-copy:disabled { background: #b0c4de; cursor: not-allowed; opacity: 0.7; }
+
+        .agree-label {
+            display: flex; align-items: center; gap: 10px;
+            margin-top: 16px; margin-bottom: 12px;
+            padding: 13px 16px;
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            font-size: 13.5px; font-weight: 700; color: var(--dark);
+        }
+        .agree-label:hover { border-color: #93c5fd; background: var(--blue-light); }
+        .agree-label input[type="checkbox"] { accent-color: var(--blue); width: 17px; height: 17px; flex-shrink: 0; }
+        .agree-label.checked { border-color: var(--blue); background: var(--blue-light); }
+
+        .btn-group {
+            display: flex; gap: 8px;
+        }
+        .btn-reset {
+            flex: 1;
+            height: 56px;
+            background: var(--surface);
+            color: var(--mid);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 14px; font-weight: 800;
+            cursor: pointer;
+            font-family: 'Paperozi';
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .btn-reset:hover { background: #f1f5f9; border-color: #94a3b8; }
+
+        .btn-inquiry {
+            flex: 1;
+            height: 56px;
+            background: var(--dark);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 14px; font-weight: 800;
+            cursor: pointer;
+            font-family: 'Paperozi';
+            transition: background 0.2s, transform 0.15s;
+        }
+        .btn-inquiry:hover { background: #0f172a; transform: translateY(-1px); }
+        .btn-inquiry:active { transform: translateY(0); }
+
+        /* ── 포트폴리오 (details/summary) ── */
+        .pf-section-header {
+            text-align: center;
+            margin: 32px 0 16px;
+        }
+        .pf-section-header h3 {
+            font-size: 19px; font-weight: 800; color: var(--dark);
+            margin: 0 0 6px;
+        }
+        .pf-hint {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 12px; color: var(--muted); font-weight: 600;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 5px 14px;
+        }
+        .pf-hint-icon {
+            width: 16px; height: 16px;
+            background: var(--blue);
+            border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .pf-hint-icon::after {
+            content: '';
+            display: block;
+            width: 0; height: 0;
+            border-top: 4px solid transparent;
+            border-bottom: 4px solid transparent;
+            border-left: 6px solid white;
+            margin-left: 1px;
+        }
+
+        details { display: block; width: 100%; margin-bottom: 10px; }
+        details summary::-webkit-details-marker { display: none; }
+
+        summary {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0;
+            list-style: none; cursor: pointer;
+            font-family: 'Paperozi';
+        }
+
+        .summary-inner {
+            display: flex; align-items: center; justify-content: space-between;
+            width: 100%;
+            padding: 17px 22px;
+            background: var(--white);
+            border-radius: var(--radius-md);
+            border: 1.5px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+        }
+        .summary-inner:hover {
+            border-color: #93c5fd;
+            box-shadow: 0 0 0 4px rgba(26,115,232,0.07);
+        }
+
+        .summary-left {
+            display: flex; align-items: center; gap: 12px;
+        }
+        .summary-emoji { font-size: 18px; line-height: 1; }
+        .summary-text {
+            font-size: 15px; font-weight: 800; color: var(--dark);
+        }
+        .summary-right {
+            display: flex; align-items: center; gap: 8px;
+        }
+        .summary-tap-hint {
+            font-size: 11px; font-weight: 700;
+            color: var(--blue);
+            background: var(--blue-light);
+            padding: 3px 10px;
+            border-radius: 50px;
+            opacity: 1;
+            transition: opacity 0.2s;
+        }
+        .summary-chevron {
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            background: var(--blue-light);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.25s, transform 0.3s;
+        }
+        .summary-chevron svg {
+            width: 12px; height: 12px;
+            stroke: var(--blue); stroke-width: 2.5;
+            fill: none; stroke-linecap: round; stroke-linejoin: round;
+            transition: transform 0.3s ease;
+        }
+
+        details[open] .summary-inner {
+            background: var(--blue);
+            border-color: var(--blue);
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            box-shadow: none;
+        }
+        details[open] .summary-text { color: var(--white); }
+        details[open] .summary-emoji { filter: brightness(10); }
+        details[open] .summary-tap-hint { display: none; }
+        details[open] .summary-chevron {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(180deg);
+        }
+        details[open] .summary-chevron svg { stroke: white; }
+        details[open] .summary-inner:hover { box-shadow: none; border-color: var(--blue); }
+
+        .pf-content {
+            background: var(--white);
+            padding: 22px;
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+            border: 1.5px solid var(--blue);
+            border-top: none;
+            box-shadow: var(--shadow-sm);
+        }
+        .pf-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
+        }
+        .pf-video { width: 100%; aspect-ratio: 16/9; border-radius: var(--radius-sm); border: none; background: var(--surface); display: block; }
+        .pf-fallback {
+            width: 100%; aspect-ratio: 16/9;
+            border-radius: var(--radius-sm);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 10px;
+        }
+        .pf-fallback-thumb {
+            width: 100%; height: 100%;
+            position: absolute; top: 0; left: 0;
+            object-fit: cover; border-radius: var(--radius-sm);
+            filter: brightness(0.55);
+        }
+        .pf-fallback-wrap {
+            position: relative; width: 100%; aspect-ratio: 16/9;
+            border-radius: var(--radius-sm); overflow: hidden;
+        }
+        .pf-fallback-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 10px;
+            z-index: 1;
+        }
+        .pf-fallback-msg {
+            font-size: 13px; font-weight: 700; color: #fff;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+        }
+        .pf-fallback-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 18px;
+            background: #ff0000; color: #fff;
+            border-radius: 6px; font-size: 13px; font-weight: 800;
+            text-decoration: none; font-family: 'Paperozi';
+            transition: background 0.15s;
+        }
+        .pf-fallback-btn:hover { background: #cc0000; }
+        .pf-item-title {
+            font-weight: 800; font-size: 13px;
+            color: var(--dark); margin-top: 9px;
+            text-align: center;
+        }
+
+        /* ── 반응형 ── */
+        @media (max-width: 560px) {
+            .price-grid { grid-template-columns: 1fr; }
+            .options-grid { grid-template-columns: 1fr; }
+            .opt-item.full { grid-column: span 1; }
+            .card { padding: 22px 18px; }
+            .title-main { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- 히어로 -->
+    <div class="card hero-card">
+        <div class="badge">LIVE2D RIGGER</div>
+        <h2 class="title-main">Goyu <span style="color:var(--blue);">Live2D</span></h2>
+        <p class="hero-desc">
+            안녕하세요. 의뢰해주신 소중한 캐릭터를 <strong style="color:var(--dark); font-weight:800;">정성스럽게, 그리고 진심을 담아</strong> 리깅하고 있는 고유입니다.<br>
+            제가 가장 중요하게 생각하는 것은 <strong style="color:var(--blue); font-weight:800;">"서로를 존중하며 함께 만들어가는 과정"</strong>입니다.<br>
+            서로의 언어와 마음을 존중하며, 기분 좋은 협업이 될 수 있도록 <strong style="color:var(--dark); font-weight:800;">따뜻한 말과 태도</strong>를 부탁드립니다.
+        </p>
+    </div>
+
+    <!-- 필독 안내 -->
+    <div class="card notice-card">
+        <div class="notice-header">
+            💡 필독 안내사항
+        </div>
+        <p class="notice-warn">※ 아래 내용을 숙지하지 않아 발생하는 문제에 대해서는 책임지지 않습니다.</p>
+        <ul class="notice-list">
+            <li>모든 작업물은 샘플 및 포트폴리오 용도로 <strong>SNS, 유튜브 등에 업로드될 수 있습니다.</strong></li>
+            <li>비공개 요청 시에는 <strong>추가 요금이 발생합니다.</strong> (단, 데뷔 전 공개는 해당되지 않음)</li>
+            <li><strong>2차 가공, 트레이닝, 양도, 판매, AI 학습</strong> 등 사전 협의되지 않은 모든 행위는 금지됩니다.</li>
+            <li>작업물은 반드시 <strong>협의된 범위 내에서만 사용</strong> 가능합니다.</li>
+            <li>리깅·파츠분리 작업물은 <strong>원 일러스트 작가와 협의된 범위 내</strong>에서만 사용해 주세요.</li>
+            <li><strong>결제 전 반드시 견적 문의를 부탁드립니다.</strong> (문의 없는 결제에 대해서는 대응이 어렵습니다)</li>
+            <li>안내된 금액은 <strong>최소 기준</strong>이며, 별도 작업은 개별 문의 바랍니다.</li>
+            <li>AI/일러스트 작가 허가 불가 등 특정 경우에 따라 <strong>작업을 거절할 수 있습니다.</strong></li>
+            <li>원본 작업 파일<strong>(.cmo3/.clip 등)은 제공하지 않으며</strong>, 제품·판매에 사용되지 않습니다.</li>
+            <li>모든 내용은 사전 고지 없이 변경될 수 있습니다. (마지막 수정: 25.08.26)</li>
+            <li>PSD는 <strong>완성된 레이어 구조</strong>로 제공해 주세요. (레이어 정리가 필요한 경우 추가 비용이 발생할 수 있습니다.)</li>
+            <li>작업 기간은 일반적으로 <strong>3~4주 소요</strong>되며, 일정은 협의 후 확정됩니다.</li>
+            <li>예약금은 기본금으로 진행되며, 예약일 기준 취소 환불 규정은 다음과 같습니다:
+                <div class="refund-box">
+                    • 60일 전: <strong>100% 환불</strong><br>
+                    • 30일 전: <strong>50% 환불</strong><br>
+                    • 14일 전: <strong>25% 환불</strong>
+                </div>
+            </li>
+            <li>예약은 <strong>입금 순으로 확정</strong>됩니다.</li>
+        </ul>
+    </div>
+
+    <!-- 가격표 -->
+    <div class="card">
+        <h3 class="section-title">Service Price</h3>
+
+        <!-- 기본 요금 -->
+        <div class="price-hero">
+            <div>
+                <div class="price-hero-label">기본 리깅 (Full Set)</div>
+                <div class="price-hero-sub">항상 동일한 퀄리티와 정성으로 작업합니다</div>
+            </div>
+            <div class="price-hero-amount">1,320,000원</div>
+        </div>
+
+        <!-- 기본 포함 항목 -->
+        <div class="include-grid">
+            <div class="include-item"><span class="include-check">✓</span>얼굴 리깅 (눈, 입, 턱, 코끝, 눈썹, 감정표현 등)</div>
+            <div class="include-item"><span class="include-check">✓</span>VBridger 세팅 기본 포함</div>
+            <div class="include-item"><span class="include-check">✓</span>VTube Studio / NizimaLive 플랫폼 맞춤 셋팅</div>
+            <div class="include-item"><span class="include-check">✓</span>상업적 사용 포함</div>
+            <div class="include-item"><span class="include-check">✓</span>감정표현 기본 포함 (최대 6개)</div>
+            <div class="include-item"><span class="include-check">✓</span>피드백 3회까지 무료 반영</div>
+            <div class="include-item"><span class="include-check">✓</span>파츠 개수·머리카락 길이·난이도 추가 요금 없음</div>
+            <div class="include-item"><span class="include-check">✓</span>최종 납품 전 캐릭터 작동 영상 제공</div>
+        </div>
+
+        <!-- 추가 옵션 테이블 -->
+        <div class="price-table-wrap">
+            <table class="price-table">
+                <thead>
+                    <tr>
+                        <th>항목</th>
+                        <th>추가금</th>
+                        <th>설명</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>표정 추가</td>
+                        <td class="price-amt">+1.1만원 / 개</td>
+                        <td class="price-desc">커스텀 표정, 트리거 포함</td>
+                    </tr>
+                    <tr>
+                        <td>추가 의상</td>
+                        <td class="price-amt">+44만원</td>
+                        <td class="price-desc">별도 PSD 의상 레이어 리깅</td>
+                    </tr>
+                    <tr>
+                        <td>추가 헤어스타일</td>
+                        <td class="price-amt">+44만원</td>
+                        <td class="price-desc">머리 올리기 + 스타일별 리깅</td>
+                    </tr>
+                    <tr>
+                        <td>추가 파츠<span class="price-sub">소품, 배경 등</span></td>
+                        <td class="price-amt">+5.5~11만원</td>
+                        <td class="price-desc">트래킹 및 간단한 물리 포함</td>
+                    </tr>
+                    <tr>
+                        <td>특수 애니메이션<span class="price-sub">스파이크, 특수효과 등</span></td>
+                        <td class="price-amt">+27.5만원</td>
+                        <td class="price-desc">특수 연출 전용 애니메이션 구성</td>
+                    </tr>
+                    <tr>
+                        <td>두상 X축 180도 회전</td>
+                        <td class="price-amt">+110만원</td>
+                        <td class="price-desc">일러스트 작가와 사전 상의 필수</td>
+                    </tr>
+                    <tr>
+                        <td>PerfectSync</td>
+                        <td class="price-amt">+50만원</td>
+                        <td class="price-desc">VTS 사용시 VBridger 필수</td>
+                    </tr>
+                    <tr>
+                        <td>팔 리깅</td>
+                        <td class="price-amt">금액 협의</td>
+                        <td class="price-desc">트래킹 장비 필요</td>
+                    </tr>
+                    <tr class="urgent-row">
+                        <td>긴급 작업<span class="price-sub">7일 이내 납기</span></td>
+                        <td class="price-amt">총 금액 ×2배</td>
+                        <td class="price-desc">상황에 따라 가능 여부 다름</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 당부의 말씀 -->
+    <div class="card message-card">
+        <h3 class="section-title">당부의 말씀</h3>
+        <div style="text-align:center; color:var(--mid);">
+            <p class="message-accent">그림 작가님과 연결이 가능하다면 더 좋아요!</p>
+            <p class="message-body">PSD를 제작하신 그림 작가님과 연결되어 있다면 표정, 레이어 수정, 추후 대응이 원활해져 작업자 입장에서 훨씬 정교한 리깅이 가능합니다.<br>만약 작가님과 직접 커뮤니케이션이 어려우시다면, 가능한 부분을 제가 파악하고 조율해드리니 편하게 말씀해주세요.</p>
+            <div class="message-quote">
+                저는 단순히 움직이는 리깅이 아니라,<br>
+                <strong>"당신에게 꼭 맞는 캐릭터가 움직이도록 만드는 것"</strong>을 목표로 합니다.
+            </div>
+            <p class="message-body">의뢰해주신 순간부터 그 캐릭터는 저에게도 소중한 존재입니다.<br>당신의 마음을 소중히 여기고, 최선을 다해 작업하겠습니다.<br>감사합니다.</p>
+        </div>
+    </div>
+
+    <!-- 협업 작가 -->
+    <div class="card" style="background:transparent; box-shadow:none; border:none; padding-left:0; padding-right:0; padding-bottom:0;">
+        <h3 class="section-title" style="margin-bottom:2px;">협업 작가</h3>
+        <div id="collab-list" class="collab-container"></div>
+    </div>
+
+    <!-- 견적 계산기 -->
+    <div class="card">
+        <div class="calc-section-badge">
+            <div class="badge">ESTIMATE</div>
+            <h2 class="title-main">Live2D <span style="color:var(--blue);">실시간 견적</span></h2>
+        </div>
+
+        <div class="calc-yellow-box">
+            <label class="calc-label">1. 표정 추가 개수 (개당 1.1만)</label>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <input type="number" id="calc-exp" value="0" min="0" oninput="updatePrice()" class="calc-input">
+                <span style="font-weight:800; color:var(--dark);">개</span>
+            </div>
+        </div>
+
+        <div>
+            <label class="options-label">2. 추가 옵션 선택</label>
+            <div class="options-grid">
+                <label class="opt-item"><input type="checkbox" id="opt-cloth" onchange="updatePrice()"> 추가 의상 (+44만)</label>
+                <label class="opt-item"><input type="checkbox" id="opt-hair" onchange="updatePrice()"> 추가 헤어 (+44만)</label>
+                <label class="opt-item"><input type="checkbox" id="opt-ani" onchange="updatePrice()"> 특수 애니메이션 (+27.5만)</label>
+                <label class="opt-item"><input type="checkbox" id="opt-head" onchange="updatePrice()"> 두상 X축 180도 회전 (+110만)</label>
+                <label class="opt-item"><input type="checkbox" id="opt-sync" onchange="updatePrice()"> PerfectSync (+50만)</label>
+                <label class="opt-item"><input type="checkbox" id="opt-private" onchange="updatePrice()"> 비공개 요청 (+5만)</label>
+                <label class="opt-item full"><input type="checkbox" id="opt-urgent" onchange="updatePrice()"> 긴급 작업 (총 금액 ×2배)</label>
+            </div>
+        </div>
+
+        <div class="result-box">
+            <div class="result-label">예상 총 견적</div>
+            <div class="result-price"><span id="total-price">1,320,000</span>원</div>
+        </div>
+
+        <!-- 동의 체크박스 -->
+        <label class="agree-label" id="agree-label">
+            <input type="checkbox" id="agree-check" onchange="updateAgree()">
+            <span class="agree-text">안내사항을 확인했으며 이에 동의합니까?</span>
+        </label>
+
+        <!-- 3버튼 -->
+        <div class="btn-group">
+            <button class="btn-reset" onclick="resetForm()">초기화</button>
+            <button class="btn-copy" id="btn-copy" onclick="copyForm()" disabled>복사하기</button>
+            <button class="btn-inquiry" onclick="openInquiry()">문의하기</button>
+        </div>
+    </div>
+
+    <!-- 포트폴리오 -->
+    <div class="pf-section-header">
+        <h3>Portfolio</h3>
+        <div class="pf-hint">
+            <span class="pf-hint-icon"></span>
+            항목을 클릭하면 영상을 확인할 수 있어요
+        </div>
+    </div>
+
+    <details open>
+        <summary>
+            <div class="summary-inner">
+                <div class="summary-left">
+                    <span class="summary-emoji">✨</span>
+                    <span class="summary-text">Vbridger 샘플</span>
+                </div>
+                <div class="summary-right">
+                    <span class="summary-tap-hint">탭하여 열기</span>
+                    <div class="summary-chevron">
+                        <svg viewBox="0 0 14 14"><polyline points="2,4 7,10 12,4"/></svg>
+                    </div>
+                </div>
+            </div>
+        </summary>
+        <div class="pf-content"><div class="pf-grid" id="pf-vbridger"></div></div>
+    </details>
+
+    <details>
+        <summary>
+            <div class="summary-inner">
+                <div class="summary-left">
+                    <span class="summary-emoji">📸</span>
+                    <span class="summary-text">PerfectSync</span>
+                </div>
+                <div class="summary-right">
+                    <span class="summary-tap-hint">탭하여 열기</span>
+                    <div class="summary-chevron">
+                        <svg viewBox="0 0 14 14"><polyline points="2,4 7,10 12,4"/></svg>
+                    </div>
+                </div>
+            </div>
+        </summary>
+        <div class="pf-content"><div class="pf-grid" id="pf-perfect"></div></div>
+    </details>
+
+    <details>
+        <summary>
+            <div class="summary-inner">
+                <div class="summary-left">
+                    <span class="summary-emoji">💃</span>
+                    <span class="summary-text">바디 움직임 샘플</span>
+                </div>
+                <div class="summary-right">
+                    <span class="summary-tap-hint">탭하여 열기</span>
+                    <div class="summary-chevron">
+                        <svg viewBox="0 0 14 14"><polyline points="2,4 7,10 12,4"/></svg>
+                    </div>
+                </div>
+            </div>
+        </summary>
+        <div class="pf-content"><div class="pf-grid" id="pf-body"></div></div>
+    </details>
+
+    <details>
+        <summary>
+            <div class="summary-inner">
+                <div class="summary-left">
+                    <span class="summary-emoji">💪</span>
+                    <span class="summary-text">팔 리깅 샘플</span>
+                </div>
+                <div class="summary-right">
+                    <span class="summary-tap-hint">탭하여 열기</span>
+                    <div class="summary-chevron">
+                        <svg viewBox="0 0 14 14"><polyline points="2,4 7,10 12,4"/></svg>
+                    </div>
+                </div>
+            </div>
+        </summary>
+        <div class="pf-content"><div class="pf-grid" id="pf-arm"></div></div>
+    </details>
+
+    <details>
+        <summary>
+            <div class="summary-inner">
+                <div class="summary-left">
+                    <span class="summary-emoji">🎬</span>
+                    <span class="summary-text">쇼케이스</span>
+                </div>
+                <div class="summary-right">
+                    <span class="summary-tap-hint">탭하여 열기</span>
+                    <div class="summary-chevron">
+                        <svg viewBox="0 0 14 14"><polyline points="2,4 7,10 12,4"/></svg>
+                    </div>
+                </div>
+            </div>
+        </summary>
+        <div class="pf-content"><div class="pf-grid" id="pf-showcase"></div></div>
+    </details>
+
+</div>
+
+<script>
+    const G_SHEET_COLLAB = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vREAG3CW-SetXOuR0NFkuOdkN5pIeS9rD2OHi_BNYpnAI37ftRSW6W2s6ywd1vo3BcNcjKU1cJyFk2U/pub?gid=0&single=true&output=csv';
+    const G_SHEET_PF = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vREAG3CW-SetXOuR0NFkuOdkN5pIeS9rD2OHi_BNYpnAI37ftRSW6W2s6ywd1vo3BcNcjKU1cJyFk2U/pub?gid=673009892&single=true&output=csv';
+
+    // 따옴표·콤마를 올바르게 처리하는 CSV 파서
+    function parseCSV(text) {
+        const rows = [];
+        const lines = text.split(/\r?\n/);
+        for (const line of lines) {
+            if (!line.trim()) continue;
+            const cols = [];
+            let cur = '', inQ = false;
+            for (let i = 0; i < line.length; i++) {
+                const ch = line[i];
+                if (ch === '"') {
+                    if (inQ && line[i+1] === '"') { cur += '"'; i++; }
+                    else inQ = !inQ;
+                } else if (ch === ',' && !inQ) {
+                    cols.push(cur.trim()); cur = '';
+                } else {
+                    cur += ch;
+                }
+            }
+            cols.push(cur.trim());
+            rows.push(cols);
+        }
+        return rows;
+    }
+
+    async function fetchCSV(url) {
+        const res = await fetch(url);
+        const text = await res.text();
+        const rows = parseCSV(text);
+        return rows.slice(1); // 헤더 제거
+    }
+
+    async function loadCollabArtists() {
+        const rows = await fetchCSV(G_SHEET_COLLAB);
+        const container = document.getElementById('collab-list');
+        container.innerHTML = '';
+        rows.forEach(cols => {
+            if (cols.length >= 2 && cols[0]) {
+                const a = document.createElement('a');
+                a.href = cols[1]; a.className = 'collab-link'; a.target = '_blank';
+                const img = document.createElement('img');
+                img.src = cols[0]; img.className = 'collab-img';
+                a.appendChild(img); container.appendChild(a);
+            }
+        });
+    }
+
+    function getYoutubeId(url) {
+        if (!url) return null;
+        const regExp = /(?:youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]{11})/;
+        const match = url.match(regExp);
+        return match ? match[1] : null;
+    }
+
+    async function loadPortfolio() {
+        const rows = await fetchCSV(G_SHEET_PF);
+        const sections = {
+            'Vbridger': document.getElementById('pf-vbridger'),
+            'Perfect': document.getElementById('pf-perfect'),
+            '바디 움직임': document.getElementById('pf-body'),
+            '팔 리깅': document.getElementById('pf-arm'),
+            '쇼케이스': document.getElementById('pf-showcase')
+        };
+        rows.forEach(cols => {
+            if (cols.length >= 3 && sections[cols[0]]) {
+                const videoId = getYoutubeId(cols[2]);
+                if (!videoId) return;
+
+                const item = document.createElement('div');
+                const ytUrl = 'https://www.youtube.com/watch?v=' + videoId;
+                const thumbUrl = 'https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg';
+
+                // iframe 먼저 시도
+                const iframe = document.createElement('iframe');
+                iframe.className = 'pf-video';
+                iframe.src = 'https://www.youtube.com/embed/' + videoId + '?rel=0&modestbranding=1';
+                iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+                iframe.setAttribute('allowfullscreen', '');
+                iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+                iframe.setAttribute('loading', 'lazy');
+
+                // postMessage로 임베드 차단 감지
+                const checkId = 'yt_' + videoId;
+                iframe.id = checkId;
+
+                const title = document.createElement('div');
+                title.className = 'pf-item-title';
+                title.textContent = cols[1];
+
+                item.appendChild(iframe);
+                item.appendChild(title);
+                sections[cols[0]].appendChild(item);
+
+                // 3초 후 썸네일 로드 실패(=임베드 차단)를 썸네일 이미지로 감지
+                const img = new Image();
+                img.onload = () => {
+                    // hqdefault가 120x90 기본 회색이면 차단된 것 — 실제 썸네일은 더 큰 비율
+                    if (img.naturalWidth <= 120) {
+                        replaceFallback(item, iframe, title, ytUrl, thumbUrl, cols[1]);
+                    }
+                };
+                img.onerror = () => {
+                    replaceFallback(item, iframe, title, ytUrl, thumbUrl, cols[1]);
+                };
+                // maxresdefault 없으면 차단 의심 — hqdefault로 체크
+                const checkImg = new Image();
+                checkImg.onload = () => {};
+                checkImg.src = thumbUrl;
+
+                // iframe 로드 후 내부 메시지 수신으로 차단 감지
+                iframe.addEventListener('load', () => {
+                    // about:blank 혹은 빈 문서가 로드되면 차단 — 간접 확인
+                    setTimeout(() => {
+                        try {
+                            // cross-origin이라 직접 접근 불가이므로 clientHeight로 체크
+                            // 차단된 경우 iframe 내부 높이가 0에 가까움
+                            if (iframe.clientHeight < 5) {
+                                replaceFallback(item, iframe, title, ytUrl, thumbUrl, cols[1]);
+                            }
+                        } catch(e) {}
+                    }, 1500);
+                });
+            }
+        });
+    }
+
+    function replaceFallback(item, iframe, titleEl, ytUrl, thumbUrl, label) {
+        if (item.querySelector('.pf-fallback-wrap')) return; // 이미 교체됨
+        iframe.remove();
+        const wrap = document.createElement('div');
+        wrap.className = 'pf-fallback-wrap';
+        wrap.innerHTML = `
+            <img class="pf-fallback-thumb" src="${thumbUrl}" alt="${label}">
+            <div class="pf-fallback-overlay">
+                <div class="pf-fallback-msg">이 영상은 임베드가 제한되어 있습니다</div>
+                <a class="pf-fallback-btn" href="${ytUrl}" target="_blank">
+                    ▶ YouTube에서 보기
+                </a>
+            </div>
+        `;
+        item.insertBefore(wrap, titleEl);
+    }
+
+    function updatePrice() {
+        let total = 1320000;
+        let expCount = parseInt(document.getElementById('calc-exp').value) || 0;
+        let optCloth = document.getElementById('opt-cloth').checked ? 440000 : 0;
+        let optHair = document.getElementById('opt-hair').checked ? 440000 : 0;
+        let optAni = document.getElementById('opt-ani').checked ? 275000 : 0;
+        let optHead = document.getElementById('opt-head').checked ? 1100000 : 0;
+        let optSync = document.getElementById('opt-sync').checked ? 500000 : 0;
+        let optPrivate = document.getElementById('opt-private').checked ? 50000 : 0;
+        total += (expCount * 11000) + optCloth + optHair + optAni + optHead + optSync + optPrivate;
+        if (document.getElementById('opt-urgent').checked) total *= 2;
+        document.getElementById('total-price').innerText = total.toLocaleString();
+    }
+
+    function updateAgree() {
+        const checked = document.getElementById('agree-check').checked;
+        document.getElementById('btn-copy').disabled = !checked;
+        const label = document.getElementById('agree-label');
+        if (checked) label.classList.add('checked');
+        else label.classList.remove('checked');
+    }
+
+    function resetForm() {
+        document.getElementById('calc-exp').value = 0;
+        ['opt-cloth','opt-hair','opt-ani','opt-head','opt-sync','opt-private','opt-urgent'].forEach(id => {
+            document.getElementById(id).checked = false;
+        });
+        document.getElementById('agree-check').checked = false;
+        document.getElementById('btn-copy').disabled = true;
+        document.getElementById('agree-label').classList.remove('checked');
+        updatePrice();
+    }
+
+    function copyForm() {
+        if (!document.getElementById('agree-check').checked) return;
+        const total = document.getElementById('total-price').innerText;
+        const exp = document.getElementById('calc-exp').value;
+        const opts = [];
+        if (document.getElementById('opt-cloth').checked) opts.push('추가 의상');
+        if (document.getElementById('opt-hair').checked) opts.push('추가 헤어');
+        if (document.getElementById('opt-ani').checked) opts.push('특수 애니메이션');
+        if (document.getElementById('opt-head').checked) opts.push('두상 X축 180도 회전');
+        if (document.getElementById('opt-sync').checked) opts.push('PerfectSync');
+        if (document.getElementById('opt-private').checked) opts.push('비공개 요청');
+        if (document.getElementById('opt-urgent').checked) opts.push('긴급 작업');
+        const optText = opts.length ? opts.join(', ') : '없음';
+        const text = `[Goyu Live2D 상담 신청]\n- 추가 표정: ${exp}개\n- 추가 옵션: ${optText}\n- 예상 견적: ${total}원\n\n견적 확인 후 상담 요청드립니다!`;
+        navigator.clipboard ? navigator.clipboard.writeText(text).then(() => {
+            alert('견적 양식이 복사되었습니다! 채팅창에 붙여넣어 주세요.');
+        }) : (function() {
+            const ta = document.createElement('textarea');
+            document.body.appendChild(ta);
+            ta.value = text; ta.select();
+            document.execCommand('copy'); document.body.removeChild(ta);
+            alert('견적 양식이 복사되었습니다! 채팅창에 붙여넣어 주세요.');
+        })();
+    }
+
+    function openInquiry(event) {
+        if (typeof pLightBox !== 'undefined') {
+            pLightBox.show('php/qna_write.php?number=47896', 'iframe_w', '1080', '500', '문의하기', '0');
+        }
+        if (typeof qnaAlert === 'function') qnaAlert();
+        return false;
+    }
+
+    // ── 자동 높이 조절 (iframe 임베드용) ──
+    function sendHeight() {
+        const h = document.documentElement.scrollHeight;
+        window.parent.postMessage({ type: 'resize', height: h }, '*');
+    }
+    const ro = new ResizeObserver(sendHeight);
+    ro.observe(document.body);
+    window.addEventListener('load', sendHeight);
+
+    window.addEventListener('DOMContentLoaded', () => {
+        loadCollabArtists();
+        loadPortfolio();
+        sendHeight();
+    });
+</script>
+
+</body>
+</html>
