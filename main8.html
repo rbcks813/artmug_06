@@ -1080,20 +1080,33 @@
         })();
     }
 
-    function openInquiry(event) {
-        if (typeof pLightBox !== 'undefined') {
-            pLightBox.show('php/qna_write.php?number=47896', 'iframe_w', '1080', '500', '문의하기', '0');
-        }
-        if (typeof qnaAlert === 'function') qnaAlert();
+    function openInquiry() {
+        // iframe 내부에서 부모 페이지의 pLightBox를 직접 호출할 수 없으므로
+        // postMessage로 부모에게 신호를 전달
+        window.parent.postMessage({ type: 'openInquiry' }, '*');
         return false;
     }
 
     // ── 자동 높이 조절 (iframe 임베드용) ──
+    // scrollHeight는 줄어들지 않으므로 body를 auto로 리셋 후 실제 높이 측정
     function sendHeight() {
-        const h = document.documentElement.scrollHeight;
+        document.body.style.height = 'auto';
+        document.documentElement.style.height = 'auto';
+        const h = document.body.offsetHeight;
         window.parent.postMessage({ type: 'resize', height: h }, '*');
     }
-    const ro = new ResizeObserver(sendHeight);
+
+    // details(포트폴리오 아코디언) 토글 감지
+    document.addEventListener('toggle', function(e) {
+        if (e.target.tagName === 'DETAILS') {
+            // 닫힐 때 DOM이 실제로 수축한 후 측정
+            requestAnimationFrame(() => requestAnimationFrame(sendHeight));
+        }
+    }, true);
+
+    const ro = new ResizeObserver(() => {
+        requestAnimationFrame(sendHeight);
+    });
     ro.observe(document.body);
     window.addEventListener('load', sendHeight);
 
