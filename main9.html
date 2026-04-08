@@ -1,0 +1,2084 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>리깅 커미션</title>
+<style>
+@font-face {
+  font-family: 'KerisKedyuche';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-3@1.0/KERISKEDU_R.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'KerisKedyuche';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-3@1.0/KERISKEDU_B.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f4f2f8;
+  --bg2: #ece9f4;
+  --bg3: #ffffff;
+  --text: #1c1a2e;
+  --text2: #5a5470;
+  --text3: #9c98b4;
+  --accent: #b399f5;
+  --accent2: #7c5cbf;
+  --accent3: #5a3d9a;
+  --pink: #d4b8f5;
+  --pink2: #9b6de0;
+  --teal: #c4b5fd;
+  --teal2: #7c5cbf;
+  --border: rgba(100,80,180,0.1);
+  --glass-bg: rgba(255,255,255,0.6);
+  --glass-border: rgba(255,255,255,0.82);
+  --glass-shadow: 0 8px 32px rgba(100,70,200,0.09), 0 2px 8px rgba(80,60,160,0.07);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --radius-lg: 28px;
+}
+
+body {
+  font-family: 'KerisKedyuche', 'Apple SD Gothic Neo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 15px;
+  overflow-x: hidden;
+}
+
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 65% 45% at 15% 5%,  rgba(180,150,255,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 55% at 85% 85%, rgba(140,110,230,0.13) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 35% at 55% 35%, rgba(210,190,255,0.14) 0%, transparent 55%),
+    var(--bg);
+}
+
+/* ── GLASS CARD ── */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1.5px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius);
+}
+
+.glass-sm {
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.8);
+  box-shadow: 0 4px 16px rgba(110,80,200,0.06);
+  border-radius: var(--radius-sm);
+}
+
+/* ── LAYOUT ── */
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+section {
+  margin-bottom: 28px;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.section-label::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+/* ── TOP HERO ── */
+.hero {
+  padding: 32px 0 20px;
+}
+
+.hero-card {
+  padding: 24px 28px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .hero-card { padding: 20px 16px 18px; }
+}
+
+.artist-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--pink));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+.artist-name {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.artist-tag {
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 14px;
+}
+
+.artist-bio {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.75;
+}
+
+.slot-box {
+  background: rgba(160,120,240,0.10);
+  border: 1.5px solid rgba(160,120,240,0.25);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+}
+
+.slot-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent3);
+  margin-bottom: 10px;
+  letter-spacing: 0.05em;
+}
+
+.slot-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.slot-item {
+  background: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.9);
+  border-radius: 10px;
+  padding: 10px 14px;
+  text-align: center;
+}
+
+.slot-num {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.slot-desc {
+  font-size: 11px;
+  color: var(--text2);
+}
+
+.hero-btns {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'KerisKedyuche', sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent2), var(--pink2));
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(140,100,220,0.30);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(140,100,220,0.40); }
+
+.btn-outline {
+  background: rgba(255,255,255,0.6);
+  color: var(--accent2);
+  border: 1.5px solid rgba(160,120,240,0.4);
+}
+.btn-outline:hover { background: rgba(160,120,240,0.08); }
+
+/* ── EVENT ── */
+.event-card {
+  padding: 22px 28px;
+  background: linear-gradient(135deg, rgba(200,170,255,0.18), rgba(160,120,240,0.14));
+  border: 1.5px solid rgba(190,160,250,0.4);
+  border-radius: var(--radius);
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.event-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.event-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.event-content {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.75;
+}
+
+.event-badge {
+  display: inline-block;
+  background: rgba(155,109,224,0.12);
+  color: var(--pink2);
+  border: 1px solid rgba(155,109,224,0.25);
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  margin-right: 6px;
+  margin-bottom: 4px;
+}
+
+/* ── RIGGING SAMPLES SLIDER ── */
+.sample-slider-wrap { overflow: hidden; border-radius: var(--radius); position: relative; }
+.sample-track { display: flex; transition: transform 0.38s cubic-bezier(0.4,0,0.2,1); }
+.sample-slide { flex: 0 0 100%; min-width: 0; }
+
+.sample-card-wide {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1.5px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius);
+  padding: 24px 28px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.sample-cat-header {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sample-cat-header::before {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.sample-images-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+.sample-img-box {
+  aspect-ratio: 3/4;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(160,120,240,0.08);
+  border: 1px solid rgba(160,120,240,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sample-img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sample-img-placeholder {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 8px; font-size: 11px;
+  color: var(--text3); font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.sample-img-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: rgba(160,120,240,0.15);
+  border: 1px solid rgba(160,120,240,0.25);
+  display: flex; align-items: center; justify-content: center;
+}
+.sample-footer {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 12px;
+}
+.sample-title { font-size: 16px; font-weight: 700; color: var(--text); }
+.sample-subtitle { font-size: 12px; color: var(--text2); margin-top: 2px; }
+.sample-nav {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-top: 14px;
+}
+.sample-dots { display: flex; gap: 6px; }
+
+/* ── PORTFOLIO ── */
+.portfolio-slider {
+  overflow: hidden;
+  border-radius: var(--radius);
+  position: relative;
+}
+
+.portfolio-track {
+  display: flex;
+  gap: 0;
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+.portfolio-item {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+@media (max-width: 540px) {
+  .portfolio-item { flex: 0 0 100%; }
+}
+
+.portfolio-thumb {
+  aspect-ratio: 16/9;
+  background: var(--bg2);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.portfolio-yt-mock {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text2);
+}
+
+.yt-play {
+  width: 68px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+}
+
+.yt-play::after { display: none; }
+
+.portfolio-desc {
+  font-size: 13px;
+  color: var(--text2);
+  padding: 0 2px;
+}
+
+.portfolio-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.portfolio-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text3);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.dot.active {
+  background: var(--accent2);
+  width: 18px;
+  border-radius: 3px;
+}
+
+.nav-arrows {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--text2);
+  transition: all 0.2s;
+  font-family: 'KerisKedyuche', sans-serif;
+}
+.nav-btn:hover { background: rgba(160,120,240,0.15); color: var(--accent2); }
+
+/* ── PROCESS ── */
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.step-card {
+  padding: 18px 16px;
+  position: relative;
+  transition: transform 0.2s;
+}
+.step-card:hover { transform: translateY(-2px); }
+
+.step-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  margin-bottom: 8px;
+}
+
+.step-icon {
+  font-size: 24px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.step-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.step-desc {
+  font-size: 11px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+.step-arrow {
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: var(--accent);
+  z-index: 1;
+}
+
+.step-card:last-child .step-arrow { display: none; }
+
+/* ── RIGGING OPTIONS ── */
+.options-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tab-btn {
+  padding: 8px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  font-family: 'KerisKedyuche', sans-serif;
+  transition: all 0.2s;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--accent2), var(--pink2));
+  color: #fff;
+  border-color: transparent;
+}
+.tab-btn:not(.active) {
+  background: rgba(255,255,255,0.5);
+  color: var(--text2);
+  border-color: var(--border);
+}
+.tab-btn:not(.active):hover {
+  border-color: rgba(160,120,240,0.4);
+  color: var(--accent2);
+}
+
+.options-panel { display: none; }
+.options-panel.active { display: block; }
+
+.options-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+@media (max-width: 500px) {
+  .options-list { grid-template-columns: 1fr; }
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.8);
+  border-radius: 12px;
+  font-size: 13px;
+  color: var(--text);
+  transition: all 0.2s;
+}
+.option-item:hover {
+  background: rgba(160,120,240,0.08);
+  border-color: rgba(160,120,240,0.3);
+}
+
+.option-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.option-item.extra .option-dot {
+  background: var(--pink);
+}
+
+/* ── NOTICE ── */
+.notice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.notice-item {
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.8);
+  border-radius: 14px;
+  font-size: 13px;
+  color: var(--text2);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.65;
+}
+
+.notice-icon {
+  flex-shrink: 0;
+  font-size: 16px;
+  margin-top: 1px;
+}
+
+/* ── FORM ── */
+.form-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 20px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 500px) {
+  .form-row { grid-template-columns: 1fr; }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.form-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text2);
+}
+
+.form-input {
+  background: rgba(255,255,255,0.65);
+  border: 1.5px solid rgba(200,180,230,0.3);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--text);
+  font-family: 'KerisKedyuche', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.form-input:focus {
+  border-color: var(--accent2);
+  background: rgba(255,255,255,0.8);
+}
+.form-input::placeholder { color: var(--text3); }
+
+textarea.form-input {
+  resize: none;
+  min-height: 90px;
+  max-height: 90px;
+  overflow-y: auto;
+}
+
+.radio-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.5);
+  border: 1.5px solid rgba(200,180,230,0.3);
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.radio-label:has(input:checked) {
+  background: rgba(140,100,220,0.10);
+  border-color: var(--accent2);
+  color: var(--accent2);
+}
+
+.radio-label input { display: none; }
+
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.4);
+  border: 1px solid rgba(200,180,230,0.2);
+  border-radius: 12px;
+  margin-bottom: 6px;
+}
+
+.option-check-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  flex: 1;
+}
+
+.option-check-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent2);
+  cursor: pointer;
+}
+
+.option-price {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text3);
+  white-space: nowrap;
+}
+
+.option-count {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.count-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: rgba(160,120,240,0.15);
+  border: 1px solid rgba(160,120,240,0.3);
+  color: var(--accent2);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'KerisKedyuche', sans-serif;
+  transition: all 0.2s;
+}
+.count-btn:hover { background: rgba(160,120,240,0.3); }
+
+.count-val {
+  font-size: 13px;
+  font-weight: 700;
+  min-width: 24px;
+  text-align: center;
+  color: var(--text);
+}
+
+.price-preview {
+  background: linear-gradient(135deg, rgba(160,120,240,0.12), rgba(160,130,240,0.10));
+  border: 1.5px solid rgba(160,120,240,0.25);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.price-label {
+  font-size: 13px;
+  color: var(--text2);
+  font-weight: 700;
+}
+
+.price-total {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent2);
+}
+
+.form-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.btn-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.6);
+  border: 1.5px solid rgba(160,120,240,0.3);
+  color: var(--accent2);
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'KerisKedyuche', sans-serif;
+  transition: all 0.2s;
+}
+.btn-copy:hover { background: rgba(160,120,240,0.10); }
+
+.btn-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text2);
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'KerisKedyuche', sans-serif;
+  transition: all 0.2s;
+}
+.btn-reset:hover { border-color: rgba(160,120,240,0.3); color: var(--accent2); }
+
+/* ── REFUND ── */
+.refund-card {
+  padding: 24px 28px;
+}
+
+.refund-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.refund-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.refund-row:last-child { border-bottom: none; }
+
+.refund-stage {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  flex: 1;
+}
+
+.refund-pct {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.pct-100 { color: var(--teal2); }
+.pct-70 { color: #3b82f6; }
+.pct-50 { color: #f59e0b; }
+.pct-0 { color: #ef4444; }
+
+.refund-icon { font-size: 18px; }
+
+/* ── SCROLL ANIM ── */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── DECORATIVE ── */
+.deco-pill {
+  display: inline-block;
+  background: rgba(160,120,240,0.12);
+  color: var(--accent2);
+  border: 1px solid rgba(160,120,240,0.25);
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  margin-bottom: 12px;
+}
+
+/* Smooth color blobs in sample thumbs */
+.blob1 { background: linear-gradient(135deg, rgba(180,150,255,0.30), rgba(210,190,255,0.22)); }
+.blob2 { background: linear-gradient(135deg, rgba(150,120,240,0.28), rgba(190,165,255,0.20)); }
+.blob3 { background: linear-gradient(135deg, rgba(200,175,255,0.28), rgba(225,210,255,0.22)); }
+.blob4 { background: linear-gradient(135deg, rgba(165,135,245,0.25), rgba(195,170,255,0.22)); }
+
+/* ── TYPE TOGGLE BTN ── */
+.type-toggle-btn {
+  padding: 6px 18px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'KerisKedyuche', sans-serif;
+  cursor: pointer;
+  border: 1.5px solid rgba(200,180,230,0.35);
+  background: rgba(255,255,255,0.5);
+  color: var(--text2);
+  transition: all 0.2s;
+}
+.type-toggle-btn.active {
+  background: linear-gradient(135deg, var(--accent2), var(--pink2));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 3px 10px rgba(140,100,220,0.25);
+}
+.type-toggle-btn:not(.active):hover {
+  border-color: rgba(160,120,240,0.5);
+  color: var(--accent2);
+}
+
+/* ── DESIGN POLISH ── */
+section { margin-bottom: 32px; }
+.hero-card { padding: 36px; gap: 32px; }
+
+/* Glass: inner light shimmer */
+.glass { position: relative; overflow: hidden; }
+.glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Section label refined */
+.section-label { font-size: 10px; letter-spacing: 0.2em; margin-bottom: 8px; }
+.section-title { font-size: 20px; margin-bottom: 18px; }
+
+/* Step cards */
+.step-card { border-radius: 18px !important; }
+
+/* Notice */
+.notice-item { padding: 15px 20px; border-radius: 16px; transition: background 0.2s; }
+.notice-item:hover { background: rgba(255,255,255,0.72); }
+
+/* Slot box */
+.slot-box { border-radius: 20px; padding: 20px 22px; }
+
+/* Refund */
+.refund-row { padding: 14px 0; }
+.refund-row:hover .refund-stage { color: var(--text); }
+
+/* Option rows */
+.option-row { border-radius: 14px; padding: 12px 16px; transition: background 0.18s; }
+.option-row:hover { background: rgba(255,255,255,0.7); }
+
+/* Form inputs */
+.form-input { border-radius: 14px; padding: 11px 16px; font-size: 14px; }
+.form-input:focus { box-shadow: 0 0 0 3px rgba(140,100,220,0.12); }
+
+/* Buttons */
+.btn-copy, .btn-reset { padding: 11px 22px; border-radius: 10px; }
+
+/* Sample cards */
+.sample-card { border-radius: 20px !important; overflow: hidden; }
+.sample-thumb { border-radius: 0 !important; }
+
+/* Portfolio */
+.portfolio-thumb { border-radius: 18px !important; margin-bottom: 14px; }
+
+/* Glass-sm */
+.glass-sm { border-radius: 18px; }
+
+/* Event card hover */
+.event-card { transition: box-shadow 0.2s; }
+.event-card:hover { box-shadow: 0 12px 40px rgba(110,80,200,0.12); }
+
+/* Options list items */
+.option-item { border-radius: 12px; transition: all 0.18s; }
+.option-item:hover { background: rgba(255,255,255,0.8); border-color: rgba(160,120,240,0.35); }
+
+/* Tab buttons */
+.tab-btn { font-size: 13px; padding: 9px 22px; }
+
+/* Dot nav */
+.dot { transition: all 0.25s cubic-bezier(0.4,0,0.2,1); }
+
+/* Refund pct badge */
+.refund-pct { padding: 3px 12px; border-radius: 6px; font-size: 13px; }
+.pct-100 { background: rgba(130,100,220,0.10); }
+.pct-70 { background: rgba(59,130,246,0.1); }
+.pct-50 { background: rgba(245,158,11,0.1); }
+.pct-0 { background: rgba(239,68,68,0.08); }
+
+/* Price preview */
+.price-preview { border-radius: 18px; }
+
+/* Form section title */
+.form-section-title { font-size: 13px; border-radius: 0; }
+
+/* Btn primary pulse on hover */
+.btn-primary { transition: transform 0.18s, box-shadow 0.18s; }
+.btn-primary:active { transform: scale(0.97); }
+.btn-outline { transition: all 0.18s; }
+</style>
+</head>
+<body>
+<div class="page-bg"></div>
+
+<div class="container">
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="glass hero-card fade-in">
+      <!-- 프로필 이미지 -->
+      <div style="width:96px;height:96px;border-radius:20px;overflow:hidden;border:2px solid rgba(255,255,255,0.88);box-shadow:0 8px 24px rgba(140,100,220,0.22),0 2px 6px rgba(0,0,0,0.08);margin-bottom:12px;flex-shrink:0;">
+        <img src="https://www.dropbox.com/scl/fi/n1vs8ipq2qww46q30mall/Profile.png?rlkey=xm4u5nz10dfnb5th1edbbbg6c&st=7ibrmnlm&dl=1" alt="SpicyPotato"
+          style="width:100%;height:100%;object-fit:cover;display:block;">
+      </div>
+      <!-- 이름 + 소개 -->
+      <div class="artist-name" style="margin-bottom:5px;">SpicyPotato</div>
+      <div class="artist-bio" style="max-width:420px;margin-bottom:18px;">캐릭터의 매력을 표현하기 위해 최선을 다하는 Live2D 리거입니다</div>
+      <!-- 슬롯 -->
+      <div style="width:100%;">
+        <div class="slot-box">
+          <div class="slot-title">현재 작업 슬롯</div>
+          <div id="slotContainer" style="display:flex;flex-direction:column;gap:8px;">
+            <div style="text-align:center;font-size:12px;color:var(--text3);padding:8px;">슬롯 정보 불러오는 중...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── EVENT ── -->
+  <section class="fade-in">
+    <div class="section-label">이벤트 안내</div>
+    <div id="eventContainer">
+      <div style="text-align:center;font-size:13px;color:var(--text3);padding:24px;">이벤트 정보 불러오는 중...</div>
+    </div>
+  </section>
+
+  <!-- ── RIGGING SAMPLES ── -->
+  <section id="samples" class="fade-in">
+    <div class="section-label">리깅 샘플</div>
+    <div class="section-title">작업 샘플 갤러리</div>
+
+    <div class="sample-slider-wrap">
+      <div class="sample-track" id="sampleTrack">
+
+        <!-- Slide 1: 전신 · 기본형 -->
+        <div class="sample-slide">
+          <div class="sample-card-wide">
+            <div class="sample-cat-header">전신 · 기본형</div>
+            <div class="sample-images-row">
+              <div class="sample-img-box">
+                <div class="sample-img-placeholder">
+                  <div class="sample-img-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                  </div>
+                  기본 표정
+                </div>
+              </div>
+              <div class="sample-img-box">
+                <div class="sample-img-placeholder">
+                  <div class="sample-img-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                  </div>
+                  눈 리깅
+                </div>
+              </div>
+              <div class="sample-img-box">
+                <div class="sample-img-placeholder">
+                  <div class="sample-img-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+                  </div>
+                  머리 물리
+                </div>
+              </div>
+            </div>
+            <div class="sample-footer">
+              <div>
+                <div class="sample-title">사쿠라 치요 모델</div>
+                <div class="sample-subtitle">눈·표정·머리 리깅 기본 구성</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2: 전신 · 풀옵션 -->
+        <div class="sample-slide">
+          <div class="sample-card-wide">
+            <div class="sample-cat-header">전신 · 풀옵션</div>
+            <div class="sample-images-row">
+              <div class="sample-img-box">
+                <div class="sample-img-placeholder">
+                  <div class="sample-img-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </div>
+                  추가 표정
+                </div>
+              </div>
+              <div class="sample-img-box">
+                <div class="sample-img-placeholder">
+                  <div class="sample-img-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/></svg>
+                  </div>
+                  바디 물리
+                </div>
+              </div>
+              <div class="sample-img-box">
+                <div class="sample-img-placeholder">
+                  <div class="sample-img-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  </div>
+                  파츠 리깅
+                </div>
+              </div>
+            </div>
+            <div class="sample-footer">
+              <div>
+                <div class="sample-title">아쿠아 마린 모델</div>
+                <div class="sample-subtitle">물리·추가표정·파츠 풀옵션</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3: 반신 · 추가파츠 -->
+        <div class="sample-slide">
+          <div class="sample-card-wide">
+            <div class="sample-cat-header">반신 · 추가파츠</div>
+            <div class="sample-images-row">
+              <div class="sample-img-box">
+                <div class="sample-img-placeholder">
+                  <div class="sample-img-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                  </div>
+                  동물귀
+                </div>
+              </div>
+              <div class="sample-img-box">
+                <div class="sample-img-placeholder">
+                  <div class="sample-img-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  </div>
+                  날개 물리
+                </div>
+              </div>
+              <div class="sample-img-box">
+                <div class="sample-img-placeholder">
+                  <div class="sample-img-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                  </div>
+                  특수파츠
+                </div>
+              </div>
+            </div>
+            <div class="sample-footer">
+              <div>
+                <div class="sample-title">네코 미미 모델</div>
+                <div class="sample-subtitle">동물귀·날개·특수파츠 구성</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 4: 전신 · 9칸 물리 -->
+        <div class="sample-slide">
+          <div class="sample-card-wide">
+            <div class="sample-cat-header">전신 · 9칸 물리</div>
+            <div class="sample-images-row">
+              <div class="sample-img-box">
+                <div class="sample-img-placeholder">
+                  <div class="sample-img-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                  </div>
+                  9칸 표정
+                </div>
+              </div>
+              <div class="sample-img-box">
+                <div class="sample-img-placeholder">
+                  <div class="sample-img-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  </div>
+                  고급 물리
+                </div>
+              </div>
+              <div class="sample-img-box">
+                <div class="sample-img-placeholder">
+                  <div class="sample-img-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  </div>
+                  파츠 연동
+                </div>
+              </div>
+            </div>
+            <div class="sample-footer">
+              <div>
+                <div class="sample-title">루나 마법사 모델</div>
+                <div class="sample-subtitle">9칸 표정·고급 물리 연산</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /sample-track -->
+    </div><!-- /sample-slider-wrap -->
+
+    <div class="sample-nav">
+      <div class="sample-dots" id="sampleDots">
+        <div class="dot active" onclick="goSampleSlide(0)"></div>
+        <div class="dot" onclick="goSampleSlide(1)"></div>
+        <div class="dot" onclick="goSampleSlide(2)"></div>
+        <div class="dot" onclick="goSampleSlide(3)"></div>
+      </div>
+      <div class="nav-arrows">
+        <button class="nav-btn" onclick="prevSampleSlide()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="nav-btn" onclick="nextSampleSlide()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PORTFOLIO ── -->
+  <section class="fade-in">
+    <div class="section-label">포트폴리오</div>
+    <div class="section-title">작업 영상 포트폴리오</div>
+    <div class="glass" style="padding:24px;">
+      <div class="portfolio-slider">
+        <div class="portfolio-track" id="portfolioTrack">
+          <div class="portfolio-item">
+            <div class="portfolio-thumb blob1" style="border-radius:var(--radius-sm);">
+              <div class="portfolio-yt-mock">
+                <div class="yt-play"></div>
+                <span>사쿠라 치요 · 전신 리깅 쇼케이스</span>
+              </div>
+            </div>
+            <div class="portfolio-desc">귀여운 핑크 계열 전신 모델의 표정 + 물리 연산 전체 쇼케이스. 9칸 표정 시연 포함 🌸</div>
+          </div>
+          <div class="portfolio-item">
+            <div class="portfolio-thumb blob2" style="border-radius:var(--radius-sm);">
+              <div class="portfolio-yt-mock">
+                <div class="yt-play"></div>
+                <span>아쿠아 마린 · 풀옵션 리깅 데모</span>
+              </div>
+            </div>
+            <div class="portfolio-desc">바디 물리, 날개, 동물귀 모두 포함된 풀옵션 모델 최종 납품본 영상 🌊</div>
+          </div>
+          <div class="portfolio-item">
+            <div class="portfolio-thumb blob3" style="border-radius:var(--radius-sm);">
+              <div class="portfolio-yt-mock">
+                <div class="yt-play"></div>
+                <span>네코 미미 · 반신 특수파츠</span>
+              </div>
+            </div>
+            <div class="portfolio-desc">동물귀 특수 물리 연산 + 추가 표정 애니메이션 데모 영상 🐾</div>
+          </div>
+          <div class="portfolio-item">
+            <div class="portfolio-thumb blob4" style="border-radius:var(--radius-sm);">
+              <div class="portfolio-yt-mock">
+                <div class="yt-play"></div>
+                <span>루나 · 고급 물리 쇼케이스</span>
+              </div>
+            </div>
+            <div class="portfolio-desc">망토, 마법진 파츠 + 고급 머리카락 물리 연산 작업 영상 🔮</div>
+          </div>
+        </div>
+      </div>
+      <div class="portfolio-nav">
+        <div class="portfolio-dots" id="portDots">
+          <div class="dot active" onclick="goSlide(0)"></div>
+          <div class="dot" onclick="goSlide(1)"></div>
+          <div class="dot" onclick="goSlide(2)"></div>
+          <div class="dot" onclick="goSlide(3)"></div>
+        </div>
+        <div class="nav-arrows">
+          <button class="nav-btn" onclick="prevSlide()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <button class="nav-btn" onclick="nextSlide()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROCESS ── -->
+  <section class="fade-in">
+    <div class="section-label">작업 과정</div>
+    <div class="section-title">작업은 이렇게 진행돼요 ✨</div>
+    <div class="glass" style="padding:24px;">
+      <div class="process-steps">
+        <div class="glass-sm step-card">
+          <div class="step-num">STEP 01</div>
+          <span class="step-icon">💬</span>
+          <div class="step-name">문의 및 안내</div>
+          <div class="step-desc">신청 양식 작성 후 작업 안내 메시지를 보내드려요</div>
+          <div class="step-arrow">›</div>
+        </div>
+        <div class="glass-sm step-card">
+          <div class="step-num">STEP 02</div>
+          <span class="step-icon">💳</span>
+          <div class="step-name">결제</div>
+          <div class="step-desc">견적 확인 후 결제 완료 시 슬롯 확정</div>
+          <div class="step-arrow">›</div>
+        </div>
+        <div class="glass-sm step-card">
+          <div class="step-num">STEP 03</div>
+          <span class="step-icon">🔧</span>
+          <div class="step-name">1차 리깅</div>
+          <div class="step-desc">눈·입·표정·머리 XYZ + 물리 연산 작업</div>
+          <div class="step-arrow">›</div>
+        </div>
+        <div class="glass-sm step-card">
+          <div class="step-num">STEP 04</div>
+          <span class="step-icon">🔍</span>
+          <div class="step-name">1차 컨펌</div>
+          <div class="step-desc">영상 확인 후 수정 사항을 알려주세요</div>
+          <div class="step-arrow">›</div>
+        </div>
+        <div class="glass-sm step-card">
+          <div class="step-num">STEP 05</div>
+          <span class="step-icon">⚙️</span>
+          <div class="step-name">2차 리깅</div>
+          <div class="step-desc">바디·추가파츠 XYZ + 물리 연산 추가 작업</div>
+          <div class="step-arrow">›</div>
+        </div>
+        <div class="glass-sm step-card">
+          <div class="step-num">STEP 06</div>
+          <span class="step-icon">✅</span>
+          <div class="step-name">2차 컨펌</div>
+          <div class="step-desc">최종 확인 및 마무리 수정</div>
+          <div class="step-arrow">›</div>
+        </div>
+        <div class="glass-sm step-card">
+          <div class="step-num">STEP 07</div>
+          <span class="step-icon">📦</span>
+          <div class="step-name">완성 후 전달</div>
+          <div class="step-desc">최종 파일 및 세팅 안내서를 전달해요</div>
+          <div class="step-arrow">›</div>
+        </div>
+        <div class="glass-sm step-card" style="background:rgba(160,120,240,0.10);border-color:rgba(160,120,240,0.25);">
+          <div class="step-num">STEP 08</div>
+          <span class="step-icon">⚙️</span>
+          <div class="step-name">세팅 안내</div>
+          <div class="step-desc">VTube Studio 세팅 가이드 제공 🎀</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RIGGING OPTIONS ── -->
+  <section class="fade-in">
+    <div class="section-label">리깅 옵션</div>
+    <div class="section-title">리깅 옵션 안내</div>
+    <div class="glass" style="padding:24px;">
+      <div class="options-tabs">
+        <button class="tab-btn active" onclick="switchTab('basic', this)">기본 리깅 옵션</button>
+        <button class="tab-btn" onclick="switchTab('extra', this)">추가 리깅 옵션</button>
+      </div>
+
+      <div class="options-panel active" id="panel-basic">
+        <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap;">
+          <span style="font-size:12px;font-weight:700;color:var(--text2);">모델 타입:</span>
+          <button id="typeBtn_full" class="type-toggle-btn active" onclick="selectModelType('full')">전신</button>
+          <button id="typeBtn_half" class="type-toggle-btn" onclick="selectModelType('half')">반신</button>
+        </div>
+        <div id="optList_full" class="options-list">
+          <div class="option-item"><div class="option-dot"></div>눈 깜빡이, 미소 + 물리 연산</div>
+          <div class="option-item"><div class="option-dot"></div>눈썹 상하, 변형 + 물리 연산</div>
+          <div class="option-item"><div class="option-dot"></div>눈동자 XY + 물리 연산</div>
+          <div class="option-item"><div class="option-dot"></div>입모양 12점</div>
+          <div class="option-item"><div class="option-dot"></div>표정 3종 + 물리 연산</div>
+          <div class="option-item"><div class="option-dot"></div>머리 (눈·코·입·귀·얼굴) XYZ</div>
+          <div class="option-item"><div class="option-dot"></div>머리카락 XYZ + 물리연산</div>
+          <div class="option-item"><div class="option-dot"></div>머리 악세사리 XYZ + 물리 연산</div>
+          <div class="option-item"><div class="option-dot"></div>바디 XYZ + 물리 연산</div>
+          <div class="option-item"><div class="option-dot"></div>의상·악세사리 XYZ + 물리</div>
+          <div class="option-item"><div class="option-dot"></div>호흡 애니메이션</div>
+        </div>
+        <div id="optList_half" class="options-list" style="display:none;">
+          <div class="option-item"><div class="option-dot" style="background:var(--teal2);"></div>눈 깜빡이, 미소 + 물리 연산</div>
+          <div class="option-item"><div class="option-dot" style="background:var(--teal2);"></div>눈썹 상하, 변형 + 물리 연산</div>
+          <div class="option-item"><div class="option-dot" style="background:var(--teal2);"></div>눈동자 XY + 물리 연산</div>
+          <div class="option-item"><div class="option-dot" style="background:var(--teal2);"></div>입모양 12점</div>
+          <div class="option-item"><div class="option-dot" style="background:var(--teal2);"></div>표정 3종 + 물리 연산</div>
+          <div class="option-item"><div class="option-dot" style="background:var(--teal2);"></div>머리 (눈·코·입·귀·얼굴) XYZ</div>
+          <div class="option-item"><div class="option-dot" style="background:var(--teal2);"></div>머리카락 XYZ + 물리연산</div>
+          <div class="option-item"><div class="option-dot" style="background:var(--teal2);"></div>호흡 애니메이션</div>
+        </div>
+
+      </div>
+
+      <div class="options-panel" id="panel-extra">
+        <div class="options-list">
+          <div class="option-item extra"><div class="option-dot"></div>추가 표정 (종당 추가)</div>
+          <div class="option-item extra"><div class="option-dot"></div>추가 표정 애니메이션</div>
+          <div class="option-item extra"><div class="option-dot"></div>볼 빵빵 (뺨 부풀리기)</div>
+          <div class="option-item extra"><div class="option-dot"></div>메롱 (혀 내밀기)</div>
+          <div class="option-item extra"><div class="option-dot"></div>입 X 모션</div>
+          <div class="option-item extra"><div class="option-dot"></div>기본 VBridger 세팅</div>
+          <div class="option-item extra"><div class="option-dot"></div>동물귀 물리</div>
+          <div class="option-item extra"><div class="option-dot"></div>날개 물리</div>
+          <div class="option-item extra"><div class="option-dot"></div>추가 수정 (횟수당)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── NOTICE ── -->
+  <section class="fade-in">
+    <div class="section-label">공지사항</div>
+    <div class="section-title">작업 전 꼭 확인해주세요</div>
+    <div class="glass" style="padding:24px;display:flex;flex-direction:column;gap:20px;">
+
+      <!-- 견적 및 결제 -->
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--accent2);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          견적 및 결제
+        </div>
+        <div class="notice-list">
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div>결제 전 문의 양식을 바탕으로 상담 후 진행합니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div>PSD 파일을 첨부해 주시면 상세한 견적 안내가 가능합니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div><div>작업 중 단순 변심에 의한 환불은 불가능합니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div>환불에 대한 규정은 하단 [환불 안내] 규정을 확인해 주세요.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div>분할 결제를 원하시는 경우 사전에 문의 부탁드립니다.</div></div>
+        </div>
+      </div>
+
+      <!-- 작업 안내 -->
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--accent2);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          작업 안내
+        </div>
+        <div class="notice-list">
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div>문의 및 결제 후, PSD 파일을 수령한 시점부터 작업을 시작합니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div>PSD 파일 수령 후 추가 점검을 진행하며, 파일에 문제가 있을 경우 별도로 연락을 드릴 수 있습니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div><div>본 작업에는 파츠 분리가 포함되지 않습니다. 파츠 분리가 미흡할 경우 결과물의 퀄리티에 영향을 미칠 수 있으며, 일러스트레이터분과의 소통이 필요할 수 있습니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div>iOS 트래킹을 권장합니다. 웹캠을 이용할 시 작업물의 성능이 100% 발휘되지 않을 수 있습니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><div>VTube Studio, Live2D Cubism Editor, VBridger를 기반으로 작업합니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><div>무상 수정 횟수는 2회이며, 이후 추가 수정 시 별도의 비용이 발생합니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div>작업 기간은 평균 3~4주 정도 소요됩니다. 피드백 답변이 지연될 경우 전체 일정이 늦춰질 수 있습니다.</div></div>
+        </div>
+      </div>
+
+      <!-- 파일 전달 -->
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--accent2);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          파일 전달
+        </div>
+        <div class="notice-list">
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div>작업 완료 후 VTube Studio에서 즉시 사용 가능한 파일들을 ZIP 형식으로 압축하여 전달해 드립니다. (.png, .json, .moc3 포함)</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div><div>.cmo3 및 .can3 파일(원본 프로젝트 파일)은 제공하거나 판매하지 않습니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div>VTube Studio 및 VBridger 사용 시, 프로그램 내 추가 결제(프로 버전 등)가 필요한지 사전에 확인해 주시기 바랍니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><div>VTube Studio 내 아이콘(icon) 등록을 원하시는 경우 말씀해 주세요.</div></div>
+        </div>
+      </div>
+
+      <!-- 사용 -->
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--accent2);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          사용
+        </div>
+        <div class="notice-list">
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div><div>모든 작업물은 SNS, 유튜브, 아트머그 등에서 포트폴리오로 사용될 수 있습니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div>포트폴리오 공개는 파일 전달 후 최대 60일까지 유예(비공개) 요청이 가능합니다. 해당 기간 이상의 공개 연기를 원하실 경우 추가 요금이 발생합니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div><div>리깅 작업물에 대한 저작권은 SpicyPotato에게 있으며, 작업물의 무단 재배포, 판매, 양도를 엄격히 금지합니다.</div></div>
+        </div>
+      </div>
+
+      <!-- A/S -->
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--accent2);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          A/S
+        </div>
+        <div class="notice-list">
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div>작업 완료 후 VTube Studio 초기 세팅을 도와드립니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.08-2.49"/></svg></div><div>리깅 자체에 결함이나 오류가 발견될 경우, 기간 제한 없이 무상으로 수정을 진행합니다.</div></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── FORM ── -->
+  <section id="form-section" class="fade-in">
+    <div class="section-label">리깅 신청</div>
+    <div class="section-title">리깅 신청 양식 📝</div>
+    <div class="glass" style="padding:28px;">
+
+      <div class="form-section-title">🎤 기본 정보</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">방송 닉네임</label>
+          <input class="form-input" type="text" placeholder="닉네임" id="f_nick">
+        </div>
+        <div class="form-group">
+          <label class="form-label">방송 플랫폼</label>
+          <input class="form-input" type="text" placeholder="유튜브 / 트위치 / 치지직 등" id="f_platform">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">데뷔 예정일</label>
+          <input class="form-input" type="date" id="f_debut">
+        </div>
+        <div class="form-group">
+          <label class="form-label">일러스트레이터 닉네임 (비공개 시 공란)</label>
+          <input class="form-input" type="text" placeholder="(비공개 시 공란)" id="f_illustrator">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">일러스트레이터 링크</label>
+        <input class="form-input" type="text" placeholder="https://" id="f_illust_link">
+      </div>
+
+      <div class="form-section-title">🎮 트래킹 장비</div>
+      <div class="radio-group">
+        <label class="radio-label"><input type="radio" name="tracking" value="ios" onchange="calcPrice()"> iOS (아이폰/아이패드)</label>
+        <label class="radio-label"><input type="radio" name="tracking" value="webcam" onchange="calcPrice()"> 웹캠</label>
+      </div>
+
+      <div class="form-section-title">✨ 기본 리깅 옵션</div>
+      <div class="radio-group">
+        <label class="radio-label"><input type="radio" name="base" value="full" onchange="calcPrice()"> 전신</label>
+        <label class="radio-label"><input type="radio" name="base" value="half" onchange="calcPrice()"> 반신</label>
+      </div>
+
+      <div class="form-section-title">🎁 추가 리깅 옵션</div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin:8px 0 6px;">표정</div>
+      <div class="option-row">
+        <label class="option-check-label">
+          <input type="checkbox" id="opt_emotion" onchange="calcPrice()">
+          추가 표정
+        </label>
+        <div class="option-price">미정</div>
+        <div class="option-count">
+          <button class="count-btn" onclick="changeCount('emotion', -1)">-</button>
+          <span class="count-val" id="cnt_emotion">0</span>
+          <button class="count-btn" onclick="changeCount('emotion', 1)">+</button>
+        </div>
+      </div>
+      <div class="option-row">
+        <label class="option-check-label">
+          <input type="checkbox" id="opt_emoAnim" onchange="calcPrice()">
+          추가 표정 애니메이션
+        </label>
+        <div class="option-price">미정</div>
+        <div class="option-count">
+          <button class="count-btn" onclick="changeCount('emoAnim', -1)">-</button>
+          <span class="count-val" id="cnt_emoAnim">0</span>
+          <button class="count-btn" onclick="changeCount('emoAnim', 1)">+</button>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin:12px 0 6px;">바디</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label" style="width:100%;">
+            <input type="checkbox" id="opt_hair" onchange="calcPrice()"> 헤어
+          </label>
+          <span class="option-price">미정</span>
+        </div>
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label" style="width:100%;">
+            <input type="checkbox" id="opt_clothes" onchange="calcPrice()"> 의상
+          </label>
+          <span class="option-price">미정</span>
+        </div>
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label" style="width:100%;">
+            <input type="checkbox" id="opt_arm" onchange="calcPrice()"> 고정 팔
+          </label>
+          <span class="option-price">미정</span>
+        </div>
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label" style="width:100%;">
+            <input type="checkbox" id="opt_ears" onchange="calcPrice()"> 동물귀
+          </label>
+          <span class="option-price">미정</span>
+        </div>
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label" style="width:100%;">
+            <input type="checkbox" id="opt_wings" onchange="calcPrice()"> 날개
+          </label>
+          <span class="option-price">미정</span>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin:12px 0 6px;">IOS · VBridger</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;">
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label"><input type="checkbox" id="opt_bbang" onchange="calcPrice()">볼 빵빵</label>
+          <span class="option-price">미정</span>
+        </div>
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label"><input type="checkbox" id="opt_melon" onchange="calcPrice()">메롱</label>
+          <span class="option-price">미정</span>
+        </div>
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label"><input type="checkbox" id="opt_mouthX" onchange="calcPrice()">입 X</label>
+          <span class="option-price">미정</span>
+        </div>
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label"><input type="checkbox" id="opt_vbridger" onchange="calcPrice()">VBridger</label>
+          <span class="option-price">미정</span>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin:12px 0 6px;">작업</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label" style="width:100%;">
+            <input type="checkbox" id="opt_fix" onchange="calcPrice()"> 추가 수정
+          </label>
+          <div style="display:flex;align-items:center;gap:6px;width:100%;">
+            <span class="option-price">미정/회</span>
+            <div class="option-count" style="margin-left:auto;">
+              <button class="count-btn" onclick="changeCount('fix', -1)">-</button>
+              <span class="count-val" id="cnt_fix">0</span>
+              <button class="count-btn" onclick="changeCount('fix', 1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label">
+            <input type="checkbox" id="opt_reveal" onchange="calcPrice()"> 90일 이후 작업 공개
+          </label>
+          <span class="option-price">미정</span>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin:12px 0 6px;">이벤트</div>
+      <div class="option-row">
+        <label class="option-check-label">
+          <input type="checkbox" id="opt_event" onchange="calcPrice()">
+          봄맞이 이벤트 (신규 고객 10% 할인)
+        </label>
+        <div class="option-price" style="color:var(--teal2);">-10%</div>
+      </div>
+
+      <div class="form-section-title" style="margin-top:20px;">💬 추가 문의사항</div>
+      <div class="form-group">
+        <textarea class="form-input" placeholder="기타 요청 사항이나 궁금한 점을 자유롭게 작성해주세요 💌" id="f_memo"></textarea>
+      </div>
+
+      <div class="price-preview">
+        <div>
+          <div class="price-label">예상 견적</div>
+          <div style="font-size:11px;color:var(--text3);">옵션 선택에 따라 변경될 수 있어요</div>
+        </div>
+        <div class="price-total" id="priceDisplay">0원</div>
+      </div>
+
+      <div class="form-btns">
+        <button class="btn-copy" onclick="copyQuote()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 견적서 복사</button>
+        <button class="btn-reset" onclick="resetForm()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> 초기화</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── REFUND ── -->
+  <section class="fade-in" style="margin-bottom:40px;">
+    <div class="section-label">환불 안내</div>
+    <div class="section-title">환불 정책 안내 💫</div>
+    <div class="glass refund-card">
+      <div style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.7;">
+        고객님의 권익 보호를 위해 단계별 환불 정책을 운영하고 있어요. 작업 진행 상황에 따라 아래 기준이 적용됩니다 🌸
+      </div>
+      <div class="refund-steps">
+        <div class="refund-row">
+          <div class="refund-icon">✅</div>
+          <div class="refund-stage">작업 시작 전</div>
+          <div class="refund-pct pct-100">100% 환불</div>
+        </div>
+        <div class="refund-row">
+          <div class="refund-icon">🔧</div>
+          <div class="refund-stage">작업 시작 ~ 1차 컨펌 전</div>
+          <div class="refund-pct pct-70">70% 환불</div>
+        </div>
+        <div class="refund-row">
+          <div class="refund-icon">🔍</div>
+          <div class="refund-stage">1차 컨펌 후 ~ 2차 컨펌 전</div>
+          <div class="refund-pct pct-50">50% 환불</div>
+        </div>
+        <div class="refund-row">
+          <div class="refund-icon">🚫</div>
+          <div class="refund-stage">2차 컨펌 후</div>
+          <div class="refund-pct pct-0">환불 불가</div>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:12px 16px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:12px;font-size:12px;color:#b91c1c;line-height:1.7;">
+        ⚠️ 고객 변심으로 인한 취소의 경우, 이미 진행된 작업 분량만큼 공제 후 환불됩니다. 무통장 입금 기준이며 카드 결제 시 수수료가 공제될 수 있어요.
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// ── GOOGLE SHEETS CSV URLS ──
+const SLOT_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSytmOtrazdbmv-fobgbSO4JV1Xpmd5mk-ohxqdMDGjIxsqK9awuFoXhF8ByEQBJNNuCh5xbP_g_ieM/pub?gid=0&single=true&output=csv';
+const EVENT_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSytmOtrazdbmv-fobgbSO4JV1Xpmd5mk-ohxqdMDGjIxsqK9awuFoXhF8ByEQBJNNuCh5xbP_g_ieM/pub?gid=1400947798&single=true&output=csv';
+const PORTFOLIO_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSytmOtrazdbmv-fobgbSO4JV1Xpmd5mk-ohxqdMDGjIxsqK9awuFoXhF8ByEQBJNNuCh5xbP_g_ieM/pub?gid=1368256576&single=true&output=csv';
+
+// ── CSV PARSER (따옴표 안 줄바꿈 포함 완전 처리) ──
+function parseCSV(text) {
+  // 전체 텍스트를 문자 단위로 파싱 → row 배열 생성
+  const rows = [];
+  let fields = [], cur = '', inQ = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    const next = text[i + 1];
+    if (c === '"') {
+      if (inQ && next === '"') { cur += '"'; i++; } // escaped quote
+      else inQ = !inQ;
+    } else if (c === ',' && !inQ) {
+      fields.push(cur); cur = '';
+    } else if ((c === '\r' || c === '\n') && !inQ) {
+      if (c === '\r' && next === '\n') i++; // CRLF
+      fields.push(cur); cur = '';
+      rows.push(fields); fields = [];
+    } else {
+      cur += c;
+    }
+  }
+  fields.push(cur);
+  if (fields.some(f => f !== '')) rows.push(fields);
+
+  if (rows.length < 2) return [];
+  const headers = rows[0].map(h => h.trim());
+  return rows.slice(1).map(vals => {
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = (vals[i] || '').trim());
+    return obj;
+  });
+}
+
+// ── LOAD SLOTS ──
+async function loadSlots() {
+  try {
+    const res = await fetch(SLOT_CSV_URL);
+    const text = await res.text();
+    const rows = parseCSV(text);
+    if (!rows.length) return;
+    const { '최대 슬롯': maxStr, '남은 슬롯': availStr } = rows[0];
+    const max = parseInt(maxStr) || 0;
+    const avail = parseInt(availStr) || 0;
+    const used = max - avail;
+
+    const slots = [];
+    for (let i = 0; i < max; i++) {
+      slots.push(i < used ? 'busy' : 'free');
+    }
+
+    const container = document.getElementById('slotContainer');
+    // 한 줄에 최대 3개씩 배치
+    const rows2 = [];
+    for (let i = 0; i < slots.length; i += 3) rows2.push(slots.slice(i, i + 3));
+
+    container.innerHTML = rows2.map(row => `
+      <div style="display:flex;gap:7px;align-items:center;">
+        ${row.map(s => s === 'busy'
+          ? `<div style="flex:1;padding:7px 12px;background:rgba(168,85,247,0.13);border:1.5px solid rgba(168,85,247,0.35);border-radius:10px;font-size:12px;font-weight:700;color:var(--accent2);text-align:center;">작업 중</div>`
+          : `<div style="flex:1;padding:7px 12px;background:rgba(94,234,212,0.13);border:1.5px dashed rgba(94,234,212,0.55);border-radius:10px;font-size:12px;font-weight:700;color:var(--teal2);text-align:center;">비어있음</div>`
+        ).join('')}
+      </div>`).join('');
+  } catch(e) {
+    document.getElementById('slotContainer').innerHTML =
+      '<div style="font-size:12px;color:var(--text3);text-align:center;padding:8px;">슬롯 정보를 불러올 수 없습니다</div>';
+  }
+}
+
+// ── LOAD EVENTS ──
+async function loadEvents() {
+  try {
+    const res = await fetch(EVENT_CSV_URL);
+    const text = await res.text();
+    const rows = parseCSV(text);
+    const container = document.getElementById('eventContainer');
+
+    if (!rows.length || !rows[0]['제목']) {
+      container.innerHTML = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:24px;">현재 진행 중인 이벤트가 없습니다</div>';
+      return;
+    }
+
+    container.innerHTML = rows.map(row => {
+      const tags = (row['태그'] || '').split(',').map(t => t.trim()).filter(Boolean);
+      const deadline = row['마감일'] ? `~${row['마감일'].trim()}` : '';
+      const content = (row['내용'] || '').replace(/\n/g, '<br>');
+      return `
+        <div class="event-card glass" style="margin-bottom:12px;">
+          <div class="event-icon">🎉</div>
+          <div style="flex:1;min-width:0;">
+            <div class="event-title">${row['제목']}${deadline ? ` (${deadline})` : ''}</div>
+            ${tags.length ? `<div style="margin-bottom:8px;">${tags.map(t => `<span class="event-badge">${t}</span>`).join('')}</div>` : ''}
+            <div class="event-content">${content}</div>
+          </div>
+        </div>`;
+    }).join('');
+  } catch(e) {
+    document.getElementById('eventContainer').innerHTML =
+      '<div style="font-size:13px;color:var(--text3);text-align:center;padding:24px;">이벤트 정보를 불러올 수 없습니다</div>';
+  }
+}
+
+// ── LOAD PORTFOLIO ──
+const BLOB_CLASSES = ['blob1','blob2','blob3','blob4'];
+function getYouTubeId(url) {
+  const m = url.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+// 현재 재생 중인 iframe을 멈춤
+function stopAllYouTube() {
+  document.querySelectorAll('.portfolio-item iframe').forEach(iframe => {
+    const src = iframe.src;
+    iframe.src = ''; // src 초기화로 영상 완전 종료
+    iframe.src = src.replace('&autoplay=1','').replace('?autoplay=1','');
+  });
+  // 썸네일 오버레이 다시 보이기
+  document.querySelectorAll('.portfolio-item .yt-overlay').forEach(el => {
+    el.style.display = 'flex';
+  });
+  document.querySelectorAll('.portfolio-item iframe').forEach(iframe => {
+    iframe.style.display = 'none';
+  });
+}
+
+function playYouTube(btn, vid, itemEl) {
+  // 해당 슬라이드 안에서만 처리
+  const overlay = itemEl.querySelector('.yt-overlay');
+  const iframe = itemEl.querySelector('iframe');
+  overlay.style.display = 'none';
+  iframe.src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0`;
+  iframe.style.display = 'block';
+}
+
+async function loadPortfolio() {
+  try {
+    const res = await fetch(PORTFOLIO_CSV_URL);
+    const text = await res.text();
+    const rows = parseCSV(text);
+    if (!rows.length || !rows[0]['영상 링크']) {
+      document.getElementById('portfolioTrack').innerHTML =
+        '<div class="portfolio-item"><div style="padding:40px;text-align:center;font-size:13px;color:var(--text3);">포트폴리오 영상이 없습니다</div></div>';
+      renderPortfolioDots(1);
+      return;
+    }
+    const track = document.getElementById('portfolioTrack');
+    track.innerHTML = rows.map((row, i) => {
+      const vid = getYouTubeId(row['영상 링크'] || '');
+      const blob = BLOB_CLASSES[i % BLOB_CLASSES.length];
+      const YT_SVG = `<svg height="100%" version="1.1" viewBox="0 0 68 48" width="100%"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#ff0000"/><path d="M 45,24 27,14 27,34" fill="#fff"/></svg>`;
+      const thumbContent = vid
+        ? `<div class="yt-overlay" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;"
+             onclick="playYouTube(this, '${vid}', this.closest('.portfolio-item'))">
+             <img src="https://img.youtube.com/vi/${vid}/maxresdefault.jpg"
+               onerror="this.src='https://img.youtube.com/vi/${vid}/hqdefault.jpg'"
+               alt="썸네일" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+             <div class="yt-play" style="position:relative;z-index:1;">${YT_SVG}</div>
+           </div>
+           <iframe style="display:none;position:absolute;inset:0;width:100%;height:100%;border:none;z-index:3;"
+             src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>`
+        : `<div class="portfolio-yt-mock ${blob}" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;">
+             <div class="yt-play"></div>
+             <span style="font-size:13px;color:var(--text2);">${row['설명'] || ''}</span>
+           </div>`;
+      return `
+        <div class="portfolio-item">
+          <div class="portfolio-thumb ${blob}" style="border-radius:var(--radius-sm);position:relative;">
+            ${thumbContent}
+          </div>
+          <div class="portfolio-desc">${row['설명'] || ''}</div>
+        </div>`;
+    }).join('');
+    renderPortfolioDots(rows.length);
+    slideIdx = 0;
+    updateSlider();
+  } catch(e) {
+    document.getElementById('portfolioTrack').innerHTML =
+      '<div class="portfolio-item"><div style="padding:40px;text-align:center;font-size:13px;color:var(--text3);">포트폴리오를 불러올 수 없습니다</div></div>';
+    renderPortfolioDots(1);
+  }
+}
+function renderPortfolioDots(count) {
+  const dotsEl = document.getElementById('portDots');
+  dotsEl.innerHTML = Array.from({length: count}, (_, i) =>
+    `<div class="dot${i===0?' active':''}" onclick="goSlide(${i})"></div>`
+  ).join('');
+}
+
+// 페이지 로드 시 실행
+document.addEventListener('DOMContentLoaded', () => {
+  loadSlots();
+  loadEvents();
+  loadPortfolio();
+});
+</script>
+<script>
+// ── FADE IN ON SCROLL ──
+const faders = document.querySelectorAll('.fade-in');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.08 });
+faders.forEach(el => observer.observe(el));
+
+// ── SAMPLE SLIDER ──
+let sampleIdx = 0;
+function getSampleTrack() { return document.getElementById('sampleTrack'); }
+function getSampleTotal() { return getSampleTrack().querySelectorAll('.sample-slide').length; }
+function updateSampleSlider() {
+  const track = getSampleTrack();
+  const items = track.querySelectorAll('.sample-slide');
+  if (!items.length) return;
+  track.style.transition = 'transform 0.38s cubic-bezier(0.4,0,0.2,1)';
+  track.style.transform = `translateX(-${sampleIdx * items[0].offsetWidth}px)`;
+  document.querySelectorAll('#sampleDots .dot').forEach((d, i) => d.classList.toggle('active', i === sampleIdx));
+}
+function nextSampleSlide() { const t = getSampleTotal(); sampleIdx = sampleIdx >= t-1 ? 0 : sampleIdx+1; updateSampleSlider(); }
+function prevSampleSlide() { const t = getSampleTotal(); sampleIdx = sampleIdx <= 0 ? t-1 : sampleIdx-1; updateSampleSlider(); }
+function goSampleSlide(i) { sampleIdx = i; updateSampleSlider(); }
+window.addEventListener('resize', () => { updateSampleSlider(); updateSlider(); });
+
+// ── PORTFOLIO SLIDER ──
+let slideIdx = 0;
+
+function getSliderTrack() { return document.getElementById('portfolioTrack'); }
+function getSliderTotal() { return getSliderTrack().querySelectorAll('.portfolio-item').length; }
+
+function updateSlider() {
+  const track = getSliderTrack();
+  const items = track.querySelectorAll('.portfolio-item');
+  if (!items.length) return;
+  track.style.transition = 'transform 0.38s cubic-bezier(0.4,0,0.2,1)';
+  const itemW = items[0].offsetWidth;
+  track.style.transform = `translateX(-${slideIdx * itemW}px)`;
+  document.querySelectorAll('#portDots .dot').forEach((d, i) => d.classList.toggle('active', i === slideIdx));
+}
+
+function nextSlide() { stopAllYouTube(); const t = getSliderTotal(); slideIdx = slideIdx >= t - 1 ? 0 : slideIdx + 1; updateSlider(); }
+function prevSlide() { stopAllYouTube(); const t = getSliderTotal(); slideIdx = slideIdx <= 0 ? t - 1 : slideIdx - 1; updateSlider(); }
+function goSlide(i) { stopAllYouTube(); slideIdx = i; updateSlider(); }
+
+
+
+// ── TABS ──
+function switchTab(name, btn) {
+  document.querySelectorAll('.options-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── COUNTER ──
+const counts = { emotion: 0, emoAnim: 0, fix: 0 };
+function changeCount(key, delta) {
+  counts[key] = Math.max(0, counts[key] + delta);
+  document.getElementById('cnt_' + key).textContent = counts[key];
+  if(counts[key] > 0) {
+    const cb = document.getElementById('opt_' + key);
+    if(cb) cb.checked = true;
+  }
+  calcPrice();
+}
+
+// ── PRICE CALC ──
+const prices = {
+  base_full: 0, base_half: 0,
+  emotion: 0, emoAnim: 0,
+  hair: 0, clothes: 0, arm: 0,
+  ears: 0, wings: 0,
+  bbang: 0, melon: 0, mouthX: 0, vbridger: 0,
+  fix: 0, reveal: 0
+};
+
+function calcPrice() {
+  let total = 0;
+  const baseRadio = document.querySelector('input[name="base"]:checked');
+  if(baseRadio) total += baseRadio.value === 'full' ? prices.base_full : prices.base_half;
+  ['hair','clothes','arm','ears','wings','bbang','melon','mouthX','vbridger','reveal'].forEach(k => {
+    const el = document.getElementById('opt_' + k);
+    if(el && el.checked) total += prices[k];
+  });
+  total += counts.emotion * prices.emotion;
+  total += counts.emoAnim * prices.emoAnim;
+  total += counts.fix * prices.fix;
+  if(document.getElementById('opt_event').checked && total > 0) total = Math.round(total * 0.9);
+  document.getElementById('priceDisplay').textContent = total.toLocaleString() + '원';
+  return total;
+}
+
+function resetForm() {
+  document.querySelectorAll('.form-input').forEach(el => { el.value = ''; });
+  document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+  document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+  Object.keys(counts).forEach(k => { counts[k] = 0; document.getElementById('cnt_' + k).textContent = 0; });
+  document.getElementById('priceDisplay').textContent = '0원';
+}
+
+function copyQuote() {
+  const nick = document.getElementById('f_nick').value || '(미입력)';
+  const platform = document.getElementById('f_platform').value || '(미입력)';
+  const debut = document.getElementById('f_debut').value || '(미입력)';
+  const baseRadio = document.querySelector('input[name="base"]:checked');
+  const base = baseRadio ? (baseRadio.value === 'full' ? '전신' : '반신') : '(미선택)';
+  const tracking = document.querySelector('input[name="tracking"]:checked');
+  const track_v = tracking ? (tracking.value === 'ios' ? 'iOS' : '웹캠') : '(미선택)';
+  const price = document.getElementById('priceDisplay').textContent;
+  const memo = document.getElementById('f_memo').value;
+
+  const opts = [];
+  ['hair','clothes','arm','ears','wings','bbang','melon','mouthX','vbridger','reveal','event'].forEach(k => {
+    const el = document.getElementById('opt_' + k);
+    if(el && el.checked) opts.push(el.parentElement.textContent.trim().replace(/\s+/g,' '));
+  });
+  if(counts.emotion > 0) opts.push(`추가 표정 x${counts.emotion}`);
+  if(counts.emoAnim > 0) opts.push(`표정 애니메이션 x${counts.emoAnim}`);
+  if(counts.fix > 0) opts.push(`추가 수정 x${counts.fix}`);
+
+  const text = `📋 리깅 신청서\n\n닉네임: ${nick}\n플랫폼: ${platform}\n데뷔 예정일: ${debut}\n트래킹: ${track_v}\n기본 옵션: ${base}\n추가 옵션: ${opts.join(', ') || '없음'}\n예상 견적: ${price}\n\n💬 메모: ${memo || '없음'}`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.btn-copy');
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 복사 완료!';
+    setTimeout(() => btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 견적서 복사', 2000);
+  }).catch(() => alert(text));
+}
+
+function selectModelType(type) {
+  document.getElementById('typeBtn_full').classList.toggle('active', type === 'full');
+  document.getElementById('typeBtn_half').classList.toggle('active', type === 'half');
+  const full = document.getElementById('optList_full');
+  const half = document.getElementById('optList_half');
+  full.style.cssText = type === 'full' ? 'display:grid !important' : 'display:none !important';
+  half.style.cssText = type === 'half' ? 'display:grid !important' : 'display:none !important';
+}
+// init on load
+document.addEventListener('DOMContentLoaded', () => {
+  selectModelType('full');
+});
+</script>
+<script>
+// ── IFRAME 자동 높이 조절 ──
+function sendHeight() {
+  const h = document.documentElement.scrollHeight;
+  window.parent.postMessage({ type: 'resize', height: h }, '*');
+}
+// 초기 + 콘텐츠 변경 시마다 전송
+const resizeObserver = new ResizeObserver(() => sendHeight());
+resizeObserver.observe(document.body);
+window.addEventListener('load', sendHeight);
+</script>
+</body>
+</html>
