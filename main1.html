@@ -371,7 +371,7 @@
         .port-item iframe { width: 100%; height: 100%; border: none; }
 
         .port-grid > .port-item { aspect-ratio: 16 / 9; }
-        #tab-shorts-game .port-item, #tab-shorts-chat .port-item { aspect-ratio: 9 / 16; }
+        #tab-shorts-game .port-item, #tab-shorts-chat .port-item, .port-item.shorts-item { aspect-ratio: 9 / 16; }
 
         .video-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -602,7 +602,7 @@
             .reset-btn-container { flex: none; }
 
             .port-item { height: auto; width: 85vw; max-width: none; }
-            #tab-shorts-game .port-item, #tab-shorts-chat .port-item { width: 55vw; max-width: none; }
+            #tab-shorts-game .port-item, #tab-shorts-chat .port-item, .port-item.shorts-item { width: 55vw; max-width: none; }
             
             .price-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
             .toc-btn { padding: 6px 12px; font-size: 0.8rem; }
@@ -740,14 +740,16 @@
             <p style="font-size: 0.8rem; color: #bbb; margin-top: -15px; margin-bottom: 15px;">* 옆으로 밀어서 확인하세요. 클릭 시 영상이 재생됩니다.</p>
             
             <div class="tab-wrapper">
-                <button class="tab-btn active" onclick="showTab('tab-game', this)">게임</button>
+                <button class="tab-btn active" onclick="showTab('tab-all', this)">전체</button>
+                <button class="tab-btn" onclick="showTab('tab-game', this)">게임</button>
                 <button class="tab-btn" onclick="showTab('tab-justchat', this)">저스트 채팅</button>
                 <button class="tab-btn" onclick="showTab('tab-debut', this)">데뷔 영상</button>
                 <button class="tab-btn" onclick="showTab('tab-shorts-game', this)">쇼츠 게임</button>
                 <button class="tab-btn" onclick="showTab('tab-shorts-chat', this)">쇼츠 저챗</button>
             </div>
 
-            <div id="tab-game" class="port-grid active"></div>
+            <div id="tab-all" class="port-grid active"></div>
+            <div id="tab-game" class="port-grid"></div>
             <div id="tab-justchat" class="port-grid"></div>
             <div id="tab-debut" class="port-grid"></div>
             <div id="tab-shorts-game" class="port-grid"></div>
@@ -990,11 +992,13 @@
 
         async function loadPortfolio() {
             const grids = { '게임': document.getElementById('tab-game'), '저스트 채팅': document.getElementById('tab-justchat'), '데뷔': document.getElementById('tab-debut'), '쇼츠 게임': document.getElementById('tab-shorts-game'), '쇼츠 저챗': document.getElementById('tab-shorts-chat') };
+            const allGrid = document.getElementById('tab-all');
             try {
                 const response = await fetch(PORTFOLIO_CSV_URL);
                 const data = await response.text();
                 const rows = data.split('\n').filter(r => r.trim() !== '');
                 Object.values(grids).forEach(g => g.innerHTML = '');
+                allGrid.innerHTML = '';
                 for (let i = 1; i < rows.length; i++) {
                     const cols = parseCSVLine(rows[i]);
                     if (cols.length >= 2) {
@@ -1003,12 +1007,12 @@
                         const target = grids[cat];
                         if (target && youtubeId) {
                             const thumbUrl = `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
+
                             const item = document.createElement('div');
-                            item.className = 'port-item';
+                            item.className = cat.includes('쇼츠') ? 'port-item shorts-item' : 'port-item';
                             item.dataset.videoId = youtubeId;
                             item.dataset.thumb = thumbUrl;
                             item.innerHTML = `<img src="${thumbUrl}" alt="portfolio">`;
-                            
                             item.onclick = function(e) {
                                 e.stopPropagation();
                                 if (activeVideoItem && activeVideoItem !== this) {
@@ -1022,10 +1026,30 @@
                                 }
                             };
                             target.appendChild(item);
+
+                            const itemAll = document.createElement('div');
+                            itemAll.className = cat.includes('쇼츠') ? 'port-item shorts-item' : 'port-item';
+                            itemAll.dataset.videoId = youtubeId;
+                            itemAll.dataset.thumb = thumbUrl;
+                            itemAll.innerHTML = `<img src="${thumbUrl}" alt="portfolio">`;
+                            itemAll.onclick = function(e) {
+                                e.stopPropagation();
+                                if (activeVideoItem && activeVideoItem !== this) {
+                                    activeVideoItem.innerHTML = `<img src="${activeVideoItem.dataset.thumb}" alt="portfolio">`;
+                                    activeVideoItem.classList.remove('playing');
+                                }
+                                if (!this.classList.contains('playing')) {
+                                    this.innerHTML = `<iframe src="https://www.youtube.com/embed/${this.dataset.videoId}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                                    this.classList.add('playing');
+                                    activeVideoItem = this;
+                                }
+                            };
+                            allGrid.appendChild(itemAll);
                         }
                     }
                 }
                 Object.values(grids).forEach(g => { if (g.innerHTML === '') g.innerHTML = '<div style="width: 100%; text-align:center; padding: 60px 0; color:#bbb; font-size: 0.95rem;">아직 포트폴리오가 없습니다! 🍵</div>'; });
+                if (allGrid.innerHTML === '') allGrid.innerHTML = '<div style="width: 100%; text-align:center; padding: 60px 0; color:#bbb; font-size: 0.95rem;">아직 포트폴리오가 없습니다! 🍵</div>';
             } catch (e) { console.error(e); }
         }
 
