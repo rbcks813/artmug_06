@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Portfolio & Guide</title>
+    <style>
+        /* 폰트 설정 */
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight: 100; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2'); font-weight: 200; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2'); font-weight: 800; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+
+        :root {
+            --bg-white: #ffffff;
+            --bg-light: #dce4ff;
+            --primary: #003cf7;
+            --accent-1: #9084e6;
+            --accent-2: #788bf3;
+            --text-main: #222;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Paperozi', sans-serif; background-color: var(--bg-white); color: var(--text-main); line-height: 1.6; word-break: keep-all; overflow-x: hidden; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+
+        section { margin-bottom: 60px; }
+        h2 { font-weight: 800; font-size: 24px; color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; }
+        h2::before { content: ''; width: 4px; height: 24px; background: var(--primary); margin-right: 12px; border-radius: 2px; }
+
+        /* NOTICE */
+        .notice-card { background: var(--bg-light); padding: 30px; border-radius: 15px; border-left: 5px solid var(--accent-2); }
+        .notice-card ul { list-style: none; }
+        .notice-card li { margin-bottom: 12px; font-weight: 400; color: #444; position: relative; padding-left: 20px; }
+        .notice-card li::before { content: '•'; position: absolute; left: 0; color: var(--primary); }
+
+        /* 문의양식 */
+        .form-guide-v2 { background: #ffffff; padding: 40px; border-radius: 20px; border: 1px solid var(--bg-light); box-shadow: 0 10px 30px rgba(0,60,247,0.03); }
+        .form-grid-v2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .form-item-v2 { display: flex; flex-direction: column; gap: 8px; }
+        .form-item-v2.full-width { grid-column: span 2; }
+        .form-item-v2 label { font-weight: 700; color: var(--primary); font-size: 14px; }
+        .form-item-v2 input[type="text"], .form-item-v2 input[type="date"], .form-item-v2 textarea { width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #ddd; background: #fafafa; font-family: 'Paperozi'; font-size: 14px; outline: none; transition: 0.3s; }
+        .form-item-v2 input[type="text"]:focus, .form-item-v2 input[type="date"]:focus, .form-item-v2 textarea:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(0,60,247,0.1); }
+        .form-item-v2 textarea { resize: none; min-height: 100px; max-height: 200px; overflow-y: auto; }
+        
+        .color-control-box { display: flex; align-items: center; gap: 10px; }
+        
+        /* 1. 오류 수정: 표준 appearance 속성 추가 */
+        input[type="color"] { -webkit-appearance: none; appearance: none; border: none; width: 40px; height: 40px; border-radius: 8px; cursor: pointer; padding: 0; background: none; }
+        input[type="color"]::-webkit-color-swatch { border: 1px solid #ddd; border-radius: 8px; }
+        
+        .color-hex-input { width: 100px !important; text-transform: uppercase; }
+        .btn-add { padding: 0 15px; height: 40px; background: var(--bg-light); color: var(--primary); border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: 'Paperozi'; }
+        .selected-colors { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; }
+        .color-chip { display: flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .color-chip span { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1); }
+        .color-chip button { background: none; border: none; font-size: 14px; cursor: pointer; opacity: 0.5; }
+
+        .file-upload-box { border: 2px dashed #ddd; padding: 20px; border-radius: 8px; text-align: center; background: #fafafa; }
+        .file-upload-label { display: inline-block; padding: 10px 20px; background: white; border: 1px solid var(--primary); color: var(--primary); border-radius: 8px; font-weight: 600; cursor: pointer; }
+        input[type="file"] { display: none; }
+        .image-preview-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
+        .img-preview-item { position: relative; width: 80px; height: 80px; border-radius: 8px; overflow: hidden; border: 1px solid #eee; }
+        .img-preview-item img { width: 100%; height: 100%; object-fit: cover; }
+        .img-remove-btn { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.7); color: white; border: none; width: 20px; height: 20px; border-radius: 50%; font-size: 10px; cursor: pointer; }
+
+        .copy-btn-wrapper { grid-column: span 2; display: flex; justify-content: center; margin-top: 20px; position: relative; }
+        .copy-btn { background: var(--primary); color: white; border: none; padding: 16px 50px; border-radius: 30px; font-size: 16px; font-family: 'Paperozi'; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,60,247,0.2); }
+        .copy-btn:hover { background: var(--accent-1); transform: translateY(-2px); }
+        
+        .copy-balloon {
+            position: absolute; top: -45px; left: 50%; transform: translateX(-50%);
+            background: #333; color: #fff; padding: 8px 15px; border-radius: 8px;
+            font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: 0.3s;
+        }
+        .copy-balloon.show { opacity: 1; top: -50px; }
+
+        /* 패키지 */
+        .package-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .package-card { border: 1px solid var(--bg-light); padding: 30px; border-radius: 20px; transition: 0.3s; background: #fff; }
+        .package-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,60,247,0.05); }
+        .package-tag { display: inline-block; padding: 4px 12px; background: var(--primary); color: white; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 12px; }
+        .package-title { font-weight: 800; font-size: 20px; margin-bottom: 8px; color: #111; }
+        .package-desc { font-size: 14px; color: var(--accent-1); font-weight: 600; margin-bottom: 15px; line-height: 1.4; }
+        .package-list { font-size: 13px; color: #555; background: #f8f9ff; padding: 15px; border-radius: 12px; border: 1px solid var(--bg-light); }
+        .package-list b { color: var(--primary); }
+
+        /* 포트폴리오 */
+        .portfolio-tabs { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; justify-content: center; }
+        .tab-btn { padding: 8px 20px; border: 1px solid var(--bg-light); background: white; border-radius: 25px; cursor: pointer; font-family: 'Paperozi'; font-weight: 500; transition: 0.3s; }
+        .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .portfolio-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; min-height: 400px; }
+        .portfolio-item { cursor: pointer; display: flex; flex-direction: column; gap: 10px; }
+        .portfolio-thumb { width: 100%; aspect-ratio: 16 / 9; background: #eee; border-radius: 10px; overflow: hidden; position: relative; border: 1px solid #f0f0f0; }
+        .portfolio-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+        .portfolio-item:hover .portfolio-thumb img { transform: scale(1.05); }
+        .portfolio-title-box { font-size: 14px; font-weight: 600; color: #333; padding: 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .category-label { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; padding: 2px 8px; font-size: 10px; border-radius: 4px; z-index: 1; }
+
+        .pagination { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 40px; flex-wrap: wrap; }
+        .pg-numbers { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; align-items: center; }
+        .pg-btn, .pg-num { flex-shrink: 0; width: 34px; height: 34px; border: 1px solid var(--bg-light); background: white; cursor: pointer; font-family: 'Paperozi'; font-size: 14px; color: var(--primary); font-weight: 700; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+        .pg-num.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; cursor: zoom-out; }
+        #lightbox img { max-width: 90%; max-height: 90%; border-radius: 5px; }
+
+        @media (max-width: 768px) { 
+            .container { padding: 30px 15px; }
+            .form-grid-v2 { grid-template-columns: 1fr; }
+            .form-item-v2.full-width, .copy-btn-wrapper { grid-column: span 1; }
+            .package-container { grid-template-columns: 1fr; } 
+            .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="main-container">
+    <section>
+        <h2>NOTICE</h2>
+        <div class="notice-card">
+            <ul>
+                <li>모든 저작물의 저작권은 저에게 있습니다. 2차 수정 및 무단 배포를 금지합니다.</li>
+                <li>모든 저작물은 신청해 주신 용도 외 사용 불가합니다. 외적인 용도 사용 시 문의 하시기 바랍니다.</li>
+                <li>그림은 그리지 않습니다.</li>
+                <li>무료 수정은 최대 2회입니다. 수정 사항은 정리해서 전달해 주시면 감사드리겠습니다.</li>
+                <li>아바타 사진 제공 시 원하시는 디자인과 잘 어울리는 복장을 보내주세요. (화질 4K 이상 권장)</li>
+                <li>오마카세 여부를 말씀 해주세요!</li>
+                <li>작업 시 문의 양식에 레퍼런스 첨부를 해주시면 원하시는 분위기를 수월하게 파악할 수 있습니다!</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2>문의 양식</h2>
+        <div class="form-guide-v2">
+            <div class="form-grid-v2" id="inquiryForm">
+                <div class="form-item-v2"><label>1. 방송 닉네임</label><input type="text" id="fm_nickname" placeholder="닉네임을 입력해주세요."></div>
+                <div class="form-item-v2"><label>2. 디자인 품목</label><input type="text" id="fm_item" placeholder="자유롭게 적어주세요."></div>
+                <div class="form-item-v2 full-width"><label>3. 콘셉트/레퍼런스</label><textarea id="fm_concept" placeholder="이미지 첨부 또는 글로 설명해주세요."></textarea></div>
+                
+                <div class="form-item-v2 full-width">
+                    <label>4. 퍼스널컬러 또는 색감</label>
+                    <div class="color-control-box">
+                        <input type="color" id="colorPickerUI" value="#003cf7" oninput="document.getElementById('colorHexUI').value = this.value.toUpperCase()">
+                        <input type="text" id="colorHexUI" class="color-hex-input" value="#003CF7" maxlength="7">
+                        <button class="btn-add" onclick="addColorChip()">+ 추가</button>
+                    </div>
+                    <div class="selected-colors" id="colorChipContainer"></div>
+                </div>
+
+                <div class="form-item-v2 full-width"><label>5. 꼭 들어가야 할 문구 또는 넣고 싶은 오브젝트</label><textarea id="fm_object" placeholder="내용을 입력해주세요."></textarea></div>
+
+                <div class="form-item-v2 full-width">
+                    <label>6. 이미지 첨부 (다중 선택 가능)</label>
+                    <div class="file-upload-box">
+                        <label for="fm_images" class="file-upload-label">📁 이미지 파일 선택</label>
+                        <input type="file" id="fm_images" multiple accept="image/*" onchange="handleImageFiles(event)">
+                        <div class="image-preview-list" id="imagePreviewContainer"></div>
+                    </div>
+                </div>
+
+                <div class="form-item-v2 full-width"><label>7. 그 외 추가 사항</label><textarea id="fm_extra" placeholder="기타 요청사항을 입력해주세요."></textarea></div>
+                <div class="form-item-v2 full-width"><label>8. 마감 날짜</label><input type="date" id="fm_date"></div>
+
+                <div class="copy-btn-wrapper">
+                    <div class="copy-balloon" id="copyBalloon">복사완료!</div>
+                    <button class="copy-btn" onclick="copyInquiryRichText()">📝 문의 양식 복사하기</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>PACKAGE</h2>
+        <div class="package-container">
+            <div class="package-card">
+                <div class="package-tag">Package-A</div>
+                <div class="package-title">숲 방송 필수 디자인!</div>
+                <div class="package-desc">숲(SOOP) 방송 시작을 위한 가장 핵심적인 구성입니다.</div>
+                <div class="package-list">
+                    유튜브 채널아트 + 숲 채널아트 + 플로팅배너 3장 + <b>플로팅배너 1장(서비스)</b>
+                </div>
+            </div>
+            <div class="package-card">
+                <div class="package-tag">SOOP Full</div>
+                <div class="package-title">숲 패키지</div>
+                <div class="package-desc">방송과 팬카페 운영을 병행하시는 분들을 위한 풀세트 구성입니다.</div>
+                <div class="package-list">
+                    유튜브 채널아트 + 숲 채널아트 + 플로팅배너 3장 + <b>플로팅배너 1장(서비스)</b> + 팬카페 배너 + 팬카페 대문
+                </div>
+            </div>
+            <div class="package-card">
+                <div class="package-tag">Package-B</div>
+                <div class="package-title">치지직 방송 필수 디자인!</div>
+                <div class="package-desc">치지직(CHZZK) 스트리머분들을 위한 필수 패키지입니다.</div>
+                <div class="package-list">
+                    유튜브 채널아트 + 치지직 배너 <b>(장수 제한 7장)</b>
+                </div>
+            </div>
+            <div class="package-card">
+                <div class="package-tag">CHZZK Full</div>
+                <div class="package-title">치지직 패키지</div>
+                <div class="package-desc">치지직 방송 및 네이버 카페 운영을 위한 완벽한 솔루션입니다.</div>
+                <div class="package-list">
+                    유튜브 채널아트 + 치지직 배너 <b>(제한 없음)</b> + 팬카페 배너 + 팬카페 대문
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>PORTFOLIO</h2>
+        <div class="portfolio-tabs" id="categoryTabs">
+            <button class="tab-btn active" onclick="filterCategory('ALL')">ALL</button>
+            <button class="tab-btn" onclick="filterCategory('SET')">SET</button>
+            <button class="tab-btn" onclick="filterCategory('SOOP')">SOOP</button>
+            <button class="tab-btn" onclick="filterCategory('CHZZK')">CHZZK</button>
+            <button class="tab-btn" onclick="filterCategory('POSTER')">POSTER</button>
+            <button class="tab-btn" onclick="filterCategory('YOUTUBE')">YOUTUBE</button>
+            <button class="tab-btn" onclick="filterCategory('SCHEDULE')">SCHEDULE</button>
+            <button class="tab-btn" onclick="filterCategory('THUMBNAIL')">THUMBNAIL</button>
+        </div>
+        <div class="portfolio-grid" id="portfolioGrid"></div>
+        <div class="pagination">
+            <button class="pg-btn" onclick="changePage(currentPage - 1)">&lt;</button>
+            <div class="pg-numbers" id="pgNumbers"></div>
+            <button class="pg-btn" onclick="changePage(currentPage + 1)">&gt;</button>
+        </div>
+    </section>
+</div>
+
+<div id="lightbox" onclick="this.style.display='none'"><img id="lightboxImg" src=""></div>
+
+<script>
+    /* 2. 임베드 높이 자동 조절용 스크립트 */
+    function sendHeightToParent() {
+        const height = document.documentElement.scrollHeight;
+        window.parent.postMessage({ type: 'resize', height: height }, '*');
+    }
+    window.addEventListener('load', sendHeightToParent);
+    window.addEventListener('resize', sendHeightToParent);
+    // 내용이 변할 때마다 호출
+    const observer = new MutationObserver(sendHeightToParent);
+    observer.observe(document.body, { attributes: true, childList: true, subtree: true });
+
+    let selectedColors = [];
+    let attachedImagesBase64 = [];
+
+    function addColorChip() {
+        const hex = document.getElementById('colorHexUI').value.toUpperCase();
+        if(/^#[0-9A-F]{6}$/i.test(hex) && !selectedColors.includes(hex)) {
+            selectedColors.push(hex);
+            renderColorChips();
+        }
+    }
+    function removeColorChip(hex) {
+        selectedColors = selectedColors.filter(c => c !== hex);
+        renderColorChips();
+    }
+    function renderColorChips() {
+        const container = document.getElementById('colorChipContainer');
+        container.innerHTML = selectedColors.map(c => `<div class="color-chip" style="background:${c}20; border:1px solid ${c}50;"><span style="background:${c}"></span> ${c} <button onclick="removeColorChip('${c}')">×</button></div>`).join('');
+    }
+
+    function handleImageFiles(event) {
+        const files = event.target.files;
+        for(let file of files) {
+            const reader = new FileReader();
+            reader.onload = (e) => { attachedImagesBase64.push({ name: file.name, data: e.target.result }); renderImagePreviews(); }
+            reader.readAsDataURL(file);
+        }
+        event.target.value = '';
+    }
+    function renderImagePreviews() {
+        const container = document.getElementById('imagePreviewContainer');
+        container.innerHTML = attachedImagesBase64.map((img, idx) => `<div class="img-preview-item"><img src="${img.data}"><button class="img-remove-btn" onclick="attachedImagesBase64.splice(${idx}, 1); renderImagePreviews();">✕</button></div>`).join('');
+    }
+
+    async function copyInquiryRichText() {
+        const data = {
+            nickname: document.getElementById('fm_nickname').value || '내용 없음',
+            item: document.getElementById('fm_item').value || '내용 없음',
+            concept: document.getElementById('fm_concept').value.replace(/\n/g, '<br>') || '내용 없음',
+            colors: selectedColors.join(', ') || '내용 없음',
+            object: document.getElementById('fm_object').value.replace(/\n/g, '<br>') || '내용 없음',
+            extra: document.getElementById('fm_extra').value.replace(/\n/g, '<br>') || '내용 없음',
+            date: document.getElementById('fm_date').value || '미정'
+        };
+
+        let htmlStr = `<div style="font-family:sans-serif; line-height:1.6; color:#333;"><h3 style="color:#003cf7;">[디자인 문의 양식]</h3><p><b>1. 방송 닉네임:</b> ${data.nickname}</p><p><b>2. 디자인 품목:</b> ${data.item}</p><p><b>3. 콘셉트/레퍼런스:</b><br>${data.concept}</p><p><b>4. 퍼스널컬러/색감:</b> ${data.colors}</p><p><b>5. 필수 문구/오브젝트:</b><br>${data.object}</p><p><b>6. 첨부 이미지:</b><br>`;
+        attachedImagesBase64.forEach(img => { htmlStr += `<img src="${img.data}" style="max-width:400px; display:block; margin-bottom:10px; border-radius:8px;">`; });
+        htmlStr += `</p><p><b>7. 그 외 추가 사항:</b><br>${data.extra}</p><p><b>8. 마감 날짜:</b> ${data.date}</p></div>`;
+
+        let plainTextStr = `[디자인 문의 양식]\n\n1. 방송 닉네임: ${data.nickname}\n2. 디자인 품목: ${data.item}\n3. 콘셉트/레퍼런스: ${data.concept.replace(/<br>/g, '\n')}\n4. 퍼스널컬러/색감: ${data.colors}\n5. 필수 문구: ${data.object.replace(/<br>/g, '\n')}\n6. 이미지: ${attachedImagesBase64.length}장\n7. 추가사항: ${data.extra.replace(/<br>/g, '\n')}\n8. 마감일: ${data.date}`;
+
+        try {
+            const clipboardItem = new ClipboardItem({ "text/html": new Blob([htmlStr], { type: "text/html" }), "text/plain": new Blob([plainTextStr], { type: "text/plain" }) });
+            await navigator.clipboard.write([clipboardItem]);
+            
+            const balloon = document.getElementById('copyBalloon');
+            balloon.classList.add('show');
+            setTimeout(() => balloon.classList.remove('show'), 1500);
+        } catch (e) { alert("복사 실패. 브라우저 보안 설정을 확인하세요."); }
+    }
+
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTH03PGVgFdh1F6NcXkK6YqEEH-iaRudUtjCQvRBz991-ln1zo562B9j83lPqLhmPrGlOlSBcri-199/pub?gid=0&single=true&output=csv';
+    let portfolioData = [];
+    let currentCategory = 'ALL';
+    let currentPage = 1;
+    const itemsPerPage = 12;
+
+    async function fetchPortfolio() {
+        try {
+            const response = await fetch(sheetUrl);
+            const data = await response.text();
+            const rows = data.split('\n').slice(1);
+            portfolioData = rows.map(row => { const [cat, tit, lnk] = row.split(',').map(s => s?.trim()); return { category: cat, title: tit, img: lnk }; }).filter(i => i.img);
+            renderPortfolio();
+        } catch (e) { console.error('Load Error'); }
+    }
+
+    function filterCategory(cat) {
+        currentCategory = cat; currentPage = 1;
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText === cat));
+        renderPortfolio();
+    }
+
+    function renderPortfolio() {
+        const grid = document.getElementById('portfolioGrid');
+        const pg = document.getElementById('pgNumbers');
+        const filtered = currentCategory === 'ALL' ? portfolioData : portfolioData.filter(i => i.category === currentCategory);
+        const total = Math.ceil(filtered.length / itemsPerPage) || 1;
+        const paged = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+        grid.innerHTML = paged.map(i => `<div class="portfolio-item" onclick="openLightbox('${i.img}')"><div class="portfolio-thumb"><div class="category-label">${i.category}</div><img src="${i.img}"></div><div class="portfolio-title-box">${i.title}</div></div>`).join('');
+        if(paged.length < itemsPerPage) for(let i=0; i < itemsPerPage - paged.length; i++) grid.innerHTML += `<div class="portfolio-item" style="visibility:hidden;"><div class="portfolio-thumb"></div></div>`;
+        
+        pg.innerHTML = '';
+        for(let i=1; i<=total; i++) pg.innerHTML += `<div class="pg-num ${i === currentPage ? 'active' : ''}" onclick="currentPage=${i}; renderPortfolio();">${i}</div>`;
+    }
+
+    function changePage(p) {
+        const total = Math.ceil((currentCategory === 'ALL' ? portfolioData : portfolioData.filter(i => i.category === currentCategory)).length / itemsPerPage) || 1;
+        if(p < 1 || p > total) return;
+        currentPage = p; renderPortfolio();
+    }
+
+    function openLightbox(src) { document.getElementById('lightboxImg').src = src; document.getElementById('lightbox').style.display = 'flex'; }
+
+    fetchPortfolio();
+</script>
+
+</body>
+</html>
