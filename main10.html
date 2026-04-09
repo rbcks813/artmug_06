@@ -46,15 +46,17 @@
         .form-item-v2 input[type="text"], .form-item-v2 input[type="date"], .form-item-v2 textarea { width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #ddd; background: #fafafa; font-family: 'Paperozi'; font-size: 14px; outline: none; transition: 0.3s; }
         .form-item-v2 textarea { resize: none; min-height: 100px; max-height: 200px; overflow-y: auto; }
         
-        input[type="color"] { -webkit-appearance: none; appearance: none; border: none; width: 40px; height: 40px; border-radius: 8px; cursor: pointer; padding: 0; background: none; }
+        input[type="color"] { -webkit-appearance: none; appearance: none; border: none; width: 45px; height: 45px; border-radius: 8px; cursor: pointer; padding: 0; background: none; flex-shrink: 0; }
         input[type="color"]::-webkit-color-swatch { border: 1px solid #ddd; border-radius: 8px; }
         
-        .color-hex-input { width: 100px !important; text-transform: uppercase; }
-        .btn-add { padding: 0 15px; height: 40px; background: var(--bg-light); color: var(--primary); border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: 'Paperozi'; }
-        .selected-colors { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; }
-        .color-chip { display: flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .color-chip span { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1); }
-        .color-chip button { background: none; border: none; font-size: 14px; cursor: pointer; opacity: 0.5; }
+        .color-control-box { display: flex; align-items: center; gap: 10px; background: #fafafa; padding: 10px; border-radius: 10px; border: 1px solid #eee; }
+        .color-hex-input { width: 120px !important; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin: 0 !important; }
+        .btn-add { padding: 0 20px; height: 45px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: 'Paperozi'; transition: 0.3s; }
+        
+        .selected-colors { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .color-chip { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.05); background: white; border: 1px solid #eee; }
+        .color-chip span { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1); }
+        .color-chip button { background: none; border: none; font-size: 16px; cursor: pointer; opacity: 0.5; }
 
         .file-upload-box { border: 2px dashed #ddd; padding: 20px; border-radius: 8px; text-align: center; background: #fafafa; }
         .file-upload-label { display: inline-block; padding: 10px 20px; background: white; border: 1px solid var(--primary); color: var(--primary); border-radius: 8px; font-weight: 600; cursor: pointer; }
@@ -136,8 +138,8 @@
                 <div class="form-item-v2 full-width">
                     <label>4. 퍼스널컬러 또는 색감</label>
                     <div class="color-control-box">
-                        <input type="color" id="colorPickerUI" value="#003cf7" oninput="document.getElementById('colorHexUI').value = this.value.toUpperCase()">
-                        <input type="text" id="colorHexUI" class="color-hex-input" value="#003CF7" maxlength="7">
+                        <input type="color" id="colorPickerUI" value="#003cf7" oninput="updateHexFromPicker(this.value)">
+                        <input type="text" id="colorHexUI" class="color-hex-input" value="#003CF7" maxlength="7" oninput="updatePickerFromHex(this.value)">
                         <button class="btn-add" onclick="addColorChip()">+ 추가</button>
                     </div>
                     <div class="selected-colors" id="colorChipContainer"></div>
@@ -235,28 +237,31 @@
     const observer = new MutationObserver(sendHeightToParent);
     observer.observe(document.body, { attributes: true, childList: true, subtree: true });
 
-    /* 팝업 열기: 부모 페이지로 이미지 경로 전송 */
+    /* 팝업 열기 */
     function openLightbox(src) {
         window.parent.postMessage({ type: 'openLightbox', src: src }, '*');
     }
+
+    function updateHexFromPicker(val) { document.getElementById('colorHexUI').value = val.toUpperCase(); }
+    function updatePickerFromHex(val) { if(/^#[0-9A-F]{6}$/i.test(val)) { document.getElementById('colorPickerUI').value = val; } else if(/^[0-9A-F]{6}$/i.test(val)) { document.getElementById('colorPickerUI').value = '#' + val; } }
 
     let selectedColors = [];
     let attachedImagesBase64 = [];
 
     function addColorChip() {
-        const hex = document.getElementById('colorHexUI').value.toUpperCase();
+        let hex = document.getElementById('colorHexUI').value.toUpperCase();
+        if(!hex.startsWith('#')) hex = '#' + hex;
         if(/^#[0-9A-F]{6}$/i.test(hex) && !selectedColors.includes(hex)) {
             selectedColors.push(hex);
             renderColorChips();
         }
     }
-    function removeColorChip(hex) {
-        selectedColors = selectedColors.filter(c => c !== hex);
-        renderColorChips();
-    }
+    
+    function removeColorChip(hex) { selectedColors = selectedColors.filter(c => c !== hex); renderColorChips(); }
+    
     function renderColorChips() {
         const container = document.getElementById('colorChipContainer');
-        container.innerHTML = selectedColors.map(c => `<div class="color-chip" style="background:${c}20; border:1px solid ${c}50;"><span style="background:${c}"></span> ${c} <button onclick="removeColorChip('${c}')">×</button></div>`).join('');
+        container.innerHTML = selectedColors.map(c => `<div class="color-chip"><span style="background:${c}"></span> ${c} <button onclick="removeColorChip('${c}')">×</button></div>`).join('');
     }
 
     function handleImageFiles(event) {
@@ -268,11 +273,13 @@
         }
         event.target.value = '';
     }
+    
     function renderImagePreviews() {
         const container = document.getElementById('imagePreviewContainer');
         container.innerHTML = attachedImagesBase64.map((img, idx) => `<div class="img-preview-item"><img src="${img.data}"><button class="img-remove-btn" onclick="attachedImagesBase64.splice(${idx}, 1); renderImagePreviews();">✕</button></div>`).join('');
     }
 
+    /* 크롬 임베드 복사 오류 수정본 */
     async function copyInquiryRichText() {
         const data = {
             nickname: document.getElementById('fm_nickname').value || '내용 없음',
@@ -291,13 +298,26 @@
         let plainTextStr = `[디자인 문의 양식]\n\n1. 방송 닉네임: ${data.nickname}\n2. 디자인 품목: ${data.item}\n3. 콘셉트/레퍼런스: ${data.concept.replace(/<br>/g, '\n')}\n4. 퍼스널컬러/색감: ${data.colors}\n5. 필수 문구: ${data.object.replace(/<br>/g, '\n')}\n6. 이미지: ${attachedImagesBase64.length}장\n7. 추가사항: ${data.extra.replace(/<br>/g, '\n')}\n8. 마감일: ${data.date}`;
 
         try {
-            const clipboardItem = new ClipboardItem({ "text/html": new Blob([htmlStr], { type: "text/html" }), "text/plain": new Blob([plainTextStr], { type: "text/plain" }) });
-            await navigator.clipboard.write([clipboardItem]);
+            // 크롬 임베드 환경에서는 포커스가 명확해야 함
+            window.focus();
             
-            const balloon = document.getElementById('copyBalloon');
-            balloon.classList.add('show');
-            setTimeout(() => balloon.classList.remove('show'), 1500);
-        } catch (e) { alert("복사 실패."); }
+            if (navigator.clipboard && window.ClipboardItem) {
+                const clipboardItem = new ClipboardItem({ 
+                    "text/html": new Blob([htmlStr], { type: "text/html" }), 
+                    "text/plain": new Blob([plainTextStr], { type: "text/plain" }) 
+                });
+                await navigator.clipboard.write([clipboardItem]);
+                
+                const balloon = document.getElementById('copyBalloon');
+                balloon.classList.add('show');
+                setTimeout(() => balloon.classList.remove('show'), 1500);
+            } else {
+                throw new Error("클립보드 API 미지원");
+            }
+        } catch (e) { 
+            console.error(e);
+            alert("복사가 차단되었습니다. 임베드 코드(iframe)에 allow=\"clipboard-write\" 속성이 있는지 확인해주세요."); 
+        }
     }
 
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTH03PGVgFdh1F6NcXkK6YqEEH-iaRudUtjCQvRBz991-ln1zo562B9j83lPqLhmPrGlOlSBcri-199/pub?gid=0&single=true&output=csv';
@@ -316,11 +336,7 @@
         } catch (e) { console.error('Load Error'); }
     }
 
-    function filterCategory(cat) {
-        currentCategory = cat; currentPage = 1;
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText === cat));
-        renderPortfolio();
-    }
+    function filterCategory(cat) { currentCategory = cat; currentPage = 1; document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText === cat)); renderPortfolio(); }
 
     function renderPortfolio() {
         const grid = document.getElementById('portfolioGrid');
@@ -328,10 +344,8 @@
         const filtered = currentCategory === 'ALL' ? portfolioData : portfolioData.filter(i => i.category === currentCategory);
         const total = Math.ceil(filtered.length / itemsPerPage) || 1;
         const paged = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
         grid.innerHTML = paged.map(i => `<div class="portfolio-item" onclick="openLightbox('${i.img}')"><div class="portfolio-thumb"><div class="category-label">${i.category}</div><img src="${i.img}"></div><div class="portfolio-title-box">${i.title}</div></div>`).join('');
         if(paged.length < itemsPerPage) for(let i=0; i < itemsPerPage - paged.length; i++) grid.innerHTML += `<div class="portfolio-item" style="visibility:hidden;"><div class="portfolio-thumb"></div></div>`;
-        
         pg.innerHTML = '';
         for(let i=1; i<=total; i++) pg.innerHTML += `<div class="pg-num ${i === currentPage ? 'active' : ''}" onclick="currentPage=${i}; renderPortfolio();">${i}</div>`;
     }
