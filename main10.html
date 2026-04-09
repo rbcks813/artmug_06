@@ -88,15 +88,13 @@
         .portfolio-tabs { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; justify-content: center; }
         .tab-btn { padding: 8px 20px; border: 1px solid var(--bg-light); background: white; border-radius: 25px; cursor: pointer; font-family: 'Paperozi'; font-weight: 500; transition: 0.3s; }
         .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        
-        /* PC: 3열로 크기 확대 */
-        .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; min-height: auto; }
+
+        /* 포트폴리오 박스 크기 확대 (3열 배치) 및 제목 넘침 방지 */
+        .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
         .portfolio-item { cursor: pointer; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
         .portfolio-thumb { width: 100%; aspect-ratio: 16 / 9; background: #eee; border-radius: 10px; overflow: hidden; position: relative; border: 1px solid #f0f0f0; }
         .portfolio-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-        
-        /* 제목이 길어도 박스 크기 유지 */
-        .portfolio-title-box { font-size: 14px; font-weight: 600; color: #333; padding: 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; box-sizing: border-box; }
+        .portfolio-title-box { font-size: 14px; font-weight: 600; color: #333; padding: 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
         .category-label { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; padding: 2px 8px; font-size: 10px; border-radius: 4px; z-index: 1; }
 
         .pagination { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 40px; flex-wrap: wrap; }
@@ -104,7 +102,6 @@
         .pg-btn, .pg-num { flex-shrink: 0; width: 34px; height: 34px; border: 1px solid var(--bg-light); background: white; cursor: pointer; font-family: 'Paperozi'; font-size: 14px; color: var(--primary); font-weight: 700; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
         .pg-num.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* 모바일 UI 최적화 */
         @media (max-width: 768px) { 
             .container { padding: 30px 15px; }
             .form-grid-v2 { grid-template-columns: 1fr; }
@@ -237,31 +234,20 @@
 </div>
 
 <script>
-    /* 높이 조절 보정 (Math.ceil로 정밀도 향상) */
-    function sendHeightToParent() {
-        const height = Math.ceil(document.body.offsetHeight);
-        window.parent.postMessage({ type: 'resize', height: height }, '*');
-    }
-    window.addEventListener('load', sendHeightToParent);
-    window.addEventListener('resize', sendHeightToParent);
-    const observer = new MutationObserver(sendHeightToParent);
-    observer.observe(document.body, { attributes: true, childList: true, subtree: true });
+    /* [수정] 실시간 높이 조절 최적화 (ResizeObserver 사용) */
+    const container = document.getElementById('main-container');
+    const resizeObserver = new ResizeObserver(entries => {
+        for (let entry of entries) {
+            const height = Math.ceil(entry.contentRect.height + 80); // 상하 패딩 포함
+            window.parent.postMessage({ type: 'resize', height: height }, '*');
+        }
+    });
+    resizeObserver.observe(container);
 
-    /* 팝업 제어 */
+    /* 팝업 열기 (기존 기능 유지) */
     function openLightbox(src) {
         window.parent.postMessage({ type: 'openLightbox', src: src }, '*');
     }
-    function closeLightbox() {
-        window.parent.postMessage({ type: 'closeLightbox' }, '*');
-    }
-
-    /* 배경 클릭 시 팝업 닫기 신호 전달 */
-    document.addEventListener('click', function(e) {
-        // 아이템이나 버튼, 입력창이 아닌 빈 공간 클릭 시 닫기 신호 보냄
-        if (!e.target.closest('.portfolio-item') && !e.target.closest('.copy-btn') && !e.target.closest('.btn-add') && !e.target.closest('input') && !e.target.closest('textarea') && !e.target.closest('.tab-btn')) {
-            closeLightbox();
-        }
-    });
 
     function updateHexFromPicker(val) { document.getElementById('colorHexUI').value = val.toUpperCase(); }
     function updatePickerFromHex(val) { if(/^#[0-9A-F]{6}$/i.test(val)) { document.getElementById('colorPickerUI').value = val; } else if(/^[0-9A-F]{6}$/i.test(val)) { document.getElementById('colorPickerUI').value = '#' + val; } }
@@ -329,7 +315,7 @@
                 balloon.classList.add('show');
                 setTimeout(() => balloon.classList.remove('show'), 1500);
             }
-        } catch (e) { alert("복사가 차단되었습니다."); }
+        } catch (e) { alert("복사 실패"); }
     }
 
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTH03PGVgFdh1F6NcXkK6YqEEH-iaRudUtjCQvRBz991-ln1zo562B9j83lPqLhmPrGlOlSBcri-199/pub?gid=0&single=true&output=csv';
@@ -357,13 +343,19 @@
         const total = Math.ceil(filtered.length / itemsPerPage) || 1;
         const paged = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
         
-        // 빈 박스 생성 로직 제거 (빈 공간 원인 해결)
-        grid.innerHTML = paged.map(i => `<div class="portfolio-item" onclick="openLightbox('${i.img}')"><div class="portfolio-thumb"><div class="category-label">${i.category}</div><img src="${i.img}"></div><div class="portfolio-title-box">${i.title}</div></div>`).join('');
-        
+        /* [수정] 빈 박스를 생성하여 강제로 높이를 채우던 루프를 삭제하여 빈 공간 발생 원인 차단 */
+        grid.innerHTML = paged.map(i => `
+            <div class="portfolio-item" onclick="openLightbox('${i.img}')">
+                <div class="portfolio-thumb">
+                    <div class="category-label">${i.category}</div>
+                    <img src="${i.img}" loading="lazy">
+                </div>
+                <div class="portfolio-title-box">${i.title}</div>
+            </div>
+        `).join('');
+
         pg.innerHTML = '';
         for(let i=1; i<=total; i++) pg.innerHTML += `<div class="pg-num ${i === currentPage ? 'active' : ''}" onclick="currentPage=${i}; renderPortfolio();">${i}</div>`;
-        
-        sendHeightToParent();
     }
 
     function changePage(p) {
