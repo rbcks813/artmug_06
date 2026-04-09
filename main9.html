@@ -1607,7 +1607,7 @@ function fallbackCopy(text, cb) {
   ta.setAttribute('readonly', '');
   ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
   document.body.appendChild(ta);
-  ta.focus();
+  ta.focus({ preventScroll: true });
   ta.select();
   // iOS Safari
   const range = document.createRange();
