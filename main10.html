@@ -88,11 +88,15 @@
         .portfolio-tabs { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; justify-content: center; }
         .tab-btn { padding: 8px 20px; border: 1px solid var(--bg-light); background: white; border-radius: 25px; cursor: pointer; font-family: 'Paperozi'; font-weight: 500; transition: 0.3s; }
         .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .portfolio-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; min-height: 400px; }
-        .portfolio-item { cursor: pointer; display: flex; flex-direction: column; gap: 10px; }
+        
+        /* [수정됨] 4열에서 3열로 변경하여 박스 크기 확장 */
+        .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; min-height: 400px; }
+        /* [수정됨] min-width: 0 을 추가하여 텍스트가 길어져도 박스가 팽창하지 않고 말줄임 처리되도록 보장 */
+        .portfolio-item { cursor: pointer; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+        
         .portfolio-thumb { width: 100%; aspect-ratio: 16 / 9; background: #eee; border-radius: 10px; overflow: hidden; position: relative; border: 1px solid #f0f0f0; }
         .portfolio-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-        .portfolio-title-box { font-size: 14px; font-weight: 600; color: #333; padding: 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .portfolio-title-box { font-size: 14px; font-weight: 600; color: #333; padding: 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
         .category-label { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; padding: 2px 8px; font-size: 10px; border-radius: 4px; z-index: 1; }
 
         .pagination { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 40px; flex-wrap: wrap; }
@@ -100,12 +104,33 @@
         .pg-btn, .pg-num { flex-shrink: 0; width: 34px; height: 34px; border: 1px solid var(--bg-light); background: white; cursor: pointer; font-family: 'Paperozi'; font-size: 14px; color: var(--primary); font-weight: 700; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
         .pg-num.active { background: var(--primary); color: white; border-color: var(--primary); }
 
+        /* [수정됨] 모바일 반응형 디테일 추가 및 최적화 */
         @media (max-width: 768px) { 
-            .container { padding: 30px 15px; }
+            .container { padding: 20px 15px; }
+            h2 { font-size: 20px; }
+            .form-guide-v2 { padding: 25px 20px; }
             .form-grid-v2 { grid-template-columns: 1fr; }
             .form-item-v2.full-width, .copy-btn-wrapper { grid-column: span 1; }
+            
+            /* 색상 선택창 모바일 최적화 */
+            .color-control-box { flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+            .color-hex-input { width: calc(100% - 65px) !important; flex-grow: 1; }
+            .btn-add { width: 100%; }
+            
+            .copy-btn { width: 100%; padding: 14px 20px; font-size: 15px; }
+            
             .package-container { grid-template-columns: 1fr; } 
-            .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .package-card { padding: 20px; }
+            
+            /* 포트폴리오 모바일 최적화 */
+            .portfolio-tabs { gap: 6px; }
+            .tab-btn { padding: 6px 12px; font-size: 13px; }
+            .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        }
+        
+        /* 아주 작은 스마트폰 사이즈 대응 */
+        @media (max-width: 480px) {
+            .portfolio-grid { grid-template-columns: 1fr; gap: 20px; }
         }
     </style>
 </head>
@@ -227,15 +252,21 @@
 </div>
 
 <script>
-    /* 높이 조절 */
+    /* [수정됨] 실시간 높이 조절 - ResizeObserver 사용으로 구조 및 이미지 변경 실시간 감지 */
     function sendHeightToParent() {
         const height = document.documentElement.scrollHeight;
         window.parent.postMessage({ type: 'resize', height: height }, '*');
     }
+    
     window.addEventListener('load', sendHeightToParent);
-    window.addEventListener('resize', sendHeightToParent);
-    const observer = new MutationObserver(sendHeightToParent);
-    observer.observe(document.body, { attributes: true, childList: true, subtree: true });
+    if (window.ResizeObserver) {
+        new ResizeObserver(sendHeightToParent).observe(document.body);
+    } else {
+        // Fallback for older browsers
+        window.addEventListener('resize', sendHeightToParent);
+        const observer = new MutationObserver(sendHeightToParent);
+        observer.observe(document.body, { attributes: true, childList: true, subtree: true });
+    }
 
     /* 팝업 열기 */
     function openLightbox(src) {
@@ -324,7 +355,7 @@
     let portfolioData = [];
     let currentCategory = 'ALL';
     let currentPage = 1;
-    const itemsPerPage = 12;
+    const itemsPerPage = 12; // 3열이므로 한 페이지 12개 설정 유지
 
     async function fetchPortfolio() {
         try {
