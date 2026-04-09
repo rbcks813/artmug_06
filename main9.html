@@ -1,362 +1,1639 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Design Portfolio & Guide</title>
-    <style>
-        /* 폰트 설정 */
-        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight: 100; font-display: swap; }
-        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2'); font-weight: 200; font-display: swap; }
-        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
-        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
-        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
-        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
-        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
-        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2'); font-weight: 800; font-display: swap; }
-        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>리깅 커미션</title>
+<style>
+@font-face {
+  font-family: 'KerisKedyuche';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-3@1.0/KERISKEDU_R.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'KerisKedyuche';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-3@1.0/KERISKEDU_B.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
 
-        :root {
-            --bg-white: #ffffff;
-            --bg-light: #dce4ff;
-            --primary: #003cf7;
-            --accent-1: #9084e6;
-            --accent-2: #788bf3;
-            --text-main: #222;
-        }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Paperozi', sans-serif; background-color: var(--bg-white); color: var(--text-main); line-height: 1.6; word-break: keep-all; overflow-x: hidden; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+:root {
+  --bg: #fdf9ee;
+  --bg2: #f5edcf;
+  --bg3: #ffffff;
+  --text: #2a2310;
+  --text2: #6b5e38;
+  --text3: #b0a07a;
+  --accent: #e8c84a;
+  --accent2: #c49b1a;
+  --accent3: #9a7710;
+  --pink: #f5d98a;
+  --pink2: #d4a820;
+  --teal: #f0e4a0;
+  --teal2: #c49b1a;
+  --border: rgba(180,140,30,0.12);
+  --glass-bg: rgba(255,252,235,0.65);
+  --glass-border: rgba(255,248,210,0.88);
+  --glass-shadow: 0 8px 32px rgba(160,120,20,0.10), 0 2px 8px rgba(140,100,10,0.07);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --radius-lg: 28px;
+}
 
-        section { margin-bottom: 60px; }
-        h2 { font-weight: 800; font-size: 24px; color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; }
-        h2::before { content: ''; width: 4px; height: 24px; background: var(--primary); margin-right: 12px; border-radius: 2px; }
+body {
+  font-family: 'KerisKedyuche', 'Apple SD Gothic Neo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 15px;
+  overflow-x: hidden;
+}
 
-        .notice-card { background: var(--bg-light); padding: 30px; border-radius: 15px; border-left: 5px solid var(--accent-2); }
-        .notice-card ul { list-style: none; }
-        .notice-card li { margin-bottom: 12px; font-weight: 400; color: #444; position: relative; padding-left: 20px; }
-        .notice-card li::before { content: '•'; position: absolute; left: 0; color: var(--primary); }
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 65% 45% at 15% 5%,  rgba(240,210,80,0.20) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 55% at 85% 85%, rgba(220,180,40,0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 35% at 55% 35%, rgba(255,230,120,0.16) 0%, transparent 55%),
+    var(--bg);
+}
 
-        .form-guide-v2 { background: #ffffff; padding: 40px; border-radius: 20px; border: 1px solid var(--bg-light); box-shadow: 0 10px 30px rgba(0,60,247,0.03); }
-        .form-grid-v2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .form-item-v2 { display: flex; flex-direction: column; gap: 8px; }
-        .form-item-v2.full-width { grid-column: span 2; }
-        .form-item-v2 label { font-weight: 700; color: var(--primary); font-size: 14px; }
-        .form-item-v2 input[type="text"], .form-item-v2 input[type="date"], .form-item-v2 textarea { width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #ddd; background: #fafafa; font-family: 'Paperozi'; font-size: 14px; outline: none; transition: 0.3s; }
-        .form-item-v2 textarea { resize: none; min-height: 100px; max-height: 200px; overflow-y: auto; }
-        
-        input[type="color"] { -webkit-appearance: none; appearance: none; border: none; width: 45px; height: 45px; border-radius: 8px; cursor: pointer; padding: 0; background: none; flex-shrink: 0; }
-        input[type="color"]::-webkit-color-swatch { border: 1px solid #ddd; border-radius: 8px; }
-        
-        .color-control-box { display: flex; align-items: center; gap: 10px; background: #fafafa; padding: 10px; border-radius: 10px; border: 1px solid #eee; }
-        .color-hex-input { width: 120px !important; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin: 0 !important; }
-        .btn-add { padding: 0 20px; height: 45px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: 'Paperozi'; transition: 0.3s; }
-        
-        .selected-colors { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-        .color-chip { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.05); background: white; border: 1px solid #eee; }
-        .color-chip span { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1); }
-        .color-chip button { background: none; border: none; font-size: 16px; cursor: pointer; opacity: 0.5; }
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1.5px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius);
+}
 
-        .file-upload-box { border: 2px dashed #ddd; padding: 20px; border-radius: 8px; text-align: center; background: #fafafa; }
-        .file-upload-label { display: inline-block; padding: 10px 20px; background: white; border: 1px solid var(--primary); color: var(--primary); border-radius: 8px; font-weight: 600; cursor: pointer; }
-        input[type="file"] { display: none; }
-        .image-preview-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
-        .img-preview-item { position: relative; width: 80px; height: 80px; border-radius: 8px; overflow: hidden; border: 1px solid #eee; }
-        .img-preview-item img { width: 100%; height: 100%; object-fit: cover; }
-        .img-remove-btn { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.7); color: white; border: none; width: 20px; height: 20px; border-radius: 50%; font-size: 10px; cursor: pointer; }
+.glass-sm {
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.8);
+  box-shadow: 0 4px 16px rgba(170,130,15,0.06);
+  border-radius: var(--radius-sm);
+}
 
-        .copy-btn-wrapper { grid-column: span 2; display: flex; justify-content: center; margin-top: 20px; position: relative; }
-        .copy-btn { background: var(--primary); color: white; border: none; padding: 16px 50px; border-radius: 30px; font-size: 16px; font-family: 'Paperozi'; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,60,247,0.2); }
-        
-        .copy-balloon {
-            position: absolute; top: -45px; left: 50%; transform: translateX(-50%);
-            background: #333; color: #fff; padding: 8px 15px; border-radius: 8px;
-            font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: 0.3s;
-        }
-        .copy-balloon.show { opacity: 1; top: -50px; }
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
 
-        .package-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .package-card { border: 1px solid var(--bg-light); padding: 30px; border-radius: 20px; transition: 0.3s; background: #fff; }
-        .package-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,60,247,0.05); }
-        .package-tag { display: inline-block; padding: 4px 12px; background: var(--primary); color: white; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 12px; }
-        .package-title { font-weight: 800; font-size: 20px; margin-bottom: 8px; color: #111; }
-        .package-desc { font-size: 14px; color: var(--accent-1); font-weight: 600; margin-bottom: 15px; line-height: 1.4; }
-        .package-list { font-size: 13px; color: #555; background: #f8f9ff; padding: 15px; border-radius: 12px; border: 1px solid var(--bg-light); }
-        .package-list b { color: var(--primary); }
+section { margin-bottom: 28px; }
 
-        .portfolio-tabs { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; justify-content: center; }
-        .tab-btn { padding: 8px 20px; border: 1px solid var(--bg-light); background: white; border-radius: 25px; cursor: pointer; font-family: 'Paperozi'; font-weight: 500; transition: 0.3s; }
-        .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .portfolio-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; min-height: 400px; }
-        .portfolio-item { cursor: pointer; display: flex; flex-direction: column; gap: 10px; }
-        .portfolio-thumb { width: 100%; aspect-ratio: 16 / 9; background: #eee; border-radius: 10px; overflow: hidden; position: relative; border: 1px solid #f0f0f0; }
-        .portfolio-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-        .portfolio-title-box { font-size: 14px; font-weight: 600; color: #333; padding: 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .category-label { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; padding: 2px 8px; font-size: 10px; border-radius: 4px; z-index: 1; }
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.section-label::before {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
 
-        .pagination { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 40px; flex-wrap: wrap; }
-        .pg-numbers { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; align-items: center; }
-        .pg-btn, .pg-num { flex-shrink: 0; width: 34px; height: 34px; border: 1px solid var(--bg-light); background: white; cursor: pointer; font-family: 'Paperozi'; font-size: 14px; color: var(--primary); font-weight: 700; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
-        .pg-num.active { background: var(--primary); color: white; border-color: var(--primary); }
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 18px;
+}
 
-        @media (max-width: 768px) { 
-            .container { padding: 30px 15px; }
-            .form-grid-v2 { grid-template-columns: 1fr; }
-            .form-item-v2.full-width, .copy-btn-wrapper { grid-column: span 1; }
-            .package-container { grid-template-columns: 1fr; } 
-            .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        }
-    </style>
+/* ── HERO ── */
+.hero { padding: 24px 0 16px; }
+
+.hero-card {
+  padding: 22px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0;
+}
+
+.artist-name { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.artist-bio { font-size: 13px; color: var(--text2); line-height: 1.75; }
+
+.slot-box {
+  background: rgba(210,160,20,0.10);
+  border: 1.5px solid rgba(210,160,20,0.25);
+  border-radius: 16px;
+  padding: 14px 16px;
+  width: 100%;
+}
+.slot-title { font-size: 12px; font-weight: 700; color: var(--accent3); margin-bottom: 10px; letter-spacing: 0.05em; }
+
+/* ── EVENT ── */
+.event-card {
+  padding: 18px 20px;
+  background: linear-gradient(135deg, rgba(240,210,80,0.18), rgba(210,160,20,0.14));
+  border: 1.5px solid rgba(225,185,50,0.4);
+  border-radius: var(--radius);
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  transition: box-shadow 0.2s;
+}
+.event-card:hover { box-shadow: 0 12px 40px rgba(170,130,15,0.12); }
+.event-icon { font-size: 26px; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+.event-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.event-content { font-size: 13px; color: var(--text2); line-height: 1.75; }
+.event-badge {
+  display: inline-block;
+  background: rgba(196,155,26,0.12);
+  color: var(--pink2);
+  border: 1px solid rgba(196,155,26,0.25);
+  border-radius: 6px;
+  font-size: 10px; font-weight: 700;
+  padding: 3px 10px;
+  margin-right: 6px; margin-bottom: 4px;
+}
+
+/* ── SAMPLE ── */
+.sample-images-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+.sample-img-box {
+  aspect-ratio: 3/4;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(210,160,20,0.08);
+  border: 1px solid rgba(210,160,20,0.15);
+  display: flex; align-items: center; justify-content: center;
+}
+.sample-img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sample-item-title {
+  font-size: 10px; font-weight: 700; color: var(--text2);
+  text-align: center; margin-top: 5px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.sample-img-placeholder {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 8px; font-size: 11px; color: var(--text3); font-weight: 600;
+}
+.sample-img-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(210,160,20,0.15);
+  border: 1px solid rgba(210,160,20,0.25);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── PORTFOLIO ── */
+.portfolio-slider { overflow: hidden; border-radius: var(--radius); position: relative; }
+.portfolio-track {
+  display: flex;
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.portfolio-item { flex: 0 0 100%; min-width: 0; }
+.portfolio-thumb {
+  aspect-ratio: 16/9;
+  background: var(--bg2);
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+}
+.portfolio-yt-mock {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 10px;
+  font-size: 13px; color: var(--text2);
+}
+.yt-play {
+  width: 68px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+}
+.portfolio-desc { font-size: 13px; color: var(--text2); padding: 0 2px; }
+.portfolio-nav {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-top: 20px;
+}
+.portfolio-dots { display: flex; gap: 6px; }
+
+.dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--text3); cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+.dot.active { background: var(--accent2); width: 18px; border-radius: 3px; }
+
+.nav-arrows { display: flex; gap: 8px; }
+.nav-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--text2);
+  transition: all 0.2s;
+  font-family: 'KerisKedyuche', sans-serif;
+}
+.nav-btn:hover { background: rgba(210,160,20,0.15); color: var(--accent2); }
+
+/* ── PROCESS ── */
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+.step-card {
+  padding: 16px 14px; position: relative;
+  border-radius: 18px;
+  transition: transform 0.2s;
+}
+.step-card:hover { transform: translateY(-2px); }
+.step-num { font-size: 10px; font-weight: 700; color: var(--text3); margin-bottom: 8px; }
+.step-icon { font-size: 22px; margin-bottom: 8px; display: block; }
+.step-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.step-desc { font-size: 11px; color: var(--text2); line-height: 1.6; }
+.step-arrow {
+  position: absolute; right: -6px; top: 50%;
+  transform: translateY(-50%); font-size: 12px; color: var(--accent); z-index: 1;
+}
+.step-card:last-child .step-arrow { display: none; }
+
+/* ── OPTIONS ── */
+.option-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.8);
+  border-radius: 12px; font-size: 13px; color: var(--text);
+  transition: all 0.18s;
+}
+.option-item:hover { background: rgba(255,255,255,0.8); border-color: rgba(210,160,20,0.35); }
+.option-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.option-item.extra .option-dot { background: var(--pink); }
+
+/* ── NOTICE ── */
+.notice-list { display: flex; flex-direction: column; gap: 8px; }
+.notice-item {
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.8);
+  border-radius: 16px; font-size: 13px; color: var(--text2);
+  display: flex; align-items: flex-start; gap: 10px; line-height: 1.65;
+  transition: background 0.2s;
+}
+.notice-item:hover { background: rgba(255,255,255,0.72); }
+.notice-icon { flex-shrink: 0; font-size: 16px; margin-top: 1px; }
+
+/* ── FORM ── */
+.form-section-title {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  margin: 20px 0 10px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px; margin-bottom: 10px;
+}
+
+.form-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.form-label { font-size: 12px; font-weight: 700; color: var(--text2); }
+.form-input {
+  background: rgba(255,255,255,0.65);
+  border: 1.5px solid rgba(200,180,230,0.3);
+  border-radius: 14px; padding: 11px 16px;
+  font-size: 14px; color: var(--text);
+  font-family: 'KerisKedyuche', sans-serif;
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+.form-input:focus {
+  border-color: var(--accent2);
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 0 0 3px rgba(196,155,26,0.12);
+}
+.form-input::placeholder { color: var(--text3); }
+textarea.form-input { resize: none; min-height: 90px; max-height: 90px; overflow-y: auto; }
+
+.radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
+.radio-label {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.5);
+  border: 1.5px solid rgba(200,180,230,0.3);
+  border-radius: 10px; font-size: 12px; font-weight: 700;
+  color: var(--text2); cursor: pointer; transition: all 0.2s;
+}
+.radio-label:has(input:checked) {
+  background: rgba(196,155,26,0.10);
+  border-color: var(--accent2); color: var(--accent2);
+}
+.radio-label input { display: none; }
+
+.option-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.4);
+  border: 1px solid rgba(200,180,230,0.2);
+  border-radius: 14px; margin-bottom: 6px;
+  transition: background 0.18s;
+}
+.option-row:hover { background: rgba(255,255,255,0.7); }
+
+.option-check-label {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; color: var(--text); cursor: pointer; flex: 1;
+}
+.option-check-label input[type="checkbox"] {
+  width: 16px; height: 16px;
+  accent-color: var(--accent2); cursor: pointer;
+}
+
+.option-price { font-size: 12px; font-weight: 700; color: var(--text3); white-space: nowrap; }
+.option-count { display: flex; align-items: center; gap: 4px; }
+.count-btn {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: rgba(210,160,20,0.15);
+  border: 1px solid rgba(210,160,20,0.3);
+  color: var(--accent2); font-size: 16px; line-height: 1;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-family: 'KerisKedyuche', sans-serif; transition: all 0.2s;
+}
+.count-btn:hover { background: rgba(210,160,20,0.3); }
+.count-val { font-size: 13px; font-weight: 700; min-width: 24px; text-align: center; color: var(--text); }
+
+.price-preview {
+  background: linear-gradient(135deg, rgba(210,160,20,0.12), rgba(210,165,30,0.10));
+  border: 1.5px solid rgba(210,160,20,0.25);
+  border-radius: 18px; padding: 16px 20px; margin-top: 16px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.price-label { font-size: 13px; color: var(--text2); font-weight: 700; }
+.price-total { font-size: 24px; font-weight: 700; color: var(--accent2); }
+
+.form-btns { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+
+.btn-copy {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.6);
+  border: 1.5px solid rgba(210,160,20,0.3);
+  color: var(--accent2); padding: 11px 22px;
+  border-radius: 10px; font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: 'KerisKedyuche', sans-serif; transition: all 0.2s;
+}
+.btn-copy:hover { background: rgba(210,160,20,0.10); }
+
+.btn-reset {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: transparent;
+  border: 1.5px solid var(--border); color: var(--text2);
+  padding: 11px 22px; border-radius: 10px;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: 'KerisKedyuche', sans-serif; transition: all 0.2s;
+}
+.btn-reset:hover { border-color: rgba(210,160,20,0.3); color: var(--accent2); }
+
+/* ── REFUND ── */
+.refund-card { padding: 22px 20px; }
+.refund-steps { display: flex; flex-direction: column; gap: 0; }
+.refund-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 0; border-bottom: 1px solid var(--border);
+}
+.refund-row:last-child { border-bottom: none; }
+.refund-stage { font-size: 13px; font-weight: 700; color: var(--text); flex: 1; }
+.refund-pct { font-size: 13px; font-weight: 700; padding: 3px 12px; border-radius: 6px; }
+.pct-100 { color: var(--teal2); background: rgba(185,145,20,0.10); }
+.pct-70  { color: #4a9e6b; background: rgba(59,130,246,0.1); }
+.pct-50  { color: #f59e0b; background: rgba(245,158,11,0.1); }
+.pct-0   { color: #ef4444; background: rgba(239,68,68,0.08); }
+.refund-icon { font-size: 18px; }
+
+/* ── CAT SLIDER ── */
+.cat-slider-block { display: flex; flex-direction: column; gap: 10px; }
+.cat-slider-wrap { overflow: hidden; }
+.cat-track { display: flex; transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); }
+.cat-slide { flex: 0 0 100%; min-width: 0; }
+.cat-nav-row {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-top: 10px;
+  padding-top: 10px; border-top: 1px solid var(--border);
+}
+.cat-dots { display: flex; gap: 5px; align-items: center; }
+
+/* ── DECORATIVE ── */
+.blob1 { background: linear-gradient(135deg, rgba(220,180,40,0.30), rgba(240,210,80,0.22)); }
+.blob2 { background: linear-gradient(135deg, rgba(200,160,25,0.28), rgba(190,165,255,0.20)); }
+.blob3 { background: linear-gradient(135deg, rgba(235,200,60,0.28), rgba(225,210,255,0.22)); }
+.blob4 { background: linear-gradient(135deg, rgba(215,175,40,0.25), rgba(235,200,60,0.22)); }
+
+/* Glass shimmer */
+.glass { position: relative; overflow: hidden; }
+.glass::after {
+  content: '';
+  position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ── SCROLL ANIM ── */
+.fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ════════════════════════════════
+   📱 MOBILE RESPONSIVE
+   ════════════════════════════════ */
+@media (max-width: 600px) {
+  body { font-size: 14px; }
+
+  .container { padding: 0 12px; }
+
+  /* Hero */
+  .hero { padding: 16px 0 12px; }
+  .hero-card { padding: 18px 14px 16px; }
+  .artist-name { font-size: 18px; }
+  .artist-bio { font-size: 12px; }
+
+  /* Section */
+  .section-title { font-size: 17px; margin-bottom: 14px; }
+
+  /* Event */
+  .event-card { padding: 14px 14px; gap: 10px; }
+  .event-icon { font-size: 22px; }
+  .event-title { font-size: 13px; }
+  .event-content { font-size: 12px; }
+
+  /* Sample */
+  .sample-images-row { gap: 6px; }
+  .sample-item-title { font-size: 9px; }
+
+  /* Portfolio */
+  .portfolio-desc { font-size: 12px; }
+  .portfolio-nav { margin-top: 14px; }
+
+  /* Process */
+  .process-steps { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .step-card { padding: 12px 10px; }
+  .step-icon { font-size: 20px; margin-bottom: 6px; }
+  .step-name { font-size: 12px; }
+  .step-desc { font-size: 10px; }
+  .step-arrow { display: none; }
+
+  /* Rigging options 2-col → 1-col */
+  .rigging-base-grid { grid-template-columns: 1fr !important; }
+  .rigging-extra-grid { grid-template-columns: 1fr 1fr !important; }
+
+  /* Form */
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+  .form-input { font-size: 13px; padding: 10px 14px; }
+  .form-section-title { font-size: 12px; margin: 16px 0 8px; }
+  .radio-label { font-size: 11px; padding: 7px 12px; }
+
+  /* Option rows - 모바일 최적화 */
+  .option-row { padding: 10px 12px; gap: 8px; }
+  .option-check-label { font-size: 12px; }
+  .option-price { font-size: 11px; }
+  .count-btn { width: 26px; height: 26px; }
+  .count-val { font-size: 12px; min-width: 20px; }
+
+  /* IOS 옵션 4칸 → 2칸 */
+  .ios-grid { grid-template-columns: 1fr 1fr !important; }
+  /* 작업 옵션 2칸 → 1칸 */
+  .work-grid { grid-template-columns: 1fr !important; }
+
+  /* Price preview */
+  .price-preview { padding: 14px 16px; }
+  .price-total { font-size: 20px; }
+
+  /* Buttons */
+  .btn-copy, .btn-reset { padding: 11px 16px; font-size: 12px; width: 100%; justify-content: center; }
+  .form-btns { flex-direction: column; }
+
+  /* Refund */
+  .refund-card { padding: 16px 14px; }
+  .refund-stage { font-size: 12px; }
+  .refund-pct { font-size: 12px; padding: 3px 8px; }
+
+  /* Notice */
+  .notice-item { padding: 12px 14px; font-size: 12px; }
+
+  /* Glass card padding */
+  .glass[style*="padding:24px"] { padding: 16px !important; }
+  .glass[style*="padding:28px"] { padding: 18px !important; }
+}
+
+@media (max-width: 400px) {
+  .process-steps { grid-template-columns: 1fr; }
+  .rigging-extra-grid { grid-template-columns: 1fr !important; }
+  .ios-grid { grid-template-columns: 1fr 1fr !important; }
+}
+</style>
 </head>
 <body>
+<div class="page-bg"></div>
 
-<div class="container" id="main-container">
-    <section>
-        <h2>NOTICE</h2>
-        <div class="notice-card">
-            <ul>
-                <li>모든 저작물의 저작권은 저에게 있습니다. 2차 수정 및 무단 배포를 금지합니다.</li>
-                <li>모든 저작물은 신청해 주신 용도 외 사용 불가합니다. 외적인 용도 사용 시 문의 하시기 바랍니다.</li>
-                <li>그림은 그리지 않습니다.</li>
-                <li>무료 수정은 최대 2회입니다. 수정 사항은 정리해서 전달해 주시면 감사드리겠습니다.</li>
-                <li>아바타 사진 제공 시 원하시는 디자인과 잘 어울리는 복장을 보내주세요. (화질 4K 이상 권장)</li>
-                <li>오마카세 여부를 말씀 해주세요!</li>
-                <li>작업 시 문의 양식에 레퍼런스 첨부를 해주시면 원하시는 분위기를 수월하게 파악할 수 있습니다!</li>
-            </ul>
+<div class="container">
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="glass hero-card fade-in">
+      <div style="width:82px;height:82px;border-radius:18px;overflow:hidden;border:2px solid rgba(255,255,255,0.88);box-shadow:0 6px 20px rgba(196,155,26,0.20),0 2px 6px rgba(0,0,0,0.07);margin-bottom:10px;flex-shrink:0;">
+        <img src="https://www.dropbox.com/scl/fi/xlu1h0eh6i2e4f8kszmt7/Profile.png?rlkey=ce45irvyccs2f45feaxinxlz7&st=8b5t0bgp&dl=1" alt="SpicyPotato"
+          style="width:100%;height:100%;object-fit:cover;display:block;">
+      </div>
+      <div class="artist-name" style="margin-bottom:4px;">SpicyPotato</div>
+      <div class="artist-bio" style="max-width:420px;margin-bottom:14px;">캐릭터의 매력을 표현하기 위해 최선을 다하는 Live2D 리거입니다</div>
+      <div style="width:100%;">
+        <div class="slot-box">
+          <div class="slot-title">현재 작업 슬롯</div>
+          <div id="slotContainer" style="display:flex;flex-direction:column;gap:8px;">
+            <div style="text-align:center;font-size:12px;color:var(--text3);padding:8px;">슬롯 정보 불러오는 중...</div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <section>
-        <h2>문의 양식</h2>
-        <div class="form-guide-v2">
-            <div class="form-grid-v2" id="inquiryForm">
-                <div class="form-item-v2"><label>1. 방송 닉네임</label><input type="text" id="fm_nickname" placeholder="닉네임을 입력해주세요."></div>
-                <div class="form-item-v2"><label>2. 디자인 품목</label><input type="text" id="fm_item" placeholder="자유롭게 적어주세요."></div>
-                <div class="form-item-v2 full-width"><label>3. 콘셉트/레퍼런스</label><textarea id="fm_concept" placeholder="이미지 첨부 또는 글로 설명해주세요."></textarea></div>
-                
-                <div class="form-item-v2 full-width">
-                    <label>4. 퍼스널컬러 또는 색감</label>
-                    <div class="color-control-box">
-                        <input type="color" id="colorPickerUI" value="#003cf7" oninput="updateHexFromPicker(this.value)">
-                        <input type="text" id="colorHexUI" class="color-hex-input" value="#003CF7" maxlength="7" oninput="updatePickerFromHex(this.value)">
-                        <button class="btn-add" onclick="addColorChip()">+ 추가</button>
-                    </div>
-                    <div class="selected-colors" id="colorChipContainer"></div>
-                </div>
+  <!-- ── EVENT ── -->
+  <section class="fade-in">
+    <div class="section-label">이벤트 안내</div>
+    <div id="eventContainer">
+      <div style="text-align:center;font-size:13px;color:var(--text3);padding:24px;">이벤트 정보 불러오는 중...</div>
+    </div>
+  </section>
 
-                <div class="form-item-v2 full-width"><label>5. 꼭 들어가야 할 문구 또는 넣고 싶은 오브젝트</label><textarea id="fm_object" placeholder="내용을 입력해주세요."></textarea></div>
+  <!-- ── RIGGING SAMPLES ── -->
+  <section id="samples" class="fade-in">
+    <div class="section-label">리깅 샘플</div>
+    <div class="section-title">작업 샘플 갤러리</div>
+    <div id="sampleGallery" style="display:flex;flex-direction:column;gap:12px;">
+      <div style="text-align:center;font-size:13px;color:var(--text3);padding:32px;">샘플 불러오는 중...</div>
+    </div>
+  </section>
 
-                <div class="form-item-v2 full-width">
-                    <label>6. 이미지 첨부 (다중 선택 가능)</label>
-                    <div class="file-upload-box">
-                        <label for="fm_images" class="file-upload-label">📁 이미지 파일 선택</label>
-                        <input type="file" id="fm_images" multiple accept="image/*" onchange="handleImageFiles(event)">
-                        <div class="image-preview-list" id="imagePreviewContainer"></div>
-                    </div>
-                </div>
-
-                <div class="form-item-v2 full-width"><label>7. 그 외 추가 사항</label><textarea id="fm_extra" placeholder="기타 요청사항을 입력해주세요."></textarea></div>
-                <div class="form-item-v2 full-width"><label>8. 마감 날짜</label><input type="date" id="fm_date"></div>
-
-                <div class="copy-btn-wrapper">
-                    <div class="copy-balloon" id="copyBalloon">복사완료!</div>
-                    <button class="copy-btn" onclick="copyInquiryRichText()">📝 문의 양식 복사하기</button>
-                </div>
+  <!-- ── PORTFOLIO ── -->
+  <section class="fade-in">
+    <div class="section-label">포트폴리오</div>
+    <div class="section-title">작업 영상 포트폴리오</div>
+    <div class="glass" style="padding:24px;">
+      <div class="portfolio-slider">
+        <div class="portfolio-track" id="portfolioTrack">
+          <div class="portfolio-item">
+            <div class="portfolio-thumb blob1" style="border-radius:var(--radius-sm);">
+              <div class="portfolio-yt-mock">
+                <div class="yt-play"></div>
+                <span>사쿠라 치요 · 전신 리깅 쇼케이스</span>
+              </div>
             </div>
+            <div class="portfolio-desc">귀여운 핑크 계열 전신 모델의 표정 + 물리 연산 전체 쇼케이스. 9칸 표정 시연 포함 🌸</div>
+          </div>
         </div>
-    </section>
+      </div>
+      <div class="portfolio-nav">
+        <div class="portfolio-dots" id="portDots">
+          <div class="dot active" onclick="goSlide(0)"></div>
+        </div>
+        <div class="nav-arrows">
+          <button class="nav-btn" onclick="prevSlide()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <button class="nav-btn" onclick="nextSlide()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <section>
-        <h2>PACKAGE</h2>
-        <div class="package-container">
-            <div class="package-card">
-                <div class="package-tag">Package-A</div>
-                <div class="package-title">숲 방송 필수 디자인!</div>
-                <div class="package-desc">숲(SOOP) 방송 시작을 위한 가장 핵심적인 구성입니다.</div>
-                <div class="package-list">
-                    유튜브 채널아트 + 숲 채널아트 + 플로팅배너 3장 + <b>플로팅배너 1장(서비스)</b>
-                </div>
-            </div>
-            <div class="package-card">
-                <div class="package-tag">SOOP Full</div>
-                <div class="package-title">숲 패키지</div>
-                <div class="package-desc">방송과 팬카페 운영을 병행하시는 분들을 위한 풀세트 구성입니다.</div>
-                <div class="package-list">
-                    유튜브 채널아트 + 숲 채널아트 + 플로팅배너 3장 + <b>플로팅배너 1장(서비스)</b> + 팬카페 배너 + 팬카페 대문
-                </div>
-            </div>
-            <div class="package-card">
-                <div class="package-tag">Package-B</div>
-                <div class="package-title">치지직 방송 필수 디자인!</div>
-                <div class="package-desc">치지직(CHZZK) 스트리머분들을 위한 필수 패키지입니다.</div>
-                <div class="package-list">
-                    유튜브 채널아트 + 치지직 배너 <b>(장수 제한 7장)</b>
-                </div>
-            </div>
-            <div class="package-card">
-                <div class="package-tag">CHZZK Full</div>
-                <div class="package-title">치지직 패키지</div>
-                <div class="package-desc">치지직 방송 및 네이버 카페 운영을 위한 완벽한 솔루션입니다.</div>
-                <div class="package-list">
-                    유튜브 채널아트 + 치지직 배너 <b>(제한 없음)</b> + 팬카페 배너 + 팬카페 대문
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- ── PROCESS ── -->
+  <section class="fade-in">
+    <div class="section-label">작업 과정</div>
+    <div class="section-title">작업은 이렇게 진행돼요 ✨</div>
+    <div class="glass" style="padding:24px;">
+      <div class="process-steps">
+        <div class="glass-sm step-card"><div class="step-num">STEP 01</div><span class="step-icon">💬</span><div class="step-name">문의 및 안내</div><div class="step-desc">신청 양식 작성 후 작업 안내 메시지를 보내드려요</div><div class="step-arrow">›</div></div>
+        <div class="glass-sm step-card"><div class="step-num">STEP 02</div><span class="step-icon">💳</span><div class="step-name">결제</div><div class="step-desc">견적 확인 후 결제 완료 시 슬롯 확정</div><div class="step-arrow">›</div></div>
+        <div class="glass-sm step-card"><div class="step-num">STEP 03</div><span class="step-icon">🔧</span><div class="step-name">1차 리깅</div><div class="step-desc">눈·입·표정·머리 XYZ + 물리 연산 작업</div><div class="step-arrow">›</div></div>
+        <div class="glass-sm step-card"><div class="step-num">STEP 04</div><span class="step-icon">🔍</span><div class="step-name">1차 컨펌</div><div class="step-desc">영상 확인 후 수정 사항을 알려주세요</div><div class="step-arrow">›</div></div>
+        <div class="glass-sm step-card"><div class="step-num">STEP 05</div><span class="step-icon">⚙️</span><div class="step-name">2차 리깅</div><div class="step-desc">바디·추가파츠 XYZ + 물리 연산 추가 작업</div><div class="step-arrow">›</div></div>
+        <div class="glass-sm step-card"><div class="step-num">STEP 06</div><span class="step-icon">✅</span><div class="step-name">2차 컨펌</div><div class="step-desc">최종 확인 및 마무리 수정</div><div class="step-arrow">›</div></div>
+        <div class="glass-sm step-card"><div class="step-num">STEP 07</div><span class="step-icon">📦</span><div class="step-name">완성 후 전달</div><div class="step-desc">최종 파일 및 세팅 안내서를 전달해요</div><div class="step-arrow">›</div></div>
+        <div class="glass-sm step-card" style="background:rgba(210,160,20,0.10);border-color:rgba(210,160,20,0.25);"><div class="step-num">STEP 08</div><span class="step-icon">⚙️</span><div class="step-name">세팅 안내</div><div class="step-desc">VTube Studio 세팅 가이드 제공 🎀</div></div>
+      </div>
+    </div>
+  </section>
 
-    <section>
-        <h2>PORTFOLIO</h2>
-        <div class="portfolio-tabs" id="categoryTabs">
-            <button class="tab-btn active" onclick="filterCategory('ALL')">ALL</button>
-            <button class="tab-btn" onclick="filterCategory('SET')">SET</button>
-            <button class="tab-btn" onclick="filterCategory('SOOP')">SOOP</button>
-            <button class="tab-btn" onclick="filterCategory('CHZZK')">CHZZK</button>
-            <button class="tab-btn" onclick="filterCategory('POSTER')">POSTER</button>
-            <button class="tab-btn" onclick="filterCategory('YOUTUBE')">YOUTUBE</button>
-            <button class="tab-btn" onclick="filterCategory('SCHEDULE')">SCHEDULE</button>
-            <button class="tab-btn" onclick="filterCategory('THUMBNAIL')">THUMBNAIL</button>
+  <!-- ── RIGGING OPTIONS ── -->
+  <section class="fade-in">
+    <div class="section-label">리깅 옵션</div>
+    <div class="section-title">리깅 옵션 안내</div>
+    <div class="glass" style="padding:24px;display:flex;flex-direction:column;gap:20px;">
+
+      <!-- 기본 리깅 -->
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--accent2);letter-spacing:0.12em;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          기본 리깅 옵션 <span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:4px;">(전신 · 반신 공통)</span>
         </div>
-        <div class="portfolio-grid" id="portfolioGrid"></div>
-        <div class="pagination">
-            <button class="pg-btn" onclick="changePage(currentPage - 1)">&lt;</button>
-            <div class="pg-numbers" id="pgNumbers"></div>
-            <button class="pg-btn" onclick="changePage(currentPage + 1)">&gt;</button>
+        <div style="background:rgba(210,160,20,0.06);border:1px solid rgba(210,160,20,0.15);border-radius:14px;padding:14px 16px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;">
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <div style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>눈 깜빡이·미소 + 물리</div>
+              <div style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>눈썹 상하·변형 + 물리</div>
+              <div style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>눈동자 XY + 물리</div>
+              <div style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>입모양 12점</div>
+              <div style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>표정 3종 + 물리</div>
+              <div style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>머리 (눈·코·입·귀·얼굴) XYZ</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <div style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>머리카락 XYZ + 물리</div>
+              <div style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>머리 악세사리 XYZ + 물리</div>
+              <div style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>바디 XYZ + 물리</div>
+              <div style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>의상·악세사리 XYZ + 물리</div>
+              <div style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>호흡 애니메이션</div>
+            </div>
+          </div>
         </div>
-    </section>
+      </div>
+
+      <div style="height:1px;background:var(--border);"></div>
+
+      <!-- 추가 리깅 옵션 -->
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--pink2);letter-spacing:0.12em;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          추가 리깅 옵션
+        </div>
+        <div class="rigging-extra-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;">
+          <div class="option-item extra"><div class="option-dot"></div>추가 표정</div>
+          <div class="option-item extra"><div class="option-dot"></div>표정 애니메이션</div>
+          <div class="option-item extra"><div class="option-dot"></div>볼 빵빵</div>
+          <div class="option-item extra"><div class="option-dot"></div>메롱</div>
+          <div class="option-item extra"><div class="option-dot"></div>입 X 모션</div>
+          <div class="option-item extra"><div class="option-dot"></div>VBridger 세팅</div>
+          <div class="option-item extra"><div class="option-dot"></div>동물귀 물리</div>
+          <div class="option-item extra"><div class="option-dot"></div>날개 물리</div>
+          <div class="option-item extra"><div class="option-dot"></div>추가 수정</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── NOTICE ── -->
+  <section class="fade-in">
+    <div class="section-label">공지사항</div>
+    <div class="section-title">작업 전 꼭 확인해주세요</div>
+    <div class="glass" style="padding:24px;display:flex;flex-direction:column;gap:20px;">
+
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--accent2);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          견적 및 결제
+        </div>
+        <div class="notice-list">
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div>결제 전 문의 양식을 바탕으로 상담 후 진행합니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div>PSD 파일을 첨부해 주시면 상세한 견적 안내가 가능합니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div><div>작업 중 단순 변심에 의한 환불은 불가능합니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div>환불에 대한 규정은 하단 [환불 안내] 규정을 확인해 주세요.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div>분할 결제를 원하시는 경우 사전에 문의 부탁드립니다.</div></div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--accent2);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          작업 안내
+        </div>
+        <div class="notice-list">
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div>문의 및 결제 후, PSD 파일을 수령한 시점부터 작업을 시작합니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div>PSD 파일 수령 후 추가 점검을 진행하며, 파일에 문제가 있을 경우 별도로 연락을 드릴 수 있습니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div><div>본 작업에는 파츠 분리가 포함되지 않습니다. 파츠 분리가 미흡할 경우 결과물의 퀄리티에 영향을 미칠 수 있으며, 일러스트레이터분과의 소통이 필요할 수 있습니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div>iOS 트래킹을 권장합니다. 웹캠을 이용할 시 작업물의 성능이 100% 발휘되지 않을 수 있습니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><div>VTube Studio, Live2D Cubism Editor, VBridger를 기반으로 작업합니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><div>무상 수정 횟수는 2회이며, 이후 추가 수정 시 별도의 비용이 발생합니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div>작업 기간은 평균 3~4주 정도 소요됩니다. 피드백 답변이 지연될 경우 전체 일정이 늦춰질 수 있습니다.</div></div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--accent2);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          파일 전달
+        </div>
+        <div class="notice-list">
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div>작업 완료 후 VTube Studio에서 즉시 사용 가능한 파일들을 ZIP 형식으로 압축하여 전달해 드립니다. (.png, .json, .moc3 포함)</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div><div>.cmo3 및 .can3 파일(원본 프로젝트 파일)은 제공하거나 판매하지 않습니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div>VTube Studio 및 VBridger 사용 시, 프로그램 내 추가 결제(프로 버전 등)가 필요한지 사전에 확인해 주시기 바랍니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><div>VTube Studio 내 아이콘(icon) 등록을 원하시는 경우 말씀해 주세요.</div></div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--accent2);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          사용
+        </div>
+        <div class="notice-list">
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div><div>모든 작업물은 SNS, 유튜브, 아트머그 등에서 포트폴리오로 사용될 수 있습니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div>포트폴리오 공개는 파일 전달 후 최대 60일까지 유예(비공개) 요청이 가능합니다. 해당 기간 이상의 공개 연기를 원하실 경우 추가 요금이 발생합니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div><div>리깅 작업물에 대한 저작권은 SpicyPotato에게 있으며, 작업물의 무단 재배포, 판매, 양도를 엄격히 금지합니다.</div></div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--accent2);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          A/S
+        </div>
+        <div class="notice-list">
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div>작업 완료 후 VTube Studio 초기 세팅을 도와드립니다.</div></div>
+          <div class="notice-item"><div class="notice-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.08-2.49"/></svg></div><div>리깅 자체에 결함이나 오류가 발견될 경우, 기간 제한 없이 무상으로 수정을 진행합니다.</div></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── FORM ── -->
+  <section id="form-section" class="fade-in">
+    <div class="section-label">리깅 신청</div>
+    <div class="section-title">리깅 신청 양식 📝</div>
+    <div class="glass" style="padding:28px;">
+
+      <div class="form-section-title">🎤 기본 정보</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">방송 닉네임</label>
+          <input class="form-input" type="text" placeholder="닉네임" id="f_nick">
+        </div>
+        <div class="form-group">
+          <label class="form-label">방송 플랫폼</label>
+          <input class="form-input" type="text" placeholder="유튜브 / 트위치 / 치지직 등" id="f_platform">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">데뷔 예정일</label>
+          <input class="form-input" type="date" id="f_debut">
+        </div>
+        <div class="form-group">
+          <label class="form-label">일러스트레이터 닉네임 (비공개 시 공란)</label>
+          <input class="form-input" type="text" placeholder="(비공개 시 공란)" id="f_illustrator">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">일러스트레이터 링크</label>
+        <input class="form-input" type="text" placeholder="https://" id="f_illust_link">
+      </div>
+
+      <div class="form-section-title">🎮 트래킹 장비</div>
+      <div class="radio-group">
+        <label class="radio-label"><input type="radio" name="tracking" value="ios" onchange="calcPrice()"> iOS (아이폰/아이패드)</label>
+        <label class="radio-label"><input type="radio" name="tracking" value="webcam" onchange="calcPrice()"> 웹캠</label>
+      </div>
+
+      <div class="form-section-title">✨ 기본 리깅 옵션</div>
+      <!-- 가격은 JS에서 시트 로드 후 업데이트 -->
+      <div class="radio-group">
+        <label class="radio-label"><input type="radio" name="base" value="full" onchange="calcPrice()"> 전신 <span id="label_base_full" style="color:var(--text3);font-weight:400;margin-left:4px;"></span></label>
+        <label class="radio-label"><input type="radio" name="base" value="half" onchange="calcPrice()"> 반신 <span id="label_base_half" style="color:var(--text3);font-weight:400;margin-left:4px;"></span></label>
+      </div>
+
+      <div class="form-section-title">🎁 추가 리깅 옵션</div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin:8px 0 6px;">표정</div>
+      <div class="option-row">
+        <label class="option-check-label">
+          <input type="checkbox" id="opt_emotion" onchange="calcPrice()">
+          추가 표정
+        </label>
+        <div class="option-price" id="price_emotion">-</div>
+        <div class="option-count">
+          <button class="count-btn" onclick="changeCount('emotion', -1)">-</button>
+          <span class="count-val" id="cnt_emotion">0</span>
+          <button class="count-btn" onclick="changeCount('emotion', 1)">+</button>
+        </div>
+      </div>
+      <div class="option-row">
+        <label class="option-check-label">
+          <input type="checkbox" id="opt_emoAnim" onchange="calcPrice()">
+          추가 표정 애니메이션
+        </label>
+        <div class="option-price" id="price_emoAnim">-</div>
+        <div class="option-count">
+          <button class="count-btn" onclick="changeCount('emoAnim', -1)">-</button>
+          <span class="count-val" id="cnt_emoAnim">0</span>
+          <button class="count-btn" onclick="changeCount('emoAnim', 1)">+</button>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin:12px 0 6px;">바디</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div class="option-row">
+          <label class="option-check-label" style="flex:1;"><input type="checkbox" id="opt_hair" onchange="calcPrice()"> 헤어</label>
+          <span class="option-price" id="price_hair">-</span>
+          <div class="option-count">
+            <button class="count-btn" onclick="changeCount('hair', -1)">-</button>
+            <span class="count-val" id="cnt_hair">0</span>
+            <button class="count-btn" onclick="changeCount('hair', 1)">+</button>
+          </div>
+        </div>
+        <div class="option-row">
+          <label class="option-check-label" style="flex:1;"><input type="checkbox" id="opt_clothes" onchange="calcPrice()"> 의상</label>
+          <span class="option-price" id="price_clothes">-</span>
+          <div class="option-count">
+            <button class="count-btn" onclick="changeCount('clothes', -1)">-</button>
+            <span class="count-val" id="cnt_clothes">0</span>
+            <button class="count-btn" onclick="changeCount('clothes', 1)">+</button>
+          </div>
+        </div>
+        <div class="option-row">
+          <label class="option-check-label" style="flex:1;"><input type="checkbox" id="opt_arm" onchange="calcPrice()"> 고정 팔</label>
+          <span class="option-price" id="price_arm">-</span>
+          <div class="option-count">
+            <button class="count-btn" onclick="changeCount('arm', -1)">-</button>
+            <span class="count-val" id="cnt_arm">0</span>
+            <button class="count-btn" onclick="changeCount('arm', 1)">+</button>
+          </div>
+        </div>
+        <div class="option-row">
+          <label class="option-check-label" style="flex:1;"><input type="checkbox" id="opt_ears" onchange="calcPrice()"> 동물귀</label>
+          <span class="option-price" id="price_ears">-</span>
+          <div class="option-count">
+            <button class="count-btn" onclick="changeCount('ears', -1)">-</button>
+            <span class="count-val" id="cnt_ears">0</span>
+            <button class="count-btn" onclick="changeCount('ears', 1)">+</button>
+          </div>
+        </div>
+        <div class="option-row">
+          <label class="option-check-label" style="flex:1;"><input type="checkbox" id="opt_wings" onchange="calcPrice()"> 날개</label>
+          <span class="option-price" id="price_wings">-</span>
+          <div class="option-count">
+            <button class="count-btn" onclick="changeCount('wings', -1)">-</button>
+            <span class="count-val" id="cnt_wings">0</span>
+            <button class="count-btn" onclick="changeCount('wings', 1)">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin:12px 0 6px;">iOS · VBridger</div>
+      <div class="ios-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;">
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label"><input type="checkbox" id="opt_bbang" onchange="calcPrice()">볼 빵빵</label>
+          <span class="option-price" id="price_bbang">-</span>
+        </div>
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label"><input type="checkbox" id="opt_melon" onchange="calcPrice()">메롱</label>
+          <span class="option-price" id="price_melon">-</span>
+        </div>
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label"><input type="checkbox" id="opt_mouthX" onchange="calcPrice()">입 X</label>
+          <span class="option-price" id="price_mouthX">-</span>
+        </div>
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label"><input type="checkbox" id="opt_vbridger" onchange="calcPrice()">VBridger</label>
+          <span class="option-price" id="price_vbridger">-</span>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin:12px 0 6px;">작업</div>
+      <div class="work-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label" style="width:100%;">
+            <input type="checkbox" id="opt_fix" onchange="calcPrice()"> 추가 수정
+          </label>
+          <div style="display:flex;align-items:center;gap:6px;width:100%;">
+            <span class="option-price" id="price_fix">-</span>
+            <div class="option-count" style="margin-left:auto;">
+              <button class="count-btn" onclick="changeCount('fix', -1)">-</button>
+              <span class="count-val" id="cnt_fix">0</span>
+              <button class="count-btn" onclick="changeCount('fix', 1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <label class="option-check-label">
+            <input type="checkbox" id="opt_reveal" onchange="calcPrice()"> 90일 이후 작업 공개
+          </label>
+          <span class="option-price" id="price_reveal">-</span>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin:12px 0 6px;">이벤트</div>
+      <div id="formEventContainer">
+        <div style="font-size:12px;color:var(--text3);padding:8px 0;">이벤트 정보 불러오는 중...</div>
+      </div>
+
+      <div class="form-section-title" style="margin-top:20px;">💬 추가 문의사항</div>
+      <div class="form-group">
+        <textarea class="form-input" placeholder="기타 요청 사항이나 궁금한 점을 자유롭게 작성해주세요 💌" id="f_memo"></textarea>
+      </div>
+
+      <div class="price-preview">
+        <div>
+          <div class="price-label">예상 견적</div>
+          <div style="font-size:11px;color:var(--text3);">옵션 선택에 따라 변경될 수 있어요</div>
+        </div>
+        <div class="price-total" id="priceDisplay">0원</div>
+      </div>
+
+      <div class="form-btns">
+        <button class="btn-copy" id="copyBtn" onclick="copyQuote()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          견적서 복사
+        </button>
+        <button class="btn-reset" onclick="resetForm()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          초기화
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── REFUND ── -->
+  <section class="fade-in" style="margin-bottom:40px;">
+    <div class="section-label">환불 안내</div>
+    <div class="section-title">환불 정책 안내</div>
+    <div class="glass refund-card">
+      <div style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.7;">
+        고객님의 권익 보호를 위해 단계별 환불 정책을 운영하고 있어요. 작업 진행 상황에 따라 아래 기준이 적용됩니다.
+      </div>
+      <div class="refund-steps">
+        <div class="refund-row">
+          <div class="refund-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--teal2)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+          <div class="refund-stage">작업 전</div>
+          <div class="refund-pct pct-100">100% 환불</div>
+        </div>
+        <div class="refund-row">
+          <div class="refund-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4a9e6b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+          <div class="refund-stage">작업 시작 ~ 1차 컨펌 전</div>
+          <div class="refund-pct pct-70">70% 환불</div>
+        </div>
+        <div class="refund-row">
+          <div class="refund-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+          <div class="refund-stage">1차 컨펌 후 ~ 2차 컨펌 전</div>
+          <div class="refund-pct pct-50">50% 환불</div>
+        </div>
+        <div class="refund-row">
+          <div class="refund-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
+          <div class="refund-stage">2차 컨펌 후</div>
+          <div class="refund-pct pct-0">환불 불가</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </div>
 
 <script>
-    /* 높이 조절 */
-    function sendHeightToParent() {
-        const height = document.documentElement.scrollHeight;
-        window.parent.postMessage({ type: 'resize', height: height }, '*');
+// ════════════════════════════════════════
+// GOOGLE SHEETS CSV URLs
+// ════════════════════════════════════════
+const SLOT_CSV_URL      = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSytmOtrazdbmv-fobgbSO4JV1Xpmd5mk-ohxqdMDGjIxsqK9awuFoXhF8ByEQBJNNuCh5xbP_g_ieM/pub?gid=0&single=true&output=csv';
+const EVENT_CSV_URL     = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSytmOtrazdbmv-fobgbSO4JV1Xpmd5mk-ohxqdMDGjIxsqK9awuFoXhF8ByEQBJNNuCh5xbP_g_ieM/pub?gid=1400947798&single=true&output=csv';
+const PORTFOLIO_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSytmOtrazdbmv-fobgbSO4JV1Xpmd5mk-ohxqdMDGjIxsqK9awuFoXhF8ByEQBJNNuCh5xbP_g_ieM/pub?gid=1368256576&single=true&output=csv';
+const SAMPLE_CSV_URL    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSytmOtrazdbmv-fobgbSO4JV1Xpmd5mk-ohxqdMDGjIxsqK9awuFoXhF8ByEQBJNNuCh5xbP_g_ieM/pub?gid=68015558&single=true&output=csv';
+const PRICE_CSV_URL     = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSytmOtrazdbmv-fobgbSO4JV1Xpmd5mk-ohxqdMDGjIxsqK9awuFoXhF8ByEQBJNNuCh5xbP_g_ieM/pub?gid=633320517&single=true&output=csv';
+
+// ════════════════════════════════════════
+// CSV PARSER
+// ════════════════════════════════════════
+function parseCSV(text) {
+  const rows = [];
+  let fields = [], cur = '', inQ = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i], next = text[i + 1];
+    if (c === '"') {
+      if (inQ && next === '"') { cur += '"'; i++; }
+      else inQ = !inQ;
+    } else if (c === ',' && !inQ) {
+      fields.push(cur); cur = '';
+    } else if ((c === '\r' || c === '\n') && !inQ) {
+      if (c === '\r' && next === '\n') i++;
+      fields.push(cur); cur = '';
+      rows.push(fields); fields = [];
+    } else { cur += c; }
+  }
+  fields.push(cur);
+  if (fields.some(f => f !== '')) rows.push(fields);
+  if (rows.length < 2) return [];
+  const headers = rows[0].map(h => h.trim());
+  return rows.slice(1).map(vals => {
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = (vals[i] || '').trim());
+    return obj;
+  });
+}
+
+// ════════════════════════════════════════
+// PRICES (시트에서 로드)
+// ════════════════════════════════════════
+const prices = {
+  base_full: 0, base_half: 0,
+  emotion: 0, emoAnim: 0,
+  hair: 0, clothes: 0, arm: 0, ears: 0, wings: 0,
+  bbang: 0, melon: 0, mouthX: 0, vbridger: 0,
+  fix: 0, reveal: 0
+};
+
+// 시트 옵션명 → prices 키 매핑 (trim 후 정확 매칭)
+const PRICE_KEY_MAP = {
+  '전신':              'base_full',
+  '반신':              'base_half',
+  '추가 표정':         'emotion',
+  '추가 표정 애니메이션': 'emoAnim',
+  '헤어':              'hair',
+  '의상':              'clothes',
+  '고정 팔':           'arm',
+  '동물귀':            'ears',
+  '날개':              'wings',
+  '볼 빵빵':           'bbang',
+  '메롱':              'melon',
+  '입 X':              'mouthX',
+  'VBridger':          'vbridger',
+  '추가 수정':         'fix',
+  '90일 이후 작업 공개': 'reveal'
+};
+
+// 가격 → 표시용 문자열
+function fmtPrice(v) { return v > 0 ? v.toLocaleString() + '원' : '-'; }
+function fmtUnit(v)  { return v > 0 ? v.toLocaleString() + '원/개' : '-'; }
+
+async function loadPrices() {
+  try {
+    const res  = await fetch(PRICE_CSV_URL);
+    const text = await res.text();
+    const rows = parseCSV(text);
+
+    rows.forEach(row => {
+      const name = (row['옵션명'] || '').trim();
+      const val  = parseInt((row['가격'] || '0').replace(/,/g, '')) || 0;
+      const key  = PRICE_KEY_MAP[name];
+      if (key !== undefined) prices[key] = val;
+    });
+
+    // 라벨 업데이트
+    const lf = document.getElementById('label_base_full');
+    const lh = document.getElementById('label_base_half');
+    if (lf) lf.textContent = prices.base_full > 0 ? prices.base_full.toLocaleString() + '원' : '';
+    if (lh) lh.textContent = prices.base_half > 0 ? prices.base_half.toLocaleString() + '원' : '';
+
+    // 단가 표시 업데이트
+    const unitMap = {
+      price_emotion: fmtUnit(prices.emotion),
+      price_emoAnim: fmtUnit(prices.emoAnim),
+      price_hair:    fmtUnit(prices.hair),
+      price_clothes: fmtUnit(prices.clothes),
+      price_arm:     fmtUnit(prices.arm),
+      price_ears:    fmtUnit(prices.ears),
+      price_wings:   fmtUnit(prices.wings),
+      price_bbang:   fmtPrice(prices.bbang),
+      price_melon:   fmtPrice(prices.melon),
+      price_mouthX:  fmtPrice(prices.mouthX),
+      price_vbridger:fmtPrice(prices.vbridger),
+      price_fix:     fmtUnit(prices.fix),
+      price_reveal:  fmtPrice(prices.reveal),
+    };
+    Object.entries(unitMap).forEach(([id, txt]) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = txt;
+    });
+
+    calcPrice();
+  } catch(e) {
+    console.warn('가격 시트 로드 실패:', e);
+  }
+}
+
+// ════════════════════════════════════════
+// SLOTS
+// ════════════════════════════════════════
+async function loadSlots() {
+  try {
+    const res  = await fetch(SLOT_CSV_URL);
+    const text = await res.text();
+    const rows = parseCSV(text);
+    if (!rows.length) return;
+    const max   = parseInt(rows[0]['최대 슬롯'])  || 0;
+    const avail = parseInt(rows[0]['남은 슬롯']) || 0;
+    const used  = max - avail;
+    const slots = Array.from({length: max}, (_, i) => i < used ? 'busy' : 'free');
+    const grouped = [];
+    for (let i = 0; i < slots.length; i += 3) grouped.push(slots.slice(i, i + 3));
+    document.getElementById('slotContainer').innerHTML = grouped.map(row => `
+      <div style="display:flex;gap:7px;align-items:center;">
+        ${row.map(s => s === 'busy'
+          ? `<div style="flex:1;padding:7px 12px;background:rgba(196,155,26,0.13);border:1.5px solid rgba(196,155,26,0.35);border-radius:10px;font-size:12px;font-weight:700;color:var(--accent2);text-align:center;">작업 중</div>`
+          : `<div style="flex:1;padding:7px 12px;background:rgba(130,190,80,0.13);border:1.5px dashed rgba(130,190,80,0.55);border-radius:10px;font-size:12px;font-weight:700;color:var(--teal2);text-align:center;">비어있음</div>`
+        ).join('')}
+      </div>`).join('');
+  } catch(e) {
+    document.getElementById('slotContainer').innerHTML =
+      '<div style="font-size:12px;color:var(--text3);text-align:center;padding:8px;">슬롯 정보를 불러올 수 없습니다</div>';
+  }
+}
+
+// ════════════════════════════════════════
+// EVENTS
+// ════════════════════════════════════════
+let activeEventDiscounts = []; // [{id, type:'pct'|'amt', value:number}]
+
+/**
+ * 할인값 파싱
+ * - "10%"  → {type:'pct', value:10}
+ * - "5000" → {type:'amt', value:5000}
+ * - ""     → null
+ */
+function parseDiscount(raw) {
+  if (!raw) return null;
+  const s = raw.trim();
+  if (s.endsWith('%')) {
+    const v = parseFloat(s);
+    return isNaN(v) ? null : { type: 'pct', value: v };
+  }
+  const v = parseInt(s.replace(/,/g, ''));
+  return isNaN(v) ? null : { type: 'amt', value: v };
+}
+
+function discountLabel(d) {
+  if (!d) return '';
+  return d.type === 'pct' ? `-${d.value}%` : `-${d.value.toLocaleString()}원`;
+}
+
+async function loadEvents() {
+  try {
+    const res  = await fetch(EVENT_CSV_URL);
+    const text = await res.text();
+    const rows = parseCSV(text);
+    const container     = document.getElementById('eventContainer');
+    const formContainer = document.getElementById('formEventContainer');
+
+    if (!rows.length || !rows[0]['제목']) {
+      const empty = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:24px;">현재 진행 중인 이벤트가 없습니다</div>';
+      if (container) container.innerHTML = empty;
+      if (formContainer) formContainer.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:4px 0;">진행 중인 이벤트가 없습니다</div>';
+      return;
     }
-    window.addEventListener('load', sendHeightToParent);
-    window.addEventListener('resize', sendHeightToParent);
-    const observer = new MutationObserver(sendHeightToParent);
-    observer.observe(document.body, { attributes: true, childList: true, subtree: true });
 
-    /* 팝업 열기 */
-    function openLightbox(src) {
-        window.parent.postMessage({ type: 'openLightbox', src: src }, '*');
+    // 이벤트 섹션 카드
+    if (container) {
+      container.innerHTML = rows.map(row => {
+        const tags     = (row['태그'] || '').split(',').map(t => t.trim()).filter(Boolean);
+        const deadline = row['마감일'] ? `~${row['마감일'].trim()}` : '';
+        const content  = (row['내용'] || '').replace(/\n/g, '<br>');
+        const disc     = parseDiscount(row['할인률']);
+        const discText = disc ? discountLabel(disc) : '';
+        return `
+          <div class="event-card glass" style="margin-bottom:12px;">
+            <div class="event-icon">🎉</div>
+            <div style="flex:1;min-width:0;">
+              <div class="event-title">${row['제목']}${deadline ? ` (${deadline})` : ''}${discText ? `<span style="margin-left:8px;font-size:12px;color:var(--teal2);font-weight:700;">${discText}</span>` : ''}</div>
+              ${tags.length ? `<div style="margin-bottom:8px;">${tags.map(t => `<span class="event-badge">${t}</span>`).join('')}</div>` : ''}
+              <div class="event-content">${content}</div>
+            </div>
+          </div>`;
+      }).join('');
     }
 
-    function updateHexFromPicker(val) { document.getElementById('colorHexUI').value = val.toUpperCase(); }
-    function updatePickerFromHex(val) { if(/^#[0-9A-F]{6}$/i.test(val)) { document.getElementById('colorPickerUI').value = val; } else if(/^[0-9A-F]{6}$/i.test(val)) { document.getElementById('colorPickerUI').value = '#' + val; } }
-
-    let selectedColors = [];
-    let attachedImagesBase64 = [];
-
-    function addColorChip() {
-        let hex = document.getElementById('colorHexUI').value.toUpperCase();
-        if(!hex.startsWith('#')) hex = '#' + hex;
-        if(/^#[0-9A-F]{6}$/i.test(hex) && !selectedColors.includes(hex)) {
-            selectedColors.push(hex);
-            renderColorChips();
-        }
+    // 신청양식 이벤트 체크박스
+    activeEventDiscounts = [];
+    if (formContainer) {
+      formContainer.innerHTML = rows.map((row, i) => {
+        const disc   = parseDiscount(row['할인률']);
+        const id     = `opt_event_${i}`;
+        activeEventDiscounts.push({ id, disc });
+        const discText = disc ? discountLabel(disc) : '';
+        const label  = `${row['제목']}${discText ? ` (${discText} 할인)` : ''}`;
+        return `
+          <div class="option-row">
+            <label class="option-check-label">
+              <input type="checkbox" id="${id}" onchange="calcPrice()">
+              ${label}
+            </label>
+            ${discText ? `<div class="option-price" style="color:var(--teal2);">${discText}</div>` : ''}
+          </div>`;
+      }).join('');
     }
-    
-    function removeColorChip(hex) { selectedColors = selectedColors.filter(c => c !== hex); renderColorChips(); }
-    
-    function renderColorChips() {
-        const container = document.getElementById('colorChipContainer');
-        container.innerHTML = selectedColors.map(c => `<div class="color-chip"><span style="background:${c}"></span> ${c} <button onclick="removeColorChip('${c}')">×</button></div>`).join('');
+  } catch(e) {
+    const msg = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:24px;">이벤트 정보를 불러올 수 없습니다</div>';
+    const container     = document.getElementById('eventContainer');
+    const formContainer = document.getElementById('formEventContainer');
+    if (container) container.innerHTML = msg;
+    if (formContainer) formContainer.innerHTML = '<div style="font-size:12px;color:var(--text3);">이벤트 정보를 불러올 수 없습니다</div>';
+  }
+}
+
+// ════════════════════════════════════════
+// PORTFOLIO
+// ════════════════════════════════════════
+const BLOB_CLASSES = ['blob1','blob2','blob3','blob4'];
+function getYouTubeId(url) {
+  const m = url.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+function stopAllYouTube() {
+  document.querySelectorAll('.portfolio-item iframe').forEach(iframe => {
+    iframe.src = iframe.src.replace('&autoplay=1','').replace('?autoplay=1','');
+    iframe.style.display = 'none';
+  });
+  document.querySelectorAll('.portfolio-item .yt-overlay').forEach(el => {
+    el.style.display = 'flex';
+  });
+}
+
+function playYouTube(btn, vid, itemEl) {
+  const overlay = itemEl.querySelector('.yt-overlay');
+  const iframe  = itemEl.querySelector('iframe');
+  overlay.style.display = 'none';
+  iframe.src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0`;
+  iframe.style.display = 'block';
+}
+
+async function loadPortfolio() {
+  try {
+    const res  = await fetch(PORTFOLIO_CSV_URL);
+    const text = await res.text();
+    const rows = parseCSV(text);
+    if (!rows.length || !rows[0]['영상 링크']) {
+      renderPortfolioDots(1); return;
     }
+    const YT_SVG = `<svg height="100%" version="1.1" viewBox="0 0 68 48" width="100%"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#ff0000"/><path d="M 45,24 27,14 27,34" fill="#fff"/></svg>`;
+    document.getElementById('portfolioTrack').innerHTML = rows.map((row, i) => {
+      const vid  = getYouTubeId(row['영상 링크'] || '');
+      const blob = BLOB_CLASSES[i % BLOB_CLASSES.length];
+      const thumbContent = vid
+        ? `<div class="yt-overlay" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;"
+             onclick="playYouTube(this,'${vid}',this.closest('.portfolio-item'))">
+             <img src="https://img.youtube.com/vi/${vid}/maxresdefault.jpg"
+               onerror="this.src='https://img.youtube.com/vi/${vid}/hqdefault.jpg'"
+               alt="썸네일" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+             <div class="yt-play" style="position:relative;z-index:1;">${YT_SVG}</div>
+           </div>
+           <iframe style="display:none;position:absolute;inset:0;width:100%;height:100%;border:none;z-index:3;"
+             src="" allowfullscreen allow="autoplay;encrypted-media"></iframe>`
+        : `<div class="portfolio-yt-mock ${blob}" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;">
+             <div class="yt-play"></div>
+             <span style="font-size:13px;color:var(--text2);">${row['설명'] || ''}</span>
+           </div>`;
+      return `
+        <div class="portfolio-item">
+          <div class="portfolio-thumb ${blob}" style="border-radius:var(--radius-sm);position:relative;">${thumbContent}</div>
+          <div class="portfolio-desc">${row['설명'] || ''}</div>
+        </div>`;
+    }).join('');
+    renderPortfolioDots(rows.length);
+    slideIdx = 0; updateSlider();
+  } catch(e) {
+    renderPortfolioDots(1);
+  }
+}
 
-    function handleImageFiles(event) {
-        const files = event.target.files;
-        for(let file of files) {
-            const reader = new FileReader();
-            reader.onload = (e) => { attachedImagesBase64.push({ name: file.name, data: e.target.result }); renderImagePreviews(); }
-            reader.readAsDataURL(file);
-        }
-        event.target.value = '';
+function renderPortfolioDots(count) {
+  document.getElementById('portDots').innerHTML =
+    Array.from({length: count}, (_, i) =>
+      `<div class="dot${i===0?' active':''}" onclick="goSlide(${i})"></div>`
+    ).join('');
+}
+
+// ════════════════════════════════════════
+// SAMPLES
+// ════════════════════════════════════════
+async function loadSamples() {
+  const gallery = document.getElementById('sampleGallery');
+  if (!gallery) return;
+  try {
+    const res  = await fetch(SAMPLE_CSV_URL);
+    const text = await res.text();
+    const rows = parseCSV(text);
+    const catOrder = ['포인트','머리','눈','입','표정','악세사리','의상','추가 파츠','바디'];
+    const grouped  = {};
+    catOrder.forEach(c => grouped[c] = []);
+    rows.forEach(row => {
+      const cat = (row['카테고리'] || '').trim();
+      if (grouped[cat]) grouped[cat].push(row);
+      else { grouped[cat] = [row]; catOrder.push(cat); }
+    });
+    const navSVG = d => d === 'prev'
+      ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`
+      : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`;
+    gallery.innerHTML = catOrder
+      .filter(cat => grouped[cat] && grouped[cat].length > 0)
+      .map(cat => {
+        const items  = grouped[cat];
+        const slides = [];
+        for (let i = 0; i < items.length; i += 3) slides.push(items.slice(i, i + 3));
+        const slidesHTML = slides.map(slide => {
+          const empty  = 3 - slide.length;
+          const imgCols = slide.map(item => {
+            const gifUrl = (item['GIF'] || '').trim();
+            const title  = (item['제목'] || '').trim();
+            const imgEl  = gifUrl
+              ? `<img src="${gifUrl}" alt="${title}" style="width:100%;height:100%;object-fit:cover;display:block;">`
+              : `<div class="sample-img-placeholder"><div class="sample-img-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></div>`;
+            return `<div style="display:flex;flex-direction:column;gap:0;">
+              <div class="sample-img-box">${imgEl}</div>
+              <div class="sample-item-title">${title}</div>
+            </div>`;
+          }).join('') + `<div style="display:flex;flex-direction:column;gap:0;"><div class="sample-img-box" style="visibility:hidden;"></div><div class="sample-item-title"></div></div>`.repeat(empty);
+          return `<div class="cat-slide"><div class="sample-images-row">${imgCols}</div></div>`;
+        }).join('');
+        const dotsHTML = slides.map((_, i) =>
+          `<div class="dot${i===0?' active':''}" onclick="catGo(this.parentElement,${i})"></div>`
+        ).join('');
+        return `
+          <div class="glass cat-slider-block" style="padding:18px 18px;" data-idx="0">
+            <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--accent2);margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+              <span style="width:5px;height:5px;border-radius:50%;background:var(--accent);display:inline-block;flex-shrink:0;"></span>${cat}
+            </div>
+            <div class="cat-slider-wrap"><div class="cat-track">${slidesHTML}</div></div>
+            <div class="cat-nav-row">
+              <div class="cat-dots">${dotsHTML}</div>
+              <div style="display:flex;gap:4px;">
+                <button class="nav-btn" style="width:30px;height:30px;" onclick="catPrev(this)">${navSVG('prev')}</button>
+                <button class="nav-btn" style="width:30px;height:30px;" onclick="catNext(this)">${navSVG('next')}</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+  } catch(e) {
+    gallery.innerHTML = '<div style="text-align:center;font-size:13px;color:var(--text3);padding:32px;">샘플을 불러올 수 없습니다</div>';
+  }
+}
+
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  loadSlots();
+  loadEvents();
+  loadPortfolio();
+  loadSamples();
+  loadPrices();
+});
+</script>
+
+<script>
+// ════════════════════════════════════════
+// FADE IN
+// ════════════════════════════════════════
+const faders  = document.querySelectorAll('.fade-in');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.08 });
+faders.forEach(el => observer.observe(el));
+
+// ════════════════════════════════════════
+// CAT SLIDERS
+// ════════════════════════════════════════
+function getCatBlock(btn) { return btn.closest('.cat-slider-block'); }
+function getCatIdx(block)  { return parseInt(block.dataset.idx || '0'); }
+function getCatTotal(block){ return block.querySelectorAll('.cat-slide').length; }
+function updateCatSlider(block) {
+  const track = block.querySelector('.cat-track');
+  const items = block.querySelectorAll('.cat-slide');
+  if (!items.length) return;
+  const idx = getCatIdx(block);
+  track.style.transform = `translateX(-${idx * items[0].offsetWidth}px)`;
+  block.querySelectorAll('.cat-dots .dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+}
+function catNext(btn) {
+  const b = getCatBlock(btn), t = getCatTotal(b);
+  b.dataset.idx = ((getCatIdx(b) + 1) % t).toString();
+  updateCatSlider(b);
+}
+function catPrev(btn) {
+  const b = getCatBlock(btn), t = getCatTotal(b);
+  b.dataset.idx = ((getCatIdx(b) - 1 + t) % t).toString();
+  updateCatSlider(b);
+}
+function catGo(dotsEl, i) {
+  const b = dotsEl.closest('.cat-slider-block');
+  b.dataset.idx = i.toString();
+  updateCatSlider(b);
+}
+
+// ════════════════════════════════════════
+// PORTFOLIO SLIDER
+// ════════════════════════════════════════
+let slideIdx = 0;
+function getSliderTrack()  { return document.getElementById('portfolioTrack'); }
+function getSliderTotal()  { return getSliderTrack().querySelectorAll('.portfolio-item').length; }
+function updateSlider() {
+  const track = getSliderTrack();
+  const items = track.querySelectorAll('.portfolio-item');
+  if (!items.length) return;
+  track.style.transition = 'transform 0.38s cubic-bezier(0.4,0,0.2,1)';
+  track.style.transform  = `translateX(-${slideIdx * items[0].offsetWidth}px)`;
+  document.querySelectorAll('#portDots .dot').forEach((d, i) => d.classList.toggle('active', i === slideIdx));
+}
+function nextSlide() { stopAllYouTube(); const t = getSliderTotal(); slideIdx = slideIdx >= t-1 ? 0 : slideIdx+1; updateSlider(); }
+function prevSlide() { stopAllYouTube(); const t = getSliderTotal(); slideIdx = slideIdx <= 0 ? t-1 : slideIdx-1; updateSlider(); }
+function goSlide(i)  { stopAllYouTube(); slideIdx = i; updateSlider(); }
+
+window.addEventListener('resize', () => { updateSlider(); });
+
+// ════════════════════════════════════════
+// COUNTER
+// ════════════════════════════════════════
+const counts = { emotion:0, emoAnim:0, fix:0, hair:0, clothes:0, arm:0, ears:0, wings:0 };
+function changeCount(key, delta) {
+  counts[key] = Math.max(0, counts[key] + delta);
+  document.getElementById('cnt_' + key).textContent = counts[key];
+  if (counts[key] > 0) {
+    const cb = document.getElementById('opt_' + key);
+    if (cb) cb.checked = true;
+  } else {
+    const cb = document.getElementById('opt_' + key);
+    if (cb) cb.checked = false;
+  }
+  calcPrice();
+}
+
+// ════════════════════════════════════════
+// PRICE CALC
+// ════════════════════════════════════════
+function calcPrice() {
+  let total = 0;
+
+  // 기본 옵션
+  const baseRadio = document.querySelector('input[name="base"]:checked');
+  if (baseRadio) total += baseRadio.value === 'full' ? prices.base_full : prices.base_half;
+
+  // 단순 체크박스 옵션
+  ['bbang','melon','mouthX','vbridger','reveal'].forEach(k => {
+    const el = document.getElementById('opt_' + k);
+    if (el && el.checked) total += prices[k];
+  });
+
+  // 수량 기반 옵션
+  total += counts.emotion  * prices.emotion;
+  total += counts.emoAnim  * prices.emoAnim;
+  total += counts.fix      * prices.fix;
+  total += counts.hair     * prices.hair;
+  total += counts.clothes  * prices.clothes;
+  total += counts.arm      * prices.arm;
+  total += counts.ears     * prices.ears;
+  total += counts.wings    * prices.wings;
+
+  // 이벤트 할인 적용 (체크된 이벤트 중 가장 큰 할인 1개)
+  if (total > 0 && activeEventDiscounts.length > 0) {
+    const checked = activeEventDiscounts.filter(ev => {
+      const el = document.getElementById(ev.id);
+      return el && el.checked;
+    });
+    if (checked.length > 0) {
+      // 실제 할인액 계산 후 최대값 적용
+      let maxDisc = 0;
+      checked.forEach(ev => {
+        if (!ev.disc) return;
+        const discAmt = ev.disc.type === 'pct'
+          ? Math.round(total * ev.disc.value / 100)
+          : ev.disc.value;
+        if (discAmt > maxDisc) maxDisc = discAmt;
+      });
+      total = Math.max(0, total - maxDisc);
     }
-    
-    function renderImagePreviews() {
-        const container = document.getElementById('imagePreviewContainer');
-        container.innerHTML = attachedImagesBase64.map((img, idx) => `<div class="img-preview-item"><img src="${img.data}"><button class="img-remove-btn" onclick="attachedImagesBase64.splice(${idx}, 1); renderImagePreviews();">✕</button></div>`).join('');
+  }
+
+  document.getElementById('priceDisplay').textContent = total.toLocaleString() + '원';
+  return total;
+}
+
+// ════════════════════════════════════════
+// RESET
+// ════════════════════════════════════════
+function resetForm() {
+  document.querySelectorAll('.form-input').forEach(el => { el.value = ''; });
+  document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+  document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+  Object.keys(counts).forEach(k => {
+    counts[k] = 0;
+    const el = document.getElementById('cnt_' + k);
+    if (el) el.textContent = 0;
+  });
+  document.getElementById('priceDisplay').textContent = '0원';
+}
+
+// ════════════════════════════════════════
+// COPY QUOTE — 모바일 호환 복사
+// ════════════════════════════════════════
+function copyQuote() {
+  const nick      = document.getElementById('f_nick').value       || '(미입력)';
+  const platform  = document.getElementById('f_platform').value   || '(미입력)';
+  const debut     = document.getElementById('f_debut').value      || '(미입력)';
+  const illust    = document.getElementById('f_illustrator').value|| '(비공개)';
+  const illustLink= document.getElementById('f_illust_link').value|| '(미입력)';
+  const baseRadio = document.querySelector('input[name="base"]:checked');
+  const base      = baseRadio ? (baseRadio.value === 'full' ? '전신' : '반신') : '(미선택)';
+  const tracking  = document.querySelector('input[name="tracking"]:checked');
+  const track_v   = tracking  ? (tracking.value === 'ios' ? 'iOS' : '웹캠') : '(미선택)';
+  const price     = document.getElementById('priceDisplay').textContent;
+  const memo      = document.getElementById('f_memo').value;
+
+  const opts = [];
+  if (counts.emotion  > 0) opts.push(`추가 표정 x${counts.emotion}`);
+  if (counts.emoAnim  > 0) opts.push(`추가 표정 애니메이션 x${counts.emoAnim}`);
+  if (counts.hair     > 0) opts.push(`헤어 x${counts.hair}`);
+  if (counts.clothes  > 0) opts.push(`의상 x${counts.clothes}`);
+  if (counts.arm      > 0) opts.push(`고정 팔 x${counts.arm}`);
+  if (counts.ears     > 0) opts.push(`동물귀 x${counts.ears}`);
+  if (counts.wings    > 0) opts.push(`날개 x${counts.wings}`);
+  if (counts.fix      > 0) opts.push(`추가 수정 x${counts.fix}`);
+  ['bbang','melon','mouthX','vbridger','reveal'].forEach(k => {
+    const el = document.getElementById('opt_' + k);
+    if (el && el.checked) {
+      const labelMap = { bbang:'볼 빵빵', melon:'메롱', mouthX:'입 X', vbridger:'VBridger', reveal:'90일 이후 작업 공개' };
+      opts.push(labelMap[k]);
     }
-
-    /* 크롬 임베드 복사 오류 수정본 */
-    async function copyInquiryRichText() {
-        const data = {
-            nickname: document.getElementById('fm_nickname').value || '내용 없음',
-            item: document.getElementById('fm_item').value || '내용 없음',
-            concept: document.getElementById('fm_concept').value.replace(/\n/g, '<br>') || '내용 없음',
-            colors: selectedColors.join(', ') || '내용 없음',
-            object: document.getElementById('fm_object').value.replace(/\n/g, '<br>') || '내용 없음',
-            extra: document.getElementById('fm_extra').value.replace(/\n/g, '<br>') || '내용 없음',
-            date: document.getElementById('fm_date').value || '미정'
-        };
-
-        let htmlStr = `<div style="font-family:sans-serif; line-height:1.6; color:#333;"><h3 style="color:#003cf7;">[디자인 문의 양식]</h3><p><b>1. 방송 닉네임:</b> ${data.nickname}</p><p><b>2. 디자인 품목:</b> ${data.item}</p><p><b>3. 콘셉트/레퍼런스:</b><br>${data.concept}</p><p><b>4. 퍼스널컬러/색감:</b> ${data.colors}</p><p><b>5. 필수 문구/오브젝트:</b><br>${data.object}</p><p><b>6. 첨부 이미지:</b><br>`;
-        attachedImagesBase64.forEach(img => { htmlStr += `<img src="${img.data}" style="max-width:400px; display:block; margin-bottom:10px; border-radius:8px;">`; });
-        htmlStr += `</p><p><b>7. 그 외 추가 사항:</b><br>${data.extra}</p><p><b>8. 마감 날짜:</b> ${data.date}</p></div>`;
-
-        let plainTextStr = `[디자인 문의 양식]\n\n1. 방송 닉네임: ${data.nickname}\n2. 디자인 품목: ${data.item}\n3. 콘셉트/레퍼런스: ${data.concept.replace(/<br>/g, '\n')}\n4. 퍼스널컬러/색감: ${data.colors}\n5. 필수 문구: ${data.object.replace(/<br>/g, '\n')}\n6. 이미지: ${attachedImagesBase64.length}장\n7. 추가사항: ${data.extra.replace(/<br>/g, '\n')}\n8. 마감일: ${data.date}`;
-
-        try {
-            // 크롬 임베드 환경에서는 포커스가 명확해야 함
-            window.focus();
-            
-            if (navigator.clipboard && window.ClipboardItem) {
-                const clipboardItem = new ClipboardItem({ 
-                    "text/html": new Blob([htmlStr], { type: "text/html" }), 
-                    "text/plain": new Blob([plainTextStr], { type: "text/plain" }) 
-                });
-                await navigator.clipboard.write([clipboardItem]);
-                
-                const balloon = document.getElementById('copyBalloon');
-                balloon.classList.add('show');
-                setTimeout(() => balloon.classList.remove('show'), 1500);
-            } else {
-                throw new Error("클립보드 API 미지원");
-            }
-        } catch (e) { 
-            console.error(e);
-            alert("복사가 차단되었습니다. 임베드 코드(iframe)에 allow=\"clipboard-write\" 속성이 있는지 확인해주세요."); 
-        }
+  });
+  activeEventDiscounts.forEach(ev => {
+    const el = document.getElementById(ev.id);
+    if (el && el.checked) {
+      const label = el.parentElement.textContent.trim().replace(/\s+/g, ' ');
+      opts.push('[이벤트] ' + label);
     }
+  });
 
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTH03PGVgFdh1F6NcXkK6YqEEH-iaRudUtjCQvRBz991-ln1zo562B9j83lPqLhmPrGlOlSBcri-199/pub?gid=0&single=true&output=csv';
-    let portfolioData = [];
-    let currentCategory = 'ALL';
-    let currentPage = 1;
-    const itemsPerPage = 12;
+  const text = [
+    '📋 리깅 신청서',
+    '',
+    `닉네임: ${nick}`,
+    `플랫폼: ${platform}`,
+    `데뷔 예정일: ${debut}`,
+    `일러스트레이터: ${illust}`,
+    `일러스트레이터 링크: ${illustLink}`,
+    `트래킹: ${track_v}`,
+    `기본 옵션: ${base}`,
+    `추가 옵션: ${opts.length ? opts.join(', ') : '없음'}`,
+    `예상 견적: ${price}`,
+    '',
+    `💬 메모: ${memo || '없음'}`
+  ].join('\n');
 
-    async function fetchPortfolio() {
-        try {
-            const response = await fetch(sheetUrl);
-            const data = await response.text();
-            const rows = data.split('\n').slice(1);
-            portfolioData = rows.map(row => { const [cat, tit, lnk] = row.split(',').map(s => s?.trim()); return { category: cat, title: tit, img: lnk }; }).filter(i => i.img);
-            renderPortfolio();
-        } catch (e) { console.error('Load Error'); }
-    }
+  // ── 모바일 호환 클립보드 복사 ──
+  const showSuccess = () => {
+    const btn = document.getElementById('copyBtn');
+    const orig = btn.innerHTML;
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 복사 완료!`;
+    setTimeout(() => { btn.innerHTML = orig; }, 2000);
+  };
 
-    function filterCategory(cat) { currentCategory = cat; currentPage = 1; document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText === cat)); renderPortfolio(); }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showSuccess).catch(() => fallbackCopy(text, showSuccess));
+  } else {
+    fallbackCopy(text, showSuccess);
+  }
+}
 
-    function renderPortfolio() {
-        const grid = document.getElementById('portfolioGrid');
-        const pg = document.getElementById('pgNumbers');
-        const filtered = currentCategory === 'ALL' ? portfolioData : portfolioData.filter(i => i.category === currentCategory);
-        const total = Math.ceil(filtered.length / itemsPerPage) || 1;
-        const paged = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-        grid.innerHTML = paged.map(i => `<div class="portfolio-item" onclick="openLightbox('${i.img}')"><div class="portfolio-thumb"><div class="category-label">${i.category}</div><img src="${i.img}"></div><div class="portfolio-title-box">${i.title}</div></div>`).join('');
-        if(paged.length < itemsPerPage) for(let i=0; i < itemsPerPage - paged.length; i++) grid.innerHTML += `<div class="portfolio-item" style="visibility:hidden;"><div class="portfolio-thumb"></div></div>`;
-        pg.innerHTML = '';
-        for(let i=1; i<=total; i++) pg.innerHTML += `<div class="pg-num ${i === currentPage ? 'active' : ''}" onclick="currentPage=${i}; renderPortfolio();">${i}</div>`;
-    }
+// iOS 등 구형 브라우저 대응 fallback
+function fallbackCopy(text, cb) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', '');
+  ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  // iOS Safari
+  const range = document.createRange();
+  range.selectNodeContents(ta);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+  ta.setSelectionRange(0, text.length);
+  try {
+    document.execCommand('copy');
+    if (cb) cb();
+  } catch(e) {
+    alert(text);
+  }
+  document.body.removeChild(ta);
+}
 
-    function changePage(p) {
-        const total = Math.ceil((currentCategory === 'ALL' ? portfolioData : portfolioData.filter(i => i.category === currentCategory)).length / itemsPerPage) || 1;
-        if(p < 1 || p > total) return;
-        currentPage = p; renderPortfolio();
-    }
-
-    fetchPortfolio();
+// ════════════════════════════════════════
+// IFRAME HEIGHT
+// ════════════════════════════════════════
+function sendHeight() {
+  window.parent.postMessage({ type: 'resize', height: document.documentElement.scrollHeight }, '*');
+}
+const resizeObs = new ResizeObserver(() => sendHeight());
+resizeObs.observe(document.body);
+window.addEventListener('load', sendHeight);
 </script>
 </body>
 </html>
