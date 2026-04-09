@@ -89,7 +89,7 @@
         .tab-btn { padding: 8px 20px; border: 1px solid var(--bg-light); background: white; border-radius: 25px; cursor: pointer; font-family: 'Paperozi'; font-weight: 500; transition: 0.3s; }
         .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
         .portfolio-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; min-height: 400px; }
-        .portfolio-item { cursor: pointer; display: flex; flex-direction: column; gap: 10px; }
+        .portfolio-item { cursor: pointer; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
         .portfolio-thumb { width: 100%; aspect-ratio: 16 / 9; background: #eee; border-radius: 10px; overflow: hidden; position: relative; border: 1px solid #f0f0f0; }
         .portfolio-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
         .portfolio-title-box { font-size: 14px; font-weight: 600; color: #333; padding: 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -100,12 +100,29 @@
         .pg-btn, .pg-num { flex-shrink: 0; width: 34px; height: 34px; border: 1px solid var(--bg-light); background: white; cursor: pointer; font-family: 'Paperozi'; font-size: 14px; color: var(--primary); font-weight: 700; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
         .pg-num.active { background: var(--primary); color: white; border-color: var(--primary); }
 
+        /* 모바일 UI 최적화 변경 영역 */
         @media (max-width: 768px) { 
-            .container { padding: 30px 15px; }
-            .form-grid-v2 { grid-template-columns: 1fr; }
+            .container { padding: 20px 15px; }
+            h2 { font-size: 20px; margin-bottom: 15px; }
+            .notice-card { padding: 20px; }
+            .form-guide-v2 { padding: 20px; }
+            .form-grid-v2 { grid-template-columns: 1fr; gap: 15px; }
             .form-item-v2.full-width, .copy-btn-wrapper { grid-column: span 1; }
-            .package-container { grid-template-columns: 1fr; } 
+            
+            .color-control-box { flex-wrap: wrap; }
+            .color-hex-input { flex-grow: 1; }
+            .btn-add { width: 100%; }
+            .copy-btn { width: 100%; padding: 14px 20px; font-size: 15px; }
+            
+            .package-container { grid-template-columns: 1fr; gap: 15px; } 
+            .package-card { padding: 20px; }
+            
+            .portfolio-tabs { gap: 6px; }
+            .tab-btn { padding: 6px 14px; font-size: 13px; }
             .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .portfolio-title-box { font-size: 13px; }
+            
+            .pg-btn, .pg-num { width: 30px; height: 30px; font-size: 13px; }
         }
     </style>
 </head>
@@ -344,6 +361,14 @@
         const filtered = currentCategory === 'ALL' ? portfolioData : portfolioData.filter(i => i.category === currentCategory);
         const total = Math.ceil(filtered.length / itemsPerPage) || 1;
         const paged = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+        /* 포트폴리오가 없을 경우 문구 출력 */
+        if (filtered.length === 0) {
+            grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 50px 0; color: #888; font-weight: 600; font-size: 15px;">등록된 포트폴리오가 없습니다.</div>';
+            pg.innerHTML = '';
+            return;
+        }
+
         grid.innerHTML = paged.map(i => `<div class="portfolio-item" onclick="openLightbox('${i.img}')"><div class="portfolio-thumb"><div class="category-label">${i.category}</div><img src="${i.img}"></div><div class="portfolio-title-box">${i.title}</div></div>`).join('');
         if(paged.length < itemsPerPage) for(let i=0; i < itemsPerPage - paged.length; i++) grid.innerHTML += `<div class="portfolio-item" style="visibility:hidden;"><div class="portfolio-thumb"></div></div>`;
         pg.innerHTML = '';
