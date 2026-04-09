@@ -21,23 +21,23 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #f4f2f8;
-  --bg2: #ece9f4;
+  --bg: #fdf9ee;
+  --bg2: #f5edcf;
   --bg3: #ffffff;
-  --text: #1c1a2e;
-  --text2: #5a5470;
-  --text3: #9c98b4;
-  --accent: #b399f5;
-  --accent2: #7c5cbf;
-  --accent3: #5a3d9a;
-  --pink: #d4b8f5;
-  --pink2: #9b6de0;
-  --teal: #c4b5fd;
-  --teal2: #7c5cbf;
-  --border: rgba(100,80,180,0.1);
-  --glass-bg: rgba(255,255,255,0.6);
-  --glass-border: rgba(255,255,255,0.82);
-  --glass-shadow: 0 8px 32px rgba(100,70,200,0.09), 0 2px 8px rgba(80,60,160,0.07);
+  --text: #2a2310;
+  --text2: #6b5e38;
+  --text3: #b0a07a;
+  --accent: #e8c84a;
+  --accent2: #c49b1a;
+  --accent3: #9a7710;
+  --pink: #f5d98a;
+  --pink2: #d4a820;
+  --teal: #f0e4a0;
+  --teal2: #c49b1a;
+  --border: rgba(180,140,30,0.12);
+  --glass-bg: rgba(255,252,235,0.65);
+  --glass-border: rgba(255,248,210,0.88);
+  --glass-shadow: 0 8px 32px rgba(160,120,20,0.10), 0 2px 8px rgba(140,100,10,0.07);
   --radius: 20px;
   --radius-sm: 12px;
   --radius-lg: 28px;
@@ -57,9 +57,9 @@ body {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(ellipse 65% 45% at 15% 5%,  rgba(180,150,255,0.18) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 55% at 85% 85%, rgba(140,110,230,0.13) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 35% at 55% 35%, rgba(210,190,255,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 65% 45% at 15% 5%,  rgba(240,210,80,0.20) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 55% at 85% 85%, rgba(220,180,40,0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 35% at 55% 35%, rgba(255,230,120,0.16) 0%, transparent 55%),
     var(--bg);
 }
 
@@ -78,7 +78,7 @@ body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255,255,255,0.8);
-  box-shadow: 0 4px 16px rgba(110,80,200,0.06);
+  box-shadow: 0 4px 16px rgba(170,130,15,0.06);
   border-radius: var(--radius-sm);
 }
 
@@ -152,7 +152,7 @@ section {
 }
 
 .artist-name {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--text);
   margin-bottom: 4px;
@@ -171,8 +171,8 @@ section {
 }
 
 .slot-box {
-  background: rgba(160,120,240,0.10);
-  border: 1.5px solid rgba(160,120,240,0.25);
+  background: rgba(210,160,20,0.10);
+  border: 1.5px solid rgba(210,160,20,0.25);
   border-radius: var(--radius);
   padding: 14px 18px;
 }
@@ -236,22 +236,22 @@ section {
 .btn-primary {
   background: linear-gradient(135deg, var(--accent2), var(--pink2));
   color: #fff;
-  box-shadow: 0 4px 16px rgba(140,100,220,0.30);
+  box-shadow: 0 4px 16px rgba(196,155,26,0.30);
 }
-.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(140,100,220,0.40); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(196,155,26,0.40); }
 
 .btn-outline {
   background: rgba(255,255,255,0.6);
   color: var(--accent2);
-  border: 1.5px solid rgba(160,120,240,0.4);
+  border: 1.5px solid rgba(210,160,20,0.4);
 }
-.btn-outline:hover { background: rgba(160,120,240,0.08); }
+.btn-outline:hover { background: rgba(210,160,20,0.08); }
 
 /* ── EVENT ── */
 .event-card {
   padding: 22px 28px;
-  background: linear-gradient(135deg, rgba(200,170,255,0.18), rgba(160,120,240,0.14));
-  border: 1.5px solid rgba(190,160,250,0.4);
+  background: linear-gradient(135deg, rgba(240,210,80,0.18), rgba(210,160,20,0.14));
+  border: 1.5px solid rgba(225,185,50,0.4);
   border-radius: var(--radius);
   display: flex;
   gap: 16px;
@@ -280,9 +280,9 @@ section {
 
 .event-badge {
   display: inline-block;
-  background: rgba(155,109,224,0.12);
+  background: rgba(196,155,26,0.12);
   color: var(--pink2);
-  border: 1px solid rgba(155,109,224,0.25);
+  border: 1px solid rgba(196,155,26,0.25);
   border-radius: 6px;
   font-size: 10px;
   font-weight: 700;
@@ -292,21 +292,14 @@ section {
 }
 
 /* ── RIGGING SAMPLES SLIDER ── */
-.sample-slider-wrap { overflow: hidden; border-radius: var(--radius); position: relative; }
+.sample-slider-wrap { overflow: hidden; position: relative; }
 .sample-track { display: flex; transition: transform 0.38s cubic-bezier(0.4,0,0.2,1); }
 .sample-slide { flex: 0 0 100%; min-width: 0; }
 
 .sample-card-wide {
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  border: 1.5px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  border-radius: var(--radius);
-  padding: 24px 28px 22px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 .sample-cat-header {
   font-size: 11px;
@@ -335,13 +328,24 @@ section {
   aspect-ratio: 3/4;
   border-radius: 12px;
   overflow: hidden;
-  background: rgba(160,120,240,0.08);
-  border: 1px solid rgba(160,120,240,0.15);
+  background: rgba(210,160,20,0.08);
+  border: 1px solid rgba(210,160,20,0.15);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .sample-img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sample-item-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text2);
+  text-align: center;
+  margin-top: 6px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .sample-img-placeholder {
   width: 100%; height: 100%;
   display: flex; flex-direction: column;
@@ -353,8 +357,8 @@ section {
 .sample-img-icon {
   width: 40px; height: 40px;
   border-radius: 10px;
-  background: rgba(160,120,240,0.15);
-  border: 1px solid rgba(160,120,240,0.25);
+  background: rgba(210,160,20,0.15);
+  border: 1px solid rgba(210,160,20,0.25);
   display: flex; align-items: center; justify-content: center;
 }
 .sample-footer {
@@ -363,11 +367,50 @@ section {
 }
 .sample-title { font-size: 16px; font-weight: 700; color: var(--text); }
 .sample-subtitle { font-size: 12px; color: var(--text2); margin-top: 2px; }
-.sample-nav {
-  display: flex; align-items: center;
-  justify-content: space-between; margin-top: 14px;
+
+/* 카드 안 하단 nav (dots + arrows 한 줄) */
+.sample-inner-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
 }
-.sample-dots { display: flex; gap: 6px; }
+.sample-dots { display: flex; gap: 6px; align-items: center; }
+
+/* ── CAT SLIDERS ── */
+.cat-slider-block { display: flex; flex-direction: column; gap: 10px; }
+.cat-slider-header {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 10px;
+}
+.cat-title-input {
+  font-size: 13px; font-weight: 700;
+  color: var(--accent2);
+  background: transparent; border: none; outline: none;
+  font-family: 'KerisKedyuche', sans-serif;
+  border-bottom: 1.5px solid rgba(210,160,20,0.25);
+  padding: 2px 4px; min-width: 60px; max-width: 180px;
+  cursor: text;
+  transition: border-color 0.2s;
+}
+.cat-title-input:focus { border-color: var(--accent2); }
+.cat-slider-wrap { overflow: hidden; }
+.cat-track { display: flex; transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); }
+.cat-slide { flex: 0 0 100%; min-width: 0; }
+.cat-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.cat-dots { display: flex; gap: 5px; align-items: center; }
+/* hide old header arrow style */
+.cat-nav-arrows { display: none; }
+.cat-dots-row { display: none; }
 
 /* ── PORTFOLIO ── */
 .portfolio-slider {
@@ -478,7 +521,7 @@ section {
   transition: all 0.2s;
   font-family: 'KerisKedyuche', sans-serif;
 }
-.nav-btn:hover { background: rgba(160,120,240,0.15); color: var(--accent2); }
+.nav-btn:hover { background: rgba(210,160,20,0.15); color: var(--accent2); }
 
 /* ── PROCESS ── */
 .process-steps {
@@ -561,7 +604,7 @@ section {
   border-color: var(--border);
 }
 .tab-btn:not(.active):hover {
-  border-color: rgba(160,120,240,0.4);
+  border-color: rgba(210,160,20,0.4);
   color: var(--accent2);
 }
 
@@ -591,8 +634,8 @@ section {
   transition: all 0.2s;
 }
 .option-item:hover {
-  background: rgba(160,120,240,0.08);
-  border-color: rgba(160,120,240,0.3);
+  background: rgba(210,160,20,0.08);
+  border-color: rgba(210,160,20,0.3);
 }
 
 .option-dot {
@@ -713,7 +756,7 @@ textarea.form-input {
   transition: all 0.2s;
 }
 .radio-label:has(input:checked) {
-  background: rgba(140,100,220,0.10);
+  background: rgba(196,155,26,0.10);
   border-color: var(--accent2);
   color: var(--accent2);
 }
@@ -765,8 +808,8 @@ textarea.form-input {
   width: 26px;
   height: 26px;
   border-radius: 8px;
-  background: rgba(160,120,240,0.15);
-  border: 1px solid rgba(160,120,240,0.3);
+  background: rgba(210,160,20,0.15);
+  border: 1px solid rgba(210,160,20,0.3);
   color: var(--accent2);
   font-size: 16px;
   line-height: 1;
@@ -777,7 +820,7 @@ textarea.form-input {
   font-family: 'KerisKedyuche', sans-serif;
   transition: all 0.2s;
 }
-.count-btn:hover { background: rgba(160,120,240,0.3); }
+.count-btn:hover { background: rgba(210,160,20,0.3); }
 
 .count-val {
   font-size: 13px;
@@ -788,8 +831,8 @@ textarea.form-input {
 }
 
 .price-preview {
-  background: linear-gradient(135deg, rgba(160,120,240,0.12), rgba(160,130,240,0.10));
-  border: 1.5px solid rgba(160,120,240,0.25);
+  background: linear-gradient(135deg, rgba(210,160,20,0.12), rgba(210,165,30,0.10));
+  border: 1.5px solid rgba(210,160,20,0.25);
   border-radius: var(--radius-sm);
   padding: 16px 20px;
   margin-top: 16px;
@@ -821,7 +864,7 @@ textarea.form-input {
   align-items: center;
   gap: 6px;
   background: rgba(255,255,255,0.6);
-  border: 1.5px solid rgba(160,120,240,0.3);
+  border: 1.5px solid rgba(210,160,20,0.3);
   color: var(--accent2);
   padding: 10px 18px;
   border-radius: 10px;
@@ -831,7 +874,7 @@ textarea.form-input {
   font-family: 'KerisKedyuche', sans-serif;
   transition: all 0.2s;
 }
-.btn-copy:hover { background: rgba(160,120,240,0.10); }
+.btn-copy:hover { background: rgba(210,160,20,0.10); }
 
 .btn-reset {
   display: inline-flex;
@@ -848,7 +891,7 @@ textarea.form-input {
   font-family: 'KerisKedyuche', sans-serif;
   transition: all 0.2s;
 }
-.btn-reset:hover { border-color: rgba(160,120,240,0.3); color: var(--accent2); }
+.btn-reset:hover { border-color: rgba(210,160,20,0.3); color: var(--accent2); }
 
 /* ── REFUND ── */
 .refund-card {
@@ -883,7 +926,7 @@ textarea.form-input {
 }
 
 .pct-100 { color: var(--teal2); }
-.pct-70 { color: #3b82f6; }
+.pct-70 { color: #4a9e6b; }
 .pct-50 { color: #f59e0b; }
 .pct-0 { color: #ef4444; }
 
@@ -903,9 +946,9 @@ textarea.form-input {
 /* ── DECORATIVE ── */
 .deco-pill {
   display: inline-block;
-  background: rgba(160,120,240,0.12);
+  background: rgba(210,160,20,0.12);
   color: var(--accent2);
-  border: 1px solid rgba(160,120,240,0.25);
+  border: 1px solid rgba(210,160,20,0.25);
   border-radius: 10px;
   font-size: 11px;
   font-weight: 700;
@@ -914,10 +957,10 @@ textarea.form-input {
 }
 
 /* Smooth color blobs in sample thumbs */
-.blob1 { background: linear-gradient(135deg, rgba(180,150,255,0.30), rgba(210,190,255,0.22)); }
-.blob2 { background: linear-gradient(135deg, rgba(150,120,240,0.28), rgba(190,165,255,0.20)); }
-.blob3 { background: linear-gradient(135deg, rgba(200,175,255,0.28), rgba(225,210,255,0.22)); }
-.blob4 { background: linear-gradient(135deg, rgba(165,135,245,0.25), rgba(195,170,255,0.22)); }
+.blob1 { background: linear-gradient(135deg, rgba(220,180,40,0.30), rgba(240,210,80,0.22)); }
+.blob2 { background: linear-gradient(135deg, rgba(200,160,25,0.28), rgba(190,165,255,0.20)); }
+.blob3 { background: linear-gradient(135deg, rgba(235,200,60,0.28), rgba(225,210,255,0.22)); }
+.blob4 { background: linear-gradient(135deg, rgba(215,175,40,0.25), rgba(235,200,60,0.22)); }
 
 /* ── TYPE TOGGLE BTN ── */
 .type-toggle-btn {
@@ -936,16 +979,16 @@ textarea.form-input {
   background: linear-gradient(135deg, var(--accent2), var(--pink2));
   color: #fff;
   border-color: transparent;
-  box-shadow: 0 3px 10px rgba(140,100,220,0.25);
+  box-shadow: 0 3px 10px rgba(196,155,26,0.25);
 }
 .type-toggle-btn:not(.active):hover {
-  border-color: rgba(160,120,240,0.5);
+  border-color: rgba(210,160,20,0.5);
   color: var(--accent2);
 }
 
 /* ── DESIGN POLISH ── */
 section { margin-bottom: 32px; }
-.hero-card { padding: 36px; gap: 32px; }
+.hero-card { padding: 22px 26px 20px; gap: 0; }
 
 /* Glass: inner light shimmer */
 .glass { position: relative; overflow: hidden; }
@@ -970,7 +1013,7 @@ section { margin-bottom: 32px; }
 .notice-item:hover { background: rgba(255,255,255,0.72); }
 
 /* Slot box */
-.slot-box { border-radius: 20px; padding: 20px 22px; }
+.slot-box { border-radius: 16px; padding: 14px 16px; }
 
 /* Refund */
 .refund-row { padding: 14px 0; }
@@ -982,7 +1025,7 @@ section { margin-bottom: 32px; }
 
 /* Form inputs */
 .form-input { border-radius: 14px; padding: 11px 16px; font-size: 14px; }
-.form-input:focus { box-shadow: 0 0 0 3px rgba(140,100,220,0.12); }
+.form-input:focus { box-shadow: 0 0 0 3px rgba(196,155,26,0.12); }
 
 /* Buttons */
 .btn-copy, .btn-reset { padding: 11px 22px; border-radius: 10px; }
@@ -999,11 +1042,11 @@ section { margin-bottom: 32px; }
 
 /* Event card hover */
 .event-card { transition: box-shadow 0.2s; }
-.event-card:hover { box-shadow: 0 12px 40px rgba(110,80,200,0.12); }
+.event-card:hover { box-shadow: 0 12px 40px rgba(170,130,15,0.12); }
 
 /* Options list items */
 .option-item { border-radius: 12px; transition: all 0.18s; }
-.option-item:hover { background: rgba(255,255,255,0.8); border-color: rgba(160,120,240,0.35); }
+.option-item:hover { background: rgba(255,255,255,0.8); border-color: rgba(210,160,20,0.35); }
 
 /* Tab buttons */
 .tab-btn { font-size: 13px; padding: 9px 22px; }
@@ -1013,7 +1056,7 @@ section { margin-bottom: 32px; }
 
 /* Refund pct badge */
 .refund-pct { padding: 3px 12px; border-radius: 6px; font-size: 13px; }
-.pct-100 { background: rgba(130,100,220,0.10); }
+.pct-100 { background: rgba(185,145,20,0.10); }
 .pct-70 { background: rgba(59,130,246,0.1); }
 .pct-50 { background: rgba(245,158,11,0.1); }
 .pct-0 { background: rgba(239,68,68,0.08); }
@@ -1039,13 +1082,13 @@ section { margin-bottom: 32px; }
   <section class="hero">
     <div class="glass hero-card fade-in">
       <!-- 프로필 이미지 -->
-      <div style="width:96px;height:96px;border-radius:20px;overflow:hidden;border:2px solid rgba(255,255,255,0.88);box-shadow:0 8px 24px rgba(140,100,220,0.22),0 2px 6px rgba(0,0,0,0.08);margin-bottom:12px;flex-shrink:0;">
+      <div style="width:88px;height:88px;border-radius:18px;overflow:hidden;border:2px solid rgba(255,255,255,0.88);box-shadow:0 6px 20px rgba(196,155,26,0.20),0 2px 6px rgba(0,0,0,0.07);margin-bottom:10px;flex-shrink:0;">
         <img src="https://www.dropbox.com/scl/fi/n1vs8ipq2qww46q30mall/Profile.png?rlkey=xm4u5nz10dfnb5th1edbbbg6c&st=7ibrmnlm&dl=1" alt="SpicyPotato"
           style="width:100%;height:100%;object-fit:cover;display:block;">
       </div>
       <!-- 이름 + 소개 -->
-      <div class="artist-name" style="margin-bottom:5px;">SpicyPotato</div>
-      <div class="artist-bio" style="max-width:420px;margin-bottom:18px;">캐릭터의 매력을 표현하기 위해 최선을 다하는 Live2D 리거입니다</div>
+      <div class="artist-name" style="margin-bottom:4px;">SpicyPotato</div>
+      <div class="artist-bio" style="max-width:420px;margin-bottom:14px;">캐릭터의 매력을 표현하기 위해 최선을 다하는 Live2D 리거입니다</div>
       <!-- 슬롯 -->
       <div style="width:100%;">
         <div class="slot-box">
@@ -1070,184 +1113,12 @@ section { margin-bottom: 32px; }
   <section id="samples" class="fade-in">
     <div class="section-label">리깅 샘플</div>
     <div class="section-title">작업 샘플 갤러리</div>
-
-    <div class="sample-slider-wrap">
-      <div class="sample-track" id="sampleTrack">
-
-        <!-- Slide 1: 전신 · 기본형 -->
-        <div class="sample-slide">
-          <div class="sample-card-wide">
-            <div class="sample-cat-header">전신 · 기본형</div>
-            <div class="sample-images-row">
-              <div class="sample-img-box">
-                <div class="sample-img-placeholder">
-                  <div class="sample-img-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-                  </div>
-                  기본 표정
-                </div>
-              </div>
-              <div class="sample-img-box">
-                <div class="sample-img-placeholder">
-                  <div class="sample-img-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-                  </div>
-                  눈 리깅
-                </div>
-              </div>
-              <div class="sample-img-box">
-                <div class="sample-img-placeholder">
-                  <div class="sample-img-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
-                  </div>
-                  머리 물리
-                </div>
-              </div>
-            </div>
-            <div class="sample-footer">
-              <div>
-                <div class="sample-title">사쿠라 치요 모델</div>
-                <div class="sample-subtitle">눈·표정·머리 리깅 기본 구성</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 2: 전신 · 풀옵션 -->
-        <div class="sample-slide">
-          <div class="sample-card-wide">
-            <div class="sample-cat-header">전신 · 풀옵션</div>
-            <div class="sample-images-row">
-              <div class="sample-img-box">
-                <div class="sample-img-placeholder">
-                  <div class="sample-img-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                  </div>
-                  추가 표정
-                </div>
-              </div>
-              <div class="sample-img-box">
-                <div class="sample-img-placeholder">
-                  <div class="sample-img-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/></svg>
-                  </div>
-                  바디 물리
-                </div>
-              </div>
-              <div class="sample-img-box">
-                <div class="sample-img-placeholder">
-                  <div class="sample-img-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                  </div>
-                  파츠 리깅
-                </div>
-              </div>
-            </div>
-            <div class="sample-footer">
-              <div>
-                <div class="sample-title">아쿠아 마린 모델</div>
-                <div class="sample-subtitle">물리·추가표정·파츠 풀옵션</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 3: 반신 · 추가파츠 -->
-        <div class="sample-slide">
-          <div class="sample-card-wide">
-            <div class="sample-cat-header">반신 · 추가파츠</div>
-            <div class="sample-images-row">
-              <div class="sample-img-box">
-                <div class="sample-img-placeholder">
-                  <div class="sample-img-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-                  </div>
-                  동물귀
-                </div>
-              </div>
-              <div class="sample-img-box">
-                <div class="sample-img-placeholder">
-                  <div class="sample-img-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                  </div>
-                  날개 물리
-                </div>
-              </div>
-              <div class="sample-img-box">
-                <div class="sample-img-placeholder">
-                  <div class="sample-img-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-                  </div>
-                  특수파츠
-                </div>
-              </div>
-            </div>
-            <div class="sample-footer">
-              <div>
-                <div class="sample-title">네코 미미 모델</div>
-                <div class="sample-subtitle">동물귀·날개·특수파츠 구성</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 4: 전신 · 9칸 물리 -->
-        <div class="sample-slide">
-          <div class="sample-card-wide">
-            <div class="sample-cat-header">전신 · 9칸 물리</div>
-            <div class="sample-images-row">
-              <div class="sample-img-box">
-                <div class="sample-img-placeholder">
-                  <div class="sample-img-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-                  </div>
-                  9칸 표정
-                </div>
-              </div>
-              <div class="sample-img-box">
-                <div class="sample-img-placeholder">
-                  <div class="sample-img-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                  </div>
-                  고급 물리
-                </div>
-              </div>
-              <div class="sample-img-box">
-                <div class="sample-img-placeholder">
-                  <div class="sample-img-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                  </div>
-                  파츠 연동
-                </div>
-              </div>
-            </div>
-            <div class="sample-footer">
-              <div>
-                <div class="sample-title">루나 마법사 모델</div>
-                <div class="sample-subtitle">9칸 표정·고급 물리 연산</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- /sample-track -->
-    </div><!-- /sample-slider-wrap -->
-
-    <div class="sample-nav">
-      <div class="sample-dots" id="sampleDots">
-        <div class="dot active" onclick="goSampleSlide(0)"></div>
-        <div class="dot" onclick="goSampleSlide(1)"></div>
-        <div class="dot" onclick="goSampleSlide(2)"></div>
-        <div class="dot" onclick="goSampleSlide(3)"></div>
-      </div>
-      <div class="nav-arrows">
-        <button class="nav-btn" onclick="prevSampleSlide()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <button class="nav-btn" onclick="nextSampleSlide()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
-      </div>
+    <div id="sampleGallery" style="display:flex;flex-direction:column;gap:12px;">
+      <div style="text-align:center;font-size:13px;color:var(--text3);padding:32px;">샘플 불러오는 중...</div>
     </div>
   </section>
 
-  <!-- ── PORTFOLIO ── -->
+      <!-- ── PORTFOLIO ── -->
   <section class="fade-in">
     <div class="section-label">포트폴리오</div>
     <div class="section-title">작업 영상 포트폴리오</div>
@@ -1362,7 +1233,7 @@ section { margin-bottom: 32px; }
           <div class="step-desc">최종 파일 및 세팅 안내서를 전달해요</div>
           <div class="step-arrow">›</div>
         </div>
-        <div class="glass-sm step-card" style="background:rgba(160,120,240,0.10);border-color:rgba(160,120,240,0.25);">
+        <div class="glass-sm step-card" style="background:rgba(210,160,20,0.10);border-color:rgba(210,160,20,0.25);">
           <div class="step-num">STEP 08</div>
           <span class="step-icon">⚙️</span>
           <div class="step-name">세팅 안내</div>
@@ -1376,57 +1247,71 @@ section { margin-bottom: 32px; }
   <section class="fade-in">
     <div class="section-label">리깅 옵션</div>
     <div class="section-title">리깅 옵션 안내</div>
-    <div class="glass" style="padding:24px;">
-      <div class="options-tabs">
-        <button class="tab-btn active" onclick="switchTab('basic', this)">기본 리깅 옵션</button>
-        <button class="tab-btn" onclick="switchTab('extra', this)">추가 리깅 옵션</button>
+    <div class="glass" style="padding:24px;display:flex;flex-direction:column;gap:20px;">
+
+      <!-- 기본 리깅 (전신 / 반신 나란히) -->
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--accent2);letter-spacing:0.12em;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          기본 리깅 옵션
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <!-- 전신 -->
+          <div style="background:rgba(210,160,20,0.06);border:1px solid rgba(210,160,20,0.15);border-radius:14px;padding:14px 16px;">
+            <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:10px;letter-spacing:0.06em;">전신</div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>눈 깜빡이·미소 + 물리</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>눈썹 상하·변형 + 물리</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>눈동자 XY + 물리</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>입모양 12점</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>표정 3종 + 물리</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>머리 (눈·코·입·귀·얼굴) XYZ</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>머리카락 XYZ + 물리</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>머리 악세사리 XYZ + 물리</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>바디 XYZ + 물리</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>의상·악세사리 XYZ + 물리</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>호흡 애니메이션</div>
+            </div>
+          </div>
+          <!-- 반신 -->
+          <div style="background:rgba(210,160,20,0.06);border:1px solid rgba(210,160,20,0.15);border-radius:14px;padding:14px 16px;">
+            <div style="font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:10px;letter-spacing:0.06em;">반신</div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>눈 깜빡이·미소 + 물리</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>눈썹 상하·변형 + 물리</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>눈동자 XY + 물리</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>입모양 12점</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>표정 3종 + 물리</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>머리 (눈·코·입·귀·얼굴) XYZ</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>머리카락 XYZ + 물리</div>
+              <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:7px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block;"></span>호흡 애니메이션</div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="options-panel active" id="panel-basic">
-        <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap;">
-          <span style="font-size:12px;font-weight:700;color:var(--text2);">모델 타입:</span>
-          <button id="typeBtn_full" class="type-toggle-btn active" onclick="selectModelType('full')">전신</button>
-          <button id="typeBtn_half" class="type-toggle-btn" onclick="selectModelType('half')">반신</button>
-        </div>
-        <div id="optList_full" class="options-list">
-          <div class="option-item"><div class="option-dot"></div>눈 깜빡이, 미소 + 물리 연산</div>
-          <div class="option-item"><div class="option-dot"></div>눈썹 상하, 변형 + 물리 연산</div>
-          <div class="option-item"><div class="option-dot"></div>눈동자 XY + 물리 연산</div>
-          <div class="option-item"><div class="option-dot"></div>입모양 12점</div>
-          <div class="option-item"><div class="option-dot"></div>표정 3종 + 물리 연산</div>
-          <div class="option-item"><div class="option-dot"></div>머리 (눈·코·입·귀·얼굴) XYZ</div>
-          <div class="option-item"><div class="option-dot"></div>머리카락 XYZ + 물리연산</div>
-          <div class="option-item"><div class="option-dot"></div>머리 악세사리 XYZ + 물리 연산</div>
-          <div class="option-item"><div class="option-dot"></div>바디 XYZ + 물리 연산</div>
-          <div class="option-item"><div class="option-dot"></div>의상·악세사리 XYZ + 물리</div>
-          <div class="option-item"><div class="option-dot"></div>호흡 애니메이션</div>
-        </div>
-        <div id="optList_half" class="options-list" style="display:none;">
-          <div class="option-item"><div class="option-dot" style="background:var(--teal2);"></div>눈 깜빡이, 미소 + 물리 연산</div>
-          <div class="option-item"><div class="option-dot" style="background:var(--teal2);"></div>눈썹 상하, 변형 + 물리 연산</div>
-          <div class="option-item"><div class="option-dot" style="background:var(--teal2);"></div>눈동자 XY + 물리 연산</div>
-          <div class="option-item"><div class="option-dot" style="background:var(--teal2);"></div>입모양 12점</div>
-          <div class="option-item"><div class="option-dot" style="background:var(--teal2);"></div>표정 3종 + 물리 연산</div>
-          <div class="option-item"><div class="option-dot" style="background:var(--teal2);"></div>머리 (눈·코·입·귀·얼굴) XYZ</div>
-          <div class="option-item"><div class="option-dot" style="background:var(--teal2);"></div>머리카락 XYZ + 물리연산</div>
-          <div class="option-item"><div class="option-dot" style="background:var(--teal2);"></div>호흡 애니메이션</div>
-        </div>
+      <!-- 구분선 -->
+      <div style="height:1px;background:var(--border);"></div>
 
-      </div>
-
-      <div class="options-panel" id="panel-extra">
-        <div class="options-list">
-          <div class="option-item extra"><div class="option-dot"></div>추가 표정 (종당 추가)</div>
-          <div class="option-item extra"><div class="option-dot"></div>추가 표정 애니메이션</div>
-          <div class="option-item extra"><div class="option-dot"></div>볼 빵빵 (뺨 부풀리기)</div>
-          <div class="option-item extra"><div class="option-dot"></div>메롱 (혀 내밀기)</div>
+      <!-- 추가 리깅 옵션 -->
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--pink2);letter-spacing:0.12em;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          추가 리깅 옵션
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;">
+          <div class="option-item extra"><div class="option-dot"></div>추가 표정</div>
+          <div class="option-item extra"><div class="option-dot"></div>표정 애니메이션</div>
+          <div class="option-item extra"><div class="option-dot"></div>볼 빵빵</div>
+          <div class="option-item extra"><div class="option-dot"></div>메롱</div>
           <div class="option-item extra"><div class="option-dot"></div>입 X 모션</div>
-          <div class="option-item extra"><div class="option-dot"></div>기본 VBridger 세팅</div>
+          <div class="option-item extra"><div class="option-dot"></div>VBridger 세팅</div>
           <div class="option-item extra"><div class="option-dot"></div>동물귀 물리</div>
           <div class="option-item extra"><div class="option-dot"></div>날개 물리</div>
-          <div class="option-item extra"><div class="option-dot"></div>추가 수정 (횟수당)</div>
+          <div class="option-item extra"><div class="option-dot"></div>추가 수정</div>
         </div>
       </div>
+
     </div>
   </section>
 
@@ -1583,36 +1468,51 @@ section { margin-bottom: 32px; }
       </div>
 
       <div style="font-size:12px;font-weight:700;color:var(--text2);margin:12px 0 6px;">바디</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
-        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
-          <label class="option-check-label" style="width:100%;">
-            <input type="checkbox" id="opt_hair" onchange="calcPrice()"> 헤어
-          </label>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div class="option-row">
+          <label class="option-check-label" style="flex:1;"><input type="checkbox" id="opt_hair" onchange="calcPrice()"> 헤어</label>
           <span class="option-price">미정</span>
+          <div class="option-count">
+            <button class="count-btn" onclick="changeCount('hair', -1)">-</button>
+            <span class="count-val" id="cnt_hair">0</span>
+            <button class="count-btn" onclick="changeCount('hair', 1)">+</button>
+          </div>
         </div>
-        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
-          <label class="option-check-label" style="width:100%;">
-            <input type="checkbox" id="opt_clothes" onchange="calcPrice()"> 의상
-          </label>
+        <div class="option-row">
+          <label class="option-check-label" style="flex:1;"><input type="checkbox" id="opt_clothes" onchange="calcPrice()"> 의상</label>
           <span class="option-price">미정</span>
+          <div class="option-count">
+            <button class="count-btn" onclick="changeCount('clothes', -1)">-</button>
+            <span class="count-val" id="cnt_clothes">0</span>
+            <button class="count-btn" onclick="changeCount('clothes', 1)">+</button>
+          </div>
         </div>
-        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
-          <label class="option-check-label" style="width:100%;">
-            <input type="checkbox" id="opt_arm" onchange="calcPrice()"> 고정 팔
-          </label>
+        <div class="option-row">
+          <label class="option-check-label" style="flex:1;"><input type="checkbox" id="opt_arm" onchange="calcPrice()"> 고정 팔</label>
           <span class="option-price">미정</span>
+          <div class="option-count">
+            <button class="count-btn" onclick="changeCount('arm', -1)">-</button>
+            <span class="count-val" id="cnt_arm">0</span>
+            <button class="count-btn" onclick="changeCount('arm', 1)">+</button>
+          </div>
         </div>
-        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
-          <label class="option-check-label" style="width:100%;">
-            <input type="checkbox" id="opt_ears" onchange="calcPrice()"> 동물귀
-          </label>
+        <div class="option-row">
+          <label class="option-check-label" style="flex:1;"><input type="checkbox" id="opt_ears" onchange="calcPrice()"> 동물귀</label>
           <span class="option-price">미정</span>
+          <div class="option-count">
+            <button class="count-btn" onclick="changeCount('ears', -1)">-</button>
+            <span class="count-val" id="cnt_ears">0</span>
+            <button class="count-btn" onclick="changeCount('ears', 1)">+</button>
+          </div>
         </div>
-        <div class="option-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
-          <label class="option-check-label" style="width:100%;">
-            <input type="checkbox" id="opt_wings" onchange="calcPrice()"> 날개
-          </label>
+        <div class="option-row">
+          <label class="option-check-label" style="flex:1;"><input type="checkbox" id="opt_wings" onchange="calcPrice()"> 날개</label>
           <span class="option-price">미정</span>
+          <div class="option-count">
+            <button class="count-btn" onclick="changeCount('wings', -1)">-</button>
+            <span class="count-val" id="cnt_wings">0</span>
+            <button class="count-btn" onclick="changeCount('wings', 1)">+</button>
+          </div>
         </div>
       </div>
 
@@ -1660,12 +1560,8 @@ section { margin-bottom: 32px; }
       </div>
 
       <div style="font-size:12px;font-weight:700;color:var(--text2);margin:12px 0 6px;">이벤트</div>
-      <div class="option-row">
-        <label class="option-check-label">
-          <input type="checkbox" id="opt_event" onchange="calcPrice()">
-          봄맞이 이벤트 (신규 고객 10% 할인)
-        </label>
-        <div class="option-price" style="color:var(--teal2);">-10%</div>
+      <div id="formEventContainer">
+        <div style="font-size:12px;color:var(--text3);padding:8px 0;">이벤트 정보 불러오는 중...</div>
       </div>
 
       <div class="form-section-title" style="margin-top:20px;">💬 추가 문의사항</div>
@@ -1691,35 +1587,32 @@ section { margin-bottom: 32px; }
   <!-- ── REFUND ── -->
   <section class="fade-in" style="margin-bottom:40px;">
     <div class="section-label">환불 안내</div>
-    <div class="section-title">환불 정책 안내 💫</div>
+    <div class="section-title">환불 정책 안내</div>
     <div class="glass refund-card">
       <div style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.7;">
-        고객님의 권익 보호를 위해 단계별 환불 정책을 운영하고 있어요. 작업 진행 상황에 따라 아래 기준이 적용됩니다 🌸
+        고객님의 권익 보호를 위해 단계별 환불 정책을 운영하고 있어요. 작업 진행 상황에 따라 아래 기준이 적용됩니다.
       </div>
       <div class="refund-steps">
         <div class="refund-row">
-          <div class="refund-icon">✅</div>
-          <div class="refund-stage">작업 시작 전</div>
+          <div class="refund-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--teal2)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+          <div class="refund-stage">작업 전</div>
           <div class="refund-pct pct-100">100% 환불</div>
         </div>
         <div class="refund-row">
-          <div class="refund-icon">🔧</div>
+          <div class="refund-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4a9e6b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
           <div class="refund-stage">작업 시작 ~ 1차 컨펌 전</div>
           <div class="refund-pct pct-70">70% 환불</div>
         </div>
         <div class="refund-row">
-          <div class="refund-icon">🔍</div>
+          <div class="refund-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
           <div class="refund-stage">1차 컨펌 후 ~ 2차 컨펌 전</div>
           <div class="refund-pct pct-50">50% 환불</div>
         </div>
         <div class="refund-row">
-          <div class="refund-icon">🚫</div>
+          <div class="refund-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
           <div class="refund-stage">2차 컨펌 후</div>
           <div class="refund-pct pct-0">환불 불가</div>
         </div>
-      </div>
-      <div style="margin-top:16px;padding:12px 16px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:12px;font-size:12px;color:#b91c1c;line-height:1.7;">
-        ⚠️ 고객 변심으로 인한 취소의 경우, 이미 진행된 작업 분량만큼 공제 후 환불됩니다. 무통장 입금 기준이며 카드 결제 시 수수료가 공제될 수 있어요.
       </div>
     </div>
   </section>
@@ -1731,6 +1624,7 @@ section { margin-bottom: 32px; }
 const SLOT_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSytmOtrazdbmv-fobgbSO4JV1Xpmd5mk-ohxqdMDGjIxsqK9awuFoXhF8ByEQBJNNuCh5xbP_g_ieM/pub?gid=0&single=true&output=csv';
 const EVENT_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSytmOtrazdbmv-fobgbSO4JV1Xpmd5mk-ohxqdMDGjIxsqK9awuFoXhF8ByEQBJNNuCh5xbP_g_ieM/pub?gid=1400947798&single=true&output=csv';
 const PORTFOLIO_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSytmOtrazdbmv-fobgbSO4JV1Xpmd5mk-ohxqdMDGjIxsqK9awuFoXhF8ByEQBJNNuCh5xbP_g_ieM/pub?gid=1368256576&single=true&output=csv';
+const SAMPLE_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSytmOtrazdbmv-fobgbSO4JV1Xpmd5mk-ohxqdMDGjIxsqK9awuFoXhF8ByEQBJNNuCh5xbP_g_ieM/pub?gid=68015558&single=true&output=csv';
 
 // ── CSV PARSER (따옴표 안 줄바꿈 포함 완전 처리) ──
 function parseCSV(text) {
@@ -1790,8 +1684,8 @@ async function loadSlots() {
     container.innerHTML = rows2.map(row => `
       <div style="display:flex;gap:7px;align-items:center;">
         ${row.map(s => s === 'busy'
-          ? `<div style="flex:1;padding:7px 12px;background:rgba(168,85,247,0.13);border:1.5px solid rgba(168,85,247,0.35);border-radius:10px;font-size:12px;font-weight:700;color:var(--accent2);text-align:center;">작업 중</div>`
-          : `<div style="flex:1;padding:7px 12px;background:rgba(94,234,212,0.13);border:1.5px dashed rgba(94,234,212,0.55);border-radius:10px;font-size:12px;font-weight:700;color:var(--teal2);text-align:center;">비어있음</div>`
+          ? `<div style="flex:1;padding:7px 12px;background:rgba(196,155,26,0.13);border:1.5px solid rgba(196,155,26,0.35);border-radius:10px;font-size:12px;font-weight:700;color:var(--accent2);text-align:center;">작업 중</div>`
+          : `<div style="flex:1;padding:7px 12px;background:rgba(130,190,80,0.13);border:1.5px dashed rgba(130,190,80,0.55);border-radius:10px;font-size:12px;font-weight:700;color:var(--teal2);text-align:center;">비어있음</div>`
         ).join('')}
       </div>`).join('');
   } catch(e) {
@@ -1801,35 +1695,69 @@ async function loadSlots() {
 }
 
 // ── LOAD EVENTS ──
+// 활성 이벤트 목록 (calcPrice에서 참조)
+let activeEventDiscounts = []; // [{id, rate}]
+
 async function loadEvents() {
   try {
     const res = await fetch(EVENT_CSV_URL);
     const text = await res.text();
     const rows = parseCSV(text);
     const container = document.getElementById('eventContainer');
+    const formContainer = document.getElementById('formEventContainer');
 
     if (!rows.length || !rows[0]['제목']) {
-      container.innerHTML = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:24px;">현재 진행 중인 이벤트가 없습니다</div>';
+      const empty = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:24px;">현재 진행 중인 이벤트가 없습니다</div>';
+      if (container) container.innerHTML = empty;
+      if (formContainer) formContainer.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:4px 0;">진행 중인 이벤트가 없습니다</div>';
       return;
     }
 
-    container.innerHTML = rows.map(row => {
-      const tags = (row['태그'] || '').split(',').map(t => t.trim()).filter(Boolean);
-      const deadline = row['마감일'] ? `~${row['마감일'].trim()}` : '';
-      const content = (row['내용'] || '').replace(/\n/g, '<br>');
-      return `
-        <div class="event-card glass" style="margin-bottom:12px;">
-          <div class="event-icon">🎉</div>
-          <div style="flex:1;min-width:0;">
-            <div class="event-title">${row['제목']}${deadline ? ` (${deadline})` : ''}</div>
-            ${tags.length ? `<div style="margin-bottom:8px;">${tags.map(t => `<span class="event-badge">${t}</span>`).join('')}</div>` : ''}
-            <div class="event-content">${content}</div>
-          </div>
-        </div>`;
-    }).join('');
+    // ── 이벤트 섹션 카드 렌더 ──
+    if (container) {
+      container.innerHTML = rows.map(row => {
+        const tags = (row['태그'] || '').split(',').map(t => t.trim()).filter(Boolean);
+        const deadline = row['마감일'] ? `~${row['마감일'].trim()}` : '';
+        const content = (row['내용'] || '').replace(/\n/g, '<br>');
+        const rate = (row['할인률'] || '').trim();
+        return `
+          <div class="event-card glass" style="margin-bottom:12px;">
+            <div class="event-icon">🎉</div>
+            <div style="flex:1;min-width:0;">
+              <div class="event-title">${row['제목']}${deadline ? ` (${deadline})` : ''}${rate ? `<span style="margin-left:8px;font-size:12px;color:var(--teal2);font-weight:700;">-${rate}</span>` : ''}</div>
+              ${tags.length ? `<div style="margin-bottom:8px;">${tags.map(t => `<span class="event-badge">${t}</span>`).join('')}</div>` : ''}
+              <div class="event-content">${content}</div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    // ── 신청양식 이벤트 체크박스 렌더 ──
+    activeEventDiscounts = [];
+    if (formContainer) {
+      formContainer.innerHTML = rows.map((row, i) => {
+        const rate = (row['할인률'] || '').trim();
+        const rateNum = parseFloat(rate) || 0;
+        const id = `opt_event_${i}`;
+        activeEventDiscounts.push({ id, rate: rateNum });
+        const label = `${row['제목']}${rate ? ` (${rate} 할인)` : ''}`;
+        return `
+          <div class="option-row">
+            <label class="option-check-label">
+              <input type="checkbox" id="${id}" onchange="calcPrice()">
+              ${label}
+            </label>
+            ${rate ? `<div class="option-price" style="color:var(--teal2);">-${rate}</div>` : ''}
+          </div>`;
+      }).join('');
+    }
+
   } catch(e) {
-    document.getElementById('eventContainer').innerHTML =
-      '<div style="font-size:13px;color:var(--text3);text-align:center;padding:24px;">이벤트 정보를 불러올 수 없습니다</div>';
+    const msg = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:24px;">이벤트 정보를 불러올 수 없습니다</div>';
+    const container = document.getElementById('eventContainer');
+    const formContainer = document.getElementById('formEventContainer');
+    if (container) container.innerHTML = msg;
+    if (formContainer) formContainer.innerHTML = '<div style="font-size:12px;color:var(--text3);">이벤트 정보를 불러올 수 없습니다</div>';
   }
 }
 
@@ -1920,10 +1848,89 @@ function renderPortfolioDots(count) {
 }
 
 // 페이지 로드 시 실행
+// ── LOAD SAMPLES ──
+async function loadSamples() {
+  const gallery = document.getElementById('sampleGallery');
+  if (!gallery) return;
+  try {
+    const res = await fetch(SAMPLE_CSV_URL);
+    const text = await res.text();
+    const rows = parseCSV(text);
+
+    // 카테고리별 그룹화 (순서 유지)
+    const catOrder = ['포인트','머리','눈','입','표정','악세사리','의상','추가 파츠','바디'];
+    const grouped = {};
+    catOrder.forEach(c => grouped[c] = []);
+    rows.forEach(row => {
+      const cat = (row['카테고리'] || '').trim();
+      if (grouped[cat]) grouped[cat].push(row);
+      else { grouped[cat] = [row]; catOrder.push(cat); }
+    });
+
+    const navSVG = (dir) => dir === 'prev'
+      ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`
+      : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`;
+
+    // 카테고리별 카드 생성 (3개씩 슬라이드)
+    gallery.innerHTML = catOrder
+      .filter(cat => grouped[cat] && grouped[cat].length > 0)
+      .map(cat => {
+        const items = grouped[cat];
+        // 3개씩 슬라이드로 나누기
+        const slides = [];
+        for (let i = 0; i < items.length; i += 3) slides.push(items.slice(i, i + 3));
+
+        const slidesHTML = slides.map(slide => {
+          const imgCols = slide.map(item => {
+            const gifUrl = (item['GIF'] || '').trim();
+            const title = (item['제목'] || '').trim();
+            const imgEl = gifUrl
+              ? `<img src="${gifUrl}" alt="${title}" style="width:100%;height:100%;object-fit:cover;display:block;">`
+              : `<div class="sample-img-placeholder"><div class="sample-img-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></div>`;
+            return `<div style="display:flex;flex-direction:column;gap:0;">
+              <div class="sample-img-box">${imgEl}</div>
+              <div class="sample-item-title">${title}</div>
+            </div>`;
+          }).join('');
+          // 슬라이드가 3개 미만이면 빈 칸 채우기
+          const empty = 3 - slide.length;
+          const emptyCol = `<div style="display:flex;flex-direction:column;gap:0;"><div class="sample-img-box" style="visibility:hidden;"></div><div class="sample-item-title"></div></div>`;
+          return `<div class="cat-slide"><div class="sample-images-row">${imgCols}${emptyCol.repeat(empty)}</div></div>`;
+        }).join('');
+
+        const dotsHTML = slides.length > 1
+          ? slides.map((_, i) => `<div class="dot${i===0?' active':''}" onclick="catGo(this.parentElement,${i})"></div>`).join('')
+          : `<div class="dot active"></div>`;
+
+        return `<div class="glass cat-slider-block" style="padding:20px 22px;" data-idx="0">
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--accent2);margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+            <span style="width:5px;height:5px;border-radius:50%;background:var(--accent);display:inline-block;flex-shrink:0;"></span>
+            ${cat}
+          </div>
+          <div class="cat-slider-wrap">
+            <div class="cat-track">${slidesHTML}</div>
+          </div>
+          <div class="cat-nav-row">
+            <div class="cat-dots">${dotsHTML}</div>
+            <div style="display:flex;gap:4px;">
+              <button class="nav-btn" style="width:30px;height:30px;" onclick="catPrev(this)">${navSVG('prev')}</button>
+              <button class="nav-btn" style="width:30px;height:30px;" onclick="catNext(this)">${navSVG('next')}</button>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+
+  } catch(e) {
+    const gallery = document.getElementById('sampleGallery');
+    if (gallery) gallery.innerHTML = '<div style="text-align:center;font-size:13px;color:var(--text3);padding:32px;">샘플을 불러올 수 없습니다</div>';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   loadSlots();
   loadEvents();
   loadPortfolio();
+  loadSamples();
 });
 </script>
 <script>
@@ -1934,22 +1941,38 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.08 });
 faders.forEach(el => observer.observe(el));
 
-// ── SAMPLE SLIDER ──
-let sampleIdx = 0;
-function getSampleTrack() { return document.getElementById('sampleTrack'); }
-function getSampleTotal() { return getSampleTrack().querySelectorAll('.sample-slide').length; }
-function updateSampleSlider() {
-  const track = getSampleTrack();
-  const items = track.querySelectorAll('.sample-slide');
+// ── CAT SLIDERS (카테고리별 독립 슬라이더) ──
+function getCatBlock(btn) { return btn.closest('.cat-slider-block'); }
+function getCatTrack(block) { return block.querySelector('.cat-track'); }
+function getCatIdx(block) { return parseInt(block.dataset.idx || '0'); }
+function getCatTotal(block) { return block.querySelectorAll('.cat-slide').length; }
+function updateCatSlider(block) {
+  const track = getCatTrack(block);
+  const items = block.querySelectorAll('.cat-slide');
   if (!items.length) return;
-  track.style.transition = 'transform 0.38s cubic-bezier(0.4,0,0.2,1)';
-  track.style.transform = `translateX(-${sampleIdx * items[0].offsetWidth}px)`;
-  document.querySelectorAll('#sampleDots .dot').forEach((d, i) => d.classList.toggle('active', i === sampleIdx));
+  const idx = getCatIdx(block);
+  track.style.transform = `translateX(-${idx * items[0].offsetWidth}px)`;
+  const dots = block.querySelectorAll('.cat-dots .dot');
+  dots.forEach((d, i) => d.classList.toggle('active', i === idx));
 }
-function nextSampleSlide() { const t = getSampleTotal(); sampleIdx = sampleIdx >= t-1 ? 0 : sampleIdx+1; updateSampleSlider(); }
-function prevSampleSlide() { const t = getSampleTotal(); sampleIdx = sampleIdx <= 0 ? t-1 : sampleIdx-1; updateSampleSlider(); }
-function goSampleSlide(i) { sampleIdx = i; updateSampleSlider(); }
-window.addEventListener('resize', () => { updateSampleSlider(); updateSlider(); });
+function catNext(btn) {
+  const block = getCatBlock(btn);
+  const t = getCatTotal(block);
+  block.dataset.idx = ((getCatIdx(block) + 1) % t).toString();
+  updateCatSlider(block);
+}
+function catPrev(btn) {
+  const block = getCatBlock(btn);
+  const t = getCatTotal(block);
+  block.dataset.idx = ((getCatIdx(block) - 1 + t) % t).toString();
+  updateCatSlider(block);
+}
+function catGo(dotsEl, i) {
+  const block = dotsEl.closest('.cat-slider-block');
+  block.dataset.idx = i.toString();
+  updateCatSlider(block);
+}
+window.addEventListener('resize', () => { updateSlider(); });
 
 // ── PORTFOLIO SLIDER ──
 let slideIdx = 0;
@@ -1982,7 +2005,7 @@ function switchTab(name, btn) {
 }
 
 // ── COUNTER ──
-const counts = { emotion: 0, emoAnim: 0, fix: 0 };
+const counts = { emotion: 0, emoAnim: 0, fix: 0, hair: 0, clothes: 0, arm: 0, ears: 0, wings: 0 };
 function changeCount(key, delta) {
   counts[key] = Math.max(0, counts[key] + delta);
   document.getElementById('cnt_' + key).textContent = counts[key];
@@ -2007,14 +2030,27 @@ function calcPrice() {
   let total = 0;
   const baseRadio = document.querySelector('input[name="base"]:checked');
   if(baseRadio) total += baseRadio.value === 'full' ? prices.base_full : prices.base_half;
-  ['hair','clothes','arm','ears','wings','bbang','melon','mouthX','vbridger','reveal'].forEach(k => {
+  // 체크박스 단순 옵션 (수량 없음)
+  ['bbang','melon','mouthX','vbridger','reveal'].forEach(k => {
     const el = document.getElementById('opt_' + k);
     if(el && el.checked) total += prices[k];
   });
+  // 수량 기반 옵션
   total += counts.emotion * prices.emotion;
   total += counts.emoAnim * prices.emoAnim;
   total += counts.fix * prices.fix;
-  if(document.getElementById('opt_event').checked && total > 0) total = Math.round(total * 0.9);
+  total += counts.hair * prices.hair;
+  total += counts.clothes * prices.clothes;
+  total += counts.arm * prices.arm;
+  total += counts.ears * prices.ears;
+  total += counts.wings * prices.wings;
+  // 이벤트 할인 (여러 이벤트 중 가장 큰 할인율 1개 적용)
+  if (total > 0 && activeEventDiscounts.length > 0) {
+    const maxDiscount = activeEventDiscounts
+      .filter(ev => { const el = document.getElementById(ev.id); return el && el.checked; })
+      .reduce((max, ev) => Math.max(max, ev.rate), 0);
+    if (maxDiscount > 0) total = Math.round(total * (1 - maxDiscount / 100));
+  }
   document.getElementById('priceDisplay').textContent = total.toLocaleString() + '원';
   return total;
 }
@@ -2039,8 +2075,13 @@ function copyQuote() {
   const memo = document.getElementById('f_memo').value;
 
   const opts = [];
-  ['hair','clothes','arm','ears','wings','bbang','melon','mouthX','vbridger','reveal','event'].forEach(k => {
+  ['hair','clothes','arm','ears','wings','bbang','melon','mouthX','vbridger','reveal'].forEach(k => {
     const el = document.getElementById('opt_' + k);
+    if(el && el.checked) opts.push(el.parentElement.textContent.trim().replace(/\s+/g,' '));
+  });
+  // 동적 이벤트 체크박스
+  activeEventDiscounts.forEach(ev => {
+    const el = document.getElementById(ev.id);
     if(el && el.checked) opts.push(el.parentElement.textContent.trim().replace(/\s+/g,' '));
   });
   if(counts.emotion > 0) opts.push(`추가 표정 x${counts.emotion}`);
