@@ -947,16 +947,15 @@
         tooltip.classList.add('animate');
     }
 
-    // ---------------- [ 임베드 높이 자동 감지 로직 (실시간 동기화) ] ----------------
+    // ---------------- [ 임베드 높이 자동 감지 로직 (실시간 동기화/감소 해결) ] ----------------
     function sendHeight() {
         if (window.parent && window.parent !== window) {
-            const height = Math.max(
-                document.body.scrollHeight, 
-                document.documentElement.scrollHeight,
-                document.body.offsetHeight,
-                document.documentElement.offsetHeight
-            );
-            window.parent.postMessage({ type: 'setHeight', height: height }, '*');
+            const container = document.getElementById('mainContainer');
+            if (container) {
+                // scrollHeight가 아닌 실제 렌더링 높이(offsetHeight)를 사용하여 감소도 감지
+                const height = container.offsetHeight;
+                window.parent.postMessage({ type: 'setHeight', height: height }, '*');
+            }
         }
     }
 
@@ -968,12 +967,12 @@
         const ro = new ResizeObserver(() => {
             window.requestAnimationFrame(sendHeight);
         });
-        ro.observe(document.body);
+        // body 대신 mainContainer를 직접 관찰하여 더 정확하게 높이 변화 감지
         const container = document.getElementById('mainContainer');
         if (container) ro.observe(container);
     }
 
-    // 이미지 로딩이나 스타일 변경 등을 놓치지 않기 위해 0.5초마다 주기적 체크
+    // 주기적 체크 유지
     setInterval(sendHeight, 500);
 
     // ---------------- [ 구글 시트 연동 (샘플 및 포트폴리오) ] ----------------
