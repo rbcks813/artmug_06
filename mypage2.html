@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상세페이지 및 포트폴리오</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ================= 폰트 설정 ================= */
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight: 100; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2'); font-weight: 200; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2'); font-weight: 800; font-display: swap; }
+        @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+
+        /* ================= 기본 스타일 ================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Paperozi', sans-serif; }
+        body { background-color: #f4f7f9; color: #333; line-height: 1.6; padding: 40px 20px; }
+        .container { max-width: 1180px; margin: 0 auto; background: #fff; border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); padding: 50px; overflow: hidden; border-top: 6px solid #0056b3; }
+        h1, h2, h3 { color: #111; margin-bottom: 20px; letter-spacing: -0.5px; }
+        h2 { font-size: 28px; font-weight: 800; border-bottom: 2px solid #eaeaea; padding-bottom: 15px; margin-top: 60px; position: relative; }
+        h2::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 60px; height: 2px; background: #0056b3; }
+        p { margin-bottom: 10px; font-weight: 400; color: #555; }
+        ul { list-style: none; }
+        
+        /* 토스트 알림 스타일 */
+        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 12px 24px; border-radius: 50px; font-size: 14px; font-weight: bold; z-index: 10000; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 10px 20px rgba(0,0,0,0.2); pointer-events: none; }
+        #toast.show { opacity: 1; visibility: visible; bottom: 50px; }
+
+        /* ================= 1. 제작 방식 선택 가이드 ================= */
+        .guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px; }
+        .guide-card { background: #fcfcfc; padding: 30px; border-radius: 16px; border: 1px solid #eee; box-shadow: 0 4px 15px rgba(0,0,0,0.02); transition: all 0.3s; }
+        .guide-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); border-color: #e2e8f0; }
+        .guide-card h3 { font-size: 22px; color: #0056b3; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .pro-con { margin-top: 15px; }
+        .pro-con strong { display: inline-block; margin-top: 15px; margin-bottom: 5px; font-size: 14px; padding: 4px 12px; border-radius: 20px; font-weight: 700; }
+        .pro-con strong:nth-of-type(1) { background: #e6fcf5; color: #0ca678; } 
+        .pro-con strong:nth-of-type(2) { background: #fff5f5; color: #e03131; } 
+        .pro-con li { position: relative; padding-left: 15px; font-size: 15px; color: #555; margin-bottom: 6px; word-break: keep-all;}
+        .pro-con li::before { content: '·'; position: absolute; left: 0; font-weight: bold; color: #888; }
+
+        /* ================= 2. 서비스 특장점 ================= */
+        .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 25px; }
+        .feature-box { background: #fff; padding: 20px 25px; border-radius: 12px; border: 1px solid #f0f0f0; border-left: 5px solid #0056b3; box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: 0.3s; height: 100%; display: flex; flex-direction: column; justify-content: center;}
+        .feature-box:hover { transform: translateX(5px); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
+        .feature-box h4 { font-size: 17px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; color: #222; }
+        .feature-box p { font-size: 14px; color: #666; margin: 0; word-break: keep-all; }
+
+        /* ================= 3. 안내 멘트 & 4. 작업 순서 ================= */
+        .notice-box { background: linear-gradient(135deg, #e7f5ff 0%, #f1f8ff 100%); border-left: 4px solid #339af0; padding: 25px; border-radius: 12px; font-weight: 500; color: #1864ab; box-shadow: 0 4px 15px rgba(51, 154, 240, 0.1); margin-top: 25px; font-size: 15px; line-height: 1.7; word-break: keep-all;}
+        
+        .process-flow { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 30px; background: #f8f9fa; padding: 25px 20px; border-radius: 16px; border: 1px solid #eee; }
+        .process-step { background: #fff; color: #495057; padding: 12px 20px; border-radius: 30px; border: 1px solid #dee2e6; font-weight: 700; font-size: 14px; text-align: center; flex: 1; min-width: 110px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .step-arrow { color: #adb5bd; font-size: 14px; }
+        .process-step:last-child { background: #0056b3; color: #fff; border-color: #0056b3; box-shadow: 0 4px 15px rgba(0,86,179,0.3); }
+
+        /* ================= 7. 기능 체험존 (8개 박스) ================= */
+        .demo-zone-container { margin-top: 25px; background: #fcfcfc; padding: 40px; border-radius: 20px; border: 1px solid #eee; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02); }
+        .demo-zone-desc { color: #888; font-size: 15px; margin-bottom: 25px; text-align: center; }
+        .demo-zone-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        
+        /* 툴팁을 위해 overflow: visible 처리 */
+        .demo-box { background: #fff; border: 1px solid #eaeaea; border-radius: 16px; padding: 30px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 160px; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.03); transition: 0.3s; overflow: visible; }
+        .demo-box:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.08); transform: translateY(-3px); }
+        .demo-box-title { position: absolute; top: 12px; left: 15px; font-size: 12px; font-weight: 800; color: #adb5bd; letter-spacing: 0.5px; }
+
+        .typing-effect { font-size: 16px; font-weight: bold; color: #0056b3; min-height: 24px; }
+        .typing-effect::after { content: '|'; animation: blink 1s step-end infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        .btn-neon { background: transparent; color: #e83e8c; border: 2px solid #e83e8c; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
+        .btn-neon:hover { background: #e83e8c; color: #fff; box-shadow: 0 0 15px #e83e8c; }
+        
+        .counter-num { font-size: 32px; font-weight: 900; color: #20c997; font-family: 'Courier New', Courier, monospace; }
+        
+        .toggle-switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .toggle-slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .toggle-slider { background-color: #0056b3; }
+        input:checked + .toggle-slider:before { transform: translateX(26px); }
+        
+        .demo-accordion { width: 100%; text-align: left; background: #f8f9fa; border-radius: 8px; padding: 10px 15px; border: 1px solid #eee; cursor: pointer; }
+        .demo-accordion summary { font-weight: 700; font-size: 14px; outline: none; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .demo-accordion summary::-webkit-details-marker { display: none; }
+        .demo-accordion summary::after { content: '+'; color: #0056b3; font-size: 18px; transition: 0.3s; }
+        .demo-accordion[open] summary::after { transform: rotate(45deg); }
+        .demo-accordion p { margin-top: 10px; font-size: 13px; color: #666; border-top: 1px dashed #ddd; padding-top: 10px; }
+
+        .demo-btn { padding: 10px 18px; background: #343a40; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .demo-btn:hover { background: #495057; }
+        
+        .tooltip-wrap { position: relative; display: inline-block; cursor: help; }
+        /* 툴팁 위치 및 z-index 최적화 */
+        .tooltip-text { visibility: hidden; width: 150px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 10px; position: absolute; z-index: 100; bottom: 130%; left: 50%; margin-left: -75px; opacity: 0; transition: all 0.3s; font-size: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .tooltip-text::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #333 transparent transparent transparent; }
+        .tooltip-wrap:hover .tooltip-text { visibility: visible; opacity: 1; bottom: 140%; }
+
+        .skeleton-box { width: 100%; height: 40px; border-radius: 8px; background: linear-gradient(90deg, #e9ecef 25%, #f8f9fa 50%, #e9ecef 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
+        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        /* ================= 5. 포트폴리오 (목록형 3x3 + 태그) ================= */
+        .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 25px; }
+        .portfolio-item { background: #fff; border: 1px solid #eee; border-radius: 16px; overflow: hidden; cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 5px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column;}
+        .portfolio-item:hover { box-shadow: 0 15px 30px rgba(0,0,0,0.1); transform: translateY(-8px); border-color: #ddd; }
+        .portfolio-img-wrapper { width: 100%; height: 220px; overflow: hidden; background: #f8f9fa; display: flex; align-items: center; justify-content: center; position: relative; }
+        .portfolio-img-wrapper::after { content: '\f00e  크게 보기'; font-family: "Font Awesome 6 Free", 'Paperozi', sans-serif; font-weight: 900; position: absolute; inset: 0; background: rgba(0,86,179,0.7); color: white; display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; font-size: 16px; }
+        .portfolio-item:hover .portfolio-img-wrapper::after { opacity: 1; }
+        .portfolio-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+        .portfolio-item:hover .portfolio-img-wrapper img { transform: scale(1.05); }
+        .portfolio-info { padding: 20px; flex: 1; display: flex; flex-direction: column;}
+        .portfolio-info h4 { font-size: 17px; margin-bottom: 8px; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .portfolio-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+        .portfolio-tags span { font-size: 11px; background: #f1f3f5; color: #495057; padding: 3px 8px; border-radius: 4px; font-weight: 600; }
+        .portfolio-info p { font-size: 13px; color: #777; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 12px; }
+        .portfolio-price { margin-top: auto; font-size: 14px; font-weight: 800; color: #0056b3; background: #e7f5ff; display: inline-block; padding: 6px 12px; border-radius: 8px; align-self: flex-start;}
+        
+        .pagination { display: flex; justify-content: center; align-items: center; margin-top: 40px; gap: 10px; }
+        .page-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid #ddd; background: #fff; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; transition: 0.2s; color: #555; }
+        .page-btn:hover, .page-btn.active { background: #0056b3; color: #fff; border-color: #0056b3; box-shadow: 0 4px 10px rgba(0,86,179,0.2); }
+
+        /* 포트폴리오 모달 */
+        .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(8px); justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: #fff; border-radius: 20px; max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; padding: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+        .close-modal { position: absolute; top: 20px; right: 25px; font-size: 35px; font-weight: 300; color: #888; cursor: pointer; z-index: 10; transition: 0.2s; }
+        .close-modal:hover { color: #111; transform: rotate(90deg); }
+        .modal-img-container { width: 100%; text-align: center; margin-bottom: 25px; background: #f8f9fa; border-radius: 12px; padding: 10px; border: 1px solid #eee; }
+        .modal-img-container img { max-width: 100%; height: auto; border-radius: 8px; object-fit: contain; }
+        .modal-details h3 { font-size: 26px; margin-bottom: 15px; color: #111; }
+        .modal-details .meta { display: flex; gap: 10px; font-size: 14px; color: #444; margin-bottom: 20px; flex-wrap: wrap; }
+        .modal-details .meta span { background: #f1f3f5; border: 1px solid #e9ecef; padding: 6px 12px; border-radius: 6px; font-weight: 600; }
+        .modal-details .meta-tags { margin-top: -10px; margin-bottom: 20px; }
+        .modal-details .meta-tags span { background: #e7f5ff; color: #0056b3; border: none; }
+
+        /* ================= 6 & 8. 견적 계산기 및 가격표 ================= */
+        .calc-container { display: flex; flex-direction: column; gap: 40px; margin-top: 25px; } 
+        
+        .calc-category { margin-bottom: 25px; background: #fff; border: 1px solid #eee; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .calc-category h4 { font-size: 19px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; color: #222; }
+        
+        .calc-item-wrapper { margin-bottom: 10px; }
+        .calc-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f8f9fa; border-radius: 10px; border: 1px solid #eee; transition: 0.2s; }
+        .calc-item.has-qty { border-radius: 10px 10px 0 0; border-bottom: none; background: #f1f3f5; }
+        .calc-item:hover { background: #f1f3f5; border-color: #dee2e6; }
+        .calc-item label { flex: 1; cursor: pointer; font-weight: 500; font-size: 15px; display: flex; align-items: center; gap: 12px; color: #333; }
+        .calc-item input[type="checkbox"] { transform: scale(1.3); cursor: pointer; accent-color: #0056b3; }
+        .item-price { font-weight: 800; color: #0056b3; font-size: 15px; }
+        
+        .qty-dropdown { display: none; padding: 15px; background: #fff; border: 1px solid #dee2e6; border-top: 1px dashed #ccc; border-radius: 0 0 10px 10px; text-align: right; box-shadow: inset 0 2px 5px rgba(0,0,0,0.02); }
+        .qty-dropdown.show { display: flex; justify-content: space-between; align-items: center; animation: slideDown 0.3s ease; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        .qty-dropdown input[type="number"] { width: 80px; padding: 8px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-weight: bold; outline: none; transition: 0.2s; font-size: 15px; }
+        .qty-dropdown input[type="number"]:focus { border-color: #0056b3; box-shadow: 0 0 0 3px rgba(0,86,179,0.1); }
+
+        .calc-summary { background: #1a1e23; color: #fff; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); border: 1px solid #2c3238; }
+        .calc-summary-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid #3c424a; padding-bottom: 15px; margin-bottom: 20px; flex-wrap: wrap; gap:10px; }
+        .calc-summary-header h3 { color: white; margin: 0; border: none; font-size: 22px; }
+        .total-price-wrap { text-align: right; }
+        .total-price-wrap span { font-size: 14px; color: #8ba1b7; display: block; margin-bottom: 5px; }
+        .total-price { font-size: 32px; font-weight: 900; color: #ffd43b; margin: 0; line-height: 1; }
+        
+        /* 안내사항 가시성 및 상호작용 개선 */
+        .terms-overlay { position: relative; background: rgba(255,255,255,0.05); padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #3c424a; text-align: center; }
+        
+        /* 잠금 시 안내 텍스트 - 레이아웃 영향 없도록 위치 조정 */
+        .terms-overlay.locked .lock-msg { display: block; color: #ffc107; font-size: 14px; font-weight: bold; margin-bottom: 15px; animation: pulse 2s infinite; }
+        .lock-msg { display: none; }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+
+        .terms-check { font-size: 15px; position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .terms-link-btn { display: inline-block; background: #339af0; color: white !important; padding: 12px 25px; border-radius: 30px; font-weight: 800; text-decoration: none !important; box-shadow: 0 4px 15px rgba(51, 154, 240, 0.4); transition: 0.3s; font-size: 16px; z-index: 10; position: relative; }
+        .terms-link-btn:hover { background: #228be6; transform: translateY(-2px); }
+        
+        /* 체크박스 영역: 잠금 시 흐릿하게 */
+        .terms-checkbox-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer; color: #e9ecef; font-weight: bold; background: rgba(0,0,0,0.2); padding: 15px 25px; border-radius: 10px; width: 100%; border: 1px dashed #555; transition: 0.3s; }
+        .terms-overlay.locked .terms-checkbox-wrap { opacity: 0.3; cursor: not-allowed; }
+        .terms-check input[type="checkbox"] { transform: scale(1.5); accent-color: #339af0; }
+
+        .selected-list-container { background: #23282e; border-radius: 12px; padding: 20px; margin-bottom: 25px; border: 1px solid #333940; }
+        .selected-list-container h5 { font-size: 14px; color: #8ba1b7; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed #3c424a; }
+        .selected-list { font-size: 14px; color: #ced4da; min-height: 20px; }
+        .selected-list li { display: flex; justify-content: space-between; margin-bottom: 10px; color: #f8f9fa; font-weight: 500; word-break: keep-all; gap: 10px; }
+        .selected-list li span:last-child { color: #ffd43b; font-weight: 700; white-space: nowrap; }
+        
+        .calc-btns { display: flex; gap: 15px; }
+        .calc-btns button { flex: 1; padding: 18px; border: none; border-radius: 12px; font-weight: 800; font-size: 16px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-copy { background: #0056b3; color: white; opacity: 0.4; cursor: not-allowed; }
+        .btn-copy.active { opacity: 1; cursor: pointer; box-shadow: 0 8px 20px rgba(0,86,179,0.4); }
+        .btn-copy.active:hover { background: #004494; transform: translateY(-3px); }
+        .btn-reset { background: #3c424a; color: #fff; }
+        .btn-reset:hover { background: #4d555e; }
+
+        @media (max-width: 1024px) {
+            .demo-zone-grid { grid-template-columns: repeat(2, 1fr); }
+            .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .guide-grid, .feature-grid { grid-template-columns: 1fr; }
+            .calc-summary { padding: 20px; }
+            .calc-btns { flex-direction: column; }
+            .process-step { min-width: 45%; }
+            .step-arrow { display: none; }
+        }
+        @media (max-width: 480px) {
+            body { padding: 20px 10px; }
+            .container { padding: 30px 20px; border-radius: 16px; }
+            .demo-zone-grid { grid-template-columns: 1fr; }
+            .portfolio-grid { grid-template-columns: 1fr; }
+            .total-price { font-size: 26px; }
+            .process-step { min-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="toast">메시지</div>
+
+<div class="container">
+
+    <h2>1. 제작 방식 선택 가이드</h2>
+    <div class="guide-grid">
+        <div class="guide-card">
+            <h3><i class="fa-brands fa-html5"></i> A. 아트머그 기본 HTML</h3>
+            <div class="pro-con">
+                <strong>[장점]</strong>
+                <ul>
+                    <li>모바일 최적화 완벽 대응</li>
+                    <li>렉이나 로딩 지연 전혀 없음</li>
+                    <li>플랫폼 내 오류 발생 제로</li>
+                </ul>
+                <strong>[단점]</strong>
+                <ul>
+                    <li>디자인 일부 제한</li>
+                    <li>포트폴리오 등 내용 수정 시 직접 코드를 교체해야 함</li>
+                </ul>
+            </div>
+        </div>
+        <div class="guide-card">
+            <h3><i class="fa-solid fa-code"></i> B. iframe 임베드 방식</h3>
+            <div class="pro-con">
+                <strong>[장점]</strong>
+                <ul>
+                    <li>포트폴리오 실시간 업데이트</li>
+                    <li>재의뢰 시 구매자 수정 불필요</li>
+                    <li>제한 적은 디자인</li>
+                </ul>
+                <strong>[단점]</strong>
+                <ul>
+                    <li>모바일 일부 기능 오류 가능성 (스크롤 등)</li>
+                    <li>네트워크 상태에 따른 로딩 발생</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <h2>2. 서비스 특장점 상세</h2>
+    <div class="feature-grid">
+        <div>
+            <h3 style="font-size: 20px; color: #333; margin-bottom: 15px;">A. 핵심 차별점</h3>
+            <div style="display:flex; flex-direction:column; gap:12px; height: 100%;">
+                <div class="feature-box">
+                    <h4>✅ PC · 모바일 완전 대응 UI 설계</h4>
+                    <p>화면 크기에 상관없이 정렬과 가독성 유지</p>
+                </div>
+                <div class="feature-box">
+                    <h4>✅ 플랫폼 제한 고려한 UX 최적화</h4>
+                    <p>아트머그 제약 내 최적의 인터페이스 구현</p>
+                </div>
+                <div class="feature-box">
+                    <h4>✅ 터치 인터페이스 기준 레이아웃</h4>
+                    <p>모바일에서도 클릭 편리한 버튼 배치</p>
+                </div>
+                <div class="feature-box">
+                    <h4>✅ 모바일 깨짐 방지 설계</h4>
+                    <p>고질적인 레이아웃 오류 원천 차단</p>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h3 style="font-size: 20px; color: #333; margin-bottom: 15px;">B. 제작 능력 강조</h3>
+            <div style="display:flex; flex-direction:column; gap:12px; height: 100%;">
+                <div class="feature-box" style="border-left-color:#ffc107;">
+                    <h4>✨ 레퍼런스 기반 1:1 커스텀 제작</h4>
+                    <p>참고하고 싶은 디자인 그대로 구현 가능</p>
+                </div>
+                <div class="feature-box" style="border-left-color:#ffc107;">
+                    <h4>✨ 디자인 스타일 제한 없음</h4>
+                    <p>미니멀 / 카드형 / 브랜드형 모두 가능</p>
+                </div>
+                <div class="feature-box" style="border-left-color:#ffc107;">
+                    <h4>✨ UI 설계 중심의 고도화 작업</h4>
+                    <p>단순 이미지가 아닌 탄탄한 구조적 설계</p>
+                </div>
+                <div class="feature-box" style="border-left-color:#ffc107;">
+                    <h4>✨ 복잡한 인터랙션 구현 가능</h4>
+                    <p>고난도 UI 구성도 완벽하게 지원</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2>3. 안내 및 작업 순서</h2>
+    <div class="notice-box">
+        <i class="fa-solid fa-circle-info" style="font-size: 18px; margin-right: 5px;"></i> 작업은 예정된 날짜에 시작되어 <b>최대 7일 이내</b> 완료되나, <b>일반적으로 4일 이내</b>에 빠르게 완성됩니다.<br>
+        무상 유지보수(A/S)는 <b>최대 1년</b>을 지원하며, 기간 내 유상 작업(신규 제작 등) 시 <b>최대 2년까지 무상 수리</b>를 지원합니다.
+    </div>
+    
+    <div class="process-flow">
+        <div class="process-step">문의 및 상담</div>
+        <i class="fa-solid fa-chevron-right step-arrow"></i>
+        <div class="process-step">입금 확인</div>
+        <i class="fa-solid fa-chevron-right step-arrow"></i>
+        <div class="process-step">방향 설정</div>
+        <i class="fa-solid fa-chevron-right step-arrow"></i>
+        <div class="process-step">시안 제작</div>
+        <i class="fa-solid fa-chevron-right step-arrow"></i>
+        <div class="process-step">수정 및 보완</div>
+        <i class="fa-solid fa-chevron-right step-arrow"></i>
+        <div class="process-step">최종 수령 <i class="fa-solid fa-check"></i></div>
+    </div>
+
+    <h2 style="margin-top: 70px;">✨ 상세페이지 기능 체험존</h2>
+    <div class="demo-zone-container">
+        <p class="demo-zone-desc">상세페이지에 적용할 수 있는 다양한 동적 기능들을 각각 테스트해보세요!</p>
+        <div class="demo-zone-grid">
+            <div class="demo-box">
+                <div class="demo-box-title">1. 타이핑 효과</div>
+                <div id="typingText" class="typing-effect"></div>
+            </div>
+            
+            <div class="demo-box">
+                <div class="demo-box-title">2. 버튼 애니메이션</div>
+                <button class="btn-neon">Neon Hover</button>
+            </div>
+            
+            <div class="demo-box">
+                <div class="demo-box-title">3. 숫자 카운터</div>
+                <div class="counter-num" id="loopCounter">0</div>
+            </div>
+            
+            <div class="demo-box">
+                <div class="demo-box-title">4. 스위치 토글</div>
+                <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div class="demo-box" style="justify-content: flex-start; padding-top: 45px;">
+                <div class="demo-box-title">5. FAQ 아코디언</div>
+                <details class="demo-accordion">
+                    <summary>질문을 클릭해보세요</summary>
+                    <p>깔끔하게 긴 텍스트를 숨겨두고 원할 때만 펼쳐볼 수 있습니다.</p>
+                </details>
+            </div>
+            
+            <div class="demo-box">
+                <div class="demo-box-title">6. 정보 툴팁</div>
+                <div class="tooltip-wrap">
+                    <button class="demo-btn">마우스를 올려보세요</button>
+                    <span class="tooltip-text">특정 단어나 이미지에 마우스를 올리면 부가 설명이 팝업됩니다!</span>
+                </div>
+            </div>
+            
+            <div class="demo-box">
+                <div class="demo-box-title">7. 로딩 스켈레톤</div>
+                <div class="skeleton-box"></div>
+                <div class="skeleton-box" style="height:15px; width:70%; margin-top:10px;"></div>
+            </div>
+            
+            <div class="demo-box" id="themePreview" style="transition: background 0.5s, color 0.5s;">
+                <div class="demo-box-title" id="themeTitle">8. 컬러 테마 (Light)</div>
+                <button class="demo-btn" onclick="toggleTheme()">다크 모드 전환</button>
+            </div>
+        </div>
+    </div>
+
+    <h2 style="margin-top: 70px;">5. 포트폴리오</h2>
+    <div class="portfolio-grid" id="portfolioGrid">
+        <p style="text-align:center; width:100%; grid-column: 1 / -1; padding: 40px; color: #888;">포트폴리오 데이터를 불러오는 중입니다...</p>
+    </div>
+    <div class="pagination" id="portfolioPagination"></div>
+
+    <h2 style="margin-top: 70px;">6. 실시간 견적 계산기</h2>
+    <div class="calc-container">
+        <div class="calc-options" id="calcOptions">
+            <div style="padding: 30px; text-align: center; color: #888; background: #f8f9fa; border-radius: 12px;">가격표 데이터를 불러오는 중입니다...</div>
+        </div>
+        
+        <div class="calc-summary">
+            <div class="calc-summary-header">
+                <h3><i class="fa-solid fa-calculator" style="color: #ffd43b; margin-right: 8px;"></i> 견적 요약</h3>
+                <div class="total-price-wrap">
+                    <span>예상 총액</span>
+                    <div class="total-price" id="totalPriceDisplay">0원</div>
+                </div>
+            </div>
+
+            <div id="termsOverlay" class="terms-overlay locked">
+                <div class="lock-msg"><i class="fa-solid fa-triangle-exclamation"></i> 안내사항 버튼 클릭 후 링크를 확인해야 동의가 가능합니다.</div>
+                <div class="terms-check">
+                    <a href="https://rbcks813.github.io/main/" target="_blank" id="termsLink" class="terms-link-btn">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> 안내사항(규정) 필독하기
+                    </a>
+                    <label class="terms-checkbox-wrap">
+                        <input type="checkbox" id="termsCheckbox" disabled>
+                        위 안내사항을 모두 확인하였으며, 이에 동의합니다.
+                    </label>
+                </div>
+            </div>
+
+            <div class="selected-list-container">
+                <h5>선택된 항목 상세 내역</h5>
+                <ul class="selected-list" id="selectedList">
+                    <li style="color:#6c757d; justify-content:center; padding: 10px 0;">선택된 항목이 없습니다.</li>
+                </ul>
+            </div>
+            
+            <div class="calc-btns">
+                <button class="btn-reset" onclick="resetCalc()"><i class="fa-solid fa-rotate-right"></i> 초기화</button>
+                <button class="btn-copy" id="btnCopy" onclick="copyEstimate()"><i class="fa-solid fa-copy"></i> 문의 내용 복사</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="portfolioModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></span>
+        <div class="modal-img-container" id="modalImageContainer"></div>
+        <div class="modal-details" id="modalDetails"></div>
+    </div>
+</div>
+
+<script>
+// =================== 임베드 자동 높이 조절 ===================
+function sendHeight() {
+    const height = document.documentElement.scrollHeight || document.body.scrollHeight;
+    window.parent.postMessage({ height: height }, '*');
+}
+window.addEventListener('load', sendHeight);
+window.addEventListener('resize', sendHeight);
+if (window.ResizeObserver) {
+    new ResizeObserver(sendHeight).observe(document.body);
+}
+
+// =================== 토스트 팝업 (말풍선 알림) ===================
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.innerText = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// =================== 숫자에 콤마 추가 ===================
+function formatPriceStr(str) {
+    if (!str && str !== 0) return '';
+    return str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+// =================== 체험존 기능 스크립트 ===================
+// 1. 타이핑 효과 (지우는 애니메이션 포함)
+const typingText = "원하는 문구를 강조해보세요!";
+let typeIndex = 0;
+let isDeleting = false;
+function typeWriter() {
+    const el = document.getElementById("typingText");
+    if (!el) return;
+    
+    const current = typingText.substring(0, typeIndex);
+    el.innerHTML = current;
+    
+    if (!isDeleting && typeIndex < typingText.length) {
+        typeIndex++;
+        setTimeout(typeWriter, 100);
+    } else if (isDeleting && typeIndex > 0) {
+        typeIndex--;
+        setTimeout(typeWriter, 50);
+    } else {
+        isDeleting = !isDeleting;
+        setTimeout(typeWriter, isDeleting ? 2000 : 500);
+    }
+}
+
+// 3. 숫자 카운팅 루프 (0->200 (3초대기) -> 200->0 (3초대기) 무한반복)
+function startLoopingCounter() {
+    const el = document.getElementById("loopCounter");
+    if(!el) return;
+
+    function animate(start, end, duration, callback) {
+        let startTime = null;
+        function step(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+            el.innerText = Math.floor(progress * (end - start) + start);
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            } else {
+                callback();
+            }
+        }
+        window.requestAnimationFrame(step);
+    }
+
+    function startCycle() {
+        animate(0, 200, 1000, () => {
+            setTimeout(() => {
+                animate(200, 0, 1000, () => {
+                    setTimeout(startCycle, 3000);
+                });
+            }, 3000);
+        });
+    }
+
+    startCycle();
+}
+
+// 8. 테마 토글
+function toggleTheme() {
+    const box = document.getElementById('themePreview');
+    const title = document.getElementById('themeTitle');
+    const btn = box.querySelector('button');
+    
+    if(box.style.backgroundColor === 'rgb(34, 34, 34)') {
+        box.style.backgroundColor = '#fff';
+        btn.style.backgroundColor = '#343a40';
+        btn.style.color = 'white';
+        btn.innerText = '다크 모드 전환';
+        title.innerText = '8. 컬러 테마 (Light)';
+        title.style.color = '#adb5bd';
+    } else {
+        box.style.backgroundColor = '#222';
+        btn.style.backgroundColor = '#f8f9fa';
+        btn.style.color = '#222';
+        btn.innerText = '라이트 모드 전환';
+        title.innerText = '8. 컬러 테마 (Dark)';
+        title.style.color = '#888';
+    }
+}
+
+// =================== 기본 상태 변수 ===================
+const portfolioUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSSeX3pWLHORYzu74HfYL39u8-G5s-bQEbPNffQoW5WAXPDSe1MJu8Piz8FKANsgLqUXKOa2ZgbJI_y/pub?gid=1487607827&single=true&output=csv";
+const priceUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSSeX3pWLHORYzu74HfYL39u8-G5s-bQEbPNffQoW5WAXPDSe1MJu8Piz8FKANsgLqUXKOa2ZgbJI_y/pub?gid=1047411872&single=true&output=csv";
+
+let portfolios = [];
+let currentPage = 1;
+const itemsPerPage = 9;
+
+let priceData = {}; 
+let selectedItems = new Map();
+
+// =================== 초기화 ===================
+document.addEventListener("DOMContentLoaded", () => {
+    loadPortfolio();
+    loadPriceData();
+    typeWriter();
+    startLoopingCounter();
+
+    // 안내사항 링크 클릭 -> 락 해제
+    document.getElementById('termsLink').addEventListener('click', function() {
+        const overlay = document.getElementById('termsOverlay');
+        const cb = document.getElementById('termsCheckbox');
+        
+        if(overlay.classList.contains('locked')) {
+            overlay.classList.remove('locked');
+            cb.disabled = false;
+            showToast("안내사항 창을 열었습니다. 내용을 확인하신 후 하단의 체크박스에 동의해주세요.");
+        }
+    });
+
+    // 체크박스 -> 복사 버튼 활성화
+    document.getElementById('termsCheckbox').addEventListener('change', function() {
+        const copyBtn = document.getElementById('btnCopy');
+        if(this.checked) {
+            copyBtn.classList.add('active');
+        } else {
+            copyBtn.classList.remove('active');
+        }
+    });
+
+    window.onclick = function(event) {
+        let modal = document.getElementById('portfolioModal');
+        if (event.target == modal) { closeModal(); }
+    }
+});
+
+// =================== 포트폴리오 스크립트 ===================
+function loadPortfolio() {
+    Papa.parse(portfolioUrl, {
+        download: true,
+        header: true,
+        complete: function(results) {
+            portfolios = results.data.filter(item => item['제목'] && item['제목'].trim() !== '');
+            renderPortfolio();
+        }
+    });
+}
+
+function renderPortfolio() {
+    const grid = document.getElementById('portfolioGrid');
+    const pagination = document.getElementById('portfolioPagination');
+    grid.innerHTML = '';
+    pagination.innerHTML = '';
+
+    const totalPages = Math.ceil(portfolios.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentItems = portfolios.slice(startIndex, startIndex + itemsPerPage);
+
+    currentItems.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'portfolio-item';
+        div.onclick = () => openModal(startIndex + index);
+        
+        let imgUrl = item['이미지 링크'] ? item['이미지 링크'].replace('dl=1', 'raw=1') : 'https://via.placeholder.com/400x300';
+        
+        let rawPrice = item['가격'] || '별도 문의';
+        let displayPrice = rawPrice.includes('비공개') ? '비공개' : formatPriceStr(rawPrice) + '원';
+        
+        const tagsHtml = item['태그'] ? `<div class="portfolio-tags">` + item['태그'].split(',').map(t => `<span>#${t.trim()}</span>`).join('') + `</div>` : '';
+
+        div.innerHTML = `
+            <div class="portfolio-img-wrapper"><img src="${imgUrl}" alt="${item['제목']}" loading="lazy"></div>
+            <div class="portfolio-info">
+                <h4>${item['제목']}</h4>
+                ${tagsHtml}
+                <p>${item['설명'].replace(/\n/g, ' ')}</p>
+                <div class="portfolio-price">${displayPrice}</div>
+            </div>
+        `;
+        grid.appendChild(div);
+    });
+
+    if(totalPages > 1) {
+        const prev = document.createElement('button');
+        prev.className = 'page-btn'; prev.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+        prev.onclick = () => { if(currentPage > 1) { currentPage--; renderPortfolio(); } };
+        pagination.appendChild(prev);
+
+        for(let i=1; i<=totalPages; i++) {
+            const btn = document.createElement('button');
+            btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+            btn.innerText = i; btn.onclick = () => { currentPage = i; renderPortfolio(); };
+            pagination.appendChild(btn);
+        }
+
+        const next = document.createElement('button');
+        next.className = 'page-btn'; next.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+        next.onclick = () => { if(currentPage < totalPages) { currentPage++; renderPortfolio(); } };
+        pagination.appendChild(next);
+    }
+}
+
+function openModal(index) {
+    const item = portfolios[index];
+    const modal = document.getElementById('portfolioModal');
+    let imgUrl = item['이미지 링크'] ? item['이미지 링크'].replace('dl=1', 'raw=1') : '';
+    document.getElementById('modalImageContainer').innerHTML = `<img src="${imgUrl}" alt="">`;
+    const desc = item['설명'] ? item['설명'].replace(/\n/g, '<br>') : '';
+    const tags = item['태그'] ? item['태그'].split(',').map(t => `<span>#${t.trim()}</span>`).join('') : '';
+    const inc = item['포함된 상품'] ? item['포함된 상품'].replace(/\n/g, '<br> - ') : '';
+    
+    let rawPrice = item['가격'] || '별도 문의';
+    let price = rawPrice.includes('비공개') ? '비공개' : formatPriceStr(rawPrice) + '원';
+
+    document.getElementById('modalDetails').innerHTML = `
+        <h3>${item['제목']}</h3>
+        <div class="meta meta-tags">${tags}</div>
+        <div class="meta">
+            <span><i class="fa-regular fa-calendar"></i> 작업일: ${item['작업일']}</span>
+            <span style="color:#0056b3;"><i class="fa-solid fa-coins"></i> 가격: ${price}</span>
+        </div>
+        <div style="background:#f8f9fa; padding:20px; border-radius:12px; margin-bottom:15px; border:1px solid #eee;">
+            <strong style="color:#111; font-size:16px;">상세 설명</strong><br>
+            <p style="margin-top:8px; color:#555;">${desc}</p>
+        </div>
+        <div style="background:#e7f5ff; padding:20px; border-radius:12px; border:1px solid #d0ebff;">
+            <strong style="color:#0056b3; font-size:16px;">포함된 옵션</strong><br>
+            <p style="margin-top:8px; color:#333; font-weight:500;"> - ${inc}</p>
+        </div>
+    `;
+    modal.style.display = 'flex';
+}
+
+function closeModal() { document.getElementById('portfolioModal').style.display = 'none'; }
+
+// =================== 견적 계산기 스크립트 ===================
+function loadPriceData() {
+    Papa.parse(priceUrl, {
+        download: true, header: true,
+        complete: function(res) {
+            res.data.filter(i => i['카테고리']?.trim()).forEach(i => {
+                const cat = i['카테고리'].trim();
+                if(!priceData[cat]) priceData[cat] = [];
+                priceData[cat].push({ name: i['상품명'], price: i['가격'].replace(/[^0-9]/g, '') });
+            });
+            renderCalc();
+        }
+    });
+}
+
+function renderCalc() {
+    const container = document.getElementById('calcOptions');
+    container.innerHTML = '';
+
+    for (const [category, items] of Object.entries(priceData)) {
+        const catDiv = document.createElement('div');
+        catDiv.className = 'calc-category';
+        catDiv.innerHTML = `<h4>${category}</h4>`;
+
+        items.forEach((item, index) => {
+            const id = `calc_${category}_${index}`;
+            const priceNum = parseInt(item.price) || 0;
+            const priceStr = priceNum === 0 ? '상담 후 결정' : formatPriceStr(priceNum) + '원';
+            const fullName = `[${category}] ${item.name}`;
+            const isPerItem = item.name.includes('(개당)');
+
+            const wrapDiv = document.createElement('div');
+            wrapDiv.className = 'calc-item-wrapper';
+
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'calc-item';
+            itemDiv.id = `box_${id}`;
+            itemDiv.innerHTML = `
+                <label for="${id}">
+                    <input type="checkbox" id="${id}" value="${priceNum}" data-name="${fullName}" data-is-per="${isPerItem}" onchange="updateCalcCheckbox(this)">
+                    ${item.name}
+                </label>
+                <div class="item-price">${priceStr}</div>
+            `;
+            wrapDiv.appendChild(itemDiv);
+
+            if (isPerItem) {
+                const dropDiv = document.createElement('div');
+                dropDiv.className = 'qty-dropdown';
+                dropDiv.id = `qtywrap_${id}`;
+                dropDiv.innerHTML = `
+                    <span style="color:#555; font-size:14px; font-weight:bold;">수량을 입력해주세요 <i class="fa-solid fa-arrow-right"></i></span>
+                    <div>
+                        <input type="number" id="qty_${id}" min="1" value="1" data-name="${fullName}" data-price="${priceNum}" onchange="updateCalcQty(this)">
+                        <span style="font-weight:bold; color:#333; margin-left:5px;">개</span>
+                    </div>
+                `;
+                wrapDiv.appendChild(dropDiv);
+            }
+            catDiv.appendChild(wrapDiv);
+        });
+        container.appendChild(catDiv);
+    }
+}
+
+function updateCalcCheckbox(cb) {
+    const name = cb.getAttribute('data-name');
+    const price = parseInt(cb.value);
+    const isPer = cb.getAttribute('data-is-per') === 'true';
+    const box = document.getElementById(`box_${cb.id}`);
+
+    if(cb.checked) {
+        let qty = 1;
+        if(isPer) {
+            document.getElementById(`qtywrap_${cb.id}`).classList.add('show');
+            box.classList.add('has-qty');
+            qty = parseInt(document.getElementById(`qty_${cb.id}`).value) || 1;
+        }
+        selectedItems.set(name, { price: price, qty: qty, id: cb.id });
+    } else {
+        if(isPer) {
+            document.getElementById(`qtywrap_${cb.id}`).classList.remove('show');
+            box.classList.remove('has-qty');
+        }
+        selectedItems.delete(name);
+    }
+    updateSummary();
+}
+
+function updateCalcQty(input) {
+    const name = input.getAttribute('data-name');
+    const price = parseInt(input.getAttribute('data-price'));
+    let qty = parseInt(input.value) || 1;
+    if(qty < 1) { qty = 1; input.value = 1; }
+    if(selectedItems.has(name)) {
+        selectedItems.set(name, { price: price, qty: qty });
+        updateSummary();
+    }
+}
+
+function updateSummary() {
+    const list = document.getElementById('selectedList');
+    const totalDisplay = document.getElementById('totalPriceDisplay');
+    list.innerHTML = '';
+    let total = 0, hasConsult = false;
+
+    if(selectedItems.size === 0) {
+        list.innerHTML = '<li style="color:#6c757d; justify-content:center; padding: 10px 0;">선택된 항목이 없습니다.</li>';
+        totalDisplay.innerText = '0원'; return;
+    }
+
+    selectedItems.forEach((data, name) => {
+        const itemTotal = data.price * data.qty;
+        total += itemTotal;
+        if(data.price === 0) hasConsult = true;
+        const priceStr = data.price === 0 ? '별도 상담' : formatPriceStr(itemTotal) + '원';
+        const nDisp = data.qty > 1 ? `${name} <span style="color:#74c0fc;">(x${data.qty}개)</span>` : name;
+        const li = document.createElement('li');
+        li.innerHTML = `<span>${nDisp}</span> <span>${priceStr}</span>`;
+        list.appendChild(li);
+    });
+    totalDisplay.innerText = formatPriceStr(total) + '원' + (hasConsult ? ' + α' : '');
+}
+
+function resetCalc() {
+    document.querySelectorAll('.calc-options input[type="checkbox"]').forEach(cb => cb.checked = false);
+    document.querySelectorAll('.calc-options input[type="number"]').forEach(num => num.value = 1);
+    document.querySelectorAll('.qty-dropdown').forEach(d => d.classList.remove('show'));
+    document.querySelectorAll('.calc-item').forEach(b => b.classList.remove('has-qty'));
+    selectedItems.clear(); updateSummary();
+    document.getElementById('termsCheckbox').checked = false;
+    document.getElementById('btnCopy').classList.remove('active');
+    
+    showToast("선택 내역이 모두 초기화되었습니다.");
+}
+
+function copyEstimate() {
+    const termsCb = document.getElementById('termsCheckbox');
+    if (!termsCb.checked) {
+        showToast("견적을 복사하시려면 상단의 안내사항을 확인하시고 체크박스에 동의해주셔야 합니다.");
+        return;
+    }
+    if(selectedItems.size === 0) { 
+        showToast("선택된 옵션이 없습니다."); 
+        return; 
+    }
+    
+    let text = "[ 의뢰 문의 및 견적 내용 ]\n\n";
+    let total = 0, hasConsult = false;
+    selectedItems.forEach((data, name) => {
+        const itemTotal = data.price * data.qty;
+        total += itemTotal;
+        if(data.price === 0) hasConsult = true;
+        const priceStr = data.price === 0 ? '별도 상담' : formatPriceStr(itemTotal) + '원';
+        text += `- ${name}${data.qty > 1 ? ` (x${data.qty}개)` : ''} : ${priceStr}\n`;
+    });
+    text += "\n----------------------\n";
+    text += `예상 총액 : ${formatPriceStr(total)}원${hasConsult ? ' + α' : ''}\n`;
+    text += "안내사항(규정)을 모두 읽고 동의하였습니다.\n";
+    
+    navigator.clipboard.writeText(text).then(() => {
+        showToast("의뢰 내용이 클립보드에 복사되었습니다. 문의하기 창에 붙여넣기(Ctrl+V) 해주세요!");
+    }).catch(() => {
+        showToast("복사에 실패했습니다. 브라우저 설정을 확인해주세요.");
+    });
+}
+</script>
+
+</body>
+</html>
