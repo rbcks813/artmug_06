@@ -135,11 +135,10 @@
 
         @media (max-width: 768px) {
             .video-container {
-                /* 모바일 화면 너비에 맞춰 롱폼 너비가 짤리지 않도록 높이 동적 조절 (숏폼도 동일한 높이로 맞춰짐) */
                 height: 50vw; 
             }
             .swiper-button-next, .swiper-button-prev {
-                top: 25vw !important; /* 바뀐 영상 높이(50vw)의 중앙으로 버튼 위치 조정 */
+                top: 25vw !important; 
                 width: 36px !important;
                 height: 36px !important;
             }
@@ -228,7 +227,6 @@
                     
                     let type = cols[0]?.replace(/"/g, '').trim();
                     
-                    // 구글 시트 데이터 전처리 (띄어쓰기 및 카테고리 보정)
                     if (type.includes('그외')) type = type.replace('그외', '그 외');
                     if (type === '롱폼') type = '롱폼 그 외';
                     if (type === '숏폼') type = '숏폼 그 외';
@@ -253,17 +251,28 @@
             if (swiperInstance) swiperInstance.destroy(true, true);
             listContainer.innerHTML = '';
 
-            // '롱폼' 혹은 '숏폼' 메인 버튼인 경우 전체 출력, 아니면 상세 매칭
-            const filtered = (category === '롱폼' || category === '숏폼')
+            let filtered = (category === '롱폼' || category === '숏폼')
                 ? allVideos.filter(v => v.type.includes(category))
                 : allVideos.filter(v => v.type === category);
 
             if (filtered.length === 0) {
                 noData.style.display = 'block';
                 sliderWrapper.style.display = 'none';
+                return;
             } else {
                 noData.style.display = 'none';
                 sliderWrapper.style.display = 'block';
+            }
+
+            // [핵심] 원래 영상 개수 저장
+            const originalCount = filtered.length;
+
+            // 무한 루프 버그 방지: 슬라이드 개수가 적을 경우 데이터 복제 (루프 안정성 확보)
+            if (originalCount > 0 && originalCount < 6) {
+                const clones = [...filtered];
+                while (filtered.length < 6) {
+                    filtered = [...filtered, ...clones];
+                }
             }
 
             filtered.forEach(video => {
@@ -289,9 +298,36 @@
                 spaceBetween: 30,
                 centeredSlides: true,
                 loop: filtered.length > 1,
-                pagination: { el: '.swiper-pagination', clickable: true },
+                loopedSlides: filtered.length,
+                observer: true,
+                observeParents: true,
+                pagination: { 
+                    el: '.swiper-pagination', 
+                    clickable: true,
+                    // [수정] 원래 개수만큼만 점을 생성하도록 설정
+                    renderBullet: function (index, className) {
+                        if (index >= originalCount) return ''; 
+                        return '<span class="' + className + '"></span>';
+                    }
+                },
                 navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
                 keyboard: { enabled: true },
+                on: {
+                    init: function() {
+                        this.slideToLoop(0, 0);
+                    },
+                    // [추가] 복제된 슬라이드로 가도 원래 점이 활성화되도록 동기화
+                    slideChange: function() {
+                        const activeIndex = this.realIndex % originalCount;
+                        const bullets = this.pagination.bullets;
+                        if(bullets && bullets.length > 0) {
+                            bullets.forEach((bullet, i) => {
+                                if (i === activeIndex) bullet.classList.add('swiper-pagination-bullet-active');
+                                else bullet.classList.remove('swiper-pagination-bullet-active');
+                            });
+                        }
+                    }
+                }
             });
 
             setTimeout(sendHeightToParent, 300);
