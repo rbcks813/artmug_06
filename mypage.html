@@ -21,7 +21,7 @@
 
         /* ================= 기본 스타일 ================= */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Paperozi', sans-serif; }
-        body { background-color: #f4f7f9; color: #333; line-height: 1.6; padding: 40px 20px; }
+        body { background-color: #f4f7f9; color: #333; line-height: 1.6; padding: 40px 20px; position: relative;}
         .container { max-width: 1180px; margin: 0 auto; background: #fff; border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); padding: 50px; overflow: hidden; border-top: 6px solid #0056b3; }
         h1, h2, h3 { color: #111; margin-bottom: 20px; letter-spacing: -0.5px; }
         h2 { font-size: 28px; font-weight: 800; border-bottom: 2px solid #eaeaea; padding-bottom: 15px; margin-top: 60px; position: relative; }
@@ -29,9 +29,10 @@
         p { margin-bottom: 10px; font-weight: 400; color: #555; }
         ul { list-style: none; }
         
-        /* 토스트 알림 스타일 */
-        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 12px 24px; border-radius: 50px; font-size: 14px; font-weight: bold; z-index: 10000; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 10px 20px rgba(0,0,0,0.2); pointer-events: none; }
-        #toast.show { opacity: 1; visibility: visible; bottom: 50px; }
+        /* 버튼 위치 기반 말풍선 토스트 스타일 */
+        .toast-bubble { position: absolute; background: #212529; color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; z-index: 10000; opacity: 0; visibility: hidden; transition: opacity 0.3s, transform 0.3s; transform: translate(-50%, 10px); pointer-events: none; white-space: nowrap; box-shadow: 0 8px 20px rgba(0,0,0,0.25); border: 1px solid #343a40; }
+        .toast-bubble.show { opacity: 1; visibility: visible; transform: translate(-50%, -10px); }
+        .toast-bubble::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; border-color: #212529 transparent transparent transparent; }
 
         /* ================= 1. 제작 방식 선택 가이드 ================= */
         .guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px; }
@@ -60,12 +61,11 @@
         .step-arrow { color: #adb5bd; font-size: 14px; }
         .process-step:last-child { background: #0056b3; color: #fff; border-color: #0056b3; box-shadow: 0 4px 15px rgba(0,86,179,0.3); }
 
-        /* ================= 7. 기능 체험존 (8개 박스) ================= */
+        /* ================= 7. 기능 체험존 ================= */
         .demo-zone-container { margin-top: 25px; background: #fcfcfc; padding: 40px; border-radius: 20px; border: 1px solid #eee; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02); }
         .demo-zone-desc { color: #888; font-size: 15px; margin-bottom: 25px; text-align: center; }
         .demo-zone-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
         
-        /* 툴팁을 위해 overflow: visible 처리 */
         .demo-box { background: #fff; border: 1px solid #eaeaea; border-radius: 16px; padding: 30px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 160px; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.03); transition: 0.3s; overflow: visible; }
         .demo-box:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.08); transform: translateY(-3px); }
         .demo-box-title { position: absolute; top: 12px; left: 15px; font-size: 12px; font-weight: 800; color: #adb5bd; letter-spacing: 0.5px; }
@@ -97,7 +97,6 @@
         .demo-btn:hover { background: #495057; }
         
         .tooltip-wrap { position: relative; display: inline-block; cursor: help; }
-        /* 툴팁 위치 및 z-index 최적화 */
         .tooltip-text { visibility: hidden; width: 150px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 10px; position: absolute; z-index: 100; bottom: 130%; left: 50%; margin-left: -75px; opacity: 0; transition: all 0.3s; font-size: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         .tooltip-text::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #333 transparent transparent transparent; }
         .tooltip-wrap:hover .tooltip-text { visibility: visible; opacity: 1; bottom: 140%; }
@@ -105,7 +104,7 @@
         .skeleton-box { width: 100%; height: 40px; border-radius: 8px; background: linear-gradient(90deg, #e9ecef 25%, #f8f9fa 50%, #e9ecef 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
         @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-        /* ================= 5. 포트폴리오 (목록형 3x3 + 태그) ================= */
+        /* ================= 5. 포트폴리오 (목록형) ================= */
         .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 25px; }
         .portfolio-item { background: #fff; border: 1px solid #eee; border-radius: 16px; overflow: hidden; cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 5px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column;}
         .portfolio-item:hover { box-shadow: 0 15px 30px rgba(0,0,0,0.1); transform: translateY(-8px); border-color: #ddd; }
@@ -125,25 +124,10 @@
         .page-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid #ddd; background: #fff; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; transition: 0.2s; color: #555; }
         .page-btn:hover, .page-btn.active { background: #0056b3; color: #fff; border-color: #0056b3; box-shadow: 0 4px 10px rgba(0,86,179,0.2); }
 
-        /* 포트폴리오 모달 */
-        .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(8px); justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: #fff; border-radius: 20px; max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; padding: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-        .close-modal { position: absolute; top: 20px; right: 25px; font-size: 35px; font-weight: 300; color: #888; cursor: pointer; z-index: 10; transition: 0.2s; }
-        .close-modal:hover { color: #111; transform: rotate(90deg); }
-        .modal-img-container { width: 100%; text-align: center; margin-bottom: 25px; background: #f8f9fa; border-radius: 12px; padding: 10px; border: 1px solid #eee; }
-        .modal-img-container img { max-width: 100%; height: auto; border-radius: 8px; object-fit: contain; }
-        .modal-details h3 { font-size: 26px; margin-bottom: 15px; color: #111; }
-        .modal-details .meta { display: flex; gap: 10px; font-size: 14px; color: #444; margin-bottom: 20px; flex-wrap: wrap; }
-        .modal-details .meta span { background: #f1f3f5; border: 1px solid #e9ecef; padding: 6px 12px; border-radius: 6px; font-weight: 600; }
-        .modal-details .meta-tags { margin-top: -10px; margin-bottom: 20px; }
-        .modal-details .meta-tags span { background: #e7f5ff; color: #0056b3; border: none; }
-
         /* ================= 6 & 8. 견적 계산기 및 가격표 ================= */
         .calc-container { display: flex; flex-direction: column; gap: 40px; margin-top: 25px; } 
-        
         .calc-category { margin-bottom: 25px; background: #fff; border: 1px solid #eee; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .calc-category h4 { font-size: 19px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; color: #222; }
-        
         .calc-item-wrapper { margin-bottom: 10px; }
         .calc-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f8f9fa; border-radius: 10px; border: 1px solid #eee; transition: 0.2s; }
         .calc-item.has-qty { border-radius: 10px 10px 0 0; border-bottom: none; background: #f1f3f5; }
@@ -165,10 +149,7 @@
         .total-price-wrap span { font-size: 14px; color: #8ba1b7; display: block; margin-bottom: 5px; }
         .total-price { font-size: 32px; font-weight: 900; color: #ffd43b; margin: 0; line-height: 1; }
         
-        /* 안내사항 가시성 및 상호작용 개선 */
         .terms-overlay { position: relative; background: rgba(255,255,255,0.05); padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #3c424a; text-align: center; }
-        
-        /* 잠금 시 안내 텍스트 - 레이아웃 영향 없도록 위치 조정 */
         .terms-overlay.locked .lock-msg { display: block; color: #ffc107; font-size: 14px; font-weight: bold; margin-bottom: 15px; animation: pulse 2s infinite; }
         .lock-msg { display: none; }
         @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
@@ -177,7 +158,6 @@
         .terms-link-btn { display: inline-block; background: #339af0; color: white !important; padding: 12px 25px; border-radius: 30px; font-weight: 800; text-decoration: none !important; box-shadow: 0 4px 15px rgba(51, 154, 240, 0.4); transition: 0.3s; font-size: 16px; z-index: 10; position: relative; }
         .terms-link-btn:hover { background: #228be6; transform: translateY(-2px); }
         
-        /* 체크박스 영역: 잠금 시 흐릿하게 */
         .terms-checkbox-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer; color: #e9ecef; font-weight: bold; background: rgba(0,0,0,0.2); padding: 15px 25px; border-radius: 10px; width: 100%; border: 1px dashed #555; transition: 0.3s; }
         .terms-overlay.locked .terms-checkbox-wrap { opacity: 0.3; cursor: not-allowed; }
         .terms-check input[type="checkbox"] { transform: scale(1.5); accent-color: #339af0; }
@@ -189,7 +169,7 @@
         .selected-list li span:last-child { color: #ffd43b; font-weight: 700; white-space: nowrap; }
         
         .calc-btns { display: flex; gap: 15px; }
-        .calc-btns button { flex: 1; padding: 18px; border: none; border-radius: 12px; font-weight: 800; font-size: 16px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .calc-btns button { position: relative; flex: 1; padding: 18px; border: none; border-radius: 12px; font-weight: 800; font-size: 16px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-copy { background: #0056b3; color: white; opacity: 0.4; cursor: not-allowed; }
         .btn-copy.active { opacity: 1; cursor: pointer; box-shadow: 0 8px 20px rgba(0,86,179,0.4); }
         .btn-copy.active:hover { background: #004494; transform: translateY(-3px); }
@@ -219,7 +199,7 @@
 </head>
 <body>
 
-<div id="toast">메시지</div>
+<div id="toastBubble" class="toast-bubble"></div>
 
 <div class="container">
 
@@ -405,7 +385,7 @@
             <div id="termsOverlay" class="terms-overlay locked">
                 <div class="lock-msg"><i class="fa-solid fa-triangle-exclamation"></i> 안내사항 버튼 클릭 후 링크를 확인해야 동의가 가능합니다.</div>
                 <div class="terms-check">
-                    <a href="https://rbcks813.github.io/main/" target="_blank" id="termsLink" class="terms-link-btn">
+                    <a href="https://rbcks813.github.io/main/" target="_blank" id="termsLink" class="terms-link-btn" onclick="openTerms(event)">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i> 안내사항(규정) 필독하기
                     </a>
                     <label class="terms-checkbox-wrap">
@@ -423,27 +403,19 @@
             </div>
             
             <div class="calc-btns">
-                <button class="btn-reset" onclick="resetCalc()"><i class="fa-solid fa-rotate-right"></i> 초기화</button>
-                <button class="btn-copy" id="btnCopy" onclick="copyEstimate()"><i class="fa-solid fa-copy"></i> 문의 내용 복사</button>
+                <button class="btn-reset" onclick="resetCalc(event)"><i class="fa-solid fa-rotate-right"></i> 초기화</button>
+                <button class="btn-copy" id="btnCopy" onclick="copyEstimate(event)"><i class="fa-solid fa-copy"></i> 문의 내용 복사</button>
             </div>
         </div>
     </div>
 
 </div>
 
-<div id="portfolioModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></span>
-        <div class="modal-img-container" id="modalImageContainer"></div>
-        <div class="modal-details" id="modalDetails"></div>
-    </div>
-</div>
-
 <script>
 // =================== 임베드 자동 높이 조절 ===================
 function sendHeight() {
     const height = document.documentElement.scrollHeight || document.body.scrollHeight;
-    window.parent.postMessage({ height: height }, '*');
+    window.parent.postMessage({ type: 'resize', height: height }, '*');
 }
 window.addEventListener('load', sendHeight);
 window.addEventListener('resize', sendHeight);
@@ -451,12 +423,30 @@ if (window.ResizeObserver) {
     new ResizeObserver(sendHeight).observe(document.body);
 }
 
-// =================== 토스트 팝업 (말풍선 알림) ===================
-function showToast(msg) {
-    const toast = document.getElementById('toast');
-    toast.innerText = msg;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 3000);
+// =================== 버튼 위쪽 말풍선 토스트 ===================
+let toastTimeout;
+function showBubbleToast(event, msg) {
+    const bubble = document.getElementById('toastBubble');
+    bubble.innerText = msg;
+    
+    // 버튼의 위치와 크기 계산
+    const rect = event.target.getBoundingClientRect();
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+    // 말풍선 위치 지정 (버튼 가로 중앙, 버튼 위쪽)
+    const top = rect.top + scrollTop - 40; // 버튼 위 40px 여유
+    const left = rect.left + scrollLeft + (rect.width / 2);
+
+    bubble.style.top = top + 'px';
+    bubble.style.left = left + 'px';
+    
+    bubble.classList.add('show');
+    
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+        bubble.classList.remove('show');
+    }, 2500);
 }
 
 // =================== 숫자에 콤마 추가 ===================
@@ -466,7 +456,6 @@ function formatPriceStr(str) {
 }
 
 // =================== 체험존 기능 스크립트 ===================
-// 1. 타이핑 효과 (지우는 애니메이션 포함)
 const typingText = "원하는 문구를 강조해보세요!";
 let typeIndex = 0;
 let isDeleting = false;
@@ -489,7 +478,6 @@ function typeWriter() {
     }
 }
 
-// 3. 숫자 카운팅 루프 (0->200 (3초대기) -> 200->0 (3초대기) 무한반복)
 function startLoopingCounter() {
     const el = document.getElementById("loopCounter");
     if(!el) return;
@@ -518,11 +506,9 @@ function startLoopingCounter() {
             }, 3000);
         });
     }
-
     startCycle();
 }
 
-// 8. 테마 토글
 function toggleTheme() {
     const box = document.getElementById('themePreview');
     const title = document.getElementById('themeTitle');
@@ -545,7 +531,7 @@ function toggleTheme() {
     }
 }
 
-// =================== 기본 상태 변수 ===================
+// =================== 포트폴리오 & 계산기 기본 설정 ===================
 const portfolioUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSSeX3pWLHORYzu74HfYL39u8-G5s-bQEbPNffQoW5WAXPDSe1MJu8Piz8FKANsgLqUXKOa2ZgbJI_y/pub?gid=1487607827&single=true&output=csv";
 const priceUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSSeX3pWLHORYzu74HfYL39u8-G5s-bQEbPNffQoW5WAXPDSe1MJu8Piz8FKANsgLqUXKOa2ZgbJI_y/pub?gid=1047411872&single=true&output=csv";
 
@@ -556,46 +542,35 @@ const itemsPerPage = 9;
 let priceData = {}; 
 let selectedItems = new Map();
 
-// =================== 초기화 ===================
 document.addEventListener("DOMContentLoaded", () => {
     loadPortfolio();
     loadPriceData();
     typeWriter();
     startLoopingCounter();
 
-    // 안내사항 링크 클릭 -> 락 해제
-    document.getElementById('termsLink').addEventListener('click', function() {
-        const overlay = document.getElementById('termsOverlay');
-        const cb = document.getElementById('termsCheckbox');
-        
-        if(overlay.classList.contains('locked')) {
-            overlay.classList.remove('locked');
-            cb.disabled = false;
-            showToast("안내사항 창을 열었습니다. 내용을 확인하신 후 하단의 체크박스에 동의해주세요.");
-        }
-    });
-
-    // 체크박스 -> 복사 버튼 활성화
     document.getElementById('termsCheckbox').addEventListener('change', function() {
         const copyBtn = document.getElementById('btnCopy');
-        if(this.checked) {
-            copyBtn.classList.add('active');
-        } else {
-            copyBtn.classList.remove('active');
-        }
+        if(this.checked) copyBtn.classList.add('active');
+        else copyBtn.classList.remove('active');
     });
-
-    window.onclick = function(event) {
-        let modal = document.getElementById('portfolioModal');
-        if (event.target == modal) { closeModal(); }
-    }
 });
 
-// =================== 포트폴리오 스크립트 ===================
+// 안내사항 오픈 시 락 해제
+function openTerms(event) {
+    const overlay = document.getElementById('termsOverlay');
+    const cb = document.getElementById('termsCheckbox');
+    
+    if(overlay.classList.contains('locked')) {
+        overlay.classList.remove('locked');
+        cb.disabled = false;
+        showBubbleToast(event, "안내사항 창을 열었습니다. 내용을 확인하신 후 하단의 체크박스에 동의해주세요.");
+    }
+}
+
+// =================== 포트폴리오 (부모 창으로 데이터 전송 추가) ===================
 function loadPortfolio() {
     Papa.parse(portfolioUrl, {
-        download: true,
-        header: true,
+        download: true, header: true,
         complete: function(results) {
             portfolios = results.data.filter(item => item['제목'] && item['제목'].trim() !== '');
             renderPortfolio();
@@ -606,8 +581,7 @@ function loadPortfolio() {
 function renderPortfolio() {
     const grid = document.getElementById('portfolioGrid');
     const pagination = document.getElementById('portfolioPagination');
-    grid.innerHTML = '';
-    pagination.innerHTML = '';
+    grid.innerHTML = ''; pagination.innerHTML = '';
 
     const totalPages = Math.ceil(portfolios.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -619,10 +593,8 @@ function renderPortfolio() {
         div.onclick = () => openModal(startIndex + index);
         
         let imgUrl = item['이미지 링크'] ? item['이미지 링크'].replace('dl=1', 'raw=1') : 'https://via.placeholder.com/400x300';
-        
         let rawPrice = item['가격'] || '별도 문의';
         let displayPrice = rawPrice.includes('비공개') ? '비공개' : formatPriceStr(rawPrice) + '원';
-        
         const tagsHtml = item['태그'] ? `<div class="portfolio-tags">` + item['태그'].split(',').map(t => `<span>#${t.trim()}</span>`).join('') + `</div>` : '';
 
         div.innerHTML = `
@@ -657,40 +629,31 @@ function renderPortfolio() {
     }
 }
 
+// 갇힘 해결: 포트폴리오 클릭 시 iframe 밖(부모 사이트)으로 메시지를 보냄
 function openModal(index) {
     const item = portfolios[index];
-    const modal = document.getElementById('portfolioModal');
     let imgUrl = item['이미지 링크'] ? item['이미지 링크'].replace('dl=1', 'raw=1') : '';
-    document.getElementById('modalImageContainer').innerHTML = `<img src="${imgUrl}" alt="">`;
-    const desc = item['설명'] ? item['설명'].replace(/\n/g, '<br>') : '';
-    const tags = item['태그'] ? item['태그'].split(',').map(t => `<span>#${t.trim()}</span>`).join('') : '';
-    const inc = item['포함된 상품'] ? item['포함된 상품'].replace(/\n/g, '<br> - ') : '';
-    
     let rawPrice = item['가격'] || '별도 문의';
     let price = rawPrice.includes('비공개') ? '비공개' : formatPriceStr(rawPrice) + '원';
+    
+    const payload = {
+        type: 'openModal',
+        data: {
+            title: item['제목'],
+            imgUrl: imgUrl,
+            tags: item['태그'],
+            date: item['작업일'],
+            price: price,
+            desc: item['설명'] ? item['설명'].replace(/\n/g, '<br>') : '',
+            inc: item['포함된 상품'] ? item['포함된 상품'].replace(/\n/g, '<br> - ') : ''
+        }
+    };
 
-    document.getElementById('modalDetails').innerHTML = `
-        <h3>${item['제목']}</h3>
-        <div class="meta meta-tags">${tags}</div>
-        <div class="meta">
-            <span><i class="fa-regular fa-calendar"></i> 작업일: ${item['작업일']}</span>
-            <span style="color:#0056b3;"><i class="fa-solid fa-coins"></i> 가격: ${price}</span>
-        </div>
-        <div style="background:#f8f9fa; padding:20px; border-radius:12px; margin-bottom:15px; border:1px solid #eee;">
-            <strong style="color:#111; font-size:16px;">상세 설명</strong><br>
-            <p style="margin-top:8px; color:#555;">${desc}</p>
-        </div>
-        <div style="background:#e7f5ff; padding:20px; border-radius:12px; border:1px solid #d0ebff;">
-            <strong style="color:#0056b3; font-size:16px;">포함된 옵션</strong><br>
-            <p style="margin-top:8px; color:#333; font-weight:500;"> - ${inc}</p>
-        </div>
-    `;
-    modal.style.display = 'flex';
+    // 부모 창으로 데이터 전송 (부모 창 스크립트에서 이를 받아 모달 띄움)
+    window.parent.postMessage(payload, '*');
 }
 
-function closeModal() { document.getElementById('portfolioModal').style.display = 'none'; }
-
-// =================== 견적 계산기 스크립트 ===================
+// =================== 견적 계산기 ===================
 function loadPriceData() {
     Papa.parse(priceUrl, {
         download: true, header: true,
@@ -814,7 +777,7 @@ function updateSummary() {
     totalDisplay.innerText = formatPriceStr(total) + '원' + (hasConsult ? ' + α' : '');
 }
 
-function resetCalc() {
+function resetCalc(event) {
     document.querySelectorAll('.calc-options input[type="checkbox"]').forEach(cb => cb.checked = false);
     document.querySelectorAll('.calc-options input[type="number"]').forEach(num => num.value = 1);
     document.querySelectorAll('.qty-dropdown').forEach(d => d.classList.remove('show'));
@@ -823,17 +786,17 @@ function resetCalc() {
     document.getElementById('termsCheckbox').checked = false;
     document.getElementById('btnCopy').classList.remove('active');
     
-    showToast("선택 내역이 모두 초기화되었습니다.");
+    showBubbleToast(event, "선택 내역이 모두 초기화되었습니다.");
 }
 
-function copyEstimate() {
+function copyEstimate(event) {
     const termsCb = document.getElementById('termsCheckbox');
     if (!termsCb.checked) {
-        showToast("견적을 복사하시려면 상단의 안내사항을 확인하시고 체크박스에 동의해주셔야 합니다.");
+        showBubbleToast(event, "견적을 복사하시려면 상단의 안내사항을 확인하시고 체크박스에 동의해주셔야 합니다.");
         return;
     }
     if(selectedItems.size === 0) { 
-        showToast("선택된 옵션이 없습니다."); 
+        showBubbleToast(event, "선택된 옵션이 없습니다."); 
         return; 
     }
     
@@ -851,9 +814,9 @@ function copyEstimate() {
     text += "안내사항(규정)을 모두 읽고 동의하였습니다.\n";
     
     navigator.clipboard.writeText(text).then(() => {
-        showToast("의뢰 내용이 클립보드에 복사되었습니다. 문의하기 창에 붙여넣기(Ctrl+V) 해주세요!");
+        showBubbleToast(event, "의뢰 내용이 클립보드에 복사되었습니다. 문의하기 창에 붙여넣기(Ctrl+V) 해주세요!");
     }).catch(() => {
-        showToast("복사에 실패했습니다. 브라우저 설정을 확인해주세요.");
+        showBubbleToast(event, "복사에 실패했습니다. 브라우저 설정을 확인해주세요.");
     });
 }
 </script>
