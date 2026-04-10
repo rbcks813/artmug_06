@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시그니처풍 신청 상세페이지</title>
+    <style>
+        /* 폰트 설정 수정: 형식(format) 및 안정적인 CDN 경로 적용 */
+        @font-face {
+            font-family: 'TMoneyDungunbaram';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/TmoneyRoundWindRegular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'TMoneyDungunbaram';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/TmoneyRoundWindExtraBold.woff') format('woff');
+            font-weight: 800;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        /* 기본 설정 및 색상 변수 */
+        :root {
+            --bg-base: #ffffff;
+            --color-base1: #FEB1D1;
+            --color-base2: #FFD0E4;
+            --color-point1: #FF94C2;
+            --color-point2: #8E6175;
+        }
+
+        body {
+            font-family: 'TMoneyDungunbaram', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--color-point2);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(255, 148, 194, 0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--color-base1), var(--color-point1));
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        .header h1 {
+            margin: 0;
+            font-weight: 800;
+            font-size: 28px;
+            text-shadow: 1px 1px 2px rgba(142, 97, 117, 0.2);
+        }
+
+        .section {
+            padding: 30px;
+            border-bottom: 2px dashed var(--color-base1);
+        }
+        .section:last-child {
+            border-bottom: none;
+        }
+        .section-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--color-point1);
+            margin-top: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+        label {
+            display: block;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: var(--color-point2);
+        }
+        .help-text {
+            font-size: 13px;
+            color: #b08d9e;
+            margin-bottom: 8px;
+            display: block;
+            margin-top: -4px;
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--color-base1);
+            border-radius: 12px;
+            font-family: 'TMoneyDungunbaram', sans-serif;
+            font-size: 15px;
+            color: var(--color-point2);
+            box-sizing: border-box;
+            transition: all 0.3s;
+            background-color: #fafafa;
+        }
+        textarea {
+            resize: none;
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--color-point1);
+            box-shadow: 0 0 0 3px rgba(255, 148, 194, 0.2);
+            background-color: #fff;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-weight: normal;
+        }
+        .radio-label input[type="checkbox"] {
+            accent-color: var(--color-point1);
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 색상 선택기 스타일 */
+        .color-picker-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+        .color-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        input[type="color"] {
+            appearance: none;
+            -webkit-appearance: none;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+            background: none;
+            flex-shrink: 0;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border: 2px solid var(--color-base2);
+            border-radius: 50%;
+        }
+        .hex-input {
+            width: 100px !important;
+            padding: 8px !important;
+            font-size: 14px !important;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .remove-color-btn {
+            background: none;
+            border: none;
+            color: var(--color-point1);
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0 5px;
+        }
+        .add-color-btn {
+            background: none;
+            border: 1px dashed var(--color-point1);
+            color: var(--color-point1);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 5px;
+            font-family: 'TMoneyDungunbaram', sans-serif;
+            display: inline-block;
+        }
+
+        /* 동적 항목 박스 스타일 */
+        .dynamic-item-box {
+            border: 2px dashed var(--color-base2);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background-color: #fffafc;
+            position: relative;
+        }
+        .dynamic-item-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--color-point1);
+            margin-top: 0;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+        .remove-item-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--color-point2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-family: 'TMoneyDungunbaram', sans-serif;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .add-item-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #fff;
+            color: var(--color-point1);
+            border: 2px solid var(--color-base1);
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            font-family: 'TMoneyDungunbaram', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 24px;
+        }
+        .add-item-btn:hover {
+            background-color: var(--color-base2);
+            color: white;
+        }
+
+        /* 주의사항 및 공지사항 박스 */
+        .notice-box {
+            background-color: var(--bg-base);
+            border: 2px dashed var(--color-base2);
+            border-radius: 16px;
+            padding: 25px;
+            color: var(--color-point2);
+            font-size: 14px;
+            line-height: 2;
+        }
+        .notice-num {
+            font-weight: 800;
+            color: var(--color-point1);
+            margin-right: 5px;
+        }
+        .highlight-text {
+            color: var(--color-point1);
+            font-weight: 800;
+        }
+
+        /* 샘플 이미지 영역 (슬라이더 및 비율 513x164 맞춤) */
+        .sample-section-title {
+            text-align: center;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-weight: 800;
+            color: var(--color-point1);
+            font-size: 18px;
+        }
+        .sample-slider-viewport {
+            width: 100%;
+            max-width: 513px;
+            aspect-ratio: 513 / 164;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 2px solid var(--color-base2);
+            background: #eee;
+            position: relative;
+            margin: 0 auto;
+        }
+        .sample-slider-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.4s ease-out;
+        }
+        .sample-slide {
+            min-width: 100%;
+            height: 100%;
+            flex-shrink: 0;
+        }
+        .sample-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .sample-slider-viewport:hover .slider-nav {
+            opacity: 1;
+        }
+
+        /* 서브밋 영역 */
+        .submit-wrapper {
+            position: relative;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .check-notice-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+        .check-notice-group input[type="checkbox"] {
+            accent-color: var(--color-point1);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .check-notice-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .tooltip-bubble {
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--color-point2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 800;
+            white-space: nowrap;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+        }
+        .tooltip-bubble::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: var(--color-point2) transparent transparent transparent;
+        }
+
+        .tooltip-bubble.animate {
+            animation: fadeInOut 2.5s ease forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, 10px); visibility: visible; }
+            15% { opacity: 1; transform: translate(-50%, 0); }
+            85% { opacity: 1; transform: translate(-50%, 0); }
+            100% { opacity: 0; transform: translate(-50%, -10px); visibility: hidden; }
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--color-point1);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 800;
+            font-family: 'TMoneyDungunbaram', sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        .submit-btn:hover {
+            background-color: #ff7bac;
+        }
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* 파일 업로드 버튼 커스텀 */
+        .custom-file-btn {
+            display: inline-block;
+            background-color: var(--color-base1);
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: var(--color-point2);
+            font-family: 'TMoneyDungunbaram', sans-serif;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .custom-file-btn:hover {
+            background-color: var(--color-point1);
+            color: white;
+        }
+
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .preview-item {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border: 2px solid var(--color-base2);
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .remove-image-btn {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 20px;
+            height: 20px;
+            background: var(--color-point1);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* 공통 슬라이더 스타일 */
+        .slider-viewport {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            border-radius: 16px;
+            background: #eee;
+            position: relative;
+        }
+        .slider-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.4s ease-out;
+        }
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            flex-shrink: 0;
+        }
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 15px;
+            box-sizing: border-box;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .slider-viewport:hover .slider-nav {
+            opacity: 1;
+        }
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: auto;
+            color: var(--color-point1);
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--color-base1);
+            cursor: pointer;
+        }
+        .dot.active {
+            background: var(--color-point1);
+        }
+
+        /* 포트폴리오 스타일 */
+        .portfolio-container {
+            position: relative;
+            width: 100%;
+        }
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .category-btn {
+            padding: 8px 20px;
+            border: 2px solid var(--color-base1);
+            background: white;
+            border-radius: 20px;
+            color: var(--color-point2);
+            font-family: 'TMoneyDungunbaram', sans-serif;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .category-btn.active {
+            background: var(--color-point1);
+            color: white;
+            border-color: var(--color-point1);
+        }
+
+        /* 모바일 최적화 */
+        @media screen and (max-width: 600px) {
+            body { padding: 10px; }
+            .header { padding: 20px; }
+            .header h1 { font-size: 22px; }
+            .section { padding: 20px; }
+            .section-title { font-size: 18px; }
+            input[type="text"], input[type="number"], textarea, select { font-size: 16px; }
+            .radio-group { flex-direction: column; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="mainContainer">
+    <div class="header">
+        <h1>시그니처풍 신청</h1>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">신청 전 주의사항</h2>
+        <div class="notice-box">
+            - 얇은선 시그니처풍 및 숲SOOP 공식(위플랩 포함) 고정 사이즈 특성상, 기본 화질이 일부 깨질 수 있습니다.<br>
+            - 벽지풍 또한 고화질이 아닌 일반 사이즈로 제공됩니다. (과도한 확대가 아닌 이상 큰 문제는 없습니다)<br>
+            - <span class="highlight-text">4K급 고화질을 원하시는 분들은 신청을 지양해 주세요.</span>
+        </div>
+        
+        <div class="sample-section-title">
+            ↓ 모바일/PC버전 실제전달 확인용 ↓
+        </div>
+        <div class="sample-slider-viewport">
+            <div id="sampleSliderTrack" class="sample-slider-track"></div>
+            <div class="slider-nav">
+                <button class="nav-btn" onclick="moveSampleSlider(-1)">&lt;</button>
+                <button class="nav-btn" onclick="moveSampleSlider(1)">&gt;</button>
+            </div>
+        </div>
+        <div id="sampleSliderDots" class="slider-dots"></div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">신청서 작성 양식</h2>
+        <form id="requestForm">
+            
+            <div class="form-group">
+                <label for="nickname">1. 방송 닉네임</label>
+                <input type="text" id="nickname" name="nickname" placeholder="닉네임을 입력해주세요">
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">2. 신청하시는 시그니처풍 수량</label>
+                <input type="number" id="quantity" name="quantity" placeholder="예: 3" min="1">
+            </div>
+
+            <div class="form-group">
+                <label>3. 원하시는 스타일 및 문구 / 색감 / 이미지</label>
+                <span class="help-text">※ 오마카세로 가능하나 색감은 필수로 등록해주세요.</span>
+                
+                <div id="dynamicItemsContainer">
+                    <div class="dynamic-item-box" id="item-0">
+                        <div class="dynamic-item-title">디자인 항목 1</div>
+                        
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label style="font-size:14px;">스타일 및 문구</label>
+                            <textarea class="item-style-text" rows="2" placeholder="원하시는 스타일, 포즈, 들어갈 문구 등을 적어주세요"></textarea>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label style="font-size:14px;">원하시는 색감</label>
+                            <div class="color-picker-group" id="item-0-color-group">
+                                <div class="color-item">
+                                    <input type="color" id="item-0-color1" value="#FEB1D1" oninput="syncColorInput('item-0-color1', 'item-0-hex1')">
+                                    <input type="text" id="item-0-hex1" class="hex-input item-color-hex" value="#FEB1D1" maxlength="7" oninput="syncColorInput('item-0-hex1', 'item-0-color1')">
+                                    <button type="button" class="remove-color-btn" onclick="this.parentElement.remove()">×</button>
+                                </div>
+                            </div>
+                            <button type="button" class="add-color-btn" onclick="addColor(0)">+ 색상 추가</button>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label style="font-size:14px;">캐릭터/참고 이미지 첨부</label>
+                            <label class="custom-file-btn">
+                                + 이미지 첨부
+                                <input type="file" style="display:none;" accept="image/*" multiple onchange="handleItemImageUpload(event, 0)">
+                            </label>
+                            <div id="item-0-preview" class="image-preview-container"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="button" class="add-item-btn" onclick="addRequestItem()">+ 항목 추가하기</button>
+            </div>
+
+            <div class="form-group">
+                <label for="extraNotes">4. 그 외 추가사항</label>
+                <textarea id="extraNotes" name="extraNotes" rows="3" placeholder="기타 요청사항이나 문의사항을 적어주세요."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>5. 마감 기한 선택 (자유선택)</label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="checkbox" name="deadlineType" value="빠른마감" onchange="toggleDeadline(this)"> 빠른마감
+                    </label>
+                    <label class="radio-label">
+                        <input type="checkbox" name="deadlineType" value="당일마감" onchange="toggleDeadline(this)"> 당일마감
+                    </label>
+                </div>
+            </div>
+
+            <div class="submit-wrapper">
+                <div id="statusTooltip" class="tooltip-bubble">공지사항 확인을 체크해주세요</div>
+                <div class="check-notice-group">
+                    <input type="checkbox" id="noticeCheck">
+                    <label for="noticeCheck">공지사항을 확인했습니다</label>
+                </div>
+                <button type="button" class="submit-btn" id="copyBtn" onclick="copyFormData()">양식 복사하기</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">공지사항</h2>
+        <div class="notice-box">
+            <span class="notice-num">01.</span> 작업기간은 <b>~6개까지 7일이내 / ~10개까지 10일이내</b>로 전달드리며 <b>10개이상은 문의</b> 부탁드립니다.<br>
+            <span class="notice-num">02.</span> 시그니처풍 디자인 특성상 겹치는 디자인으로 제작 될 수 있습니다<br>EX)천사느낌등 원하시는 스타일이 따로 있을 시 신청전 미리 작성 부탁드립니다.<br>
+            <span class="notice-num">03.</span> 샘플과 <b>100% 동일한 디자인 제작</b>은 불가능합니다.<br>
+            <span class="notice-num">04.</span> 모든 작업물은 허락없이 <b>제3자에게 판매 및 제공을 무단으로</b> 하실 수 없습니다.<br>
+            <span class="notice-num">05.</span> 환불은 디자인 제작 전 환불은 가능하며 1차 전달 후 환불은 <b>시안비 60% 금액</b>을 받고<br>나머지 금액을 환불해드립니다. (제작 된 건 사용 불가능)<br>
+            <span class="notice-num">06.</span> 수정은 따로 제한이 없지만 <b>과도한 수정요청 시</b> 추가금이 발생 하실 수 있습니다<br>EX) 1차전달 -> 텍스트 변경 -> 요소변경 -> 색변경 -> 이미지변경 -> 배치수정 -> 폰트변경 등등<br>
+            <span class="notice-num">07.</span> 디자인을 <b>다시 제작 하거나 갈아엎을 시에는 1회 무료</b>로 해드리며 그 이상은 <b>같은 금액으로 재결제</b> 해주셔야됩니다.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">포트폴리오</h2>
+        <div class="portfolio-container">
+            <div class="category-tabs">
+                <button class="category-btn active" onclick="filterPortfolio('캐릭터/인물', this)">캐릭터/인물 시그니처풍</button>
+                <button class="category-btn" onclick="filterPortfolio('댄스', this)">댄스 시그니처풍</button>
+            </div>
+            <div class="slider-viewport">
+                <div id="portfolioSliderTrack" class="slider-track"></div>
+                <div class="slider-nav">
+                    <button class="nav-btn" onclick="movePortfolioSlider(-1)">&lt;</button>
+                    <button class="nav-btn" onclick="movePortfolioSlider(1)">&gt;</button>
+                </div>
+            </div>
+            <div id="portfolioSliderDots" class="slider-dots"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 마감 기한 단일 선택 로직
+    function toggleDeadline(clickedCheckbox) {
+        if (clickedCheckbox.checked) {
+            document.querySelectorAll('input[name="deadlineType"]').forEach(cb => {
+                if (cb !== clickedCheckbox) cb.checked = false;
+            });
+        }
+    }
+
+    // ---------------- [ 동적 항목 추가/삭제 로직 ] ----------------
+    let itemCount = 1;
+
+    function syncColorInput(fromId, toId) {
+        const fromEl = document.getElementById(fromId);
+        const toEl = document.getElementById(toId);
+        if(!fromEl || !toEl) return;
+        
+        let val = fromEl.value;
+        if (fromId.includes('hex')) {
+            if (!val.startsWith('#')) val = '#' + val;
+            if (!/^#[0-9A-F]{6}$/i.test(val)) return;
+        }
+        toEl.value = val.toUpperCase();
+    }
+
+    function addColor(itemIndex) {
+        const group = document.getElementById(`item-${itemIndex}-color-group`);
+        const uniqueId = Date.now();
+        const colorId = `item-${itemIndex}-color-${uniqueId}`;
+        const hexId = `item-${itemIndex}-hex-${uniqueId}`;
+        
+        const div = document.createElement('div');
+        div.className = 'color-item';
+        div.innerHTML = `
+            <input type="color" id="${colorId}" value="#FEB1D1" oninput="syncColorInput('${colorId}', '${hexId}')">
+            <input type="text" id="${hexId}" class="hex-input item-color-hex" value="#FEB1D1" maxlength="7" oninput="syncColorInput('${hexId}', '${colorId}')">
+            <button type="button" class="remove-color-btn" onclick="this.parentElement.remove()">×</button>
+        `;
+        group.appendChild(div);
+        sendHeight();
+    }
+
+    function addRequestItem() {
+        const container = document.getElementById('dynamicItemsContainer');
+        const currentIndex = itemCount++;
+        
+        const itemBox = document.createElement('div');
+        itemBox.className = 'dynamic-item-box';
+        itemBox.id = `item-${currentIndex}`;
+        
+        itemBox.innerHTML = `
+            <div class="dynamic-item-title">디자인 항목 ${currentIndex + 1}</div>
+            <button type="button" class="remove-item-btn" onclick="removeRequestItem(${currentIndex})">삭제</button>
+            
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label style="font-size:14px;">스타일 및 문구</label>
+                <textarea class="item-style-text" rows="2" placeholder="원하시는 스타일, 포즈, 들어갈 문구 등을 적어주세요"></textarea>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label style="font-size:14px;">원하시는 색감</label>
+                <div class="color-picker-group" id="item-${currentIndex}-color-group">
+                    <div class="color-item">
+                        <input type="color" id="item-${currentIndex}-color1" value="#FEB1D1" oninput="syncColorInput('item-${currentIndex}-color1', 'item-${currentIndex}-hex1')">
+                        <input type="text" id="item-${currentIndex}-hex1" class="hex-input item-color-hex" value="#FEB1D1" maxlength="7" oninput="syncColorInput('item-${currentIndex}-hex1', 'item-${currentIndex}-color1')">
+                        <button type="button" class="remove-color-btn" onclick="this.parentElement.remove()">×</button>
+                    </div>
+                </div>
+                <button type="button" class="add-color-btn" onclick="addColor(${currentIndex})">+ 색상 추가</button>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+                <label style="font-size:14px;">캐릭터/참고 이미지 첨부</label>
+                <label class="custom-file-btn">
+                    + 이미지 첨부
+                    <input type="file" style="display:none;" accept="image/*" multiple onchange="handleItemImageUpload(event, ${currentIndex})">
+                </label>
+                <div id="item-${currentIndex}-preview" class="image-preview-container"></div>
+            </div>
+        `;
+        
+        container.appendChild(itemBox);
+        sendHeight();
+    }
+
+    function removeRequestItem(index) {
+        const item = document.getElementById(`item-${index}`);
+        if(item) {
+            item.remove();
+            reindexItems();
+            sendHeight();
+        }
+    }
+
+    function reindexItems() {
+        const items = document.querySelectorAll('.dynamic-item-box');
+        items.forEach((item, idx) => {
+            const titleEl = item.querySelector('.dynamic-item-title');
+            if(titleEl) titleEl.innerText = `디자인 항목 ${idx + 1}`;
+        });
+    }
+
+    // ---------------- [ 이미지 미리보기 및 삭제 ] ----------------
+    const itemFilesStore = {};
+
+    function handleItemImageUpload(event, itemIndex) {
+        const files = Array.from(event.target.files);
+        if(!itemFilesStore[itemIndex]) itemFilesStore[itemIndex] = [];
+        
+        itemFilesStore[itemIndex] = [...itemFilesStore[itemIndex], ...files];
+        renderItemPreviews(itemIndex);
+        event.target.value = '';
+    }
+
+    function removeItemImage(itemIndex, fileIndex) {
+        itemFilesStore[itemIndex].splice(fileIndex, 1);
+        renderItemPreviews(itemIndex);
+    }
+
+    function renderItemPreviews(itemIndex) {
+        const container = document.getElementById(`item-${itemIndex}-preview`);
+        if(!container) return;
+        container.innerHTML = '';
+        
+        const files = itemFilesStore[itemIndex] || [];
+        files.forEach((file, fileIndex) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const div = document.createElement('div');
+                div.className = 'preview-item';
+                div.innerHTML = `
+                    <img src="${e.target.result}">
+                    <button type="button" class="remove-image-btn" onclick="removeItemImage(${itemIndex}, ${fileIndex})">×</button>
+                `;
+                container.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        });
+        sendHeight();
+    }
+
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+
+    // ---------------- [ 클립보드 복사 로직 ] ----------------
+    async function copyFormData() {
+        const btn = document.getElementById('copyBtn');
+        const noticeCheck = document.getElementById('noticeCheck');
+        if (!noticeCheck.checked) {
+            showTooltip("공지사항 확인을 체크해주세요");
+            return;
+        }
+        btn.innerText = "복사 중...";
+        await new Promise(resolve => setTimeout(resolve, 50)); 
+        
+        try {
+            const nickname = document.getElementById('nickname').value || '(공백)';
+            const quantity = document.getElementById('quantity').value || '(공백)';
+            const extra = document.getElementById('extraNotes').value || '(없음)';
+            
+            const deadlineEl = document.querySelector('input[name="deadlineType"]:checked');
+            const deadline = deadlineEl ? deadlineEl.value : '선택안함';
+
+            let plainText = `[시그니처풍 신청 양식]\n1. 방송 닉네임: ${nickname}\n2. 신청 수량: ${quantity}개\n3. 마감 기한: ${deadline}\n\n[디자인 상세 요청]\n`;
+            let htmlContent = `<div style="font-family: sans-serif;"><h3>시그니처풍 신청서</h3><p><b>1. 방송 닉네임:</b> ${nickname}</p><p><b>2. 신청 수량:</b> ${quantity}개</p><p><b>3. 마감 기한:</b> ${deadline}</p><hr><h4>[디자인 상세 요청]</h4>`;
+
+            const items = document.querySelectorAll('.dynamic-item-box');
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                const index = item.id.split('-')[1];
+                const styleText = item.querySelector('.item-style-text').value || '(오마카세/공백)';
+                
+                const hexInputs = item.querySelectorAll('.item-color-hex');
+                const colorsText = Array.from(hexInputs).map(inp => inp.value).join(', ') || '(색상 미지정)';
+                
+                plainText += `- 항목 ${i+1} -\n스타일/문구: ${styleText}\n색감: ${colorsText}\n\n`;
+                htmlContent += `<div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                                <p><b>항목 ${i+1}</b></p>
+                                <p><b>스타일 및 문구:</b> ${styleText}</p>
+                                <p><b>색감:</b> `;
+                
+                if (hexInputs.length > 0) {
+                    Array.from(hexInputs).forEach(inp => {
+                        htmlContent += `<span style="display:inline-block; width:15px; height:15px; background-color:${inp.value}; border:1px solid #000; vertical-align:middle;"></span> ${inp.value} `;
+                    });
+                } else {
+                    htmlContent += `(색상 미지정)`;
+                }
+                htmlContent += `</p>`;
+
+                const files = itemFilesStore[index] || [];
+                if (files.length > 0) {
+                    htmlContent += `<p><b>[첨부 이미지]</b></p><div>`;
+                    for (const file of files) {
+                        const base64 = await toBase64(file);
+                        htmlContent += `<img src="${base64}" width="150" style="margin-right:10px; margin-bottom:10px; border-radius:8px; object-fit:cover;" />`;
+                    }
+                    htmlContent += `</div>`;
+                } else {
+                    htmlContent += `<p style="color:#999; font-size:12px;">첨부 이미지 없음</p>`;
+                }
+                htmlContent += `</div>`;
+            }
+
+            plainText += `\n4. 추가사항: ${extra}`;
+            htmlContent += `<hr><p><b>4. 추가사항:</b><br>${extra.replace(/\n/g, '<br>')}</p></div>`;
+
+            const clipboardData = [
+                new ClipboardItem({ 
+                    "text/plain": new Blob([plainText], { type: "text/plain" }), 
+                    "text/html": new Blob([htmlContent], { type: "text/html" }) 
+                })
+            ];
+            await navigator.clipboard.write(clipboardData);
+            showTooltip("양식이 복사되었습니다!");
+            btn.innerText = "양식 복사하기";
+        } catch (err) {
+            console.error(err);
+            showTooltip("복사 중 오류가 발생했습니다");
+            btn.innerText = "양식 복사하기";
+        }
+    }
+
+    function showTooltip(message) {
+        const tooltip = document.getElementById('statusTooltip');
+        tooltip.innerText = message;
+        tooltip.classList.remove('animate');
+        void tooltip.offsetWidth; 
+        tooltip.classList.add('animate');
+    }
+
+    // ---------------- [ 임베드 높이 자동 감지 로직 ] ----------------
+    function sendHeight() {
+        if (window.parent && window.parent !== window) {
+            const height = document.documentElement.scrollHeight || document.body.scrollHeight;
+            window.parent.postMessage({ type: 'setHeight', height: height }, '*');
+        }
+    }
+    window.addEventListener('resize', sendHeight);
+    if (window.ResizeObserver) {
+        const ro = new ResizeObserver(sendHeight);
+        ro.observe(document.body);
+    }
+
+    // ---------------- [ 구글 시트 연동 (샘플 및 포트폴리오) ] ----------------
+    const SAMPLE_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQPivKMHVD5mVBUL70fJx7zDjFQ4AluCmxF4uxH_ykWFE5kBv477UwUEDGadtSuX7Tr03NJXfLM3QN4/pub?gid=0&single=true&output=csv';
+    const PORTFOLIO_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQPivKMHVD5mVBUL70fJx7zDjFQ4AluCmxF4uxH_ykWFE5kBv477UwUEDGadtSuX7Tr03NJXfLM3QN4/pub?gid=407992278&single=true&output=csv';
+
+    // 샘플 슬라이더 로직
+    let sampleData = [];
+    let currentSampleSlide = 0;
+
+    async function fetchSamples() {
+        try {
+            const response = await fetch(SAMPLE_CSV_URL);
+            const csvText = await response.text();
+            const rows = csvText.split(/\r?\n/).slice(1);
+            sampleData = rows.map(row => row.trim()).filter(link => link);
+            renderSampleSlider();
+        } catch (error) {
+            console.error('샘플 로드 실패:', error);
+        }
+    }
+
+    function renderSampleSlider() {
+        const track = document.getElementById('sampleSliderTrack');
+        const dots = document.getElementById('sampleSliderDots');
+        
+        if(sampleData.length === 0) {
+            track.innerHTML = `<div style="display:flex; width:100%; height:100%; align-items:center; justify-content:center; color:#999; font-weight:800;">샘플 이미지가 없습니다.</div>`;
+            dots.innerHTML = '';
+            return;
+        }
+
+        track.innerHTML = sampleData.map(link => `<div class="sample-slide"><img src="${link}" alt="샘플"></div>`).join('');
+        dots.innerHTML = sampleData.map((_, i) => `<div class="dot ${i === 0 ? 'active' : ''}" onclick="goToSampleSlide(${i})"></div>`).join('');
+        updateSampleSliderPosition();
+    }
+
+    function moveSampleSlider(dir) {
+        if(sampleData.length === 0) return;
+        currentSampleSlide = (currentSampleSlide + dir + sampleData.length) % sampleData.length;
+        updateSampleSliderPosition();
+    }
+
+    function goToSampleSlide(index) {
+        currentSampleSlide = index;
+        updateSampleSliderPosition();
+    }
+
+    function updateSampleSliderPosition() {
+        if(sampleData.length === 0) return;
+        const track = document.getElementById('sampleSliderTrack');
+        track.style.transform = `translateX(-${currentSampleSlide * 100}%)`;
+        const dots = document.getElementById('sampleSliderDots').querySelectorAll('.dot');
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === currentSampleSlide));
+    }
+
+
+    // 포트폴리오 슬라이더 로직
+    let portfolioData = [];
+    let currentFilteredData = [];
+    let currentPortfolioSlide = 0;
+
+    async function fetchPortfolio() {
+        try {
+            const response = await fetch(PORTFOLIO_CSV_URL);
+            const csvText = await response.text();
+            const rows = csvText.split(/\r?\n/).slice(1);
+            portfolioData = rows.map(row => {
+                const parts = row.split(',');
+                if (parts.length >= 2) {
+                    return { category: parts[0].trim(), link: parts.slice(1).join(',').trim() };
+                }
+                return null;
+            }).filter(item => item && item.link);
+            
+            filterPortfolio('캐릭터/인물', document.querySelector('.category-btn'));
+        } catch (error) {
+            console.error('포트폴리오 로드 실패:', error);
+        }
+    }
+
+    function filterPortfolio(category, btn) {
+        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilteredData = portfolioData.filter(item => item.category === category);
+        currentPortfolioSlide = 0;
+        renderPortfolioSlider();
+    }
+
+    function renderPortfolioSlider() {
+        const track = document.getElementById('portfolioSliderTrack');
+        const dots = document.getElementById('portfolioSliderDots');
+        
+        if(currentFilteredData.length === 0) {
+            track.innerHTML = `<div style="display:flex; width:100%; height:100%; align-items:center; justify-content:center; color:#999; font-weight:800;">포트폴리오 이미지가 없습니다.</div>`;
+            dots.innerHTML = '';
+            return;
+        }
+
+        track.innerHTML = currentFilteredData.map(item => `<div class="slide"><img src="${item.link}" alt="포트폴리오"></div>`).join('');
+        dots.innerHTML = currentFilteredData.map((_, i) => `<div class="dot ${i === 0 ? 'active' : ''}" onclick="goToPortfolioSlide(${i})"></div>`).join('');
+        updatePortfolioSliderPosition();
+    }
+
+    function movePortfolioSlider(dir) {
+        if(currentFilteredData.length === 0) return;
+        currentPortfolioSlide = (currentPortfolioSlide + dir + currentFilteredData.length) % currentFilteredData.length;
+        updatePortfolioSliderPosition();
+    }
+
+    function goToPortfolioSlide(index) {
+        currentPortfolioSlide = index;
+        updatePortfolioSliderPosition();
+    }
+
+    function updatePortfolioSliderPosition() {
+        if(currentFilteredData.length === 0) return;
+        const track = document.getElementById('portfolioSliderTrack');
+        track.style.transform = `translateX(-${currentPortfolioSlide * 100}%)`;
+        const dots = document.getElementById('portfolioSliderDots').querySelectorAll('.dot');
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === currentPortfolioSlide));
+    }
+
+    window.onload = () => { 
+        fetchSamples();
+        fetchPortfolio(); 
+        sendHeight(); 
+    };
+</script>
+
+</body>
+</html>
