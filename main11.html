@@ -947,18 +947,34 @@
         tooltip.classList.add('animate');
     }
 
-    // ---------------- [ 임베드 높이 자동 감지 로직 ] ----------------
+    // ---------------- [ 임베드 높이 자동 감지 로직 (실시간 동기화) ] ----------------
     function sendHeight() {
         if (window.parent && window.parent !== window) {
-            const height = document.documentElement.scrollHeight || document.body.scrollHeight;
+            const height = Math.max(
+                document.body.scrollHeight, 
+                document.documentElement.scrollHeight,
+                document.body.offsetHeight,
+                document.documentElement.offsetHeight
+            );
             window.parent.postMessage({ type: 'setHeight', height: height }, '*');
         }
     }
+
+    // 실시간 감지를 위한 리스너 등록
+    window.addEventListener('load', sendHeight);
     window.addEventListener('resize', sendHeight);
+
     if (window.ResizeObserver) {
-        const ro = new ResizeObserver(sendHeight);
+        const ro = new ResizeObserver(() => {
+            window.requestAnimationFrame(sendHeight);
+        });
         ro.observe(document.body);
+        const container = document.getElementById('mainContainer');
+        if (container) ro.observe(container);
     }
+
+    // 이미지 로딩이나 스타일 변경 등을 놓치지 않기 위해 0.5초마다 주기적 체크
+    setInterval(sendHeight, 500);
 
     // ---------------- [ 구글 시트 연동 (샘플 및 포트폴리오) ] ----------------
     const SAMPLE_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQPivKMHVD5mVBUL70fJx7zDjFQ4AluCmxF4uxH_ykWFE5kBv477UwUEDGadtSuX7Tr03NJXfLM3QN4/pub?gid=0&single=true&output=csv';
