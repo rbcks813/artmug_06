@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Design Portfolio & Guide</title>
     <style>
         /* 폰트 설정 */
         @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight: 100; font-display: swap; }
@@ -63,7 +62,7 @@
         input[type="file"] { display: none; }
         .image-preview-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
         .img-preview-item { position: relative; width: 80px; height: 80px; border-radius: 8px; overflow: hidden; border: 1px solid #eee; }
-        .img-preview-item img { width: 100%; height: 100%; object-fit: cover; }
+        .img-preview-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
         .img-remove-btn { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.7); color: white; border: none; width: 20px; height: 20px; border-radius: 50%; font-size: 10px; cursor: pointer; }
 
         .copy-btn-wrapper { grid-column: span 2; display: flex; justify-content: center; margin-top: 20px; position: relative; }
@@ -89,9 +88,7 @@
         .tab-btn { padding: 8px 20px; border: 1px solid var(--bg-light); background: white; border-radius: 25px; cursor: pointer; font-family: 'Paperozi'; font-weight: 500; transition: 0.3s; }
         .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
         
-        /* [수정됨] 4열에서 3열로 변경하여 박스 크기 확장 */
         .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; min-height: 400px; }
-        /* [수정됨] min-width: 0 을 추가하여 텍스트가 길어져도 박스가 팽창하지 않고 말줄임 처리되도록 보장 */
         .portfolio-item { cursor: pointer; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
         
         .portfolio-thumb { width: 100%; aspect-ratio: 16 / 9; background: #eee; border-radius: 10px; overflow: hidden; position: relative; border: 1px solid #f0f0f0; }
@@ -104,31 +101,23 @@
         .pg-btn, .pg-num { flex-shrink: 0; width: 34px; height: 34px; border: 1px solid var(--bg-light); background: white; cursor: pointer; font-family: 'Paperozi'; font-size: 14px; color: var(--primary); font-weight: 700; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
         .pg-num.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* [수정됨] 모바일 반응형 디테일 추가 및 최적화 */
         @media (max-width: 768px) { 
             .container { padding: 20px 15px; }
             h2 { font-size: 20px; }
             .form-guide-v2 { padding: 25px 20px; }
             .form-grid-v2 { grid-template-columns: 1fr; }
             .form-item-v2.full-width, .copy-btn-wrapper { grid-column: span 1; }
-            
-            /* 색상 선택창 모바일 최적화 */
             .color-control-box { flex-wrap: wrap; justify-content: space-between; gap: 8px; }
             .color-hex-input { width: calc(100% - 65px) !important; flex-grow: 1; }
             .btn-add { width: 100%; }
-            
             .copy-btn { width: 100%; padding: 14px 20px; font-size: 15px; }
-            
             .package-container { grid-template-columns: 1fr; } 
             .package-card { padding: 20px; }
-            
-            /* 포트폴리오 모바일 최적화 */
             .portfolio-tabs { gap: 6px; }
             .tab-btn { padding: 6px 12px; font-size: 13px; }
             .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
         }
         
-        /* 아주 작은 스마트폰 사이즈 대응 */
         @media (max-width: 480px) {
             .portfolio-grid { grid-template-columns: 1fr; gap: 20px; }
         }
@@ -194,40 +183,8 @@
 
     <section>
         <h2>PACKAGE</h2>
-        <div class="package-container">
-            <div class="package-card">
-                <div class="package-tag">Package-A</div>
-                <div class="package-title">숲 방송 필수 디자인!</div>
-                <div class="package-desc">숲(SOOP) 방송 시작을 위한 가장 핵심적인 구성입니다.</div>
-                <div class="package-list">
-                    유튜브 채널아트 + 숲 채널아트 + 플로팅배너 3장 + <b>플로팅배너 1장(서비스)</b>
-                </div>
+        <div class="package-container" id="packageContainer">
             </div>
-            <div class="package-card">
-                <div class="package-tag">SOOP Full</div>
-                <div class="package-title">숲 패키지</div>
-                <div class="package-desc">방송과 팬카페 운영을 병행하시는 분들을 위한 풀세트 구성입니다.</div>
-                <div class="package-list">
-                    유튜브 채널아트 + 숲 채널아트 + 플로팅배너 3장 + <b>플로팅배너 1장(서비스)</b> + 팬카페 배너 + 팬카페 대문
-                </div>
-            </div>
-            <div class="package-card">
-                <div class="package-tag">Package-B</div>
-                <div class="package-title">치지직 방송 필수 디자인!</div>
-                <div class="package-desc">치지직(CHZZK) 스트리머분들을 위한 필수 패키지입니다.</div>
-                <div class="package-list">
-                    유튜브 채널아트 + 치지직 배너 <b>(장수 제한 7장)</b>
-                </div>
-            </div>
-            <div class="package-card">
-                <div class="package-tag">CHZZK Full</div>
-                <div class="package-title">치지직 패키지</div>
-                <div class="package-desc">치지직 방송 및 네이버 카페 운영을 위한 완벽한 솔루션입니다.</div>
-                <div class="package-list">
-                    유튜브 채널아트 + 치지직 배너 <b>(제한 없음)</b> + 팬카페 배너 + 팬카페 대문
-                </div>
-            </div>
-        </div>
     </section>
 
     <section>
@@ -252,7 +209,7 @@
 </div>
 
 <script>
-    /* [수정됨] 실시간 높이 조절 - ResizeObserver 사용으로 구조 및 이미지 변경 실시간 감지 */
+    /* 실시간 높이 조절 */
     function sendHeightToParent() {
         const height = document.documentElement.scrollHeight;
         window.parent.postMessage({ type: 'resize', height: height }, '*');
@@ -262,13 +219,11 @@
     if (window.ResizeObserver) {
         new ResizeObserver(sendHeightToParent).observe(document.body);
     } else {
-        // Fallback for older browsers
         window.addEventListener('resize', sendHeightToParent);
         const observer = new MutationObserver(sendHeightToParent);
         observer.observe(document.body, { attributes: true, childList: true, subtree: true });
     }
 
-    /* 팝업 열기 */
     function openLightbox(src) {
         window.parent.postMessage({ type: 'openLightbox', src: src }, '*');
     }
@@ -310,7 +265,6 @@
         container.innerHTML = attachedImagesBase64.map((img, idx) => `<div class="img-preview-item"><img src="${img.data}"><button class="img-remove-btn" onclick="attachedImagesBase64.splice(${idx}, 1); renderImagePreviews();">✕</button></div>`).join('');
     }
 
-    /* 크롬 임베드 복사 오류 수정본 */
     async function copyInquiryRichText() {
         const data = {
             nickname: document.getElementById('fm_nickname').value || '내용 없음',
@@ -329,16 +283,13 @@
         let plainTextStr = `[디자인 문의 양식]\n\n1. 방송 닉네임: ${data.nickname}\n2. 디자인 품목: ${data.item}\n3. 콘셉트/레퍼런스: ${data.concept.replace(/<br>/g, '\n')}\n4. 퍼스널컬러/색감: ${data.colors}\n5. 필수 문구: ${data.object.replace(/<br>/g, '\n')}\n6. 이미지: ${attachedImagesBase64.length}장\n7. 추가사항: ${data.extra.replace(/<br>/g, '\n')}\n8. 마감일: ${data.date}`;
 
         try {
-            // 크롬 임베드 환경에서는 포커스가 명확해야 함
             window.focus();
-            
             if (navigator.clipboard && window.ClipboardItem) {
                 const clipboardItem = new ClipboardItem({ 
                     "text/html": new Blob([htmlStr], { type: "text/html" }), 
                     "text/plain": new Blob([plainTextStr], { type: "text/plain" }) 
                 });
                 await navigator.clipboard.write([clipboardItem]);
-                
                 const balloon = document.getElementById('copyBalloon');
                 balloon.classList.add('show');
                 setTimeout(() => balloon.classList.remove('show'), 1500);
@@ -351,11 +302,12 @@
         }
     }
 
+    /* 포트폴리오 연동 설정 */
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTH03PGVgFdh1F6NcXkK6YqEEH-iaRudUtjCQvRBz991-ln1zo562B9j83lPqLhmPrGlOlSBcri-199/pub?gid=0&single=true&output=csv';
     let portfolioData = [];
     let currentCategory = 'ALL';
     let currentPage = 1;
-    const itemsPerPage = 12; // 3열이므로 한 페이지 12개 설정 유지
+    const itemsPerPage = 12;
 
     async function fetchPortfolio() {
         try {
@@ -364,7 +316,53 @@
             const rows = data.split('\n').slice(1);
             portfolioData = rows.map(row => { const [cat, tit, lnk] = row.split(',').map(s => s?.trim()); return { category: cat, title: tit, img: lnk }; }).filter(i => i.img);
             renderPortfolio();
-        } catch (e) { console.error('Load Error'); }
+        } catch (e) { console.error('Portfolio Load Error'); }
+    }
+
+    /* 패키지 연동 설정 (추가됨) */
+    const packageSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTH03PGVgFdh1F6NcXkK6YqEEH-iaRudUtjCQvRBz991-ln1zo562B9j83lPqLhmPrGlOlSBcri-199/pub?gid=1993391211&single=true&output=csv';
+
+    async function fetchPackages() {
+        try {
+            const response = await fetch(packageSheetUrl);
+            const data = await response.text();
+            const rows = data.split(/\r?\n/).filter(row => row.trim() !== "");
+            const container = document.getElementById('packageContainer');
+            container.innerHTML = '';
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                let cols = [];
+                let field = '';
+                let inQuotes = false;
+                for (let j = 0; j < row.length; j++) {
+                    const char = row[j];
+                    if (char === '"') inQuotes = !inQuotes;
+                    else if (char === ',' && !inQuotes) { cols.push(field.trim()); field = ''; }
+                    else field += char;
+                }
+                cols.push(field.trim());
+
+                const [tag, title, desc, items, highlight] = cols.map(c => c.replace(/^"|"$/g, '').trim());
+                if (!tag || !title) continue;
+
+                // 콤마를 +로 변경
+                let itemsList = items.split(',').map(item => item.trim()).join(' + ');
+                // 강조할 상품 굵게 처리
+                if (highlight && highlight.trim() && itemsList.includes(highlight)) {
+                    itemsList = itemsList.replace(highlight, `<b>${highlight}</b>`);
+                }
+
+                container.innerHTML += `
+                    <div class="package-card">
+                        <div class="package-tag">${tag}</div>
+                        <div class="package-title">${title}</div>
+                        <div class="package-desc">${desc}</div>
+                        <div class="package-list">${itemsList}</div>
+                    </div>
+                `;
+            }
+        } catch (e) { console.error('Package Load Error', e); }
     }
 
     function filterCategory(cat) { currentCategory = cat; currentPage = 1; document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText === cat)); renderPortfolio(); }
@@ -388,6 +386,7 @@
     }
 
     fetchPortfolio();
+    fetchPackages();
 </script>
 </body>
 </html>
