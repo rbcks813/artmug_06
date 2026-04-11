@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>단디 버추얼 작업실</title>
+    <style>
+        /* 폰트 적용 */
+        @font-face {
+            font-family: 'KerisKedyuche';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-3@1.0/KERISKEDU_R.woff2') format('woff2');
+            font-weight: 400;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'KerisKedyuche';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-3@1.0/KERISKEDU_B.woff2') format('woff2');
+            font-weight: 700;
+            font-display: swap;
+        }
+
+        :root {
+            --point-color1: #FFB4B4; /* 메인 핑크 */
+            --point-color2: #FFE4E4; /* 아주 연한 핑크 */
+            --point-color3: #FFD1CF; /* 부드러운 살구 핑크 */
+            --text-main: #4a4a4a;
+            --text-sub: #7a7a7a;
+            --bg-glass: rgba(255, 255, 255, 0.45);
+            --bg-solid: rgba(255, 255, 255, 0.85);
+            --border-glass: rgba(255, 255, 255, 0.7);
+            --shadow-glass: 0 15px 35px rgba(255, 180, 180, 0.15);
+        }
+
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+        body {
+            font-family: 'KerisKedyuche', sans-serif;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            margin: 0;
+            padding: 50px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 메인 컨테이너 */
+        .glass-wrapper {
+            width: 100%;
+            max-width: 850px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            border: 2px solid var(--border-glass);
+            box-shadow: var(--shadow-glass);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 40px;
+            padding-bottom: 30px; /* 하단 박스 겹침 방지 및 여유 공간 */
+        }
+
+        /* 프로필 영역 */
+        .profile-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            background-color: #fff;
+            border-radius: 35px;
+            border: 5px solid white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--point-color1);
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-align: center;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .profile-text { text-align: center; margin-top: 20px; }
+        .profile-text h1 { margin: 0; font-size: 2.2rem; color: var(--text-main); font-weight: 700; }
+        .profile-text p { margin: 8px 0 0; color: var(--text-sub); font-size: 1.05rem; }
+
+        .tags-container {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .tag-badge {
+            background: var(--bg-solid);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--point-color1);
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+
+        /* 컨텐츠 섹션 */
+        .section-box {
+            padding: 35px 40px;
+            margin: 20px;
+            background: var(--bg-glass);
+            border-radius: 30px;
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+        }
+
+        .sec-title {
+            font-size: 1.4rem;
+            color: var(--text-main);
+            margin-top: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+        .sec-title::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 20px;
+            background: var(--point-color3);
+            border-radius: 5px;
+        }
+
+        .inner-card {
+            background: var(--bg-solid);
+            padding: 25px;
+            border-radius: 20px;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .alert-box {
+            background: rgba(255, 183, 178, 0.15);
+            border: 1px dashed var(--point-color3);
+            padding: 20px;
+            border-radius: 16px;
+            margin-top: 15px;
+        }
+
+        .pkg-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .pkg-item {
+            background: var(--bg-solid);
+            border: 1px solid var(--border-glass);
+            padding: 20px;
+            border-radius: 20px;
+            transition: transform 0.2s;
+        }
+        .pkg-item:hover { transform: translateY(-3px); }
+        .pkg-item h3 { margin: 0 0 10px; color: var(--point-color1); }
+        .pkg-item p { margin: 0; font-size: 0.9rem; color: var(--text-sub); }
+
+        .tab-menu {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            padding: 8px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 700;
+            color: var(--text-sub);
+            transition: 0.3s;
+        }
+        .tab-btn.active {
+            background: var(--point-color1);
+            color: white;
+            border-color: var(--point-color1);
+        }
+
+        .scroll-grid {
+            display: none;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            scroll-snap-type: x mandatory;
+        }
+        .scroll-grid.active { display: flex; }
+        .scroll-grid::-webkit-scrollbar { height: 6px; }
+        .scroll-grid::-webkit-scrollbar-thumb { background: var(--point-color2); border-radius: 10px; }
+        
+        .img-card {
+            flex-shrink: 0;
+            height: 180px;
+            background: #eee;
+            border-radius: 20px;
+            scroll-snap-align: center;
+            overflow: hidden;
+            border: 3px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .img-card img {
+            height: 100%;
+            width: auto;
+            object-fit: cover;
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 16px;
+            background: var(--bg-solid);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            resize: none;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--point-color1);
+            box-shadow: 0 0 0 3px rgba(255, 180, 180, 0.2);
+        }
+
+        .radio-btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+        .radio-btn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            background: var(--bg-solid);
+            border: 1px solid rgba(0,0,0,0.08);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            transition: 0.2s;
+        }
+        .radio-btn.active {
+            background: var(--point-color1);
+            color: white;
+            border-color: var(--point-color1);
+        }
+
+        .copy-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(120deg, var(--point-color1) 0%, #FF9E9E 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 8px 20px rgba(255, 180, 180, 0.4);
+            position: relative;
+        }
+        .copy-btn:hover { transform: translateY(-2px); }
+
+        .toast {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .toast.show { opacity: 1; bottom: 80px; }
+
+        .flow-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-solid);
+            padding: 20px;
+            border-radius: 20px;
+        }
+        .flow-step {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            text-align: center;
+        }
+        .flow-step.point {
+            background: var(--point-color2);
+            color: #333;
+            border-color: var(--point-color1);
+        }
+        .flow-arrow { color: var(--point-color3); font-weight: bold; font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            body { padding: 20px 10px; }
+            .glass-wrapper { border-radius: 30px; margin-bottom: 20px; }
+            .profile-area { padding: 30px 15px 0; }
+            .section-box { padding: 25px 20px; margin: 15px 10px; border-radius: 24px; }
+            .pkg-grid { grid-template-columns: 1fr; }
+            .profile-img { width: 120px; height: 120px; border-radius: 28px; }
+            .profile-text h1 { font-size: 1.8rem; }
+            .img-card { height: 140px; border-width: 2px; }
+            .flow-container { gap: 6px; padding: 15px; }
+            .flow-step { padding: 6px 10px; font-size: 0.8rem; }
+            .flow-arrow { font-size: 0.8rem; }
+            .radio-btn { flex: 1 1 calc(50% - 8px); text-align: center; font-size: 0.85rem; padding: 12px; }
+            .form-input { font-size: 0.9rem; padding: 12px; }
+            .input-group label { font-size: 0.85rem; }
+            .copy-btn { padding: 16px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-wrapper" id="main-content-wrapper">
+        <div class="profile-area">
+            <div class="profile-img" id="profile-img-container">프로필<br>이미지</div>
+            <div class="profile-text">
+                <h1>단디</h1>
+                <p>안녕하세요 세심하고 꼼꼼하게 작업하는 단디입니다!</p>
+            </div>
+            <div class="tags-container">
+                <span class="tag-badge">VSF</span>
+                <span class="tag-badge">VRC</span>
+                <span class="tag-badge">Warudo</span>
+                <span class="tag-badge">Warudo Pro</span>
+                <span class="tag-badge">Meligo</span>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <div class="inner-card" style="text-align: center;">
+                <strong>버추얼에 대해 전혀 몰라도 편하게 문의 주세요!</strong><br>
+                친절하게 답변드릴 것을 약속 드립니다!<br>
+                사소한 것들도 괜찮습니다! 편하게 문의 주세요!<br><br>
+                <span style="color:var(--text-sub); font-size:0.85rem;">주문목록 외 작업도 문의주세요!<br>(제 역량 안에서 할 수 있는 작업은 다 하고 있습니다!)</span>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <h2 class="sec-title">주의사항 안내</h2>
+            <div class="inner-card">
+                모든 작업은 Booth 사이트에서 판매되는 상품들을 사용합니다.<br>
+                저작권은 Booth 사이트에 기재된 사항을 따릅니다.<br>
+                <span style="color: #e57373; font-weight:bold;">저작권 문제 발생 시 본 작업자는 책임을 지지 않습니다!</span><br>
+                필히 잘 알아보시고 문의 부탁드립니다!
+                
+                <div class="alert-box">
+                    ✔️ 기본적으로 Booth 아이템은 <strong>양쪽 구매가 원칙</strong>입니다.<br>
+                    ✔️ 제게 없는 아이템은 선물하기로 보내주셔야 합니다.<br>
+                    ✔️ 작업자인 저와 신청자 서로 같은 파츠를 보유해야 합니다.<br>
+                    ✔️ 작업 주문 시 위 사항을 동의하는 것으로 간주합니다.
+                </div>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <h2 class="sec-title">데뷔 패키지 안내</h2>
+            <div class="pkg-grid">
+                <div class="pkg-item">
+                    <h3>VSF</h3>
+                    <p>블렌더 성형 + 52가지 페이셜 + 텍스처 작업 + 전용 헤어1 + 전용 의상1 + 실시간그림자 + 콜라이더 및 물리 세팅</p>
+                </div>
+                <div class="pkg-item">
+                    <h3>Warudo</h3>
+                    <p>블렌더 성형 + 52가지 페이셜 + 텍스처작업 + 전용 헤어1 + 전용 의상1 + 그림자 세팅 + 콜라이더 및 물리 세팅</p>
+                </div>
+                <div class="pkg-item">
+                    <h3>Warudo Pro 닐로툰</h3>
+                    <p>블렌더 성형 + 52가지 페이셜 + 텍스처 작업 + 전용 헤어1 + 전용 의상1 + 그림자 세팅 + 콜라이더 및 물리 세팅 + 닐로툰 세팅</p>
+                </div>
+                <div class="pkg-item">
+                    <h3>Meligo 닐로툰</h3>
+                    <p>블렌더 성형 + 52가지 페이셜 + 텍스처 작업 + 전용 헤어1 + 전용 의상1 + 그림자 세팅 + 콜라이더 및 물리 세팅 + 닐로툰 세팅</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <h2 class="sec-title">보유 아바타</h2>
+            <div id="owned-chars-grid" class="scroll-grid active">
+                <div style="color:#aaa; padding:20px;">데이터를 불러오는 중입니다...</div>
+            </div>
+            <p style="text-align: center; font-size: 0.9rem; color: var(--text-sub); margin-top: 15px; font-weight: bold;">이 외 아바타도 문의 주세요!</p>
+        </div>
+
+        <div class="section-box">
+            <h2 class="sec-title">포트폴리오</h2>
+            <div class="tab-menu">
+                <button class="tab-btn active" onclick="switchTab('all', this)">전체보기</button>
+                <button class="tab-btn" onclick="switchTab('facial', this)">페이셜</button>
+                <button class="tab-btn" onclick="switchTab('bboing', this)">뽀잉눈</button>
+                <button class="tab-btn" onclick="switchTab('custom', this)">커스텀 표정</button>
+                <button class="tab-btn" onclick="switchTab('hair', this)">헤어 텍스처</button>
+            </div>
+
+            <div id="tab-all" class="scroll-grid active"><div style="color:#aaa; padding:20px;">데이터를 불러오는 중입니다...</div></div>
+            <div id="tab-facial" class="scroll-grid"></div>
+            <div id="tab-bboing" class="scroll-grid"></div>
+            <div id="tab-custom" class="scroll-grid"></div>
+            <div id="tab-hair" class="scroll-grid"></div>
+        </div>
+
+        <div class="section-box">
+            <h2 class="sec-title">작업 단계</h2>
+            <div class="flow-container">
+                <div class="flow-step">텍스쳐 확인<br><span style="font-size:0.75rem; color:#888;">(메이크업 수정)</span></div>
+                <div class="flow-arrow">▶</div>
+                <div class="flow-step point">컨펌<br>(수정 1회)</div>
+                <div class="flow-arrow">▶</div>
+                <div class="flow-step">성형 작업</div>
+                <div class="flow-arrow">▶</div>
+                <div class="flow-step point">컨펌<br>(수정 2회)</div>
+                <div class="flow-arrow">▶</div>
+                <div class="flow-step">페이셜 작업</div>
+                <div class="flow-arrow">▶</div>
+                <div class="flow-step point">컨펌<br>(수정 1회)</div>
+                <div class="flow-arrow">▶</div>
+                <div class="flow-step">뚜따</div>
+                <div class="flow-arrow">▶</div>
+                <div class="flow-step point">컨펌<br>(수정 1회)</div>
+                <div class="flow-arrow">▶</div>
+                <div class="flow-step" style="background:var(--point-color1); color:white;">파일전달</div>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <h2 class="sec-title">신청 양식 작성</h2>
+            <div class="inner-card" style="padding: 20px;">
+                <div class="input-group">
+                    <label>방송 플랫폼 / 닉네임 (방송국 링크 필수)</label>
+                    <input type="text" id="f_name" class="form-input" placeholder="데뷔 전이신 분들은 말씀해주세요!">
+                </div>
+
+                <div class="input-group">
+                    <label>신청 작업</label>
+                    <div class="radio-btn-group" id="f_task_group">
+                        <button class="radio-btn active" onclick="setRadio('f_task_group', 'f_task', this)">패키지</button>
+                        <button class="radio-btn" onclick="setRadio('f_task_group', 'f_task', this)">파츠서칭</button>
+                        <button class="radio-btn" onclick="setRadio('f_task_group', 'f_task', this)">뚜따</button>
+                        <button class="radio-btn" onclick="setRadio('f_task_group', 'f_task', this)">기타</button>
+                    </div>
+                    <input type="hidden" id="f_task" value="패키지">
+                </div>
+
+                <div class="input-group">
+                    <label>유니티 패키지 선택 유무</label>
+                    <div class="radio-btn-group" id="f_unity_group">
+                        <button class="radio-btn active" onclick="setRadio('f_unity_group', 'f_unity', this)">선택 (O)</button>
+                        <button class="radio-btn" onclick="setRadio('f_unity_group', 'f_unity', this)">미선택 (X)</button>
+                    </div>
+                    <input type="hidden" id="f_unity" value="선택 (O)">
+                </div>
+
+                <div class="input-group">
+                    <label>원하시는 느낌 및 이미지</label>
+                    <textarea id="f_vibe" class="form-input" rows="3" placeholder="자세할 수록 좋습니다!"></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label>사용하고자 하는 Booth 아이템 링크</label>
+                    <textarea id="f_link" class="form-input" rows="3" placeholder="아바타 / 눈동자 / 헤어 / 의상 등 (아직 정하지 않으셨으면 '미정' 작성)"></textarea>
+                </div>
+
+                <div style="position: relative;">
+                    <button class="copy-btn" onclick="copyOrderForm()">신청 양식 복사하기 📋</button>
+                    <div id="toast-msg" class="toast">양식이 복사되었습니다!</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-box" style="border-bottom-left-radius: 40px; border-bottom-right-radius: 40px;">
+            <h2 class="sec-title">그 외 안내사항</h2>
+            <div class="inner-card">
+                <strong>[파일보관]</strong>
+                <ul style="padding-left: 20px; margin-top:5px;">
+                    <li>2주동안 보관후 삭제됩니다!</li>
+                    <li>주기적으로 자주 작업의뢰 주시면 신경써서 관리합니다!</li>
+                    <li>되도록 유니티파일 구매 후 가지고계시는 걸 추천드립니다!</li>
+                </ul>
+
+                <strong style="display:inline-block; margin-top:10px;">[수정횟수 안내]</strong>
+                <ul style="padding-left: 20px; margin-top:5px;">
+                    <li>성형 단계에서 2회 / 페이셜 단계에서 1회 <br><span style="color:#888; font-size:0.85rem;">(작가 실수로 인한 부분은 제외)</span></li>
+                    <li>이 외 수정추가시 1회 당 50,000원</li>
+                    <li>최대한 한번에 말씀 부탁드립니다!</li>
+                </ul>
+                <div style="text-align:center; color:#e57373; font-weight:bold; margin-top:15px;">
+                    🚨 페이셜 작업 시작 후 성형수정은 절대 불가 합니다!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PORTFOLIO_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vREdXgHEHzB1PP2v-Bo75jzOBC6G1xBKrJzY6CB4izQCCRDa-wPQ40gnDzv-Impe3Dr9wavPu0NiO6-/pub?gid=0&single=true&output=csv";
+        const PROFILE_CHAR_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vREdXgHEHzB1PP2v-Bo75jzOBC6G1xBKrJzY6CB4izQCCRDa-wPQ40gnDzv-Impe3Dr9wavPu0NiO6-/pub?gid=872615221&single=true&output=csv";
+
+        function sendHeightToParent() {
+            const height = document.body.scrollHeight;
+            window.parent.postMessage({
+                type: 'resize_iframe',
+                height: height
+            }, '*');
+        }
+
+        const resizeObserver = new ResizeObserver(() => {
+            sendHeightToParent();
+        });
+        resizeObserver.observe(document.body);
+
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') inQuotes = !inQuotes;
+                else if (char === ',' && !inQuotes) { result.push(current.trim()); current = ''; }
+                else current += char;
+            }
+            result.push(current.trim());
+            return result;
+        }
+
+        async function loadProfileAndChars() {
+            try {
+                const response = await fetch(PROFILE_CHAR_CSV_URL);
+                const data = await response.text();
+                const rows = data.split('\n').filter(r => r.trim() !== '');
+                const charContainer = document.getElementById('owned-chars-grid');
+                charContainer.innerHTML = '';
+                let currentType = '';
+                for (let i = 0; i < rows.length; i++) {
+                    const cols = parseCSVLine(rows[i]);
+                    if (!cols || cols.length === 0) continue;
+                    for (let j = 0; j < cols.length; j++) {
+                        const val = cols[j].replace(/^"|"$/g, '').trim();
+                        if (!val) continue;
+                        if (val === '프로필 이미지') currentType = 'profile';
+                        else if (val === '보유 캐릭터') currentType = 'character';
+                        else if (val.startsWith('http')) {
+                            if (currentType === 'profile') {
+                                const profileEl = document.getElementById('profile-img-container');
+                                profileEl.style.backgroundImage = `url('${val}')`;
+                                profileEl.innerHTML = ''; 
+                            } else if (currentType === 'character') {
+                                const div = document.createElement('div');
+                                div.className = 'img-card';
+                                div.innerHTML = `<img src="${val}" alt="보유 캐릭터 이미지">`;
+                                charContainer.appendChild(div);
+                            }
+                        }
+                    }
+                }
+                if (charContainer.innerHTML === '') charContainer.innerHTML = '<div style="color:#aaa; padding:20px;">등록된 보유 캐릭터가 없습니다.</div>';
+            } catch (e) { console.error(e); }
+        }
+
+        async function loadPortfolio() {
+            try {
+                const response = await fetch(PORTFOLIO_CSV_URL);
+                const data = await response.text();
+                const rows = data.split('\n').filter(r => r.trim() !== '');
+                const grids = {
+                    '페이셜': document.getElementById('tab-facial'),
+                    '뽀잉눈': document.getElementById('tab-bboing'),
+                    '커스텀 표정': document.getElementById('tab-custom'),
+                    '헤어 텍스처': document.getElementById('tab-hair')
+                };
+                const allGrid = document.getElementById('tab-all');
+                Object.values(grids).forEach(g => { if(g) g.innerHTML = ''; });
+                allGrid.innerHTML = '';
+                for (let i = 1; i < rows.length; i++) {
+                    const cols = parseCSVLine(rows[i]);
+                    if (cols.length >= 2) {
+                        const cat = cols[0].trim();
+                        const url = cols[1].replace(/^"|"$/g, '').trim();
+                        const createCard = () => {
+                            const div = document.createElement('div');
+                            div.className = 'img-card';
+                            div.innerHTML = `<img src="${url}" alt="포트폴리오 이미지">`;
+                            return div;
+                        };
+                        if (grids[cat]) grids[cat].appendChild(createCard());
+                        allGrid.appendChild(createCard());
+                    }
+                }
+                Object.values(grids).forEach(g => { if (g && g.innerHTML === '') g.innerHTML = '<div style="color:#aaa; padding:20px;">등록된 포트폴리오가 없습니다.</div>'; });
+                if (allGrid.innerHTML === '') allGrid.innerHTML = '<div style="color:#aaa; padding:20px;">등록된 포트폴리오가 없습니다.</div>';
+            } catch (e) { console.error(e); }
+        }
+
+        function switchTab(tabId, btnElement) {
+            const section = btnElement.closest('.section-box');
+            section.querySelectorAll('.scroll-grid').forEach(grid => grid.classList.remove('active'));
+            
+            section.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            btnElement.classList.add('active');
+            setTimeout(sendHeightToParent, 100);
+        }
+
+        function setRadio(groupId, inputId, btnElement) {
+            const group = document.getElementById(groupId);
+            group.querySelectorAll('.radio-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            document.getElementById(inputId).value = btnElement.innerText;
+        }
+
+        function copyOrderForm() {
+            const name = document.getElementById('f_name').value || '(미작성)';
+            const task = document.getElementById('f_task').value;
+            const vibe = document.getElementById('f_vibe').value || '(미작성)';
+            const link = document.getElementById('f_link').value || '미정';
+            const unity = document.getElementById('f_unity').value;
+            const textToCopy = `-방송하시는 플랫폼/닉네임 :\n${name}\n\n-신청작업 :\n${task}\n\n-원하시는 느낌 및 이미지 :\n${vibe}\n\n-사용하고자 하는 Booth 아이템 링크 :\n${link}\n\n-유니티패키지 선택 유무 :\n${unity}`;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const toast = document.getElementById('toast-msg');
+                toast.classList.add('show');
+                setTimeout(() => { toast.classList.remove('show'); }, 2000);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadProfileAndChars();
+            loadPortfolio();
+            window.addEventListener('load', sendHeightToParent);
+        });
+    </script>
+
+</body>
+</html>
