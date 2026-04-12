@@ -5,17 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>맛챠 영상 작업실 - Video Edit Commission</title>
     <style>
-        /* 폰트 적용 */
         @font-face {
-            font-family: 'KerisKedyuche';
-            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-3@1.0/KERISKEDU_R.woff2') format('woff2');
+            font-family: 'Paperozi';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2');
+            font-weight: 100;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Paperozi';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2');
+            font-weight: 200;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Paperozi';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2');
+            font-weight: 300;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Paperozi';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
             font-weight: 400;
             font-display: swap;
         }
+
         @font-face {
-            font-family: 'KerisKedyuche';
-            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-3@1.0/KERISKEDU_B.woff2') format('woff2');
+            font-family: 'Paperozi';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2');
+            font-weight: 500;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Paperozi';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2');
+            font-weight: 600;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Paperozi';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
             font-weight: 700;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Paperozi';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');
+            font-weight: 800;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Paperozi';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2');
+            font-weight: 900;
             font-display: swap;
         }
 
@@ -34,7 +83,7 @@
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
         body {
-            font-family: 'KerisKedyuche', sans-serif;
+            font-family: 'Paperozi', sans-serif;
             background: linear-gradient(145deg, #f5f2ee 0%, #e1e9db 100%);
             background-attachment: fixed;
             color: #444;
@@ -105,8 +154,8 @@
         }
 
         .name-tag { text-align: center; margin-top: 20px; }
-        .name-tag h1 { margin: 0; font-size: 2.4rem; color: var(--dark-tea); font-weight: 700; }
-        .name-tag span { color: var(--milktea); font-weight: bold; font-size: 1.1rem; opacity: 0.8; }
+        .name-tag h1 { margin: 0; font-size: 2.4rem; color: var(--dark-tea); font-weight: 900; }
+        .name-tag span { color: var(--milktea); font-weight: 500; font-size: 1.1rem; opacity: 0.8; }
 
         .status-badges { margin-top: 18px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; align-items: center; }
         .badge { 
@@ -117,7 +166,7 @@
             min-height: 36px;
             border-radius: 100px; 
             font-size: 0.9rem; 
-            font-weight: bold; 
+            font-weight: 600; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.03);
             transition: 0.3s cubic-bezier(0.2, 0, 0, 1);
             text-align: center;
@@ -136,7 +185,7 @@
         }
         .toggle-title {
             font-size: 0.9rem;
-            font-weight: 800;
+            font-weight: 700;
             color: var(--dark-tea);
         }
         #commission-status {
@@ -204,7 +253,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            font-weight: 700;
+            font-weight: 800;
         }
         .section-title::before { content: '🍵'; font-size: 1.2rem; }
 
@@ -215,32 +264,6 @@
             line-height: 1.8;
             border: 1px solid rgba(255, 255, 255, 0.9);
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
-        }
-
-        .toc-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 15px; 
-        }
-        .toc-btn {
-            background: var(--white);
-            color: var(--dark-tea);
-            border: 1.5px solid var(--matcha);
-            padding: 7px 14px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            font-family: inherit;
-        }
-        .toc-btn:hover {
-            background: var(--matcha);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(182, 202, 167, 0.2);
         }
 
         .process-flow {
@@ -266,7 +289,7 @@
             align-items: center;
             justify-content: center;
             font-size: 0.9rem;
-            font-weight: bold;
+            font-weight: 700;
             color: var(--dark-tea);
             background: white;
             padding: 8px 14px;
@@ -274,7 +297,7 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.02);
             min-height: 38px;
         }
-        .process-arrow { color: var(--milktea); font-size: 0.8rem; opacity: 0.5; font-weight: bold; }
+        .process-arrow { color: var(--milktea); font-size: 0.8rem; opacity: 0.5; font-weight: 300; }
 
         .package-card {
             margin-bottom: 15px;
@@ -289,7 +312,7 @@
             margin: 0 0 10px 0; 
             color: var(--milktea);
             font-size: 1.3rem; 
-            font-weight: 700; 
+            font-weight: 800; 
             display: flex; 
             align-items: center; 
             gap: 8px; 
@@ -298,7 +321,7 @@
         .price-orig { text-decoration: line-through; color: #ccc; font-size: 0.9rem; }
         .price-disc { 
             color: var(--dark-tea);
-            font-weight: 800; 
+            font-weight: 900; 
             font-size: 1.4rem; 
         }
         .discount-rate { 
@@ -307,7 +330,7 @@
             padding: 4px 10px; 
             border-radius: 10px; 
             font-size: 0.85rem; 
-            font-weight: bold; 
+            font-weight: 700; 
         }
 
         .package-included { 
@@ -334,7 +357,7 @@
             font-family: inherit;
             cursor: pointer;
             transition: all 0.2s;
-            font-weight: bold;
+            font-weight: 600;
             color: #777;
         }
         .tab-btn.active { background: white; color: #333; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
@@ -391,7 +414,7 @@
         .close-btn {
             position: absolute; top: -50px; right: 0;
             color: white; font-size: 2rem; cursor: pointer;
-            font-weight: bold; padding: 10px;
+            font-weight: 800; padding: 10px;
         }
 
         .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; }
@@ -421,7 +444,7 @@
         }
         .selection-label {
             font-size: 0.9rem;
-            font-weight: bold;
+            font-weight: 700;
             color: var(--dark-tea);
             margin-bottom: 12px;
             padding-left: 5px;
@@ -434,7 +457,7 @@
             border: 1px solid rgba(0,0,0,0.05);
             background: white;
             font-size: 0.9rem;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             transition: 0.2s;
             color: #777;
@@ -456,7 +479,7 @@
             grid-template-columns: 1fr 1fr; 
             gap: 15px;
         }
-        .option-item { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
+        .option-item { display: flex; align-items: center; gap: 10px; font-weight: 500; font-size: 0.9rem; cursor: pointer; }
         .option-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--matcha); cursor: pointer; }
 
         .input-unit-wrapper {
@@ -472,7 +495,7 @@
             font-size: 0.9rem;
             color: #888;
             pointer-events: none;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .estimate-wrapper {
@@ -484,8 +507,8 @@
             border: 1px solid rgba(93, 109, 79, 0.1);
             margin-top: 10px;
         }
-        .estimate-label { font-size: 0.9rem; color: #888; font-weight: bold; margin-bottom: 5px; }
-        .estimate-price { font-size: 1.6rem; color: var(--dark-tea); font-weight: 800; }
+        .estimate-label { font-size: 0.9rem; color: #888; font-weight: 600; margin-bottom: 5px; }
+        .estimate-price { font-size: 1.6rem; color: var(--dark-tea); font-weight: 900; }
 
         .button-group { display: flex; gap: 15px; margin-top: 35px; width: 100%; }
         .btn-container { position: relative; flex: 1; }
@@ -548,10 +571,9 @@
             border-bottom: 1px solid #f0f0f0; 
         }
         .price-list li:last-child { border-bottom: none; }
-        .price-label { font-weight: bold; color: var(--dark-tea); }
-        .price-val { font-weight: 700; color: #333; }
+        .price-label { font-weight: 600; color: var(--dark-tea); }
+        .price-val { font-weight: 800; color: #333; }
 
-        /* 모바일 최적화 레이아웃 수정 */
         @media (max-width: 768px) {
             body { padding: 15px 5px; }
             .content-section { padding: 20px 15px; margin: 15px 5px; border-radius: 20px; }
@@ -559,24 +581,21 @@
             .name-tag h1 { font-size: 1.8rem; }
             .section-title { font-size: 1.2rem; margin-bottom: 15px; }
             
-            /* 작업 순서 세로 정렬 및 화살표 처리 */
             .process-flow { flex-direction: column; align-items: center; padding: 20px 15px; border-radius: 20px; gap: 5px; }
             .process-row { flex-direction: column; width: 100%; gap: 5px; display: flex; align-items: center; }
             .process-step { width: 100%; text-align: center; padding: 10px; font-size: 0.85rem; }
             .process-arrow { transform: rotate(90deg); display: inline-block; margin: 2px 0; opacity: 0.7; }
             
-            /* 1차 컷편집본 전달 뒤에 화살표 자동 추가 */
             .process-row:first-child::after {
                 content: '▶';
                 color: var(--milktea);
                 font-size: 0.8rem;
                 opacity: 0.7;
-                font-weight: bold;
+                font-weight: 300;
                 transform: rotate(90deg);
                 margin: 5px 0;
             }
 
-            /* [수정] 가격표 괄호 줄바꿈 처리 */
             .price-val small { display: block; font-size: 0.75rem; color: #999; margin-top: 2px; text-align: right; }
 
             .info-box, .package-card { padding: 15px; border-radius: 16px; }
@@ -605,7 +624,6 @@
             #tab-shorts-game .port-item, #tab-shorts-chat .port-item, .port-item.shorts-item { width: 55vw; max-width: none; }
             
             .price-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
-            .toc-btn { padding: 6px 12px; font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -625,7 +643,7 @@
 
         <div class="header-banner"></div>
 
-        <div class="profile-area">
+        <div id="sec-intro" class="profile-area">
             <div class="profile-circle"></div>
             <div class="name-tag">
                 <h1>맛챠</h1>
@@ -641,7 +659,7 @@
             </div>
         </div>
 
-        <div class="content-section">
+        <div class="content-section" style="margin-top: 30px;">
             <div class="info-box" style="text-align: center;">
                 <p><strong>안녕하세요 영상 편집자 맛챠입니다.</strong><br>
                 방송 관련 다양한 영상 작업을 하고 있습니다.<br>
@@ -651,14 +669,6 @@
                     <span class="badge keyword" style="background: #f7f7f7;">뮤팟 비즈니스 멤버십 구독</span>
                     <span class="badge keyword" style="background: #f7f7f7;">산돌 라이프 구독</span>
                 </div>
-            </div>
-            <div class="toc-container">
-                <button type="button" class="toc-btn" onclick="document.getElementById('sec-package').scrollIntoView({behavior:'smooth'})">🎁 패키지</button>
-                <button type="button" class="toc-btn" onclick="document.getElementById('sec-process').scrollIntoView({behavior:'smooth'})">📋 작업안내</button>
-                <button type="button" class="toc-btn" onclick="document.getElementById('sec-price').scrollIntoView({behavior:'smooth'})">💰 가격안내</button>
-                <button type="button" class="toc-btn" onclick="document.getElementById('sec-notice').scrollIntoView({behavior:'smooth'})">📢 공지사항</button>
-                <button type="button" class="toc-btn" onclick="document.getElementById('sec-portfolio').scrollIntoView({behavior:'smooth'})">🎞️ 포트폴리오</button>
-                <button type="button" class="toc-btn" onclick="document.getElementById('sec-order').scrollIntoView({behavior:'smooth'})">📝 신청하기</button>
             </div>
         </div>
 
@@ -687,7 +697,7 @@
                     <span class="process-step">수정 또는 최종 완성본 전달</span>
                 </div>
             </div>
-            <p style="text-align:center; font-size: 0.9rem; color: #888; margin-top:15px; font-weight:bold;">⏱️ 평균 작업 기간 2~3일</p>
+            <p style="text-align:center; font-size: 0.9rem; color: #888; margin-top:15px; font-weight:700;">⏱️ 평균 작업 기간 2~3일</p>
         </div>
 
         <div class="content-section" id="sec-price">
@@ -822,7 +832,7 @@
                     </div>
 
                     <div style="grid-column: span 2;">
-                        <p style="font-size:0.9rem; margin: 10px 0 8px; font-weight: bold; color: var(--dark-tea); padding-left: 5px;">추가금 항목 및 기타 옵션</p>
+                        <p style="font-size:0.9rem; margin: 10px 0 8px; font-weight: 700; color: var(--dark-tea); padding-left: 5px;">추가금 항목 및 기타 옵션</p>
                         <div class="extra-options">
                             <label class="option-item">
                                 <input type="checkbox" id="private_port" value="포트폴리오 비공개" onchange="calculatePrice()"> 포트폴리오 비공개 (+50%)
@@ -885,14 +895,25 @@
         const PORTFOLIO_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=528155867&single=true&output=csv";
         const PACKAGE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=490749441&single=true&output=csv";
 
+        // ─── postMessage 수신 리스너 ───────────────────────────────────────────
+        // 부모 페이지 커스텀 메뉴에서 아래 형식으로 메시지를 보내면 해당 섹션으로 스크롤됩니다.
+        // 예시: iframe.contentWindow.postMessage({ type: 'scroll_to', id: 'sec-price' }, '*')
+        // 사용 가능한 id: sec-intro / sec-package / sec-process / sec-price / sec-notice / sec-portfolio / sec-order
+        window.addEventListener('message', function(event) {
+            if (!event.data || event.data.type !== 'scroll_to') return;
+            const targetId = event.data.id;
+            const el = document.getElementById(targetId);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+
+        // ─── 부모 페이지로 높이 정보 전송 ────────────────────────────────────────
         function sendHeightToParent() {
             const wrapper = document.querySelector('.main-wrapper');
             if (wrapper) {
                 const height = wrapper.offsetHeight + 100;
-                window.parent.postMessage({
-                    type: 'resize_iframe',
-                    height: height
-                }, '*');
+                window.parent.postMessage({ type: 'resize_iframe', height: height }, '*');
             }
         }
 
