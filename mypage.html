@@ -212,12 +212,10 @@
         .form-group { margin-bottom: 15px; }
         .form-group:last-child { margin-bottom: 0; }
         .form-group label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px; color: #333; }
-        /* resize 속성 변경 부분 */
         .form-control { width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-family: 'Paperozi', sans-serif; resize: none; overflow-y: auto; }
         .form-control:focus { outline: none; border-color: #0056b3; box-shadow: 0 0 0 3px rgba(0,86,179,0.1); }
         .color-picker-wrap { display: flex; align-items: center; gap: 5px; margin-bottom: 5px; }
 
-        /* 색상 선택기 둥근 처리 CSS 추가 */
         .inquiryColor::-webkit-color-swatch-wrapper { padding: 0; }
         .inquiryColor::-webkit-color-swatch { border: none; border-radius: 6px; }
         .inquiryColor::-moz-color-swatch { border: none; border-radius: 6px; }
@@ -663,7 +661,6 @@ if (window.ResizeObserver) {
     new ResizeObserver(sendHeight).observe(document.body);
 }
 
-// 부모 창과의 양방향 통신 수신 (스크롤 따라가기 및 네비게이션 ID 오프셋 요청)
 window.addEventListener('message', function(e) {
     if (e.data && e.data.type === 'parentScroll') {
         const rectTop = e.data.rectTop;
@@ -683,7 +680,6 @@ window.addEventListener('message', function(e) {
         }
     }
     
-    // 부모창 커스텀 메뉴 클릭 시 ID 위치값을 요구할 때 계산 후 반환
     if (e.data && e.data.type === 'requestOffset') {
         const targetElement = document.getElementById(e.data.id);
         if (targetElement) {
@@ -704,7 +700,6 @@ function initAccordions() {
             if (!inner) { details.open = !details.open; sendHeight(); return; }
 
             if (details.open) {
-                // 닫기 애니메이션
                 inner.classList.remove('opening');
                 inner.classList.add('closing');
                 inner.addEventListener('animationend', function handler() {
@@ -714,7 +709,6 @@ function initAccordions() {
                     setTimeout(sendHeight, 50);
                 });
             } else {
-                // 열기 애니메이션
                 details.open = true;
                 inner.classList.remove('closing');
                 inner.classList.add('opening');
@@ -728,11 +722,10 @@ function initAccordions() {
     });
 }
 
-// =================== 토스트 팝업 (버튼별 독립 말풍선) ===================
+// =================== 토스트 팝업 ===================
 function showToast(msg, targetEl) {
     if (!targetEl) return;
 
-    // 기존 토스트가 있으면 즉시 제거
     const existing = targetEl._toastEl;
     if (existing) {
         existing.remove();
@@ -744,7 +737,6 @@ function showToast(msg, targetEl) {
     toast.textContent = msg;
     document.body.appendChild(toast);
 
-    // 버튼 위치 기준으로 배치
     function position() {
         const rect = targetEl.getBoundingClientRect();
         const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
@@ -754,7 +746,6 @@ function showToast(msg, targetEl) {
     }
 
     position();
-    // 렌더 후 show
     requestAnimationFrame(() => {
         position();
         toast.classList.add('show');
@@ -784,11 +775,9 @@ function syncColorInput(el, isPicker) {
     } else {
         let val = hex.value;
         if(!val.startsWith('#')) val = '#' + val;
-        // 유효하지 않은 문자 실시간 제거
         val = val.replace(/[^#0-9a-fA-F]/g, '');
         hex.value = val.toUpperCase();
         
-        // 6자리 헥스코드 완성 시 색상 피커 즉시 업데이트
         if(/^#[0-9A-F]{6}$/i.test(val)) {
             picker.value = val;
         }
@@ -797,7 +786,7 @@ function syncColorInput(el, isPicker) {
 
 function addColor() {
     const container = document.getElementById('colorContainer');
-    const addBtn = document.getElementById('btnAddColor'); // 명확하게 ID로 타겟 지정
+    const addBtn = document.getElementById('btnAddColor');
     const wrap = document.createElement('div');
     wrap.className = 'color-picker-wrap';
     wrap.innerHTML = `
@@ -834,20 +823,9 @@ function startLoopingCounter() {
 
     const TARGET = 200;
     const CELL_H = 44;
-    // 자릿수는 TARGET 기준 고정 (3자리: 0~200)
     const DIGITS_COUNT = TARGET.toString().length;
 
-    // 각 컬럼의 "누적 스텝" 을 관리 — 항상 절대 위치로 지정
-    // 숫자 d를 표시하려면: translateY = -(d * CELL_H) + (세트 오프셋)
-    // 세트를 충분히 쌓아두고 누적으로 이동 → 범위 이탈 없음
-    // 대신: 항상 current number에서 자릿수를 뽑아 직접 CSS 변수로 지정
-    // → 각 컬럼은 0~9 딱 1세트만 쓰되, 올라갈 때는 "wrap-around" 처리
-
-    // 단순하고 확실한 방법: 각 컬럼에 0~9 를 3세트 세팅, 항상 중간 세트를 기준으로 이동
-    // 세트 교체가 필요할 때 transition 없이 리셋 → 육안으로 안 보임
-
-    // 각 컬럼이 현재 가리키는 "총 누적 인덱스" (0=0, 1=1, ... 9=9, 10=0, ...)
-    const cumIdx = new Array(DIGITS_COUNT).fill(0); // 각 컬럼의 누적 인덱스
+    const cumIdx = new Array(DIGITS_COUNT).fill(0);
 
     function buildSlotDOM() {
         el.innerHTML = '';
@@ -857,7 +835,6 @@ function startLoopingCounter() {
             const track = document.createElement('span');
             track.className = 'counter-digit-track';
             track.dataset.col = col;
-            // 0~9 를 3세트 (총 30셀): 중간 세트(인덱스 10~19)를 시작 위치로
             for (let rep = 0; rep < 3; rep++) {
                 for (let d = 0; d <= 9; d++) {
                     const span = document.createElement('span');
@@ -866,7 +843,6 @@ function startLoopingCounter() {
                     track.appendChild(span);
                 }
             }
-            // 초기: 중간 세트의 0 (index=10) → translateY = -10 * CELL_H
             track.style.transition = 'none';
             track.style.transform = `translateY(${-10 * CELL_H}px)`;
             wrap.appendChild(track);
@@ -878,12 +854,10 @@ function startLoopingCounter() {
         return Array.from(el.querySelectorAll('.counter-digit-track'));
     }
 
-    // 현재 숫자에서 각 자릿수 추출 (3자리 고정)
     function getDigits(num) {
         return num.toString().padStart(DIGITS_COUNT, '0').split('').map(Number);
     }
 
-    // 이전 숫자 기억
     let prevNum = 0;
 
     function spinTo(num, goingUp) {
@@ -895,35 +869,26 @@ function startLoopingCounter() {
             const from = prevDigits[i];
             const to = digits[i];
 
-            // steps: 이 컬럼이 몇 칸 이동해야 하나
             let steps;
             if (goingUp) {
-                // 증가 방향: to >= from이면 단순 차이, 아니면 wrap-around (9→0)
                 steps = to >= from ? to - from : (10 - from) + to;
             } else {
-                // 감소 방향: from >= to이면 단순 차이, 아니면 wrap-around (0→9)
                 steps = from >= to ? from - to : (10 - to) + from;
             }
 
             if (steps === 0) return;
 
-            // 현재 translateY 파싱
             const curTransform = track.style.transform;
             const curY = parseFloat(curTransform.replace('translateY(', '').replace('px)', '')) || (-10 * CELL_H);
 
             let newY = goingUp ? curY - steps * CELL_H : curY + steps * CELL_H;
 
-            // 범위 체크: -10*CELL_H ~ -19*CELL_H (중간 세트) 벗어나면 transition 없이 중간 세트로 리셋
-            // 허용 범위: -(0*CELL_H) ~ -(29*CELL_H) (3세트 = 30칸)
-            // 너무 음수로 빠지면 중간 세트 같은 숫자 위치로 조용히 리셋
             const MIN_Y = -29 * CELL_H;
             const MAX_Y = 0;
             if (newY < MIN_Y || newY > MAX_Y) {
-                // 중간 세트(10~19번 인덱스)의 to 위치로 리셋
                 const resetY = -(10 + to) * CELL_H;
                 track.style.transition = 'none';
                 track.style.transform = `translateY(${resetY}px)`;
-                // 다음 프레임에서 애니메이션 다시 적용 (실제로는 이미 목적지이므로 그냥 유지)
                 newY = resetY;
                 return;
             }
@@ -939,7 +904,6 @@ function startLoopingCounter() {
 
     function runCycle() {
         prevNum = 0;
-        // 컬럼 전부 중간 세트 0 위치로 리셋
         getColumns().forEach(track => {
             track.style.transition = 'none';
             track.style.transform = `translateY(${-10 * CELL_H}px)`;
@@ -1127,7 +1091,10 @@ function loadPriceData() {
             res.data.filter(i => i['카테고리']?.trim()).forEach(i => {
                 const cat = i['카테고리'].trim();
                 if(!priceData[cat]) priceData[cat] = [];
-                priceData[cat].push({ name: i['상품명'], price: i['가격'].replace(/[^0-9]/g, '') });
+                // ★ 변경: 가격에서 숫자를 추출하되, -1은 그대로 -1로 유지
+                const rawPrice = i['가격'].replace(/[^0-9\-]/g, '');
+                const priceNum = rawPrice === '' ? 0 : parseInt(rawPrice);
+                priceData[cat].push({ name: i['상품명'], price: priceNum });
             });
             renderCalc();
         }
@@ -1145,11 +1112,13 @@ function renderCalc() {
 
         items.forEach((item, index) => {
             const id = `calc_${category}_${index}`;
-            const priceNum = parseInt(item.price) || 0;
-            const priceStr = priceNum === 0 ? '상담 후 결정' : formatPriceStr(priceNum) + '원';
+            const priceNum = item.price;
+
+            // ★ 변경: -1이면 "상담 후 결정", 나머지는 숫자 그대로 표시 (0원 포함)
+            const priceStr = priceNum === -1 ? '상담 후 결정' : formatPriceStr(priceNum) + '원';
+
             const fullName = `[${category}] ${item.name}`;
             const isPerItem = item.name.includes('(개당)');
-            // 1개월, 2개월 등 "개월" 키워드가 포함된 상품은 월 결제 다중선택 처리
             const isMonthly = !isPerItem && /\d+개월/.test(item.name);
 
             const wrapDiv = document.createElement('div');
@@ -1203,7 +1172,8 @@ function updateCalcCheckbox(cb) {
             box.classList.add('has-qty');
             qty = parseInt(document.getElementById(`qty_${cb.id}`).value) || 1;
         }
-        selectedItems.set(name, { price: price, qty: qty, id: cb.id, isMonthly: isMonthly });
+        // ★ 변경: isConsult 기준을 price === -1 로 변경
+        selectedItems.set(name, { price: price, qty: qty, id: cb.id, isMonthly: isMonthly, isConsult: price === -1 });
     } else {
         if(isPer || isMonthly) {
             document.getElementById(`qtywrap_${cb.id}`).classList.remove('show');
@@ -1219,14 +1189,18 @@ function updateCalcQty(input) {
     const price = parseInt(input.getAttribute('data-price'));
     let qty = parseInt(input.value) || 1;
     if(qty < 1) { qty = 1; input.value = 1; }
-    if(selectedItems.has(name)) { selectedItems.set(name, { price: price, qty: qty }); updateSummary(); }
+    if(selectedItems.has(name)) {
+        selectedItems.set(name, { price: price, qty: qty, isConsult: price === -1 });
+        updateSummary();
+    }
 }
 
 function updateSummary() {
     const list = document.getElementById('selectedList');
     const totalDisplay = document.getElementById('totalPriceDisplay');
     list.innerHTML = '';
-    let total = 0, hasConsult = false;
+    let total = 0;
+    let hasConsult = false;
 
     if(selectedItems.size === 0) {
         list.innerHTML = '<li style="color:#6c757d; justify-content:center; padding: 10px 0;">선택된 항목이 없습니다.</li>';
@@ -1234,34 +1208,49 @@ function updateSummary() {
     }
 
     selectedItems.forEach((data, name) => {
-        const itemTotal = data.price * data.qty;
-        total += itemTotal;
-        if(data.price === 0) hasConsult = true;
-        const priceStr = data.price === 0 ? '별도 상담' : formatPriceStr(itemTotal) + '원';
-        const unit = data.isMonthly ? '개월' : '개';
-        const nDisp = data.qty > 1 ? `${name} <span style="color:#74c0fc;">(x${data.qty}${unit})</span>` : name;
-        const li = document.createElement('li');
-        li.innerHTML = `<span>${nDisp}</span> <span>${priceStr}</span>`;
-        list.appendChild(li);
+        // ★ 변경: isConsult(price === -1)이면 합산 제외, 표시는 "상담 후 결정"
+        if (data.isConsult) {
+            hasConsult = true;
+            const li = document.createElement('li');
+            const unit = data.isMonthly ? '개월' : '개';
+            const nDisp = data.qty > 1 ? `${name} <span style="color:#74c0fc;">(x${data.qty}${unit})</span>` : name;
+            li.innerHTML = `<span>${nDisp}</span> <span style="color:#ffc107;">상담 후 결정</span>`;
+            list.appendChild(li);
+        } else {
+            const itemTotal = data.price * data.qty;
+            total += itemTotal;
+            const priceStr = formatPriceStr(itemTotal) + '원';
+            const unit = data.isMonthly ? '개월' : '개';
+            const nDisp = data.qty > 1 ? `${name} <span style="color:#74c0fc;">(x${data.qty}${unit})</span>` : name;
+            const li = document.createElement('li');
+            li.innerHTML = `<span>${nDisp}</span> <span>${priceStr}</span>`;
+            list.appendChild(li);
+        }
     });
-    totalDisplay.innerText = formatPriceStr(total) + '원' + (hasConsult ? ' + α' : '');
+
+    // ★ 변경: 상담 항목이 있으면 총액 대신 "상담 후 결정"으로만 표시
+    if (hasConsult && total === 0) {
+        totalDisplay.innerText = '상담 후 결정';
+    } else if (hasConsult) {
+        totalDisplay.innerText = formatPriceStr(total) + '원 + 상담';
+    } else {
+        totalDisplay.innerText = formatPriceStr(total) + '원';
+    }
+
     setTimeout(sendHeight, 150); 
 }
 
 function resetCalc(btnElement) {
-    // 폼 요소 초기화
     document.querySelectorAll('.calc-options input[type="checkbox"]').forEach(cb => cb.checked = false);
     document.querySelectorAll('.calc-options input[type="number"]').forEach(num => num.value = 1);
     document.querySelectorAll('.qty-dropdown').forEach(d => d.classList.remove('show'));
     document.querySelectorAll('.calc-item').forEach(b => b.classList.remove('has-qty'));
     
-    // 추가 폼 내용 초기화
     document.getElementById('inquiryMethod').value = '';
     document.getElementById('inquiryReference').value = '';
     document.getElementById('inquiryStructure').value = '';
     document.getElementById('inquiryEtc').value = '';
     
-    // 색상 옵션 초기화 (첫 번째만 남기고 삭제)
     const colorWraps = document.querySelectorAll('.color-picker-wrap');
     colorWraps.forEach((wrap, index) => {
         if(index === 0) {
@@ -1287,7 +1276,6 @@ function copyEstimate(btnElement) {
     }
     if(selectedItems.size === 0) { showToast("선택된 견적 옵션이 없습니다.", btnElement); return; }
     
-    // 폼 내용 수집
     const method = document.getElementById('inquiryMethod').value || '미선택';
     const ref = document.getElementById('inquiryReference').value || '없음';
     
@@ -1306,17 +1294,29 @@ function copyEstimate(btnElement) {
     text += `5. 기타 요청사항: ${etc}\n\n`;
 
     text += "[ 의뢰 및 견적 내역 ]\n";
-    let total = 0, hasConsult = false;
+    let total = 0;
+    let hasConsult = false;
     selectedItems.forEach((data, name) => {
-        const itemTotal = data.price * data.qty;
-        total += itemTotal;
-        if(data.price === 0) hasConsult = true;
-        const priceStr = data.price === 0 ? '별도 상담' : formatPriceStr(itemTotal) + '원';
-        const unit = data.isMonthly ? '개월' : '개';
-        text += `- ${name}${data.qty > 1 ? ` (x${data.qty}${unit})` : ''} : ${priceStr}\n`;
+        if (data.isConsult) {
+            hasConsult = true;
+            const unit = data.isMonthly ? '개월' : '개';
+            text += `- ${name}${data.qty > 1 ? ` (x${data.qty}${unit})` : ''} : 상담 후 결정\n`;
+        } else {
+            const itemTotal = data.price * data.qty;
+            total += itemTotal;
+            const priceStr = formatPriceStr(itemTotal) + '원';
+            const unit = data.isMonthly ? '개월' : '개';
+            text += `- ${name}${data.qty > 1 ? ` (x${data.qty}${unit})` : ''} : ${priceStr}\n`;
+        }
     });
     text += "\n----------------------\n";
-    text += `예상 총액 : ${formatPriceStr(total)}원${hasConsult ? ' + α' : ''}\n`;
+    if (hasConsult && total === 0) {
+        text += `예상 총액 : 상담 후 결정\n`;
+    } else if (hasConsult) {
+        text += `예상 총액 : ${formatPriceStr(total)}원 + 상담 후 결정\n`;
+    } else {
+        text += `예상 총액 : ${formatPriceStr(total)}원\n`;
+    }
     text += "안내사항(규정)을 모두 읽고 동의하였습니다.\n";
     
     navigator.clipboard.writeText(text).then(() => {
