@@ -621,20 +621,17 @@
     .reset-btn-container { flex: none; }
 
     /* ── 포트폴리오 모바일 핵심 수정 ── */
-    /* 모든 카드 높이를 220px로 고정, aspect-ratio 대신 너비로 비율 표현 */
     .port-item {
         height: 220px !important;
         width: auto;
         aspect-ratio: unset !important;
     }
 
-    /* 롱폼 카드: 16:9 비율 → 높이 220px 기준 너비 ~392px */
     .port-grid > .port-item {
         width: calc(220px * 16 / 9) !important;
         aspect-ratio: unset !important;
     }
 
-    /* 숏폼 카드: 9:16 비율 → 높이 220px 기준 너비 ~124px */
     #tab-shorts-game .port-item,
     #tab-shorts-chat .port-item,
     .port-item.shorts-item {
@@ -914,10 +911,35 @@
         const PORTFOLIO_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=528155867&single=true&output=csv";
         const PACKAGE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=490749441&single=true&output=csv";
 
+        // ─── 유튜브 ID 추출 함수 ──────────────────────────────────────────────
+        // 구글시트에 ID만 입력하거나 유튜브 링크를 입력해도 모두 정상 동작합니다.
+        // 지원 형식:
+        //   - ID만           : dQw4w9WgXcQ
+        //   - 일반 링크      : https://www.youtube.com/watch?v=dQw4w9WgXcQ
+        //   - 단축 링크      : https://youtu.be/dQw4w9WgXcQ
+        //   - 쇼츠 링크      : https://www.youtube.com/shorts/dQw4w9WgXcQ
+        //   - 라이브 링크    : https://www.youtube.com/live/dQw4w9WgXcQ
+        //   - 임베드 링크    : https://www.youtube.com/embed/dQw4w9WgXcQ
+        function extractYoutubeId(input) {
+            const cleaned = input.replace(/^"|"$/g, '').trim();
+            // 이미 ID만 있는 경우 (11자리 영숫자 + - _)
+            if (/^[\w-]{11}$/.test(cleaned)) return cleaned;
+            // 다양한 유튜브 링크 형식에서 ID 추출
+            const patterns = [
+                /(?:youtube\.com\/watch\?.*v=)([\w-]{11})/,
+                /(?:youtu\.be\/)([\w-]{11})/,
+                /(?:youtube\.com\/embed\/)([\w-]{11})/,
+                /(?:youtube\.com\/shorts\/)([\w-]{11})/,
+                /(?:youtube\.com\/live\/)([\w-]{11})/,
+            ];
+            for (const pattern of patterns) {
+                const match = cleaned.match(pattern);
+                if (match) return match[1];
+            }
+            return cleaned; // 매칭 실패 시 원본 반환
+        }
+
         // ─── postMessage 수신 리스너 ───────────────────────────────────────────
-        // 부모 페이지 커스텀 메뉴에서 아래 형식으로 메시지를 보내면 해당 섹션으로 스크롤됩니다.
-        // 예시: iframe.contentWindow.postMessage({ type: 'scroll_to', id: 'sec-price' }, '*')
-        // 사용 가능한 id: sec-intro / sec-package / sec-process / sec-price / sec-notice / sec-portfolio / sec-order
         window.addEventListener('message', function(event) {
             if (!event.data || event.data.type !== 'scroll_to') return;
             const targetId = event.data.id;
@@ -1043,7 +1065,8 @@
                     const cols = parseCSVLine(rows[i]);
                     if (cols.length >= 2) {
                         const cat = cols[0].trim();
-                        const youtubeId = cols[1].replace(/^"|"$/g, '').trim();
+                        // ★ 수정: ID 직접 입력과 유튜브 링크 입력 모두 지원
+                        const youtubeId = extractYoutubeId(cols[1]);
                         const target = grids[cat];
                         if (target && youtubeId) {
                             const thumbUrl = `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
