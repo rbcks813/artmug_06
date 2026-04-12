@@ -155,8 +155,8 @@
         }
 
         .name-tag { text-align: center; margin-top: 20px; }
-        .name-tag h1 { margin: 0; font-size: 2.4rem; color: var(--dark-tea); font-weight: 700; }
-        .name-tag span { color: var(--milktea); font-weight: bold; font-size: 1.1rem; opacity: 0.8; }
+        .name-tag h1 { margin: 0; font-size: 2.4rem; color: var(--dark-tea); font-weight: 900; }
+        .name-tag span { color: var(--milktea); font-weight: 400; font-size: 1.1rem; opacity: 0.8; }
 
         .status-badges { margin-top: 18px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; align-items: center; }
         .badge { 
@@ -167,7 +167,7 @@
             min-height: 36px;
             border-radius: 100px; 
             font-size: 0.9rem; 
-            font-weight: bold; 
+            font-weight: 600; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.03);
             transition: 0.3s cubic-bezier(0.2, 0, 0, 1);
             text-align: center;
@@ -186,7 +186,7 @@
         }
         .toggle-title {
             font-size: 0.9rem;
-            font-weight: 800;
+            font-weight: 700;
             color: var(--dark-tea);
         }
         #commission-status {
@@ -254,7 +254,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            font-weight: 700;
+            font-weight: 800;
         }
         .section-title::before { content: '🍵'; font-size: 1.2rem; }
 
@@ -283,7 +283,7 @@
             align-items: center;
             justify-content: center;
             font-size: 0.9rem;
-            font-weight: bold;
+            font-weight: 700;
             color: var(--dark-tea);
             background: white;
             padding: 8px 14px;
@@ -291,7 +291,7 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.02);
             min-height: 38px;
         }
-        .process-arrow { color: var(--milktea); font-size: 0.8rem; opacity: 0.5; font-weight: bold; }
+        .process-arrow { color: var(--milktea); font-size: 0.8rem; opacity: 0.5; font-weight: 300; }
         .process-break { flex-basis: 100%; height: 2px; }
 
         .package-card {
@@ -303,11 +303,11 @@
             transition: 0.3s cubic-bezier(0.2, 0, 0, 1);
             text-align: left;
         }
-        .package-card h3 { margin: 0 0 10px 0; color: #C3B4AD; font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .package-card h3 { margin: 0 0 10px 0; color: #C3B4AD; font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
         .price-info { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
         .price-orig { text-decoration: line-through; color: #ccc; font-size: 0.9rem; }
-        .price-disc { color: var(--package-price); font-weight: 800; font-size: 1.4rem; }
-        .discount-rate { background: var(--package-price); color: white; padding: 4px 10px; border-radius: 10px; font-size: 0.85rem; font-weight: bold; }
+        .price-disc { color: var(--package-price); font-weight: 900; font-size: 1.4rem; }
+        .discount-rate { background: var(--package-price); color: white; padding: 4px 10px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; }
         .package-included { background: #f9faf8; padding: 18px; border-radius: 18px; font-size: 0.9rem; color: #666; border: 1px dashed #eee; }
 
         .notice-list { list-style: none; padding: 0; margin: 0; text-align: left; }
@@ -328,7 +328,7 @@
             font-family: inherit;
             cursor: pointer;
             transition: all 0.2s;
-            font-weight: bold;
+            font-weight: 600;
             color: #777;
         }
         .tab-btn.active { background: white; color: #333; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
@@ -383,7 +383,7 @@
             grid-template-columns: 1fr 1fr; 
             gap: 15px;
         }
-        .option-item { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
+        .option-item { display: flex; align-items: center; gap: 10px; font-weight: 500; font-size: 0.9rem; cursor: pointer; }
         .option-item input { width: 18px; height: 18px; accent-color: var(--matcha); cursor: pointer; }
 
         .estimate-wrapper {
@@ -395,8 +395,8 @@
             border: 1px solid rgba(93, 109, 79, 0.1);
             margin-top: 10px;
         }
-        .estimate-label { font-size: 0.9rem; color: #888; font-weight: bold; margin-bottom: 5px; }
-        .estimate-price { font-size: 1.6rem; color: var(--dark-tea); font-weight: 800; }
+        .estimate-label { font-size: 0.9rem; color: #888; font-weight: 600; margin-bottom: 5px; }
+        .estimate-price { font-size: 1.6rem; color: var(--dark-tea); font-weight: 900; }
 
         .button-group { display: flex; gap: 15px; margin-top: 35px; width: 100%; }
         .btn-container { position: relative; flex: 1; }
@@ -586,7 +586,7 @@
                 <span class="process-arrow">▶</span>
                 <span class="process-step">수정 또는 최종 완성본 전달</span>
             </div>
-            <p style="text-align: center; font-size: 0.95rem; color: var(--dark-tea); margin-top: 20px; font-weight: bold; opacity: 0.8;">
+            <p style="text-align: center; font-size: 0.95rem; color: var(--dark-tea); margin-top: 20px; font-weight: 700; opacity: 0.8;">
                 ⏱️ 평균 작업 기간: 3~5일
             </p>
         </div>
@@ -631,14 +631,14 @@
                     <input type="text" id="order_date" style="grid-column: span 2;" placeholder="희망 마감일 (YYYY-MM-DD)">
                     
                     <div style="grid-column: span 2;">
-                        <p style="font-size:0.9rem; margin: 10px 0 8px; font-weight: bold; color: var(--dark-tea); padding-left: 5px;">할인 / 패키지 선택</p>
+                        <p style="font-size:0.9rem; margin: 10px 0 8px; font-weight: 700; color: var(--dark-tea); padding-left: 5px;">할인 / 패키지 선택</p>
                         <select id="order_package">
                             <option value="없음" selected>선택 없음</option>
                         </select>
                     </div>
 
                     <div style="grid-column: span 2;">
-                        <p style="font-size:0.9rem; margin: 10px 0 8px; font-weight: bold; color: var(--dark-tea); padding-left: 5px;">추가금 항목 선택</p>
+                        <p style="font-size:0.9rem; margin: 10px 0 8px; font-weight: 700; color: var(--dark-tea); padding-left: 5px;">추가금 항목 선택</p>
                         <div class="extra-options">
                             <label class="option-item">
                                 <input type="checkbox" name="extra" value="빠른 마감 (3일 이내)" id="quick_3d" data-price="15000"> 빠른 마감 (3일 / +1.5만)
