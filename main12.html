@@ -209,7 +209,7 @@
         
         .img-card {
             flex-shrink: 0;
-            height: 280px;
+            height: 380px; /* 이미지 크기 증가 */
             background: #eee;
             border-radius: 20px;
             scroll-snap-align: center;
@@ -341,7 +341,7 @@
             .pkg-grid { grid-template-columns: 1fr; }
             .profile-img { width: 120px; height: 120px; border-radius: 28px; }
             .profile-text h1 { font-size: 1.8rem; }
-            .img-card { height: 200px; border-width: 2px; }
+            .img-card { height: 280px; border-width: 2px; } /* 모바일 이미지 크기 증가 */
             .flow-container { gap: 6px; padding: 15px; }
             .flow-step { padding: 6px 10px; font-size: 0.8rem; }
             .flow-arrow { font-size: 0.8rem; }
@@ -429,7 +429,7 @@
         <div class="section-box">
             <h2 class="sec-title">포트폴리오</h2>
             <div class="tab-menu">
-                <button class="tab-btn active" onclick="switchTab('all', this)">전체보기</button>
+                <button class="tab-btn active" onclick="switchTab('modeling', this)">성형</button>
                 <button class="tab-btn" onclick="switchTab('facial', this)">페이셜</button>
                 <button class="tab-btn" onclick="switchTab('bboing', this)">뽀잉눈</button>
                 <button class="tab-btn" onclick="switchTab('custom', this)">커스텀 표정</button>
@@ -437,7 +437,7 @@
                 <button class="tab-btn" onclick="switchTab('nilotoon', this)">닐로툰</button>
             </div>
 
-            <div id="tab-all" class="scroll-grid active"><div style="color:#aaa; padding:20px;">데이터를 불러오는 중입니다...</div></div>
+            <div id="tab-modeling" class="scroll-grid active"><div style="color:#aaa; padding:20px;">데이터를 불러오는 중입니다...</div></div>
             <div id="tab-facial" class="scroll-grid"></div>
             <div id="tab-bboing" class="scroll-grid"></div>
             <div id="tab-custom" class="scroll-grid"></div>
@@ -607,15 +607,14 @@
                 const data = await response.text();
                 const rows = data.split('\n').filter(r => r.trim() !== '');
                 const grids = {
+                    '성형': document.getElementById('tab-modeling'),
                     '페이셜': document.getElementById('tab-facial'),
                     '뽀잉눈': document.getElementById('tab-bboing'),
                     '커스텀 표정': document.getElementById('tab-custom'),
                     '헤어 텍스처': document.getElementById('tab-hair'),
                     '닐로툰': document.getElementById('tab-nilotoon')
                 };
-                const allGrid = document.getElementById('tab-all');
                 Object.values(grids).forEach(g => { if(g) g.innerHTML = ''; });
-                allGrid.innerHTML = '';
                 for (let i = 1; i < rows.length; i++) {
                     const cols = parseCSVLine(rows[i]);
                     if (cols.length >= 2) {
@@ -628,11 +627,9 @@
                             return div;
                         };
                         if (grids[cat]) grids[cat].appendChild(createCard());
-                        allGrid.appendChild(createCard());
                     }
                 }
                 Object.values(grids).forEach(g => { if (g && g.innerHTML === '') g.innerHTML = '<div style="color:#aaa; padding:20px;">등록된 포트폴리오가 없습니다.</div>'; });
-                if (allGrid.innerHTML === '') allGrid.innerHTML = '<div style="color:#aaa; padding:20px;">등록된 포트폴리오가 없습니다.</div>';
             } catch (e) { console.error(e); }
         }
 
