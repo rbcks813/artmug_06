@@ -30,9 +30,9 @@
         ul { list-style: none; }
         
         /* 토스트 알림 스타일 */
-        #toast { position: absolute; background: #333; color: #fff; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: bold; z-index: 10000; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 4px 15px rgba(0,0,0,0.2); pointer-events: none; white-space: nowrap; transform: translateX(-50%) translateY(10px); }
-        #toast::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; border-color: #333 transparent transparent transparent; }
-        #toast.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+        .toast-bubble { position: absolute; background: #333; color: #fff; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: bold; z-index: 10000; opacity: 0; pointer-events: none; white-space: nowrap; transform: translateX(-50%) translateY(10px); transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .toast-bubble::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; border-color: #333 transparent transparent transparent; }
+        .toast-bubble.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         /* ================= 1. 제작 방식 선택 가이드 ================= */
         .guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px; }
@@ -263,8 +263,6 @@
 </head>
 <body>
 
-<div id="toast">메시지</div>
-
 <div class="container">
 
     <h2 id="guide-sec">1. 제작 방식 선택 가이드</h2>
@@ -490,14 +488,10 @@
                 </div>
             </div>
 
-            <div id="termsOverlay" class="terms-overlay locked">
-                <div class="lock-msg"><i class="fa-solid fa-triangle-exclamation"></i> 안내사항 버튼 클릭 후 내용을 확인해야 동의가 가능합니다.</div>
+            <div id="termsOverlay" class="terms-overlay">
                 <div class="terms-check">
-                    <a href="#terms-sec" id="termsLink" class="terms-link-btn" onclick="document.getElementById('terms-sec').scrollIntoView({behavior:'smooth'})">
-                        <i class="fa-solid fa-arrow-down"></i> 안내사항(규정) 필독하기
-                    </a>
                     <label class="terms-checkbox-wrap">
-                        <input type="checkbox" id="termsCheckbox" disabled>
+                        <input type="checkbox" id="termsCheckbox">
                         위 안내사항을 모두 확인하였으며, 이에 동의합니다.
                     </label>
                 </div>
@@ -699,30 +693,6 @@ window.addEventListener('message', function(e) {
     }
 });
 
-// =================== 토스트 팝업 (버튼 위 말풍선 형태) ===================
-function showToast(msg, targetEl) {
-    const toast = document.getElementById('toast');
-    toast.innerText = msg;
-    
-    if (targetEl) {
-        const rect = targetEl.getBoundingClientRect();
-        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        toast.style.left = (rect.left + scrollLeft + (rect.width / 2)) + 'px';
-        toast.style.top = (rect.top + scrollTop - 40) + 'px';
-        toast.style.transform = "translateX(-50%) translateY(10px)";
-    }
-    
-    toast.classList.add('show');
-    setTimeout(() => { toast.style.transform = "translateX(-50%) translateY(0)"; }, 10);
-
-    if (toast.timeoutId) clearTimeout(toast.timeoutId);
-    toast.timeoutId = setTimeout(() => { 
-        toast.classList.remove('show'); 
-        toast.style.transform = "translateX(-50%) translateY(10px)";
-    }, 3000);
-}
 
 // =================== 아코디언 닫힘 애니메이션 처리 ===================
 function initAccordions() {
@@ -756,6 +726,45 @@ function initAccordions() {
             }
         });
     });
+}
+
+// =================== 토스트 팝업 (버튼별 독립 말풍선) ===================
+function showToast(msg, targetEl) {
+    if (!targetEl) return;
+
+    // 기존 토스트가 있으면 즉시 제거
+    const existing = targetEl._toastEl;
+    if (existing) {
+        existing.remove();
+        if (existing._timeoutId) clearTimeout(existing._timeoutId);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'toast-bubble';
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+
+    // 버튼 위치 기준으로 배치
+    function position() {
+        const rect = targetEl.getBoundingClientRect();
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        toast.style.left = (rect.left + scrollLeft + rect.width / 2) + 'px';
+        toast.style.top = (rect.top + scrollTop - toast.offsetHeight - 12) + 'px';
+    }
+
+    position();
+    // 렌더 후 show
+    requestAnimationFrame(() => {
+        position();
+        toast.classList.add('show');
+    });
+
+    targetEl._toastEl = toast;
+    toast._timeoutId = setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => { toast.remove(); if (targetEl._toastEl === toast) targetEl._toastEl = null; }, 300);
+    }, 3000);
 }
 
 // =================== 숫자에 콤마 추가 ===================
@@ -823,75 +832,143 @@ function startLoopingCounter() {
     const el = document.getElementById("loopCounter");
     if (!el) return;
 
-    // 슬롯머신: 각 자릿수별 column으로 분리해서 스핀
     const TARGET = 200;
-    const DIGITS_COUNT = TARGET.toString().length; // 최대 자릿수 기준
+    const CELL_H = 44;
+    // 자릿수는 TARGET 기준 고정 (3자리: 0~200)
+    const DIGITS_COUNT = TARGET.toString().length;
 
-    function buildSlotDOM(numStr) {
+    // 각 컬럼의 "누적 스텝" 을 관리 — 항상 절대 위치로 지정
+    // 숫자 d를 표시하려면: translateY = -(d * CELL_H) + (세트 오프셋)
+    // 세트를 충분히 쌓아두고 누적으로 이동 → 범위 이탈 없음
+    // 대신: 항상 current number에서 자릿수를 뽑아 직접 CSS 변수로 지정
+    // → 각 컬럼은 0~9 딱 1세트만 쓰되, 올라갈 때는 "wrap-around" 처리
+
+    // 단순하고 확실한 방법: 각 컬럼에 0~9 를 3세트 세팅, 항상 중간 세트를 기준으로 이동
+    // 세트 교체가 필요할 때 transition 없이 리셋 → 육안으로 안 보임
+
+    // 각 컬럼이 현재 가리키는 "총 누적 인덱스" (0=0, 1=1, ... 9=9, 10=0, ...)
+    const cumIdx = new Array(DIGITS_COUNT).fill(0); // 각 컬럼의 누적 인덱스
+
+    function buildSlotDOM() {
         el.innerHTML = '';
-        const padded = numStr.padStart(DIGITS_COUNT, '0');
-        [...padded].forEach(d => {
+        for (let col = 0; col < DIGITS_COUNT; col++) {
             const wrap = document.createElement('span');
-            wrap.style.cssText = 'overflow:hidden; height:44px; display:inline-block; position:relative;';
+            wrap.style.cssText = `overflow:hidden; height:${CELL_H}px; display:inline-block; position:relative; vertical-align:top;`;
             const track = document.createElement('span');
             track.className = 'counter-digit-track';
-            // 0~9 + 숫자 한 번 더 (루프 위해)
-            for (let i = 0; i <= 10; i++) {
-                const span = document.createElement('span');
-                span.className = 'counter-digit';
-                span.textContent = i % 10;
-                track.appendChild(span);
+            track.dataset.col = col;
+            // 0~9 를 3세트 (총 30셀): 중간 세트(인덱스 10~19)를 시작 위치로
+            for (let rep = 0; rep < 3; rep++) {
+                for (let d = 0; d <= 9; d++) {
+                    const span = document.createElement('span');
+                    span.className = 'counter-digit';
+                    span.textContent = d;
+                    track.appendChild(span);
+                }
             }
+            // 초기: 중간 세트의 0 (index=10) → translateY = -10 * CELL_H
+            track.style.transition = 'none';
+            track.style.transform = `translateY(${-10 * CELL_H}px)`;
             wrap.appendChild(track);
             el.appendChild(wrap);
-        });
+        }
     }
 
-    function spinToNumber(numStr) {
-        const padded = numStr.padStart(DIGITS_COUNT, '0');
-        const columns = el.querySelectorAll('span > .counter-digit-track');
+    function getColumns() {
+        return Array.from(el.querySelectorAll('.counter-digit-track'));
+    }
+
+    // 현재 숫자에서 각 자릿수 추출 (3자리 고정)
+    function getDigits(num) {
+        return num.toString().padStart(DIGITS_COUNT, '0').split('').map(Number);
+    }
+
+    // 이전 숫자 기억
+    let prevNum = 0;
+
+    function spinTo(num, goingUp) {
+        const digits = getDigits(num);
+        const prevDigits = getDigits(prevNum);
+        const columns = getColumns();
+
         columns.forEach((track, i) => {
-            const targetDigit = parseInt(padded[i]);
-            const offset = -(targetDigit * 44);
-            track.style.transition = `transform ${0.35 + i * 0.07}s cubic-bezier(0.17, 0.67, 0.35, 1.2)`;
-            track.style.transform = `translateY(${offset}px)`;
+            const from = prevDigits[i];
+            const to = digits[i];
+
+            // steps: 이 컬럼이 몇 칸 이동해야 하나
+            let steps;
+            if (goingUp) {
+                // 증가 방향: to >= from이면 단순 차이, 아니면 wrap-around (9→0)
+                steps = to >= from ? to - from : (10 - from) + to;
+            } else {
+                // 감소 방향: from >= to이면 단순 차이, 아니면 wrap-around (0→9)
+                steps = from >= to ? from - to : (10 - to) + from;
+            }
+
+            if (steps === 0) return;
+
+            // 현재 translateY 파싱
+            const curTransform = track.style.transform;
+            const curY = parseFloat(curTransform.replace('translateY(', '').replace('px)', '')) || (-10 * CELL_H);
+
+            let newY = goingUp ? curY - steps * CELL_H : curY + steps * CELL_H;
+
+            // 범위 체크: -10*CELL_H ~ -19*CELL_H (중간 세트) 벗어나면 transition 없이 중간 세트로 리셋
+            // 허용 범위: -(0*CELL_H) ~ -(29*CELL_H) (3세트 = 30칸)
+            // 너무 음수로 빠지면 중간 세트 같은 숫자 위치로 조용히 리셋
+            const MIN_Y = -29 * CELL_H;
+            const MAX_Y = 0;
+            if (newY < MIN_Y || newY > MAX_Y) {
+                // 중간 세트(10~19번 인덱스)의 to 위치로 리셋
+                const resetY = -(10 + to) * CELL_H;
+                track.style.transition = 'none';
+                track.style.transform = `translateY(${resetY}px)`;
+                // 다음 프레임에서 애니메이션 다시 적용 (실제로는 이미 목적지이므로 그냥 유지)
+                newY = resetY;
+                return;
+            }
+
+            track.style.transition = `transform ${0.2 + i * 0.04}s cubic-bezier(0.17, 0.67, 0.35, 1.2)`;
+            track.style.transform = `translateY(${newY}px)`;
         });
+
+        prevNum = num;
     }
 
-    function resetAll() {
-        const columns = el.querySelectorAll('span > .counter-digit-track');
-        columns.forEach(track => {
-            track.style.transition = 'none';
-            track.style.transform = 'translateY(0)';
-        });
-    }
-
-    // 초기 DOM 세팅
-    buildSlotDOM('0');
+    buildSlotDOM();
 
     function runCycle() {
+        prevNum = 0;
+        // 컬럼 전부 중간 세트 0 위치로 리셋
+        getColumns().forEach(track => {
+            track.style.transition = 'none';
+            track.style.transform = `translateY(${-10 * CELL_H}px)`;
+        });
+
         let current = 0;
-        const intervalMs = 40;
+        const intervalMs = 45;
         const step = 4;
+        let goingUp = true;
 
         function tick() {
-            current += step;
-            if (current > TARGET) current = TARGET;
-            spinToNumber(current.toString());
-            if (current < TARGET) {
-                setTimeout(tick, intervalMs);
+            if (goingUp) {
+                current += step;
+                if (current >= TARGET) { current = TARGET; goingUp = false; }
+                spinTo(current, true);
+                setTimeout(tick, current < TARGET ? intervalMs : 2000);
             } else {
-                // 최고값 유지 후 리셋 & 반복
-                setTimeout(() => {
-                    resetAll();
-                    setTimeout(() => {
-                        spinToNumber('0');
-                        setTimeout(runCycle, 1200);
-                    }, 80);
-                }, 2500);
+                current -= step;
+                if (current <= 0) current = 0;
+                spinTo(current, false);
+                if (current > 0) {
+                    setTimeout(tick, intervalMs);
+                } else {
+                    setTimeout(runCycle, 1500);
+                }
             }
         }
-        setTimeout(tick, 400);
+
+        setTimeout(tick, 600);
     }
 
     runCycle();
@@ -927,15 +1004,6 @@ let selectedItems = new Map();
 // =================== 초기화 ===================
 document.addEventListener("DOMContentLoaded", () => {
     loadPortfolio(); loadPriceData(); typeWriter(); startLoopingCounter(); initAccordions();
-
-    document.getElementById('termsLink').addEventListener('click', function(e) {
-        const overlay = document.getElementById('termsOverlay');
-        const cb = document.getElementById('termsCheckbox');
-        if(overlay.classList.contains('locked')) {
-            overlay.classList.remove('locked'); cb.disabled = false;
-            showToast("안내사항 창을 열었습니다. 내용을 확인하신 후 하단의 체크박스에 동의해주세요.", this);
-        }
-    });
 
     document.getElementById('termsCheckbox').addEventListener('change', function() {
         const copyBtn = document.getElementById('btnCopy');
