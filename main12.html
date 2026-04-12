@@ -209,7 +209,7 @@
         
         .img-card {
             flex-shrink: 0;
-            height: 180px;
+            height: 280px;
             background: #eee;
             border-radius: 20px;
             scroll-snap-align: center;
@@ -341,7 +341,7 @@
             .pkg-grid { grid-template-columns: 1fr; }
             .profile-img { width: 120px; height: 120px; border-radius: 28px; }
             .profile-text h1 { font-size: 1.8rem; }
-            .img-card { height: 140px; border-width: 2px; }
+            .img-card { height: 200px; border-width: 2px; }
             .flow-container { gap: 6px; padding: 15px; }
             .flow-step { padding: 6px 10px; font-size: 0.8rem; }
             .flow-arrow { font-size: 0.8rem; }
@@ -434,6 +434,7 @@
                 <button class="tab-btn" onclick="switchTab('bboing', this)">뽀잉눈</button>
                 <button class="tab-btn" onclick="switchTab('custom', this)">커스텀 표정</button>
                 <button class="tab-btn" onclick="switchTab('hair', this)">헤어 텍스처</button>
+                <button class="tab-btn" onclick="switchTab('nilotoon', this)">닐로툰</button>
             </div>
 
             <div id="tab-all" class="scroll-grid active"><div style="color:#aaa; padding:20px;">데이터를 불러오는 중입니다...</div></div>
@@ -441,6 +442,7 @@
             <div id="tab-bboing" class="scroll-grid"></div>
             <div id="tab-custom" class="scroll-grid"></div>
             <div id="tab-hair" class="scroll-grid"></div>
+            <div id="tab-nilotoon" class="scroll-grid"></div>
         </div>
 
         <div class="section-box">
@@ -608,7 +610,8 @@
                     '페이셜': document.getElementById('tab-facial'),
                     '뽀잉눈': document.getElementById('tab-bboing'),
                     '커스텀 표정': document.getElementById('tab-custom'),
-                    '헤어 텍스처': document.getElementById('tab-hair')
+                    '헤어 텍스처': document.getElementById('tab-hair'),
+                    '닐로툰': document.getElementById('tab-nilotoon')
                 };
                 const allGrid = document.getElementById('tab-all');
                 Object.values(grids).forEach(g => { if(g) g.innerHTML = ''; });
