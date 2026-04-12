@@ -575,56 +575,75 @@
         .price-val { font-weight: 800; color: #333; }
 
         @media (max-width: 768px) {
-            body { padding: 15px 5px; }
-            .content-section { padding: 20px 15px; margin: 15px 5px; border-radius: 20px; }
-            .profile-circle { width: 120px; height: 120px; border-radius: 32px; margin-top: -60px; }
-            .name-tag h1 { font-size: 1.8rem; }
-            .section-title { font-size: 1.2rem; margin-bottom: 15px; }
-            
-            .process-flow { flex-direction: column; align-items: center; padding: 20px 15px; border-radius: 20px; gap: 5px; }
-            .process-row { flex-direction: column; width: 100%; gap: 5px; display: flex; align-items: center; }
-            .process-step { width: 100%; text-align: center; padding: 10px; font-size: 0.85rem; }
-            .process-arrow { transform: rotate(90deg); display: inline-block; margin: 2px 0; opacity: 0.7; }
-            
-            .process-row:first-child::after {
-                content: '▶';
-                color: var(--milktea);
-                font-size: 0.8rem;
-                opacity: 0.7;
-                font-weight: 300;
-                transform: rotate(90deg);
-                margin: 5px 0;
-            }
+    body { padding: 15px 5px; }
+    .content-section { padding: 20px 15px; margin: 15px 5px; border-radius: 20px; }
+    .profile-circle { width: 120px; height: 120px; border-radius: 32px; margin-top: -60px; }
+    .name-tag h1 { font-size: 1.8rem; }
+    .section-title { font-size: 1.2rem; margin-bottom: 15px; }
+    
+    .process-flow { flex-direction: column; align-items: center; padding: 20px 15px; border-radius: 20px; gap: 5px; }
+    .process-row { flex-direction: column; width: 100%; gap: 5px; display: flex; align-items: center; }
+    .process-step { width: 100%; text-align: center; padding: 10px; font-size: 0.85rem; }
+    .process-arrow { transform: rotate(90deg); display: inline-block; margin: 2px 0; opacity: 0.7; }
+    
+    .process-row:first-child::after {
+        content: '▶';
+        color: var(--milktea);
+        font-size: 0.8rem;
+        opacity: 0.7;
+        font-weight: 300;
+        transform: rotate(90deg);
+        margin: 5px 0;
+    }
 
-            .price-val small { display: block; font-size: 0.75rem; color: #999; margin-top: 2px; text-align: right; }
+    .price-val small { display: block; font-size: 0.75rem; color: #999; margin-top: 2px; text-align: right; }
 
-            .info-box, .package-card { padding: 15px; border-radius: 16px; }
-            .package-included { padding: 12px; }
-            
-            .tab-wrapper { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; width: 100%; border-radius: 12px; padding: 8px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-            .tab-wrapper::-webkit-scrollbar { display: none; }
-            .tab-btn { flex-shrink: 0; padding: 8px 14px; font-size: 0.85rem; }
+    .info-box, .package-card { padding: 15px; border-radius: 16px; }
+    .package-included { padding: 12px; }
+    
+    .tab-wrapper { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; width: 100%; border-radius: 12px; padding: 8px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .tab-wrapper::-webkit-scrollbar { display: none; }
+    .tab-btn { flex-shrink: 0; padding: 8px 14px; font-size: 0.85rem; }
 
-            .form-grid { grid-template-columns: 1fr; gap: 10px; }
-            .form-grid > * { grid-column: 1 / -1 !important; }
-            input, textarea, select { padding: 14px 15px; font-size: 0.95rem; border-radius: 14px; }
-            textarea { height: 120px; }
-            .selection-group { padding: 15px; border-radius: 16px; }
-            .selection-label { font-size: 0.85rem; margin-bottom: 8px; }
-            .selection-btns { gap: 6px; }
-            .selection-btns > div { gap: 6px; }
-            .select-btn { padding: 8px 10px; font-size: 0.85rem; flex: 1 1 calc(50% - 6px); border-radius: 10px; }
-            .extra-options { grid-template-columns: 1fr; padding: 15px; gap: 10px; border-radius: 16px; }
-            .estimate-wrapper { padding: 15px; border-radius: 16px; }
-            .submit-btn, .reset-btn { padding: 16px; border-radius: 16px; font-size: 1rem; }
-            .button-group { margin-top: 20px; gap: 10px; flex-direction: column; }
-            .reset-btn-container { flex: none; }
+    .form-grid { grid-template-columns: 1fr; gap: 10px; }
+    .form-grid > * { grid-column: 1 / -1 !important; }
+    input, textarea, select { padding: 14px 15px; font-size: 0.95rem; border-radius: 14px; }
+    textarea { height: 120px; }
+    .selection-group { padding: 15px; border-radius: 16px; }
+    .selection-label { font-size: 0.85rem; margin-bottom: 8px; }
+    .selection-btns { gap: 6px; }
+    .selection-btns > div { gap: 6px; }
+    .select-btn { padding: 8px 10px; font-size: 0.85rem; flex: 1 1 calc(50% - 6px); border-radius: 10px; }
+    .extra-options { grid-template-columns: 1fr; padding: 15px; gap: 10px; border-radius: 16px; }
+    .estimate-wrapper { padding: 15px; border-radius: 16px; }
+    .submit-btn, .reset-btn { padding: 16px; border-radius: 16px; font-size: 1rem; }
+    .button-group { margin-top: 20px; gap: 10px; flex-direction: column; }
+    .reset-btn-container { flex: none; }
 
-            .port-item { height: auto; width: 85vw; max-width: none; }
-            #tab-shorts-game .port-item, #tab-shorts-chat .port-item, .port-item.shorts-item { width: 55vw; max-width: none; }
-            
-            .price-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
-        }
+    /* ── 포트폴리오 모바일 핵심 수정 ── */
+    /* 모든 카드 높이를 220px로 고정, aspect-ratio 대신 너비로 비율 표현 */
+    .port-item {
+        height: 220px !important;
+        width: auto;
+        aspect-ratio: unset !important;
+    }
+
+    /* 롱폼 카드: 16:9 비율 → 높이 220px 기준 너비 ~392px */
+    .port-grid > .port-item {
+        width: calc(220px * 16 / 9) !important;
+        aspect-ratio: unset !important;
+    }
+
+    /* 숏폼 카드: 9:16 비율 → 높이 220px 기준 너비 ~124px */
+    #tab-shorts-game .port-item,
+    #tab-shorts-chat .port-item,
+    .port-item.shorts-item {
+        width: calc(220px * 9 / 16) !important;
+        aspect-ratio: unset !important;
+    }
+
+    .price-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+    }
     </style>
 </head>
 <body>
