@@ -77,7 +77,9 @@
         .btn-neon { background: transparent; color: #e83e8c; border: 2px solid #e83e8c; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
         .btn-neon:hover { background: #e83e8c; color: #fff; box-shadow: 0 0 15px #e83e8c; }
         
-        .counter-num { font-size: 32px; font-weight: 900; color: #20c997; font-family: 'Courier New', Courier, monospace; }
+        .counter-num { font-size: 32px; font-weight: 900; color: #20c997; font-family: 'Courier New', Courier, monospace; overflow: hidden; height: 44px; line-height: 44px; position: relative; display: inline-block; min-width: 80px; text-align: center; }
+        .counter-digit-track { display: inline-flex; flex-direction: column; transition: transform 0.18s cubic-bezier(0.25, 0.1, 0.25, 1); }
+        .counter-digit { display: block; height: 44px; line-height: 44px; }
         
         .toggle-switch { position: relative; display: inline-block; width: 60px; height: 34px; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
@@ -93,12 +95,18 @@
         .demo-accordion[open] summary::after { transform: rotate(45deg); }
         .demo-accordion p { margin-top: 10px; font-size: 13px; color: #666; border-top: 1px dashed #ddd; padding-top: 10px; }
         
-        /* 아코디언 오픈 애니메이션 */
-        .demo-accordion[open] p { animation: fadeInDown 0.3s ease-out; }
+        /* 아코디언 오픈/클로즈 애니메이션 */
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes fadeOutUp {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+        .accordion-body-inner { overflow: hidden; }
+        .accordion-body-inner.opening { animation: fadeInDown 0.3s ease-out forwards; }
+        .accordion-body-inner.closing { animation: fadeOutUp 0.25s ease-in forwards; }
 
         .demo-btn { padding: 10px 18px; background: #343a40; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
         .demo-btn:hover { background: #495057; }
@@ -213,6 +221,21 @@
         .inquiryColor::-webkit-color-swatch-wrapper { padding: 0; }
         .inquiryColor::-webkit-color-swatch { border: none; border-radius: 6px; }
         .inquiryColor::-moz-color-swatch { border: none; border-radius: 6px; }
+
+        /* ================= 7. 안내사항 ================= */
+        .terms-accordion { width: 100%; background: #fcfcfc; border: 1px solid #eee; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); overflow: hidden; }
+        .terms-accordion summary { font-weight: 700; font-size: 15px; color: #222; outline: none; list-style: none; display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; cursor: pointer; gap: 10px; }
+        .terms-accordion summary::-webkit-details-marker { display: none; }
+        .terms-accordion summary i { color: #0056b3; width: 18px; text-align: center; }
+        .terms-accordion summary::after { content: '+'; color: #0056b3; font-size: 20px; font-weight: 300; transition: 0.3s; margin-left: auto; flex-shrink: 0; }
+        .terms-accordion[open] summary::after { transform: rotate(45deg); }
+        .terms-accordion[open] summary { border-bottom: 1px solid #eee; background: #f8f9fa; }
+        .terms-accordion-body { padding: 20px 22px; }
+        .terms-accordion-body p { font-size: 14px; color: #555; margin-bottom: 8px; word-break: keep-all; line-height: 1.7; }
+        .terms-accordion-body p:last-child { margin-bottom: 0; }
+        .terms-list { list-style: none; padding: 0; }
+        .terms-list li { position: relative; padding-left: 16px; font-size: 14px; color: #555; margin-bottom: 8px; word-break: keep-all; line-height: 1.7; }
+        .terms-list li::before { content: '·'; position: absolute; left: 0; font-weight: bold; color: #0056b3; }
 
         @media (max-width: 1024px) {
             .demo-zone-grid { grid-template-columns: repeat(2, 1fr); }
@@ -362,7 +385,7 @@
             
             <div class="demo-box">
                 <div class="demo-box-title">3. 숫자 카운터</div>
-                <div class="counter-num" id="loopCounter">0</div>
+                <div class="counter-num" id="loopCounter"></div>
             </div>
             
             <div class="demo-box">
@@ -377,7 +400,9 @@
                 <div class="demo-box-title">5. FAQ 아코디언</div>
                 <details class="demo-accordion" ontoggle="sendHeight()">
                     <summary>질문을 클릭해보세요</summary>
-                    <p>깔끔하게 긴 텍스트를 숨겨두고 원할 때만 펼쳐볼 수 있습니다.</p>
+                    <div class="accordion-body-inner">
+                        <p>깔끔하게 긴 텍스트를 숨겨두고 원할 때만 펼쳐볼 수 있습니다.</p>
+                    </div>
                 </details>
             </div>
             
@@ -466,10 +491,10 @@
             </div>
 
             <div id="termsOverlay" class="terms-overlay locked">
-                <div class="lock-msg"><i class="fa-solid fa-triangle-exclamation"></i> 안내사항 버튼 클릭 후 링크를 확인해야 동의가 가능합니다.</div>
+                <div class="lock-msg"><i class="fa-solid fa-triangle-exclamation"></i> 안내사항 버튼 클릭 후 내용을 확인해야 동의가 가능합니다.</div>
                 <div class="terms-check">
-                    <a href="https://rbcks813.github.io/main/" target="_blank" id="termsLink" class="terms-link-btn">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i> 안내사항(규정) 필독하기
+                    <a href="#terms-sec" id="termsLink" class="terms-link-btn" onclick="document.getElementById('terms-sec').scrollIntoView({behavior:'smooth'})">
+                        <i class="fa-solid fa-arrow-down"></i> 안내사항(규정) 필독하기
                     </a>
                     <label class="terms-checkbox-wrap">
                         <input type="checkbox" id="termsCheckbox" disabled>
@@ -491,6 +516,120 @@
             </div>
         </div>
     </div>
+
+
+    <h2 id="terms-sec">7. 안내사항 및 이용 조건</h2>
+
+    <details class="terms-accordion" ontoggle="sendHeight()">
+        <summary><i class="fa-solid fa-circle-info"></i> 상담 시간 및 문의</summary>
+        <div class="terms-accordion-body"><div class="accordion-body-inner">
+            <p>상담 문의는 24시간 언제든 남겨주실 수 있습니다.</p>
+            <p>남겨주신 메시지를 확인하는 즉시 순차적으로 답변해 드리고 있습니다.</p>
+        </div></div>
+    </details>
+
+    <details class="terms-accordion" ontoggle="sendHeight()">
+        <summary><i class="fa-solid fa-copyright"></i> 저작권 및 소유권</summary>
+        <div class="terms-accordion-body"><div class="accordion-body-inner">
+            <p>본 상품을 통해 제작된 모든 결과물(디자인, 코드, 구조 등)에 대한 저작권은 <b>"대충닉넴임"</b>에게 귀속됩니다.</p>
+            <p>단, 구매자는 결과물을 본인의 서비스/페이지 내에서 사용하는 것에 한하여 이용 권한을 가집니다.</p>
+        </div></div>
+    </details>
+
+    <details class="terms-accordion" ontoggle="sendHeight()">
+        <summary><i class="fa-solid fa-ban"></i> 사용 범위 및 금지사항</summary>
+        <div class="terms-accordion-body"><div class="accordion-body-inner">
+            <p>구매자는 제공받은 작업물을 본인 페이지 내에서 자유롭게 수정 및 사용할 수 있습니다.</p>
+            <p style="color:#e03131; font-weight:700; margin-top:10px;">⚠️ 아래 행위는 엄격히 금지됩니다:</p>
+            <ul class="terms-list">
+                <li>제3자에게 양도, 판매, 재배포, 공유하는 행위</li>
+                <li>작업물을 기반으로 한 2차 상품 제작 및 상업적 재판매</li>
+            </ul>
+            <p style="color:#888; font-size:13px; margin-top:8px;">* 위반 시 서비스 이용 제한 및 법적 책임이 발생할 수 있습니다.</p>
+        </div></div>
+    </details>
+
+    <details class="terms-accordion" ontoggle="sendHeight()">
+        <summary><i class="fa-solid fa-images"></i> 포트폴리오 활용</summary>
+        <div class="terms-accordion-body"><div class="accordion-body-inner">
+            <p>제작된 작업물 및 작업 진행 가격은 <b>"대충닉넴임"</b>의 포트폴리오, 홍보, SNS 및 기타 채널에 활용될 수 있습니다.</p>
+            <p>단, 상세한 세부 가격 내역은 공개하지 않습니다.</p>
+        </div></div>
+    </details>
+
+    <details class="terms-accordion" ontoggle="sendHeight()">
+        <summary><i class="fa-solid fa-file-code"></i> 외부 자료 및 코드 책임 제한</summary>
+        <div class="terms-accordion-body"><div class="accordion-body-inner">
+            <p>클라이언트가 제공한 이미지, 텍스트, 코드 등 외부 자료에 대해 발생하는 저작권 문제, 라이선스 위반, 기타 법적 분쟁에 대해서 <b>"대충닉넴임"</b>은 책임을 지지 않습니다.</p>
+            <p>또한, 클라이언트가 요구한 폰트가 '웹사이트 사용(웹폰트)'이 허용되지 않은 라이선스일 경우 해당 폰트는 작업에 사용할 수 없습니다.</p>
+        </div></div>
+    </details>
+
+    <details class="terms-accordion" ontoggle="sendHeight()">
+        <summary><i class="fa-solid fa-triangle-exclamation"></i> 기존 코드 및 타 작업물 관련 면책</summary>
+        <div class="terms-accordion-body"><div class="accordion-body-inner">
+            <p>클라이언트가 전달한 기존 코드 또는 타 작업자의 작업물이 포함된 경우, 해당 부분에서 발생하는 오류, 충돌, 권리 문제 등에 대해서는 책임지지 않습니다.</p>
+        </div></div>
+    </details>
+
+    <details class="terms-accordion" ontoggle="sendHeight()">
+        <summary><i class="fa-regular fa-clock"></i> 작업 기간 및 피드백 지연</summary>
+        <div class="terms-accordion-body"><div class="accordion-body-inner">
+            <ul class="terms-list">
+                <li>기본 작업 기간은 최대 <b>7일</b>로 규정되어 있습니다.</li>
+                <li>클라이언트의 피드백이 정확히 <b>24시간</b> 동안 없을 경우, 해당 시점에서 작업은 종료 및 최종 확정된 것으로 간주합니다.</li>
+                <li>클라이언트의 답변 지연으로 인해 7일 마감일을 지키지 못한 경우 작업자에게는 귀책사유가 없으며, 이로 인해 진행하지 못한 수정이나 작업에 대해서는 추가 비용이 발생할 수 있습니다.</li>
+            </ul>
+        </div></div>
+    </details>
+
+    <details class="terms-accordion" ontoggle="sendHeight()">
+        <summary><i class="fa-solid fa-pen-ruler"></i> 작업 범위 및 수정</summary>
+        <div class="terms-accordion-body"><div class="accordion-body-inner">
+            <ul class="terms-list">
+                <li>작업 범위는 사전에 협의된 내용에 한정되며, 추가 요청은 별도의 비용이 발생할 수 있습니다.</li>
+                <li>기본 수정은 협의된 횟수 내에서 가능하며, 범위를 초과하는 수정은 추가 비용이 부과됩니다.</li>
+            </ul>
+        </div></div>
+    </details>
+
+    <details class="terms-accordion" ontoggle="sendHeight()">
+        <summary><i class="fa-solid fa-screwdriver-wrench"></i> 유지보수 및 A/S</summary>
+        <div class="terms-accordion-body"><div class="accordion-body-inner">
+            <ul class="terms-list">
+                <li>최종본 전달 후 <b>1년</b> 내 작업자의 책임으로 판단되는 문제(기능 오류 등)에 대해서는 무상 수리를 원칙으로 합니다.</li>
+                <li>무상 유지보수 기간 내 유상 작업(신규 제작 등)이 진행된 경우 최대 <b>2년</b>까지 연장되며, 이 후에는 유료로 유지보수를 이용하실 수 있습니다.</li>
+                <li style="color:#888; font-size:13px;">단, 유료 유지보수 비용 지불은 연장 조건인 유상 작업 범위에 포함되지 않습니다.</li>
+                <li>그 외의 새로운 기능 추가나 내용 변경 및 수정 요청은 추가 비용이 발생합니다.</li>
+            </ul>
+        </div></div>
+    </details>
+
+    <details class="terms-accordion" ontoggle="sendHeight()">
+        <summary><i class="fa-solid fa-folder-open"></i> 결과물 보관 및 재발송</summary>
+        <div class="terms-accordion-body"><div class="accordion-body-inner">
+            <ul class="terms-list">
+                <li>최종 파일은 가능한 한 오래 보관하나, 영구 보관을 보장하지 않습니다.</li>
+                <li>작업자의 보관 기간이 지나 폐기된 후 다시 요청하실 경우, 재제작에 따른 추가 비용이 발생합니다.</li>
+                <li>단, 작업 완료일로부터 <b>3개월</b>이 지나지 않은 시점에서는 파일 유실 시 무상으로 다시 제작하여 제공해 드립니다.</li>
+            </ul>
+        </div></div>
+    </details>
+
+    <details class="terms-accordion" ontoggle="sendHeight()">
+        <summary><i class="fa-solid fa-rotate-left"></i> 환불 및 취소</summary>
+        <div class="terms-accordion-body"><div class="accordion-body-inner">
+            <p>디지털 콘텐츠 특성상 작업이 시작된 이후에는 단순 변심에 의한 환불이 어렵습니다.</p>
+            <p>단, 작업 시작 전에는 <b>전액 환불</b>이 가능합니다.</p>
+        </div></div>
+    </details>
+
+    <details class="terms-accordion" ontoggle="sendHeight()">
+        <summary><i class="fa-solid fa-scale-balanced"></i> 책임 범위</summary>
+        <div class="terms-accordion-body"><div class="accordion-body-inner">
+            <p>결과물 사용으로 인해 발생하는 직접적/간접적 손해에 대해 <b>"대충닉넴임"</b>은 고의 또는 중대한 과실이 없는 한 책임을 지지 않습니다.</p>
+        </div></div>
+    </details>
 
 </div>
 
@@ -585,6 +724,40 @@ function showToast(msg, targetEl) {
     }, 3000);
 }
 
+// =================== 아코디언 닫힘 애니메이션 처리 ===================
+function initAccordions() {
+    document.querySelectorAll('details.demo-accordion, details.terms-accordion').forEach(details => {
+        const summary = details.querySelector('summary');
+        summary.addEventListener('click', function(e) {
+            e.preventDefault();
+            const inner = details.querySelector('.accordion-body-inner');
+            if (!inner) { details.open = !details.open; sendHeight(); return; }
+
+            if (details.open) {
+                // 닫기 애니메이션
+                inner.classList.remove('opening');
+                inner.classList.add('closing');
+                inner.addEventListener('animationend', function handler() {
+                    inner.removeEventListener('animationend', handler);
+                    inner.classList.remove('closing');
+                    details.removeAttribute('open');
+                    setTimeout(sendHeight, 50);
+                });
+            } else {
+                // 열기 애니메이션
+                details.open = true;
+                inner.classList.remove('closing');
+                inner.classList.add('opening');
+                inner.addEventListener('animationend', function handler() {
+                    inner.removeEventListener('animationend', handler);
+                    inner.classList.remove('opening');
+                    setTimeout(sendHeight, 50);
+                });
+            }
+        });
+    });
+}
+
 // =================== 숫자에 콤마 추가 ===================
 function formatPriceStr(str) {
     if (!str && str !== 0) return '';
@@ -648,22 +821,80 @@ function typeWriter() {
 
 function startLoopingCounter() {
     const el = document.getElementById("loopCounter");
-    if(!el) return;
-    function animate(start, end, duration, callback) {
-        let startTime = null;
-        function step(timestamp) {
-            if (!startTime) startTime = timestamp;
-            const progress = Math.min((timestamp - startTime) / duration, 1);
-            el.innerText = Math.floor(progress * (end - start) + start);
-            if (progress < 1) window.requestAnimationFrame(step);
-            else callback();
+    if (!el) return;
+
+    // 슬롯머신: 각 자릿수별 column으로 분리해서 스핀
+    const TARGET = 200;
+    const DIGITS_COUNT = TARGET.toString().length; // 최대 자릿수 기준
+
+    function buildSlotDOM(numStr) {
+        el.innerHTML = '';
+        const padded = numStr.padStart(DIGITS_COUNT, '0');
+        [...padded].forEach(d => {
+            const wrap = document.createElement('span');
+            wrap.style.cssText = 'overflow:hidden; height:44px; display:inline-block; position:relative;';
+            const track = document.createElement('span');
+            track.className = 'counter-digit-track';
+            // 0~9 + 숫자 한 번 더 (루프 위해)
+            for (let i = 0; i <= 10; i++) {
+                const span = document.createElement('span');
+                span.className = 'counter-digit';
+                span.textContent = i % 10;
+                track.appendChild(span);
+            }
+            wrap.appendChild(track);
+            el.appendChild(wrap);
+        });
+    }
+
+    function spinToNumber(numStr) {
+        const padded = numStr.padStart(DIGITS_COUNT, '0');
+        const columns = el.querySelectorAll('span > .counter-digit-track');
+        columns.forEach((track, i) => {
+            const targetDigit = parseInt(padded[i]);
+            const offset = -(targetDigit * 44);
+            track.style.transition = `transform ${0.35 + i * 0.07}s cubic-bezier(0.17, 0.67, 0.35, 1.2)`;
+            track.style.transform = `translateY(${offset}px)`;
+        });
+    }
+
+    function resetAll() {
+        const columns = el.querySelectorAll('span > .counter-digit-track');
+        columns.forEach(track => {
+            track.style.transition = 'none';
+            track.style.transform = 'translateY(0)';
+        });
+    }
+
+    // 초기 DOM 세팅
+    buildSlotDOM('0');
+
+    function runCycle() {
+        let current = 0;
+        const intervalMs = 40;
+        const step = 4;
+
+        function tick() {
+            current += step;
+            if (current > TARGET) current = TARGET;
+            spinToNumber(current.toString());
+            if (current < TARGET) {
+                setTimeout(tick, intervalMs);
+            } else {
+                // 최고값 유지 후 리셋 & 반복
+                setTimeout(() => {
+                    resetAll();
+                    setTimeout(() => {
+                        spinToNumber('0');
+                        setTimeout(runCycle, 1200);
+                    }, 80);
+                }, 2500);
+            }
         }
-        window.requestAnimationFrame(step);
+        setTimeout(tick, 400);
     }
-    function startCycle() {
-        animate(0, 200, 1000, () => setTimeout(() => animate(200, 0, 1000, () => setTimeout(startCycle, 3000)), 3000));
-    }
-    startCycle();
+
+    runCycle();
 }
 
 function toggleTheme() {
@@ -695,7 +926,7 @@ let selectedItems = new Map();
 
 // =================== 초기화 ===================
 document.addEventListener("DOMContentLoaded", () => {
-    loadPortfolio(); loadPriceData(); typeWriter(); startLoopingCounter();
+    loadPortfolio(); loadPriceData(); typeWriter(); startLoopingCounter(); initAccordions();
 
     document.getElementById('termsLink').addEventListener('click', function(e) {
         const overlay = document.getElementById('termsOverlay');
@@ -850,6 +1081,8 @@ function renderCalc() {
             const priceStr = priceNum === 0 ? '상담 후 결정' : formatPriceStr(priceNum) + '원';
             const fullName = `[${category}] ${item.name}`;
             const isPerItem = item.name.includes('(개당)');
+            // 1개월, 2개월 등 "개월" 키워드가 포함된 상품은 월 결제 다중선택 처리
+            const isMonthly = !isPerItem && /\d+개월/.test(item.name);
 
             const wrapDiv = document.createElement('div');
             wrapDiv.className = 'calc-item-wrapper';
@@ -858,7 +1091,7 @@ function renderCalc() {
             itemDiv.className = 'calc-item';
             itemDiv.id = `box_${id}`;
             itemDiv.innerHTML = `
-                <label for="${id}"><input type="checkbox" id="${id}" value="${priceNum}" data-name="${fullName}" data-is-per="${isPerItem}" onchange="updateCalcCheckbox(this)"> ${item.name}</label>
+                <label for="${id}"><input type="checkbox" id="${id}" value="${priceNum}" data-name="${fullName}" data-is-per="${isPerItem}" data-is-monthly="${isMonthly}" onchange="updateCalcCheckbox(this)"> ${item.name}</label>
                 <div class="item-price">${priceStr}</div>
             `;
             wrapDiv.appendChild(itemDiv);
@@ -872,6 +1105,15 @@ function renderCalc() {
                     <div><input type="number" id="qty_${id}" min="1" value="1" data-name="${fullName}" data-price="${priceNum}" onchange="updateCalcQty(this)"><span style="font-weight:bold; color:#333; margin-left:5px;">개</span></div>
                 `;
                 wrapDiv.appendChild(dropDiv);
+            } else if (isMonthly) {
+                const dropDiv = document.createElement('div');
+                dropDiv.className = 'qty-dropdown';
+                dropDiv.id = `qtywrap_${id}`;
+                dropDiv.innerHTML = `
+                    <span style="color:#555; font-size:14px; font-weight:bold;">개월 수를 선택해주세요 <i class="fa-solid fa-arrow-right"></i></span>
+                    <div><input type="number" id="qty_${id}" min="1" value="1" data-name="${fullName}" data-price="${priceNum}" onchange="updateCalcQty(this)"><span style="font-weight:bold; color:#333; margin-left:5px;">개월</span></div>
+                `;
+                wrapDiv.appendChild(dropDiv);
             }
             catDiv.appendChild(wrapDiv);
         });
@@ -883,18 +1125,19 @@ function updateCalcCheckbox(cb) {
     const name = cb.getAttribute('data-name');
     const price = parseInt(cb.value);
     const isPer = cb.getAttribute('data-is-per') === 'true';
+    const isMonthly = cb.getAttribute('data-is-monthly') === 'true';
     const box = document.getElementById(`box_${cb.id}`);
 
     if(cb.checked) {
         let qty = 1;
-        if(isPer) {
+        if(isPer || isMonthly) {
             document.getElementById(`qtywrap_${cb.id}`).classList.add('show');
             box.classList.add('has-qty');
             qty = parseInt(document.getElementById(`qty_${cb.id}`).value) || 1;
         }
-        selectedItems.set(name, { price: price, qty: qty, id: cb.id });
+        selectedItems.set(name, { price: price, qty: qty, id: cb.id, isMonthly: isMonthly });
     } else {
-        if(isPer) {
+        if(isPer || isMonthly) {
             document.getElementById(`qtywrap_${cb.id}`).classList.remove('show');
             box.classList.remove('has-qty');
         }
@@ -927,7 +1170,8 @@ function updateSummary() {
         total += itemTotal;
         if(data.price === 0) hasConsult = true;
         const priceStr = data.price === 0 ? '별도 상담' : formatPriceStr(itemTotal) + '원';
-        const nDisp = data.qty > 1 ? `${name} <span style="color:#74c0fc;">(x${data.qty}개)</span>` : name;
+        const unit = data.isMonthly ? '개월' : '개';
+        const nDisp = data.qty > 1 ? `${name} <span style="color:#74c0fc;">(x${data.qty}${unit})</span>` : name;
         const li = document.createElement('li');
         li.innerHTML = `<span>${nDisp}</span> <span>${priceStr}</span>`;
         list.appendChild(li);
@@ -1000,7 +1244,8 @@ function copyEstimate(btnElement) {
         total += itemTotal;
         if(data.price === 0) hasConsult = true;
         const priceStr = data.price === 0 ? '별도 상담' : formatPriceStr(itemTotal) + '원';
-        text += `- ${name}${data.qty > 1 ? ` (x${data.qty}개)` : ''} : ${priceStr}\n`;
+        const unit = data.isMonthly ? '개월' : '개';
+        text += `- ${name}${data.qty > 1 ? ` (x${data.qty}${unit})` : ''} : ${priceStr}\n`;
     });
     text += "\n----------------------\n";
     text += `예상 총액 : ${formatPriceStr(total)}원${hasConsult ? ' + α' : ''}\n`;
