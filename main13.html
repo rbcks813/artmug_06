@@ -59,37 +59,41 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
 .price-toggle-header.collapsed{border-radius:calc(var(--radius) - 1px);border-bottom:none}
 .price-toggle-header .toggle-arrow{
   margin-left:auto;
-  font-size:22px !important;
-  color:rgba(255,255,255,0.95) !important;
-  font-weight:700 !important;
+  font-size:20px;color:rgba(255,255,255,0.95);
+  font-weight:700;
   transition:transform 0.35s ease;
-  flex-shrink:0;
-  line-height:1;
-  display:inline-block;
-  width:22px;
-  text-align:center;
+  flex-shrink:0;line-height:1;
 }
 .price-toggle-header.collapsed .toggle-arrow{transform:rotate(-90deg)}
 .price-body-wrap{overflow:hidden;transition:max-height 0.45s ease,opacity 0.3s ease;max-height:3000px;opacity:1}
 .price-body-wrap.collapsed{max-height:0;opacity:0}
 
-/* 레이어 쌓임 — price section 감싸는 wrapper */
-.price-stack-wrap{position:relative}
-.price-layer{
+/* 접혔을 때 레이어 쌓임 효과 — 2겹, section 아래로 튀어나옴 */
+#price{position:relative;transition:margin-bottom 0.35s ease}
+#price.stacked{margin-bottom:42px}  /* 레이어 공간 확보 */
+#price::after,#price::before{
+  content:'';
   position:absolute;
-  left:50%;top:0;
-  height:54px;
+  left:0;right:0;top:0;
+  height:100%;
   background:#AED9FE;
   border-radius:var(--radius);
   border:1.5px solid var(--border);
-  pointer-events:none;
+  z-index:-1;
   opacity:0;
   transition:opacity 0.35s ease, transform 0.35s ease;
+  transform:translateY(0);
 }
-.price-layer-1{width:94%;transform:translate(-50%,0px);z-index:-1}
-.price-layer-2{width:88%;transform:translate(-50%,0px);z-index:-2;filter:brightness(0.97)}
-.price-stack-wrap.stacked .price-layer-1{opacity:1;transform:translate(-50%,8px)}
-.price-stack-wrap.stacked .price-layer-2{opacity:0.6;transform:translate(-50%,14px)}
+#price::after{transform:translateY(0) scaleX(0.94)}
+#price::before{transform:translateY(0) scaleX(0.88);filter:brightness(0.97)}
+#price.stacked::after{
+  opacity:1;
+  transform:translateY(5.3px) scaleX(0.97);
+}
+#price.stacked::before{
+  opacity:0.6;
+  transform:translateY(9px) scaleX(0.94);
+}
 
 /* ===== PROFILE — 세로 중앙 정렬 ===== */
 .profile-center{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px}
@@ -443,10 +447,7 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
 </section>
 
 <!-- ===== 가격 안내 ===== -->
-<div class="price-stack-wrap stacked">
-  <div class="price-layer price-layer-2"></div>
-  <div class="price-layer price-layer-1"></div>
-<section class="section" id="price">
+<section class="section stacked" id="price">
   <div class="section-header price-toggle-header collapsed" id="price-toggle" onclick="togglePrice()">
     <div class="icon">✦</div>
     <span class="section-title">가격 안내</span>
@@ -494,7 +495,7 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
   </div>
   </div><!-- /price-body-wrap -->
 </section>
-</div><!-- /price-stack-wrap -->
+
 
 <div id="portfolio">
 
@@ -1313,12 +1314,12 @@ window.toggleFaq=function(btn){
 window.togglePrice=function(){
   var header=document.getElementById('price-toggle');
   var body=document.getElementById('price-body-wrap');
-  var wrapper=document.querySelector('.price-stack-wrap');
+  var section=document.getElementById('price');
   if(!header||!body) return;
   var isCollapsed=body.classList.contains('collapsed');
   body.classList.toggle('collapsed',!isCollapsed);
   header.classList.toggle('collapsed',!isCollapsed);
-  if(wrapper) wrapper.classList.toggle('stacked',!isCollapsed);
+  section.classList.toggle('stacked',!isCollapsed);
 };
 
 /* ===== 유틸 ===== */
@@ -1362,6 +1363,8 @@ fetchCSV(COLLAB_URL,function(err,rows){
 
 /* ===== 높이 자동 조절 (증가 + 감소 모두 대응) ===== */
 function sendHeight(){
+  /* scrollHeight는 줄어들 때 이전 값에 고정되므로,
+     html 높이를 1px로 축소 후 실제 콘텐츠 높이를 측정해 정확한 값을 얻음 */
   var htmlEl=document.documentElement;
   var prevOverflow=htmlEl.style.overflow;
   htmlEl.style.overflow='hidden';
@@ -1369,87 +1372,34 @@ function sendHeight(){
   htmlEl.style.overflow=prevOverflow;
   try{window.parent.postMessage({type:'resize',height:Math.ceil(h)},'*');}catch(e){}
 }
+
 if(window.ResizeObserver){
   var _ro=new ResizeObserver(function(){sendHeight();});
   _ro.observe(document.body);
-}else{setInterval(sendHeight,100);}
+} else {
+  setInterval(sendHeight,100);
+}
 sendHeight();
 window.addEventListener('load',sendHeight);
 
-/* ===== 네비게이션 ===== */
-/* 메뉴에서 클릭할 섹션 ID 목록 */
-var NAV_IDS={
-  'artist'   :'artist',
-  'process'  :'process',
-  'price'    :'price',
-  'portfolio':'virtual',   /* portfolio → 버츄얼 포트폴리오 */
-  'virtual'  :'virtual',
-  'illust'   :'illust',
-  'sample'   :'sample',
-  'collab'   :'collab',
-  'apply'    :'apply',
-  'faq'      :'faq'
-};
-
-/* 실제 스크롤 실행 */
+/* ===== 커스텀 메뉴 네비게이션 ===== */
+var NAV_IDS=['artist','process','price','collab','portfolio','virtual','illust','sample','apply','faq'];
 function scrollToSection(id){
   if(!id) return;
-  /* alias 처리 */
-  var target=NAV_IDS[id]||id;
-  var el=document.getElementById(target);
-  if(!el) return;
-  /* iframe 안에서 최상단으로 스크롤 */
+  var el=document.getElementById(id);if(!el) return;
   el.scrollIntoView({behavior:'smooth',block:'start'});
-  /* 부모 페이지에도 스크롤 위치 전달 (부모가 iframe offsetTop을 더해서 처리) */
-  try{
-    var offsetTop=el.getBoundingClientRect().top+window.pageYOffset;
-    window.parent.postMessage({
-      type:'scrollTo',
-      id:target,
-      offsetTop:offsetTop
-    },'*');
-  }catch(e){}
+  try{var top=el.getBoundingClientRect().top+window.pageYOffset;window.parent.postMessage({type:'scrollTo',id:id,offsetTop:top},'*');}catch(e){}
 }
-
-/* 부모 → iframe postMessage 수신
-   지원 포맷:
-   1. {type:'scrollTo', id:'artist'}
-   2. {type:'navTo', hash:'#artist'} or {type:'navTo', id:'artist'}
-   3. {type:'nav', section:'artist'}
-   4. 문자열 'artist' 또는 '#artist'
-*/
 window.addEventListener('message',function(e){
-  if(!e||!e.data) return;
-  var d=e.data;
-  /* 문자열로 바로 보낸 경우 */
-  if(typeof d==='string'){
-    scrollToSection(d.replace(/^#/,''));
-    return;
-  }
-  /* 객체 형태 */
-  var id='';
-  if(d.type==='scrollTo')  id=d.id||'';
-  else if(d.type==='navTo') id=(d.id||d.hash||'').replace(/^#/,'');
-  else if(d.type==='nav')   id=(d.section||d.id||d.hash||'').replace(/^#/,'');
-  /* type 없이 id/section/hash만 있는 경우도 처리 */
-  else id=(d.id||d.section||d.hash||'').replace(/^#/,'');
-  if(id) scrollToSection(id);
+  if(!e.data) return;
+  if(e.data.type==='scrollTo'&&e.data.id) scrollToSection(e.data.id);
+  if(e.data.type==='navTo'&&e.data.hash) scrollToSection(e.data.hash.replace('#',''));
 });
-
-/* URL 해시로 직접 접근하는 경우 (#artist 등) */
-function handleHash(){
-  var h=location.hash.replace('#','');
-  if(h) scrollToSection(h);
-}
+function handleHash(){var h=location.hash.replace('#','');if(h&&NAV_IDS.indexOf(h)>-1)scrollToSection(h);}
 window.addEventListener('hashchange',handleHash);
 handleHash();
-
-/* 외부에서 직접 호출 가능하도록 전역 노출 */
-window.commissionNavIds=Object.keys(NAV_IDS);
+window.commissionNavIds=NAV_IDS;
 window.commissionScrollTo=scrollToSection;
-
-/* 준비 완료 신호 — 부모 페이지가 iframe이 준비됐는지 감지할 수 있도록 */
-try{window.parent.postMessage({type:'iframeReady',ids:Object.keys(NAV_IDS)},'*');}catch(e){}
 
 })();
 </script>
