@@ -54,185 +54,222 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
 .section-title{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
 .section-body{padding:24px 26px}
 
-/* ===== HERO ===== */
-.hero{background:linear-gradient(135deg,var(--main) 0%,#D4EEFF 55%,var(--accent-light) 100%);border-radius:var(--radius);padding:48px 32px 40px;margin-bottom:32px;text-align:center;position:relative;overflow:hidden;border:1.5px solid var(--border);box-shadow:var(--shadow)}
-.hero::before{content:'';position:absolute;top:-70px;right:-70px;width:220px;height:220px;background:rgba(255,184,212,0.22);border-radius:50%;pointer-events:none}
-.hero::after{content:'';position:absolute;bottom:-50px;left:-50px;width:180px;height:180px;background:rgba(190,225,255,0.28);border-radius:50%;pointer-events:none}
-.hero-tag{display:inline-block;background:rgba(255,255,255,0.75);color:var(--main-dark);font-size:11px;font-weight:700;padding:5px 16px;border-radius:20px;margin-bottom:16px;letter-spacing:1.5px;border:1px solid rgba(74,159,221,0.3);position:relative;z-index:1}
-.hero h1{font-size:30px;font-weight:800;color:var(--text);line-height:1.3;margin-bottom:10px;letter-spacing:-0.5px;position:relative;z-index:1}
-.hero-sub{font-size:14px;color:var(--text-sub);position:relative;z-index:1}
-.hero-status{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.88);border:1px solid var(--border);border-radius:20px;padding:7px 18px;font-size:13px;font-weight:600;color:var(--main-dark);margin-top:20px;position:relative;z-index:1}
-.dot{width:8px;height:8px;border-radius:50%;background:#4DC87A;flex-shrink:0;animation:blink 1.6s ease-in-out infinite}
-@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
-
-/* ===== PROFILE ===== */
-.profile-grid{display:grid;grid-template-columns:130px 1fr;gap:22px;align-items:start}
-.profile-avatar{width:130px;height:130px;border-radius:50%;border:4px solid var(--main);background:var(--main-light);display:flex;align-items:center;justify-content:center;font-size:46px;overflow:hidden;flex-shrink:0}
-.profile-name{font-size:21px;font-weight:800;margin-bottom:3px}
-.profile-handle{font-size:13px;color:var(--main-dark);font-weight:500;margin-bottom:11px}
-.profile-desc{font-size:13px;color:var(--text-sub);line-height:1.85;margin-bottom:13px}
-.tag-row{display:flex;flex-wrap:wrap;gap:6px}
+/* ===== PROFILE — 세로 중앙 정렬 ===== */
+.profile-center{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px}
+.profile-avatar{
+  width:120px;height:120px;
+  border-radius:20px;
+  border:3px solid var(--main);
+  background:var(--main-light);
+  display:flex;align-items:center;justify-content:center;
+  font-size:46px;overflow:hidden;flex-shrink:0;
+  margin-bottom:6px;
+}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.profile-name{font-size:28px;font-weight:800;color:var(--text);line-height:1.2;margin-top:0}
+.profile-handle{font-size:13px;color:var(--main-dark);font-weight:500;margin-top:0}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:4px}
 .tag{background:var(--main-light);color:var(--main-dark);font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;border:1px solid var(--border);line-height:1.4}
 .tag.pink{background:var(--accent-light);color:#C05A7A;border-color:#FFD6E7}
+.profile-desc{font-size:13px;color:var(--text-sub);line-height:1.85;margin-top:6px;text-align:center;max-width:480px}
 
-/* ===== COLLAB CARDS ===== */
-.collab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
-.collab-card{border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--card);transition:box-shadow 0.2s,border-color 0.2s;display:flex;flex-direction:column}
-.collab-card:hover{box-shadow:var(--shadow-up);border-color:var(--main-mid)}
-.collab-banner{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,var(--main-light),var(--main));display:flex;align-items:center;justify-content:center;font-size:36px;overflow:hidden;flex-shrink:0}
-.collab-banner img{width:100%;height:100%;object-fit:cover;display:block}
-.collab-body{padding:14px 16px;display:flex;flex-direction:column;gap:4px;flex:1}
-.collab-name{font-size:15px;font-weight:700;color:var(--text)}
-.collab-role{font-size:12px;color:var(--text-sub);line-height:1.6;flex:1}
-.collab-btn{display:block;margin-top:12px;text-align:center;background:var(--main-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:8px 0;font-family:'Paperozi',sans-serif;font-size:12px;font-weight:700;color:var(--main-dark);text-decoration:none;transition:background 0.18s,color 0.18s,border-color 0.18s}
-.collab-btn:hover{background:var(--main);color:var(--text);border-color:var(--main-dark)}
-.collab-loading{text-align:center;padding:32px;color:var(--text-light);font-size:13px}
+/* ===== PROCESS — 가로 배치 ===== */
+.process-flow{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  justify-content:center;
+}
+.process-pill{
+  background:var(--main-light);
+  border:1.5px solid var(--border);
+  border-radius:30px;
+  padding:8px 18px;
+  font-size:13px;font-weight:600;color:var(--text);
+  white-space:nowrap;
+}
+.process-arrow{
+  font-size:16px;color:var(--main-mid);font-weight:700;flex-shrink:0;
+}
+.process-notes{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.process-note{
+  padding:11px 16px;
+  border-radius:var(--radius-sm);
+  font-size:13px;line-height:1.75;
+}
+.process-note.warn{background:var(--warn-bg);border:1px solid var(--warn-border);color:var(--warn-text)}
+.process-note.info{background:var(--main-light);border:1px solid var(--border);color:var(--text-sub)}
 
-/* ===== PROCESS ===== */
-.process-steps{display:flex;flex-direction:column}
-.process-step{display:grid;grid-template-columns:52px 1fr}
-.step-left{display:flex;flex-direction:column;align-items:center;padding-top:2px}
-.step-num{width:34px;height:34px;border-radius:50%;background:var(--main);color:var(--text);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2.5px solid var(--card);box-shadow:0 0 0 2px var(--main);position:relative;z-index:1}
-.step-line{flex:1;width:2px;background:var(--border);margin:5px 0;min-height:20px}
-.process-step:last-child .step-line{display:none}
-.step-content{padding:2px 0 22px}
-.step-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
-.step-desc{font-size:13px;color:var(--text-sub);line-height:1.75}
-.step-badge{display:inline-block;background:var(--accent-light);color:#C05A7A;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin-top:7px}
-.process-note{margin-top:16px;padding:13px 16px;background:var(--main-light);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text-sub);line-height:1.8}
-
-/* ===== PRICE ===== */
-.price-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
-.ptab{background:var(--main-light);border:1.5px solid var(--border);border-radius:8px;padding:7px 18px;font-family:'Paperozi',sans-serif;font-size:13px;font-weight:600;color:var(--text-sub);cursor:pointer;transition:all 0.18s}
-.ptab:hover{background:var(--main);color:var(--text);border-color:var(--main)}
-.ptab.active{background:var(--main);color:var(--text);border-color:var(--main-dark)}
-.price-panel{display:none}
-.price-panel.active{display:block}
-
-.price-cards{display:flex;flex-direction:column;gap:10px}
-.price-card{border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;display:flex;align-items:center;gap:14px;background:var(--card);transition:border-color 0.18s,background 0.18s;position:relative}
-.price-card:hover{border-color:var(--main-mid);background:var(--main-light)}
-.price-card.best{border-color:var(--main-dark);background:var(--main-light)}
-.price-card-badge{position:absolute;top:-10px;right:14px;background:var(--main-dark);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.5px}
-.price-card-badge.recommend-badge{background:#FFB8D4;color:#8B2250}
-.price-card-name{flex:1;font-size:14px;font-weight:600;color:var(--text);line-height:1.5}
-.price-card-price{font-size:16px;font-weight:800;color:var(--main-dark);white-space:nowrap}
-.price-note{margin-top:12px;padding:10px 14px;background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:var(--radius-sm);font-size:12px;color:var(--warn-text);line-height:1.75}
-.price-loading{text-align:center;padding:32px;color:var(--text-light);font-size:13px}
+/* ===== PRICE — 탭 없음, 카테고리별 표 ===== */
+.price-cat{margin-bottom:28px}
+.price-cat:last-child{margin-bottom:0}
+.price-cat-title{
+  font-size:13px;font-weight:700;color:var(--text);
+  padding:7px 14px;
+  background:var(--main-light);
+  border-left:4px solid var(--main-dark);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  margin-bottom:10px;
+}
+.price-tbl{width:100%;border-collapse:collapse;font-size:13px}
+.price-tbl thead{display:none}
+.price-tbl tbody tr{border-bottom:2px dashed var(--border);transition:background 0.12s}
+.price-tbl tbody tr:last-child{border-bottom:none}
+.price-tbl tbody tr:hover{background:var(--main-light)}
+.price-tbl td{padding:10px 14px;vertical-align:middle;color:var(--text-sub)}
+.price-tbl td:first-child{font-weight:600;color:var(--text)}
+.price-tbl td:last-child{text-align:right;font-weight:700;color:var(--main-dark);white-space:nowrap}
+.price-tbl-wrap{border-radius:var(--radius-sm);border:1.5px solid var(--border);overflow:hidden}
+.price-best{background:var(--main-light)!important}
+.price-best td:first-child::after{
+  content:'✦ BEST';
+  display:inline-block;margin-left:8px;
+  font-size:10px;font-weight:700;
+  background:var(--main-dark);color:#fff;
+  padding:2px 8px;border-radius:20px;vertical-align:middle;
+}
+.price-note-small{font-size:12px;color:var(--warn-text);margin-top:8px;padding:8px 12px;background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:var(--radius-sm);line-height:1.7}
 
 /* 사용권 표 */
-.license-table-wrap{overflow-x:auto;border-radius:var(--radius-sm);border:1.5px solid var(--border);margin-top:14px}
+.license-table-wrap{overflow-x:auto;border-radius:var(--radius-sm);border:1.5px solid var(--border);margin-top:0}
 .license-table{width:100%;border-collapse:collapse;font-size:12px;min-width:480px}
 .license-table th,.license-table td{padding:9px 11px;text-align:center;border-bottom:1px solid var(--main-light);border-right:1px solid var(--main-light)}
 .license-table th:last-child,.license-table td:last-child{border-right:none}
 .license-table tbody tr:last-child td{border-bottom:none}
 .license-table thead th{background:var(--main-light);font-weight:700;color:var(--main-dark)}
 .license-table tbody td:first-child{font-weight:600;color:var(--text);text-align:left;background:#FAFCFF}
-.lc-o{color:#4DC87A;font-weight:700;font-size:14px}
+.lc-o{color:var(--main-dark);font-weight:700;font-size:14px}
 .lc-x{color:#E05A7A;font-weight:700;font-size:14px}
 .lc-partial{color:var(--main-dark);font-size:11px;font-weight:600}
 .license-note{font-size:11px;color:var(--text-light);margin-top:10px;line-height:1.75}
+.price-loading{text-align:center;padding:32px;color:var(--text-light);font-size:13px}
+
+/* ===== COLLAB ===== */
+.collab-divider{border:none;border-top:2.5px dashed var(--border);margin:20px 0}
+.collab-cat-title{
+  font-size:13px;font-weight:700;color:var(--text);
+  padding:7px 14px;
+  background:var(--main-light);
+  border-left:4px solid var(--main-dark);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  margin-bottom:12px;
+}
+.collab-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.collab-card{border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--card);transition:box-shadow 0.2s,border-color 0.2s;display:flex;flex-direction:column}
+.collab-card:hover{box-shadow:var(--shadow-up);border-color:var(--main-mid)}
+/* collab-banner: 패딩 트릭으로 16:9 고정 — iframe/img 모두 안정적으로 채움 */
+.collab-banner{
+  width:100%;
+  position:relative;
+  padding-top:56.25%;   /* 16:9 */
+  background:linear-gradient(135deg,var(--main-light),var(--main));
+  overflow:hidden;
+  flex-shrink:0;
+}
+/* 이모지 폴백 — 중앙 정렬 */
+.collab-banner-inner{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;
+}
+.collab-banner img{
+  position:absolute;top:0;left:0;
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+/* 유튜브 썸네일 래퍼 — 클릭 시 iframe으로 교체 */
+.collab-banner-yt{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  display:block;cursor:pointer;
+}
+.collab-banner-yt img{
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+/* 재생 버튼 오버레이 */
+.collab-banner-yt::after{
+  content:'';
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:48px;height:48px;
+  background:rgba(0,0,0,0.72) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M8 5v14l11-7z'/%3E%3C/svg%3E") center/60% no-repeat;
+  border-radius:50%;
+  transition:background-color 0.18s,transform 0.18s;
+  pointer-events:none;
+}
+.collab-banner-yt:hover::after{
+  background-color:rgba(204,0,0,0.92);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M8 5v14l11-7z'/%3E%3C/svg%3E");
+  background-position:center;background-size:60%;background-repeat:no-repeat;
+  transform:translate(-50%,-50%) scale(1.1);
+}
+/* 재생 중 iframe */
+.collab-banner iframe{
+  position:absolute;top:0;left:0;
+  width:100%;height:100%;border:none;display:block;
+}
+.collab-body{padding:11px 12px;display:flex;flex-direction:column;gap:3px;flex:1}
+.collab-name{font-size:13px;font-weight:700;color:var(--text)}
+.collab-desc{font-size:11px;color:var(--text-sub);line-height:1.55;flex:1}
+.collab-btn{display:block;margin-top:9px;text-align:center;background:var(--main-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:6px 0;font-family:'Paperozi',sans-serif;font-size:11px;font-weight:700;color:var(--main-dark);text-decoration:none;transition:background 0.18s,color 0.18s,border-color 0.18s}
+.collab-btn:hover{background:var(--main);color:var(--text);border-color:var(--main-dark)}
+.collab-btn.yt{background:#FFF0F0;border-color:#FFCDD2;color:#C62828}
+.collab-btn.yt:hover{background:#C62828;color:#fff;border-color:#C62828}
+.collab-btns{display:flex;gap:5px;margin-top:9px}
+.collab-btns .collab-btn{margin-top:0;flex:1}
+.collab-loading{color:var(--text-light);font-size:13px;padding:8px 0}
 
 /* ===== SLIDER ===== */
 .slider-outer{position:relative}
-
-/* slider-clip: 16:9 패딩 트릭 + overflow:visible(버튼이 밖으로 나올 수 있게)
-   이미지 클리핑은 inner-clip이 담당 */
-.slider-clip{
-  position:relative;
-  width:100%;
-  padding-top:56.25%;
-}
-
-/* 실제 overflow:hidden 클리핑 레이어 */
-.slider-inner{
-  position:absolute;
-  top:0;left:0;right:0;bottom:0;
-  border-radius:var(--radius-sm);
-  overflow:hidden;
-}
-
-/* 트랙 */
-.slider-track{
-  position:absolute;
-  top:0;left:0;
-  width:100%;height:100%;
-  display:flex;
-  transition:transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
-  will-change:transform;
-}
-
-/* 각 슬라이드 */
-.slide-item{
-  min-width:100%;
-  width:100%;
-  height:100%;
-  background:var(--main-light);
-  display:flex;align-items:center;justify-content:center;
-  position:relative;
-  flex-shrink:0;
-}
+.slider-clip{position:relative;width:100%;padding-top:56.25%}
+.slider-inner{position:absolute;top:0;left:0;right:0;bottom:0;border-radius:var(--radius-sm);overflow:hidden}
+.slider-track{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;transition:transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform}
+.slide-item{min-width:100%;width:100%;height:100%;background:var(--main-light);display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0}
 .slide-item img{width:100%;height:100%;object-fit:contain;display:block}
-
 .slide-placeholder{display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--text-light);font-size:13px;font-weight:500}
 .slide-placeholder .ph-icon{font-size:38px;opacity:0.45;line-height:1}
-.slide-label{position:absolute;bottom:12px;left:12px;background:rgba(255,255,255,0.90);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:600;color:var(--text);pointer-events:none}
-
-/* 화살표 버튼: slider-clip 기준 absolute
-   clip은 padding-top:56.25%이므로 높이 = 너비 × 0.5625
-   버튼 세로 중앙 = top:50% of clip height = 28.125% of clip width
-   단, clip 자체 height=0(padding trick), position:absolute 자식의 % top은 부모 height 기준
-   → 부모 height=0이면 % 계산 안 됨 → slider-clip에 height 명시 대신 inner와 동급으로 처리
-   해결: 버튼을 slider-inner 안에 두되 z-index로 이미지 위에 오게 함 */
-.slider-btn{
-  position:absolute;
-  top:50%;
-  transform:translateY(-50%);
-  width:36px;height:36px;border-radius:50%;
-  background:rgba(255,255,255,0.95);
-  border:1.5px solid var(--border);
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;line-height:1;
-  z-index:10;
-  color:var(--text);
-  box-shadow:0 2px 8px rgba(0,0,0,0.10);
-  opacity:0;pointer-events:none;
-  transition:opacity 0.22s,background 0.18s,border-color 0.18s;
-}
-/* hover 트리거는 slider-clip(부모) 기준 */
-.slider-clip:hover .slider-btn{opacity:1;pointer-events:auto}
+.slider-btn{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.95);border:1.5px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1;z-index:10;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,0.10);opacity:0;pointer-events:none;transition:opacity 0.22s,background 0.18s,border-color 0.18s}
+.slider-clip:hover .slider-btn,.sample-inner:hover .slider-btn{opacity:1;pointer-events:auto}
 .slider-btn:hover{background:var(--main);border-color:var(--main-dark)}
 .slider-btn.prev{left:10px}
 .slider-btn.next{right:10px}
-
 .slider-dots{display:flex;justify-content:center;gap:6px;margin-top:12px}
 .slider-dot{width:8px;height:8px;border-radius:50%;background:var(--border);cursor:pointer;transition:background 0.18s,width 0.25s,border-radius 0.25s}
 .slider-dot.active{background:var(--main-dark);width:22px;border-radius:4px}
-
-/* 썸네일: 4:3 고정 + cover */
 .thumb-row{display:flex;gap:8px;margin-top:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
 .thumb-row::-webkit-scrollbar{display:none}
-.thumb{
-  flex-shrink:0;width:80px;height:60px;
-  border-radius:8px;border:2px solid transparent;
-  background:var(--main-light);cursor:pointer;overflow:hidden;
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;color:var(--text-light);
-  transition:border-color 0.18s;font-weight:500;
-}
+.thumb{flex-shrink:0;width:80px;height:60px;border-radius:8px;border:2px solid transparent;background:var(--main-light);cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text-light);transition:border-color 0.18s;font-weight:500}
 .thumb:hover{border-color:var(--main-mid)}
 .thumb.active{border-color:var(--main-dark)}
 .thumb img{width:100%;height:100%;object-fit:cover;display:block}
 
+/* 포트폴리오 내부 카테고리 레이블 */
+.slider-cat-label{font-size:13px;font-weight:700;color:var(--text-sub);padding:4px 0 8px;border-bottom:2.5px dashed var(--border);margin-bottom:10px}
+
+/* 포트폴리오 제목 — slider-outer 아래, slider-dots 위 */
+.slide-text-title{
+  font-size:15px;font-weight:700;color:var(--text);
+  margin-top:10px;
+  margin-bottom:4px;
+  text-align:left;
+  line-height:1.4;
+}
+
+/* ===== 샘플 슬라이더 — 가로 꽉 차게, 비율 5164:2913 ≈ 56.4% ===== */
+.sample-slider-wrap{position:relative;width:100%}
+.sample-clip{
+  position:relative;width:100%;
+  padding-top:56.4%;   /* 2913/5164 × 100 */
+}
+.sample-inner{
+  position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;
+  /* 라운드 없음 — section 좌우 가득 */
+}
+.sample-item{min-width:100%;width:100%;height:100%;background:var(--main-light);display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0}
+.sample-item img{width:100%;height:100%;object-fit:contain;display:block}
+
 /* ===== FORM ===== */
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-grid{display:flex;flex-direction:column;gap:16px}
 .form-field{display:flex;flex-direction:column;gap:6px}
-.form-field.full{grid-column:1/-1}
 .form-label{font-size:13px;font-weight:600;color:var(--text)}
 .form-label .req{color:#E05A7A;margin-left:3px}
 .form-label .hint{font-size:11px;font-weight:400;color:var(--text-light);display:block;margin-top:2px}
-
 .form-input,.form-select,.form-textarea{font-family:'Paperozi',sans-serif;font-size:14px;font-weight:400;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;background:var(--card);color:var(--text);transition:border-color 0.18s,box-shadow 0.18s;outline:none;width:100%}
 .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--main-dark);box-shadow:0 0 0 3px rgba(140,200,245,0.25)}
 .form-input::placeholder,.form-textarea::placeholder{color:var(--text-light)}
@@ -245,31 +282,23 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
 .form-textarea::-webkit-scrollbar-thumb{background:var(--main-mid);border-radius:4px}
 .form-select{cursor:pointer;appearance:auto}
 
-/* 드롭다운형 단일 선택 */
-.select-field{position:relative}
-.select-field select{width:100%;appearance:auto;-webkit-appearance:auto}
-
 /* 토글 2택 */
 .toggle-group{display:flex;gap:8px;margin-top:4px}
-.toggle-item{
-  flex:1;display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:600;color:var(--text-sub);cursor:pointer;
-  padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);
-  background:var(--card);transition:all 0.18s;user-select:none;text-align:center;min-width:0;
-  position:relative;
-}
+.toggle-item{flex:1;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--text-sub);cursor:pointer;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--card);transition:all 0.18s;user-select:none;text-align:center;min-width:0;position:relative}
 .toggle-item:hover{border-color:var(--main-mid);background:var(--main-light)}
 .toggle-item.checked{border-color:var(--main-dark);background:var(--main);color:var(--text)}
-/* input은 시각적으로 숨기되 크기 0으로 유지 (완전 display:none 금지) */
-.toggle-item input[type=radio]{
-  position:absolute;opacity:0;width:0;height:0;pointer-events:none;
-}
-
+.toggle-item input[type=radio]{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
 .warn-inline{font-size:12px;color:#C05A7A;margin-top:3px;line-height:1.6}
 
-/* ===== 견적 계산기 (신청 양식 안) ===== */
+/* 타작가 텍스트박스 */
+.other-rigger-wrap{margin-top:8px;display:none}
+.other-rigger-wrap.show{display:block}
+
+/* ===== 견적 계산기 ===== */
 .calc-section{margin-top:6px}
 .calc-note{font-size:12px;color:var(--text-light);margin-bottom:10px;line-height:1.7}
+.calc-cat-label{font-size:12px;font-weight:700;color:var(--text-sub);letter-spacing:0.5px;margin:12px 0 6px}
+.calc-cat-label:first-child{margin-top:0}
 .calc-items{display:flex;flex-direction:column;gap:7px}
 .calc-item{display:flex;align-items:center;gap:10px;padding:9px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:13px;color:var(--text-sub);transition:all 0.18s;user-select:none;background:var(--card)}
 .calc-item:hover{border-color:var(--main-mid);background:var(--main-light)}
@@ -279,7 +308,7 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
 .calc-item .ci-note{font-size:11px;color:#C05A7A;font-weight:500}
 .calc-item .ci-price{font-weight:700;color:var(--main-dark);font-size:13px;white-space:nowrap}
 
-/* ===== 견적 요약 박스 ===== */
+/* ===== 견적 박스 ===== */
 .estimate-box{background:var(--main-light);border:2px solid var(--main-dark);border-radius:var(--radius);padding:18px 20px;margin-top:18px}
 .estimate-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .estimate-rows{display:flex;flex-direction:column;gap:6px;min-height:20px}
@@ -287,14 +316,14 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
 .est-row .e-label{color:var(--text-sub);flex-shrink:0}
 .est-row .e-val{font-weight:700;color:var(--text);text-align:right}
 .est-empty{font-size:13px;color:var(--text-light)}
-.estimate-divider{border:none;border-top:1.5px dashed var(--main-mid);margin:12px 0}
+.estimate-divider{border:none;border-top:2.5px dashed var(--main-mid);margin:12px 0}
 .estimate-total{display:flex;justify-content:space-between;align-items:center}
 .total-label{font-size:14px;font-weight:700;color:var(--text)}
 .total-val{font-size:22px;font-weight:800;color:var(--main-dark)}
 
-/* 섹션 구분선 */
-.form-divider{border:none;border-top:1.5px dashed var(--border);margin:22px 0}
-.form-section-label{font-size:12px;font-weight:700;color:var(--text-light);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+/* 섹션 라벨 */
+.form-section-label{font-size:13px;font-weight:700;color:var(--text);padding:7px 14px;background:var(--main-light);border-left:4px solid var(--main-dark);border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin-bottom:14px}
+.form-divider{border:none;border-top:2.5px dashed var(--border);margin:22px 0}
 
 /* ===== 복사 버튼 + 말풍선 ===== */
 .agree-section{margin-top:20px}
@@ -303,26 +332,9 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
 .agree-box input[type=checkbox]{width:17px;height:17px;accent-color:var(--main-dark);cursor:pointer;flex-shrink:0;margin-top:3px}
 .agree-text{font-size:13px;color:var(--text-sub);line-height:1.65}
 .agree-text strong{color:var(--text);font-weight:600}
-
-/* 말풍선 버튼 래퍼 */
 .btn-wrap{position:relative;margin-top:14px}
-.btn-tooltip{
-  position:absolute;
-  bottom:calc(100% + 8px);
-  left:50%;transform:translateX(-50%);
-  background:var(--text);color:#fff;
-  font-size:12px;font-weight:500;
-  padding:6px 14px;border-radius:8px;
-  white-space:nowrap;
-  opacity:0;pointer-events:none;
-  transition:opacity 0.2s;
-  z-index:20;
-}
-.btn-tooltip::after{
-  content:'';
-  position:absolute;top:100%;left:50%;transform:translateX(-50%);
-  border:5px solid transparent;border-top-color:var(--text);
-}
+.btn-tooltip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--text);color:#fff;font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:20}
+.btn-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--text)}
 .btn-tooltip.show{opacity:1}
 .copy-btn{width:100%;background:var(--main-dark);color:#fff;border:none;border-radius:var(--radius-sm);padding:14px;font-family:'Paperozi',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:background 0.18s,transform 0.15s,box-shadow 0.18s;letter-spacing:0.5px}
 .copy-btn:hover:not(:disabled){background:#3A8FCC;transform:translateY(-2px);box-shadow:0 5px 18px rgba(74,159,221,0.35)}
@@ -330,7 +342,7 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
 .copy-btn.copied{background:#4DC87A}
 
 /* ===== FAQ ===== */
-.faq-item{border-bottom:1px solid var(--main-light)}
+.faq-item{border-bottom:2px dashed var(--main-light)}
 .faq-item:last-child{border-bottom:none}
 .faq-q{width:100%;background:none;border:none;padding:15px 0;font-family:'Paperozi',sans-serif;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:10px;text-align:left;transition:color 0.18s}
 .faq-q:hover{color:var(--main-dark)}
@@ -339,46 +351,33 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
 .faq-arrow{font-size:11px;color:var(--text-light);transition:transform 0.28s;flex-shrink:0;line-height:1}
 .faq-q.open .faq-arrow{transform:rotate(180deg);color:var(--main-dark)}
 .faq-a{max-height:0;overflow:hidden;transition:max-height 0.35s ease}
-.faq-a-inner{padding:4px 0 18px 32px;font-size:13px;color:var(--text-sub);line-height:1.9}
+.faq-a-inner{padding:4px 0 18px 32px;font-size:13px;color:var(--text);line-height:1.9}
 .faq-a-inner p{margin-bottom:6px}
 .faq-a-inner p:last-child{margin-bottom:0}
 .faq-a-inner ul{padding-left:16px;margin:6px 0}
 .faq-a-inner ul li{margin-bottom:5px}
 .faq-a-inner strong{color:var(--text)}
-
 .faq-warn{background:var(--warn-bg);border:1.5px solid var(--warn-border);border-radius:var(--radius-sm);padding:13px 16px;margin:0 0 12px;font-size:13px;color:var(--warn-text);line-height:1.85}
 .faq-warn .warn-head{font-size:14px;font-weight:700;color:#6B4C00;display:block;margin-bottom:6px}
 .ai-warn{background:#FFF0F0;border:1.5px solid #FFB3B3;border-radius:var(--radius-sm);padding:13px 16px;margin:0 0 12px;font-size:13px;color:#7A2020;line-height:1.85}
 .ai-warn .warn-head{font-size:14px;font-weight:700;color:#CC0000;display:block;margin-bottom:6px}
-
 .refund-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border)}
 .refund-table th,.refund-table td{padding:9px 12px;border:1px solid var(--border);text-align:center}
 .refund-table th{background:var(--main-light);color:var(--main-dark);font-weight:700}
 .refund-table td:first-child{font-weight:600;color:var(--text);text-align:left}
 
 @media(max-width:540px){
-  .profile-grid{grid-template-columns:1fr;text-align:center}
-  .profile-avatar{margin:0 auto}
-  .tag-row{justify-content:center}
-  .form-grid{grid-template-columns:1fr}
-  .hero h1{font-size:24px}
+  .form-grid{flex-direction:column}
   .section-body{padding:18px 16px}
-  .slider-outer{padding:0 14px;margin:0 -14px}
   .collab-grid{grid-template-columns:1fr 1fr}
   .toggle-group{flex-direction:column}
+  .process-flow{gap:6px}
+  .process-pill{padding:6px 12px;font-size:12px}
 }
 </style>
 </head>
 <body>
 <div class="page-wrap">
-
-<!-- ===== HERO ===== -->
-<div class="hero">
-  <div class="hero-tag">✦ COMMISSION OPEN ✦</div>
-  <h1>양초 일러스트 커미션</h1>
-  <p class="hero-sub">버츄얼 모델 일러스트 · Live2D 리깅 커미션</p>
-  <div class="hero-status"><div class="dot"></div>현재 모집 중</div>
-</div>
 
 <!-- ===== 작가 소개 ===== -->
 <section class="section" id="artist">
@@ -392,43 +391,28 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
 <section class="section" id="process">
   <div class="section-header"><div class="icon">✦</div><span class="section-title">작업 과정</span></div>
   <div class="section-body">
-    <div class="process-steps">
-      <div class="process-step">
-        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
-        <div class="step-content"><div class="step-title">문의 및 상담</div><div class="step-desc">신청 양식 작성 또는 DM으로 커미션 내용을 문의해 주세요. 캐릭터 컨셉, 원하는 타입, 참고 이미지 등을 함께 보내주시면 더욱 정확한 상담이 가능합니다.</div></div>
-      </div>
-      <div class="process-step">
-        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
-        <div class="step-content"><div class="step-title">입금 확인 및 예약 확정</div><div class="step-desc">아트머그 규정 상 전액 입금 후 예약이 확정됩니다. 입금 확인 후 작업 순서에 따라 안내드립니다.</div><div class="step-badge">전액 입금 후 예약 확정</div></div>
-      </div>
-      <div class="process-step">
-        <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
-        <div class="step-content"><div class="step-title">러프 스케치</div><div class="step-desc">전체 구도, 포즈, 캐릭터 배치 등 큰 방향을 잡는 단계입니다. 이 단계에서 수정이 가능하며, 픽스 이후에는 변경이 어렵습니다.</div></div>
-      </div>
-      <div class="process-step">
-        <div class="step-left"><div class="step-num">4</div><div class="step-line"></div></div>
-        <div class="step-content"><div class="step-title">라인 스케치</div><div class="step-desc">러프 확정 후 세부 선화 작업을 진행합니다. 디자인 디테일, 의상 등 세부 요소 피드백이 가능합니다.</div></div>
-      </div>
-      <div class="process-step">
-        <div class="step-left"><div class="step-num">5</div><div class="step-line"></div></div>
-        <div class="step-content"><div class="step-title">컬러 배리에이션</div><div class="step-desc">캐릭터의 색상 방향을 잡는 단계입니다. 메인 컬러 및 전반적인 톤을 확인하고 피드백 주세요.</div></div>
-      </div>
-      <div class="process-step">
-        <div class="step-left"><div class="step-num">6</div><div class="step-line"></div></div>
-        <div class="step-content"><div class="step-title">컬러 러프</div><div class="step-desc">본격적인 채색 작업입니다. 전반적인 색감, 음영 방향 등을 확인합니다. 이 단계 이후의 대규모 수정은 어렵습니다.</div></div>
-      </div>
-      <div class="process-step">
-        <div class="step-left"><div class="step-num">7</div><div class="step-line"></div></div>
-        <div class="step-content"><div class="step-title">최종 수정</div><div class="step-desc">소소한 디테일 보완 및 마지막 조정 단계입니다.</div></div>
-      </div>
-      <div class="process-step">
-        <div class="step-left"><div class="step-num">8</div><div class="step-line"></div></div>
-        <div class="step-content"><div class="step-title">완성 및 납품</div><div class="step-desc">최종 완성본 확인 후 고해상도 파일을 전달드립니다. SNS 업로드 시 작가 태그를 부탁드립니다 🌸</div></div>
-      </div>
+    <div class="process-flow">
+      <div class="process-pill">문의 및 상담</div>
+      <div class="process-arrow">›</div>
+      <div class="process-pill">입금 확인 및 예약 확정</div>
+      <div class="process-arrow">›</div>
+      <div class="process-pill">1차 스케치</div>
+      <div class="process-arrow">›</div>
+      <div class="process-pill">컨펌</div>
+      <div class="process-arrow">›</div>
+      <div class="process-pill">2차 스케치</div>
+      <div class="process-arrow">›</div>
+      <div class="process-pill">컨펌</div>
+      <div class="process-arrow">›</div>
+      <div class="process-pill">컬러러프</div>
+      <div class="process-arrow">›</div>
+      <div class="process-pill">컨펌</div>
+      <div class="process-arrow">›</div>
+      <div class="process-pill">완성</div>
     </div>
-    <div class="process-note">
-      💡 수정은 <strong>최종 작업 전까지 각 단계에서 가능</strong>하며, 이전 단계에서 픽스된 내용은 수정이 불가능합니다.<br>
-      각 단계 픽스 전 충분히 검토 후 확정해 주세요.
+    <div class="process-notes">
+      <div class="process-note warn">⚠ 다음 단계로 넘어간 이후 작업에 대한 수정은 추가금이 발생됩니다. 각 단계에서 충분히 검토 후 말씀해주세요.</div>
+      <div class="process-note info">📌 아트머그 규정 상 전액 입금 후 예약이 확정됩니다.</div>
     </div>
   </div>
 </section>
@@ -437,37 +421,28 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
 <section class="section" id="price">
   <div class="section-header"><div class="icon">✦</div><span class="section-title">가격 안내</span></div>
   <div class="section-body">
-    <div class="price-tabs">
-      <button class="ptab active" onclick="switchPrice('live2d',this)">LIVE2D 일러스트</button>
-      <button class="ptab" onclick="switchPrice('options',this)">추가 옵션</button>
-      <button class="ptab" onclick="switchPrice('asset',this)">에셋 작업</button>
-      <button class="ptab" onclick="switchPrice('license',this)">사용권 안내</button>
+
+    <!-- LIVE2D 일러스트 -->
+    <div class="price-cat">
+      <div class="price-cat-title">파츠분리 일러스트</div>
+      <div id="price-live2d"><div class="price-loading">불러오는 중...</div></div>
     </div>
 
-    <div id="price-live2d" class="price-panel active">
-      <div class="price-loading" id="live2d-loading">가격 정보를 불러오는 중...</div>
+    <!-- 추가 옵션 -->
+    <div class="price-cat">
+      <div class="price-cat-title">추가 옵션 <span style="font-size:11px;font-weight:400;color:var(--text-light)">(아래 금액은 최소 금액입니다)</span></div>
+      <div id="price-options"><div class="price-loading">불러오는 중...</div></div>
     </div>
 
-    <div id="price-options" class="price-panel">
-      <div class="price-loading" id="options-loading">옵션 정보를 불러오는 중...</div>
+    <!-- 에셋 작업 -->
+    <div class="price-cat">
+      <div class="price-cat-title">에셋 작업</div>
+      <div id="price-asset"><div class="price-loading">불러오는 중...</div></div>
     </div>
 
-    <div id="price-asset" class="price-panel">
-      <div class="price-loading" id="asset-loading">에셋 정보를 불러오는 중...</div>
-    </div>
-
-    <div id="price-license" class="price-panel">
-      <p style="font-size:13px;color:var(--text-sub);line-height:1.8;margin-bottom:12px">
-        모델 사용권은 저작권과 별개입니다.<br>
-        아래 항목에 해당되시는 경우 사용권 구매를 권장드립니다.
-      </p>
-      <ul style="font-size:13px;color:var(--text-sub);padding-left:18px;line-height:1.9;margin-bottom:16px">
-        <li>모델을 브랜드화하여 장기적으로 운영하실 분</li>
-        <li>방송 외 수익 구조(멤버십, 후원 리워드 등) 확장 계획이 있으신 분</li>
-        <li>캐릭터 활용 상업 디자인 제작 계획이 있으신 분</li>
-        <li>기업 협업, 외주 작업, 상업 프로젝트에 활용 예정인 분</li>
-        <li>추후 IP 확장을 고려하고 계신 분</li>
-      </ul>
+    <!-- 사용권 안내 -->
+    <div class="price-cat">
+      <div class="price-cat-title">사용권 안내</div>
       <div class="license-table-wrap">
         <table class="license-table">
           <thead><tr><th style="text-align:left">항목</th><th>사용권 미구매</th><th>사용권 구매(개인)</th><th>사용권 구매(법인)</th></tr></thead>
@@ -484,11 +459,9 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
           </tbody>
         </table>
       </div>
-      <p class="license-note">
-        ※ "원본 모델 이미지 활용"은 기존 이미지를 그대로 사용하는 경우에 한합니다.<br>
-        ※ 모델 디자인 기반으로 새롭게 제작하는 일러스트는 2차 창작에 해당합니다.
-      </p>
+      <p class="license-note">※ "원본 모델 이미지 활용"은 기존 이미지를 그대로 사용하는 경우에 한합니다.<br>※ 모델 디자인 기반으로 새롭게 제작하는 일러스트는 2차 창작에 해당합니다.</p>
     </div>
+
   </div>
 </section>
 
@@ -496,20 +469,16 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
 <section class="section" id="collab">
   <div class="section-header"><div class="icon">✦</div><span class="section-title">협업 작가</span></div>
   <div class="section-body">
-    <p style="font-size:13px;color:var(--text-sub);margin-bottom:18px;line-height:1.8">
-      양초 작가와 함께 작업하는 리깅 작가님들입니다.<br>
-      각 작가님의 포트폴리오를 확인하시고 신청 시 선택해 주세요 ♡
-    </p>
-    <div id="collab-grid" class="collab-grid">
+    <div id="collab-grid">
       <div class="collab-loading">협업 작가 정보를 불러오는 중...</div>
     </div>
   </div>
 </section>
 
-<!-- ===== 포트폴리오 (버츄얼 + 일러스트) ===== -->
+<!-- ===== 포트폴리오 ===== -->
 <div id="portfolio">
 
-<!-- ===== 버츄얼 포트폴리오 ===== -->
+<!-- 버츄얼 포트폴리오 -->
 <section class="section" id="virtual">
   <div class="section-header"><div class="icon">✦</div><span class="section-title">버츄얼 포트폴리오</span></div>
   <div class="section-body">
@@ -524,12 +493,13 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
         </div>
       </div>
     </div>
+    <div class="slide-text-title" id="v-slide-title"></div>
     <div class="slider-dots" id="v-dots"></div>
     <div class="thumb-row" id="v-thumbs"></div>
   </div>
 </section>
 
-<!-- ===== 일러스트 포트폴리오 ===== -->
+<!-- 일러스트 포트폴리오 -->
 <section class="section" id="illust">
   <div class="section-header"><div class="icon">✦</div><span class="section-title">일러스트 포트폴리오</span></div>
   <div class="section-body">
@@ -544,6 +514,7 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
         </div>
       </div>
     </div>
+    <div class="slide-text-title" id="i-slide-title"></div>
     <div class="slider-dots" id="i-dots"></div>
     <div class="thumb-row" id="i-thumbs"></div>
   </div>
@@ -551,16 +522,36 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
 
 </div><!-- /#portfolio -->
 
+<!-- ===== 샘플 ===== -->
+<section class="section" id="sample" style="overflow:hidden">
+  <div class="section-header"><div class="icon">✦</div><span class="section-title">샘플</span></div>
+  <div class="section-body" style="padding-left:0;padding-right:0;padding-bottom:0">
+    <div class="sample-slider-wrap">
+      <div class="sample-clip">
+        <div class="sample-inner">
+          <div class="slider-track" id="s-track">
+            <div class="sample-item"><div class="slide-placeholder"><div class="ph-icon">🖼️</div><div>불러오는 중...</div></div></div>
+          </div>
+          <button class="slider-btn prev" id="s-prev" onclick="slide('s',-1)" aria-label="이전">&#8249;</button>
+          <button class="slider-btn next" id="s-next" onclick="slide('s', 1)" aria-label="다음">&#8250;</button>
+        </div>
+      </div>
+    </div>
+    <div class="slider-dots" id="s-dots" style="padding-bottom:16px"></div>
+    <div class="slide-text-title" id="s-slide-title" style="padding:0 26px 16px"></div>
+  </div>
+</section>
+
 <!-- ===== 신청 양식 + 견적 계산기 ===== -->
 <section class="section" id="apply">
   <div class="section-header"><div class="icon">✦</div><span class="section-title">신청 양식 &amp; 견적 계산기</span></div>
   <div class="section-body">
 
-    <!-- 작성 항목 -->
-    <div class="form-section-label">작성 항목</div>
+    <div class="form-section-label">신청 항목</div>
     <div class="form-grid">
 
-      <div class="form-field full">
+      <!-- 1. 신청자명 -->
+      <div class="form-field">
         <label class="form-label" for="f-name">
           1. 신청자명 <span class="req">*</span>
           <span class="hint">리깅작가님께 전달될 파일명과 포트폴리오 모델명으로 사용됩니다</span>
@@ -568,50 +559,43 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
         <input class="form-input" type="text" id="f-name" placeholder="예) 하늘이" oninput="updateEstimate()">
       </div>
 
-      <div class="form-field full">
-        <label class="form-label" for="f-concept">2. 캐릭터 컨셉 <span class="req">*</span></label>
+      <!-- 2. 신청 타입 -->
+      <div class="form-field">
+        <label class="form-label" for="f-type">2. 신청 타입 <span class="req">*</span></label>
+        <select class="form-select" id="f-type" onchange="onTypeChange()">
+          <option value="">불러오는 중...</option>
+        </select>
+      </div>
+
+      <!-- 3. 캐릭터 컨셉 -->
+      <div class="form-field">
+        <label class="form-label" for="f-concept">3. 캐릭터 컨셉 <span class="req">*</span></label>
         <textarea class="form-textarea h-lg" id="f-concept"
           placeholder="성별, 나이, 외모, 메인 컬러와 의상 등 전체적인 컨셉을 자유롭게 적어주세요." oninput="updateEstimate()"></textarea>
       </div>
 
-      <div class="form-field full">
-        <label class="form-label" for="f-rigging">3. 리깅작가님 이름 <span class="req">*</span></label>
-        <select class="form-select" id="f-rigging" onchange="updateEstimate()">
+      <!-- 4. 리깅작가 -->
+      <div class="form-field">
+        <label class="form-label" for="f-rigging">
+          4. 리깅작가님 이름 <span class="req">*</span>
+          <span class="hint">협업 작가 섹션에서 확인하세요. 정하지 못한 경우 미정을 선택해 주세요.</span>
+        </label>
+        <select class="form-select" id="f-rigging" onchange="onRiggingChange()">
           <option value="">선택해주세요</option>
-          <option>리깅작가 A</option>
-          <option>리깅작가 B</option>
-          <option>리깅작가 C</option>
+          <option value="미정">미정</option>
+          <option value="타작가">타작가</option>
         </select>
+        <!-- 타작가 선택 시 나타나는 링크 입력란 -->
+        <div class="other-rigger-wrap" id="other-rigger-wrap">
+          <input class="form-input" type="text" id="f-other-rigger"
+            placeholder="작가님 아트머그 링크 또는 이름을 입력해주세요" oninput="updateEstimate()">
+        </div>
       </div>
 
-      <div class="form-field full">
-        <label class="form-label" for="f-etc">4. 기타 요청사항</label>
-        <textarea class="form-textarea h-md" id="f-etc"
-          placeholder="작가에게 전하고 싶은 말, 참고 링크, 기타 요청 등을 자유롭게 적어주세요 ♡" oninput="updateEstimate()"></textarea>
-      </div>
-
-    </div>
-
-    <hr class="form-divider">
-
-    <!-- 선택 항목 -->
-    <div class="form-section-label">선택 항목</div>
-    <div class="form-grid">
-
-      <div class="form-field full">
-        <label class="form-label" for="f-type">선택 1. 신청 타입 <span class="req">*</span></label>
-        <select class="form-select" id="f-type" onchange="onTypeChange()">
-          <option value="">선택해주세요</option>
-          <option value="SD 전신">SD 전신 — 파츠분리 SD 전신 일러스트 + 표정3종 (베이직)</option>
-          <option value="LD 반신">LD 반신 — 파츠분리 LD 반신 일러스트 + 표정3종+대롱 (흉상 대칭/베이직)</option>
-          <option value="LD 베이직">LD 베이직 — 파츠분리 LD 전신 일러스트 + 표정3종+대롱 (베이직)</option>
-          <option value="LD 고가동">LD 고가동 — 파츠분리 LD 전신 일러스트 + 표정3종+대롱 (프리미엄, 고가동)</option>
-        </select>
-      </div>
-
-      <div class="form-field full">
-        <label class="form-label">선택 2. 모델 상업 사용권 구매 여부 <span class="req">*</span></label>
-        <p class="warn-inline">⚠ 미구매 시 2차 창작, 굿즈 제작, 3D 모델 제작 등에 제약이 있습니다.</p>
+      <!-- 5. 모델 상업 사용권 -->
+      <div class="form-field">
+        <label class="form-label">5. 모델 상업 사용권 구매 여부 <span class="req">*</span></label>
+        <p class="warn-inline">⚠ 미구매 시 2차 창작, 굿즈 제작, 3D 모델 제작 등에 제약이 있습니다.<br>법인 구매의 경우 별도 문의 부탁드립니다.</p>
         <div class="toggle-group" id="license-group" style="margin-top:8px">
           <label class="toggle-item" onclick="selectToggle('license-group','license','미구매')">
             <input type="radio" name="license" value="미구매">미구매
@@ -622,8 +606,9 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
         </div>
       </div>
 
-      <div class="form-field full">
-        <label class="form-label">선택 3. 작업과정 SNS 공개 여부 <span class="req">*</span></label>
+      <!-- 6. SNS 공개 여부 -->
+      <div class="form-field">
+        <label class="form-label">6. 작업과정 SNS 공개 여부 <span class="req">*</span></label>
         <div class="toggle-group" id="sns-group">
           <label class="toggle-item" onclick="selectToggle('sns-group','sns','공개 동의')">
             <input type="radio" name="sns" value="공개 동의">공개 동의
@@ -634,6 +619,13 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
         </div>
       </div>
 
+      <!-- 7. 기타 요청사항 -->
+      <div class="form-field">
+        <label class="form-label" for="f-etc">7. 기타 요청사항</label>
+        <textarea class="form-textarea h-md" id="f-etc"
+          placeholder="작가에게 전하고 싶은 말, 참고 링크, 기타 요청 등을 자유롭게 적어주세요 ♡" oninput="updateEstimate()"></textarea>
+      </div>
+
     </div>
 
     <hr class="form-divider">
@@ -642,17 +634,14 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
     <div class="form-section-label">견적 계산기</div>
     <div class="calc-section">
       <div class="calc-note">
-        추가 옵션 금액은 <strong>최소 금액</strong>입니다.<br>
-        추가 파츠 디자인 문의 시 별도 견적 안내가 가능합니다.<br>
+        추가 옵션 금액은 <strong>최소 금액</strong>입니다. 추가 파츠 디자인 문의 시 별도 견적 안내가 가능합니다.<br>
         신의상 제작 예정이 있다면 <strong style="color:#C05A7A">마네킹 추가가 필수</strong>입니다.
       </div>
-      <div class="calc-items" id="calc-items">
-        <div class="price-loading">옵션 정보를 불러오는 중...</div>
-      </div>
+      <div id="calc-items"><div class="price-loading">옵션 정보를 불러오는 중...</div></div>
     </div>
 
     <!-- 견적 요약 -->
-    <div class="estimate-box" id="estimate-box">
+    <div class="estimate-box">
       <div class="estimate-title">💰 예상 견적</div>
       <div class="estimate-rows" id="est-rows">
         <div class="est-empty">신청 타입을 선택하면 견적이 표시됩니다.</div>
@@ -690,7 +679,6 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
   <div class="section-header"><div class="icon">✦</div><span class="section-title">안내사항 / FAQ</span></div>
   <div class="section-body" style="padding-top:8px;padding-bottom:8px">
 
-    <!-- 1. 저작권 -->
     <div class="faq-item">
       <button type="button" class="faq-q" onclick="toggleFaq(this)">
         <span class="q-icon">Q</span><span class="faq-q-text">저작권은 어떻게 되나요?</span><span class="faq-arrow">▼</span>
@@ -701,7 +689,6 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
       </div></div>
     </div>
 
-    <!-- 2. 사용권 -->
     <div class="faq-item">
       <button type="button" class="faq-q" onclick="toggleFaq(this)">
         <span class="q-icon">Q</span><span class="faq-q-text">사용권과 저작권은 다른가요?</span><span class="faq-arrow">▼</span>
@@ -713,7 +700,6 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
       </div></div>
     </div>
 
-    <!-- 3. 금지 행위 -->
     <div class="faq-item">
       <button type="button" class="faq-q" onclick="toggleFaq(this)">
         <span class="q-icon">Q</span><span class="faq-q-text">금지 행위는 무엇인가요?</span><span class="faq-arrow">▼</span>
@@ -731,7 +717,6 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
       </div></div>
     </div>
 
-    <!-- 4. 포트폴리오 및 공개 -->
     <div class="faq-item">
       <button type="button" class="faq-q" onclick="toggleFaq(this)">
         <span class="q-icon">Q</span><span class="faq-q-text">작업물이 SNS에 공개되나요?</span><span class="faq-arrow">▼</span>
@@ -742,7 +727,6 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
       </div></div>
     </div>
 
-    <!-- 5. 권리 이전 및 양도 -->
     <div class="faq-item">
       <button type="button" class="faq-q" onclick="toggleFaq(this)">
         <span class="q-icon">Q</span><span class="faq-q-text">권리 이전 및 양도는 가능한가요?</span><span class="faq-arrow">▼</span>
@@ -753,38 +737,30 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
       </div></div>
     </div>
 
-    <!-- 6. AI 관련 -->
     <div class="faq-item">
       <button type="button" class="faq-q" onclick="toggleFaq(this)">
         <span class="q-icon">Q</span><span class="faq-q-text">AI 관련 정책은 어떻게 되나요?</span><span class="faq-arrow">▼</span>
       </button>
       <div class="faq-a"><div class="faq-a-inner">
-        <div class="ai-warn">
-          <span class="warn-head">⚠ AI 사용 전면 금지</span>
-          모든 작업물의 전부 또는 일부를 다음과 같은 방식으로 사용하는 것을 <strong>전면 금지</strong>합니다.
-        </div>
+        <p>모든 작업물의 전부 또는 일부를 아래 방식으로 사용하는 것을 <strong>전면 금지</strong>합니다.</p>
         <ul>
           <li>작업물을 AI 학습용 데이터로 사용하는 행위</li>
           <li>생성형 AI 프롬프트 입력·이미지 업로드</li>
           <li>AI를 이용한 디자인 재생성, 스타일 추출, 특징 분석, 유사 이미지 생성</li>
           <li>AI를 이용한 2차이미지, 영상, 모델 생성</li>
         </ul>
-        <p style="margin-top:10px">단, 일반적인 편집 프로그램의 보정 기능, 영상 편집 소프트웨어의 자동 기능, 플랫폼 내에서 발생하는 기술적 저장·캐싱은 허용됩니다.</p>
+        <p style="margin-top:8px">단, 일반적인 편집 프로그램의 보정 기능, 영상 편집 소프트웨어의 자동 기능, 플랫폼 내에서 발생하는 기술적 저장·캐싱은 허용됩니다.</p>
         <p>이를 위반하여 생성된 결과물 또한 무단 2차적 저작물로 간주합니다.</p>
       </div></div>
     </div>
 
-    <!-- 7. 환불 규정 -->
     <div class="faq-item">
       <button type="button" class="faq-q" onclick="toggleFaq(this)">
         <span class="q-icon">Q</span><span class="faq-q-text">환불 규정이 어떻게 되나요?</span><span class="faq-arrow">▼</span>
       </button>
       <div class="faq-a"><div class="faq-a-inner">
-        <div class="faq-warn">
-          <span class="warn-head">⚠ 아트머그 규정 — 전액 입금 후 예약 확정</span>
-          작업 진행 전 의뢰자가 예약 해지할 경우 결제 대금의 <strong>10% 위약금</strong>이 발생합니다.
-        </div>
-        <p><strong>단계별 환불 기준</strong></p>
+        <p>아트머그 규정 상 <strong>전액 입금 후 예약이 확정</strong>됩니다. 작업 진행 전 의뢰자가 예약 해지할 경우 결제 대금의 <strong>10% 위약금</strong>이 발생합니다.</p>
+        <p style="margin-top:8px"><strong>단계별 환불 기준</strong></p>
         <table class="refund-table">
           <thead><tr><th>단계</th><th>환불율</th><th>비고</th></tr></thead>
           <tbody>
@@ -796,7 +772,6 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
       </div></div>
     </div>
 
-    <!-- 8. 위반 시 조치 -->
     <div class="faq-item">
       <button type="button" class="faq-q" onclick="toggleFaq(this)">
         <span class="q-icon">Q</span><span class="faq-q-text">규정을 위반하면 어떻게 되나요?</span><span class="faq-arrow">▼</span>
@@ -816,18 +791,16 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
 (function(){
 'use strict';
 
-/* ============================================================
-   CSV 파싱
-   ============================================================ */
+/* ===== CSV 파싱 ===== */
 function parseCSV(text){
-  var lines = text.trim().split('\n');
-  var headers = splitLine(lines[0]);
+  var lines=text.trim().split('\n');
+  var headers=splitLine(lines[0]);
   return lines.slice(1).map(function(line){
-    var vals = splitLine(line);
-    var obj = {};
-    headers.forEach(function(h,i){ obj[h.trim()]=(vals[i]||'').trim(); });
+    var vals=splitLine(line);
+    var obj={};
+    headers.forEach(function(h,i){obj[h.trim()]=(vals[i]||'').trim();});
     return obj;
-  }).filter(function(r){ return Object.values(r).some(function(v){return v;}); });
+  }).filter(function(r){return Object.values(r).some(function(v){return v;});});
 }
 function splitLine(line){
   var res=[],cur='',inQ=false;
@@ -844,716 +817,567 @@ function fetchCSV(url,cb){
   fetch(url).then(function(r){return r.text();}).then(function(t){cb(null,parseCSV(t));}).catch(function(e){cb(e,null);});
 }
 
-/* ============================================================
-   URL
-   ============================================================ */
-var PRICE_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0OEfiXHpmTGoyiGRMszrgwNVPJP5WPP9ZgpB95glL7yWSkzMDLLvXxJj-nKwxeTmtrDxq2P_ZiLUU/pub?gid=0&single=true&output=csv';
-var PF_URL     = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0OEfiXHpmTGoyiGRMszrgwNVPJP5WPP9ZgpB95glL7yWSkzMDLLvXxJj-nKwxeTmtrDxq2P_ZiLUU/pub?gid=1202357506&single=true&output=csv';
-var COLLAB_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0OEfiXHpmTGoyiGRMszrgwNVPJP5WPP9ZgpB95glL7yWSkzMDLLvXxJj-nKwxeTmtrDxq2P_ZiLUU/pub?gid=1417517491&single=true&output=csv';
-var ARTIST_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0OEfiXHpmTGoyiGRMszrgwNVPJP5WPP9ZgpB95glL7yWSkzMDLLvXxJj-nKwxeTmtrDxq2P_ZiLUU/pub?gid=1256073760&single=true&output=csv';
+/* ===== URLs ===== */
+var PRICE_URL  ='https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0OEfiXHpmTGoyiGRMszrgwNVPJP5WPP9ZgpB95glL7yWSkzMDLLvXxJj-nKwxeTmtrDxq2P_ZiLUU/pub?gid=0&single=true&output=csv';
+var PF_URL     ='https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0OEfiXHpmTGoyiGRMszrgwNVPJP5WPP9ZgpB95glL7yWSkzMDLLvXxJj-nKwxeTmtrDxq2P_ZiLUU/pub?gid=1202357506&single=true&output=csv';
+var COLLAB_URL ='https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0OEfiXHpmTGoyiGRMszrgwNVPJP5WPP9ZgpB95glL7yWSkzMDLLvXxJj-nKwxeTmtrDxq2P_ZiLUU/pub?gid=1417517491&single=true&output=csv';
+var ARTIST_URL ='https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0OEfiXHpmTGoyiGRMszrgwNVPJP5WPP9ZgpB95glL7yWSkzMDLLvXxJj-nKwxeTmtrDxq2P_ZiLUU/pub?gid=1256073760&single=true&output=csv';
 
-/* ============================================================
-   가격 데이터
-   ============================================================ */
-
-/* 타입별 기본 가격 매핑 (구글시트 데이터 기반) */
-var _typePrices = {
-  'SD 전신':  400000,
-  'LD 반신':  500000,
-  'LD 베이직':850000,
-  'LD 고가동':1100000
-};
-var _optionRows = [];   /* 추가옵션 행 */
-var _calcState  = {};   /* key: index, val: price */
+/* ===== 가격 ===== */
+var _typePrices={'SD 전신':400000,'LD 반신':500000,'LD 베이직':850000,'LD 고가동':1100000};
+var _calcState={};
+var _assetState={};
 
 function renderPriceData(rows){
-  var live2d   = rows.filter(function(r){return r['카테고리']==='LIVE2D 일러스트';});
-  var options  = rows.filter(function(r){return r['카테고리']==='추가옵션';});
-  var assets   = rows.filter(function(r){return r['카테고리']==='에셋작업';});
-  _optionRows  = options;
+  var live2d  =rows.filter(function(r){return r['카테고리']==='LIVE2D 일러스트';});
+  var options =rows.filter(function(r){return r['카테고리']==='추가옵션';});
+  var assets  =rows.filter(function(r){return r['카테고리']==='에셋작업';});
 
-  /* LIVE2D 카드 */
-  var lHtml = '<div class="price-cards">';
+  /* _typePrices를 시트 데이터로 동적 갱신 */
+  _typePrices={};
   live2d.forEach(function(r){
-    var badge = r['강조'];
-    var isBest = badge==='베스트';
-    lHtml += '<div class="price-card'+(isBest?' best':'')+'">';
-    if(badge){
-      lHtml += '<div class="price-card-badge'+(isBest?'':' recommend-badge')+'">'+(isBest?'✦ BEST':'✦ '+badge)+'</div>';
-    }
-    lHtml += '<div class="price-card-name">'+escHtml(r['옵션명'])+'</div>';
-    lHtml += '<div class="price-card-price">'+Number(r['가격']).toLocaleString()+'원</div>';
-    lHtml += '</div>';
+    if(r['옵션명']&&r['가격']) _typePrices[r['옵션명']]=Number(r['가격']);
   });
-  lHtml += '</div>';
-  lHtml += '<div class="price-note" style="margin-top:14px">※ 위 가격은 일러스트 작업 기본 금액입니다.<br>신의상 제작 예정이라면 <strong>마네킹 추가가 필수</strong>입니다.</div>';
-  document.getElementById('price-live2d').innerHTML = lHtml;
 
-  /* 추가옵션 카드 (가격 안내 탭용 - 읽기 전용 표시) */
-  var oHtml = '<div class="price-note" style="margin-bottom:14px">⚠ 아래 금액은 <strong>최소 금액</strong>입니다. 추가 파츠 디자인 문의 시 별도 견적 안내 가능합니다.<br>신의상 제작 예정이라면 <strong style="color:#C05A7A">마네킹 추가가 필수</strong>입니다.</div>';
-  oHtml += '<div class="price-cards">';
+  /* 신청 타입 select도 시트 데이터로 채움 */
+  var typeEl=document.getElementById('f-type');
+  if(typeEl){
+    typeEl.innerHTML='<option value="">선택해주세요</option>';
+    live2d.forEach(function(r){
+      var name=r['옵션명']||'';
+      var price=Number(r['가격'])||0;
+      if(!name) return;
+      var opt=document.createElement('option');
+      opt.value=name;
+      opt.textContent=name+(price?' — '+price.toLocaleString()+'원':'');
+      typeEl.appendChild(opt);
+    });
+  }
+
+  /* LIVE2D 표 */
+  var lHtml='<div class="price-tbl-wrap"><table class="price-tbl"><thead><tr><th>구분</th><th style="text-align:right">가격</th></tr></thead><tbody>';
+  live2d.forEach(function(r){
+    var isBest=(r['강조']==='베스트');
+    lHtml+='<tr'+(isBest?' class="price-best"':'')+'><td>'+escHtml(r['옵션명'])+'</td><td>'+Number(r['가격']).toLocaleString()+'원</td></tr>';
+  });
+  lHtml+='</tbody></table></div>';
+  lHtml+='<p class="price-note-small">※ 위 가격은 기본 금액이며 캐릭터 복잡도에 따라 변동될 수 있습니다. 신의상 제작 예정이라면 마네킹 추가가 필수입니다.</p>';
+  document.getElementById('price-live2d').innerHTML=lHtml;
+
+  /* 추가 옵션 표 */
+  var oHtml='<div class="price-tbl-wrap"><table class="price-tbl"><thead><tr><th>옵션명</th><th style="text-align:right">최소 금액</th></tr></thead><tbody>';
   options.forEach(function(r){
-    var isManequin = r['옵션명'].indexOf('마네킹')>-1;
-    oHtml += '<div class="price-card">';
-    oHtml += '<div class="price-card-name">'+escHtml(r['옵션명']);
-    if(isManequin) oHtml += ' <span style="font-size:11px;color:#C05A7A;font-weight:600">신의상 제작 시 필수</span>';
-    oHtml += '</div>';
-    oHtml += '<div class="price-card-price">'+Number(r['가격']).toLocaleString()+'원~</div>';
-    oHtml += '</div>';
+    var isM=r['옵션명'].indexOf('마네킹')>-1;
+    oHtml+='<tr><td>'+escHtml(r['옵션명'])+(isM?' <span style="font-size:10px;color:#C05A7A;font-weight:700">(신의상 제작 시 필수)</span>':'')+'</td><td>'+Number(r['가격']).toLocaleString()+'원~</td></tr>';
   });
-  oHtml += '</div>';
-  document.getElementById('price-options').innerHTML = oHtml;
+  oHtml+='</tbody></table></div>';
+  document.getElementById('price-options').innerHTML=oHtml;
 
-  /* 에셋 카드 */
-  var aHtml = '<div class="price-cards">';
+  /* 에셋 표 */
+  var aHtml='<div class="price-tbl-wrap"><table class="price-tbl"><thead><tr><th>에셋명</th><th style="text-align:right">가격</th></tr></thead><tbody>';
   assets.forEach(function(r){
-    aHtml += '<div class="price-card"><div class="price-card-name">'+escHtml(r['옵션명'])+'</div><div class="price-card-price">'+Number(r['가격']).toLocaleString()+'원</div></div>';
+    aHtml+='<tr><td>'+escHtml(r['옵션명'])+'</td><td>'+Number(r['가격']).toLocaleString()+'원</td></tr>';
   });
-  aHtml += '</div>';
-  document.getElementById('price-asset').innerHTML = aHtml;
+  aHtml+='</tbody></table></div>';
+  document.getElementById('price-asset').innerHTML=aHtml;
 
-  /* 견적 계산기 — 추가옵션 + 에셋 */
+  /* 견적 계산기 렌더 */
   renderCalcItems(options, assets);
 }
 
-/* ============================================================
-   작가 소개 — 키-값 쌍 CSV 파싱 및 렌더
-   구조: 프로필이미지/이름, 소개글/아이디, 태그 순서
-   ============================================================ */
+function renderCalcItems(options, assets){
+  var el=document.getElementById('calc-items');
+  if(!el) return;
+  var html='';
+  if(options&&options.length){
+    html+='<div class="calc-cat-label">추가 옵션 (최소 금액)</div><div class="calc-items">';
+    options.forEach(function(r,i){
+      var isM=r['옵션명'].indexOf('마네킹')>-1;
+      html+='<label class="calc-item" id="ci_opt_'+i+'">';
+      html+='<input type="checkbox" id="cb_opt_'+i+'" onchange="onCalcChange(\'opt\','+i+','+r['가격']+')">';
+      html+='<span class="ci-name">'+escHtml(r['옵션명'])+'</span>';
+      if(isM) html+='<span class="ci-note">신의상 제작 시 필수</span>';
+      html+='<span class="ci-price">+'+Number(r['가격']).toLocaleString()+'원~</span>';
+      html+='</label>';
+    });
+    html+='</div>';
+  }
+  if(assets&&assets.length){
+    html+='<div class="calc-cat-label" style="margin-top:14px">에셋 작업</div><div class="calc-items">';
+    assets.forEach(function(r,i){
+      html+='<label class="calc-item" id="ci_asset_'+i+'">';
+      html+='<input type="checkbox" id="cb_asset_'+i+'" onchange="onCalcChange(\'asset\','+i+','+r['가격']+')">';
+      html+='<span class="ci-name">'+escHtml(r['옵션명'])+'</span>';
+      html+='<span class="ci-price">+'+Number(r['가격']).toLocaleString()+'원</span>';
+      html+='</label>';
+    });
+    html+='</div>';
+  }
+  if(!html) html='<div style="color:var(--text-light);font-size:13px">옵션 정보가 없습니다.</div>';
+  el.innerHTML=html;
+}
+
+window.onCalcChange=function(type,idx,price){
+  var cb=document.getElementById('cb_'+type+'_'+idx);
+  var item=document.getElementById('ci_'+type+'_'+idx);
+  if(!cb||!item) return;
+  item.classList.toggle('checked',cb.checked);
+  var state=(type==='asset')?_assetState:_calcState;
+  if(cb.checked){state[idx]=Number(price);}else{delete state[idx];}
+  updateEstimate();
+};
+
+/* ===== 작가 소개 ===== */
 function parseArtistCSV(text){
-  /* 줄 단위로 분리 — 셀 내부 \n 보존이 핵심 */
-  var result = {img:'', name:'', handle:'', desc:'', tags:[]};
-  var lines = [];
-  var cur = ''; var inQ = false;
+  var result={img:'',name:'',handle:'',desc:'',tags:[]};
+  var lines=[]; var cur=''; var inQ=false;
   for(var i=0;i<text.length;i++){
-    var c = text[i];
-    if(c==='"'){ inQ=!inQ; cur+=c; continue; }
-    if(c==='\n'&&!inQ){ lines.push(cur); cur=''; continue; }
+    var c=text[i];
+    if(c==='"'){inQ=!inQ;cur+=c;continue;}
+    if(c==='\n'&&!inQ){lines.push(cur);cur='';continue;}
     cur+=c;
   }
   if(cur) lines.push(cur);
-
   function splitTwo(line){
-    /* 첫 번째 콤마 기준 2분할, 따옴표 내부 콤마 무시 */
-    var inq=false, idx=-1;
+    var inq=false,idx=-1;
     for(var i=0;i<line.length;i++){
       if(line[i]==='"'){inq=!inq;continue;}
       if(line[i]===','&&!inq){idx=i;break;}
     }
     if(idx===-1) return [clean(line),''];
-    return [clean(line.slice(0,idx)), clean(line.slice(idx+1))];
+    return [clean(line.slice(0,idx)),clean(line.slice(idx+1))];
   }
   function clean(s){
     s=s.trim().replace(/\r/g,'');
     if(s.startsWith('"')&&s.endsWith('"')) s=s.slice(1,-1);
-    /* 이스케이프된 따옴표 복원 */
     s=s.replace(/""/g,'"');
     return s.trim();
   }
-
-  /* 헤더 행 건너뛰고 값 행만 읽음 */
-  /* row0=헤더(프로필이미지,이름), row1=값, row2=헤더(소개글,아이디), row3=값, row4=헤더(태그), row5=값 */
-  if(lines.length>=2){
-    var p = splitTwo(lines[1]);
-    result.img  = p[0];
-    result.name = p[1];
-  }
-  if(lines.length>=4){
-    var p2 = splitTwo(lines[3]);
-    /* 소개글 내부 \n → <br> 변환 */
-    result.desc   = p2[0].replace(/\n/g,'<br>');
-    result.handle = p2[1];
-  }
-  if(lines.length>=6){
-    var tagStr = splitTwo(lines[5])[0];
-    result.tags = tagStr.split(',').map(function(t){return t.trim();}).filter(Boolean);
-  }
+  if(lines.length>=2){var p=splitTwo(lines[1]);result.img=p[0];result.name=p[1];}
+  if(lines.length>=4){var p2=splitTwo(lines[3]);result.desc=p2[0].replace(/\n/g,'<br>');result.handle=p2[1];}
+  if(lines.length>=6){var tagStr=splitTwo(lines[5])[0];result.tags=tagStr.split(',').map(function(t){return t.trim();}).filter(Boolean);}
   return result;
 }
 
 function renderArtist(data){
-  var body = document.getElementById('artist-body');
+  var body=document.getElementById('artist-body');
   if(!body) return;
-
-  /* 마지막 태그가 "커미션 오픈"이면 pink 클래스 */
-  var tagsHtml = data.tags.map(function(t){
-    var isPink = t.indexOf('오픈')>-1||t.indexOf('OPEN')>-1||t.indexOf('open')>-1;
-    return '<span class="tag'+(isPink?' pink':'')+'">' + escHtml(t) + '</span>';
+  var tagsHtml=data.tags.map(function(t){
+    var isPink=t.indexOf('오픈')>-1||t.indexOf('OPEN')>-1||t.indexOf('open')>-1;
+    return '<span class="tag'+(isPink?' pink':'')+'">' +escHtml(t)+ '</span>';
   }).join('');
-
-  /* 아바타: 이미지 URL 있으면 img, 없으면 이모지 폴백 */
-  var avatarHtml = data.img
-    ? '<img src="'+escHtml(data.img)+'" alt="'+escHtml(data.name)+'" style="width:100%;height:100%;object-fit:cover;display:block">'
+  var avatarContent=data.img
+    ? '<img src="'+escHtml(data.img)+'" alt="'+escHtml(data.name)+'">'
     : '🎨';
-
-  body.innerHTML =
-    '<div class="profile-grid">' +
-      '<div class="profile-avatar">' + avatarHtml + '</div>' +
-      '<div>' +
-        '<div class="profile-name">' + escHtml(data.name) + '</div>' +
-        '<div class="profile-handle">' + escHtml(data.handle) + '</div>' +
-        '<div class="profile-desc">' + data.desc + '</div>' +
-        '<div class="tag-row">' + tagsHtml + '</div>' +
-      '</div>' +
+  body.innerHTML=
+    '<div class="profile-center">'+
+      '<div class="profile-avatar">'+avatarContent+'</div>'+
+      '<div class="profile-name">'+escHtml(data.name)+'</div>'+
+      '<div class="profile-handle">'+escHtml(data.handle)+'</div>'+
+      '<div class="tag-row">'+tagsHtml+'</div>'+
+      '<div class="profile-desc">'+data.desc+'</div>'+
     '</div>';
 }
 
-var _assetState = {};  /* 에셋 선택 상태 */
-
-function renderCalcItems(options, assets){
-  var el = document.getElementById('calc-items');
-  if(!el) return;
-
-  var html = '';
-
-  /* ── 추가 옵션 ── */
-  if(options && options.length){
-    html += '<div style="font-size:12px;font-weight:700;color:var(--text-light);letter-spacing:1px;margin-bottom:8px">추가 옵션 <span style="font-weight:400;color:var(--text-light)">(최소 금액)</span></div>';
-    options.forEach(function(r,i){
-      var isManequin = r['옵션명'].indexOf('마네킹')>-1;
-      html += '<label class="calc-item" id="ci_opt_'+i+'">';
-      html += '<input type="checkbox" id="cb_opt_'+i+'" onchange="onCalcChange(\'opt\','+i+','+r['가격']+')">';
-      html += '<span class="ci-name">'+escHtml(r['옵션명'])+'</span>';
-      if(isManequin) html += '<span class="ci-note">신의상 제작 시 필수</span>';
-      html += '<span class="ci-price">+'+Number(r['가격']).toLocaleString()+'원~</span>';
-      html += '</label>';
-    });
-  }
-
-  /* ── 에셋 작업 ── */
-  if(assets && assets.length){
-    html += '<div style="font-size:12px;font-weight:700;color:var(--text-light);letter-spacing:1px;margin:14px 0 8px">에셋 작업</div>';
-    assets.forEach(function(r,i){
-      html += '<label class="calc-item" id="ci_asset_'+i+'">';
-      html += '<input type="checkbox" id="cb_asset_'+i+'" onchange="onCalcChange(\'asset\','+i+','+r['가격']+')">';
-      html += '<span class="ci-name">'+escHtml(r['옵션명'])+'</span>';
-      html += '<span class="ci-price">+'+Number(r['가격']).toLocaleString()+'원</span>';
-      html += '</label>';
-    });
-  }
-
-  if(!html) html = '<div style="color:var(--text-light);font-size:13px">옵션 정보가 없습니다.</div>';
-  el.innerHTML = html;
-}
-
-window.onCalcChange = function(type, idx, price){
-  var id  = 'ci_'+type+'_'+idx;
-  var cbId = 'cb_'+type+'_'+idx;
-  var cb   = document.getElementById(cbId);
-  var item = document.getElementById(id);
-  if(!cb||!item) return;
-  item.classList.toggle('checked', cb.checked);
-  var state = (type==='asset') ? _assetState : _calcState;
-  if(cb.checked){ state[idx]=Number(price); }
-  else { delete state[idx]; }
-  updateEstimate();
-};
-
-/* ============================================================
-   신청 타입 변경
-   ============================================================ */
-window.onTypeChange = function(){
-  updateEstimate();
-};
-
-/* ============================================================
-   토글 선택 — onclick 기반 (onchange 버그 회피)
-   groupId: toggle-group의 id
-   name: radio name
-   value: 선택할 값
-   ============================================================ */
-window.selectToggle = function(groupId, name, value){
-  /* 해당 name의 라디오 중 value와 일치하는 것을 checked */
-  document.querySelectorAll('input[name="'+name+'"]').forEach(function(r){
-    r.checked = (r.value === value);
-  });
-  /* 그룹 내 toggle-item checked 클래스 갱신 */
-  var group = document.getElementById(groupId);
-  if(group){
-    group.querySelectorAll('.toggle-item').forEach(function(item){
-      var inp = item.querySelector('input[type=radio]');
-      item.classList.toggle('checked', inp ? inp.checked : false);
-    });
-  }
-  updateEstimate();
-};
-
-/* ============================================================
-   견적 계산
-   ============================================================ */
-function updateEstimate(){
-  var typeEl   = document.getElementById('f-type');
-  var typeVal  = typeEl ? typeEl.value : '';
-  var basePrice= typeVal ? (_typePrices[typeVal]||0) : 0;
-
-  /* 사용권 */
-  var licenseEl    = document.querySelector('input[name="license"]:checked');
-  var licensePrice = (licenseEl && licenseEl.value.indexOf('500,000')>-1) ? 500000 : 0;
-
-  /* 추가 옵션 합계 */
-  var optTotal = 0;
-  Object.values(_calcState).forEach(function(p){ optTotal += p; });
-
-  /* 에셋 합계 */
-  var assetTotal = 0;
-  Object.values(_assetState).forEach(function(p){ assetTotal += p; });
-
-  var rows = [];
-  if(basePrice>0){
-    rows.push({label: typeVal+' 기본가', val: basePrice.toLocaleString()+'원'});
-  }
-  if(licensePrice>0){
-    rows.push({label:'모델 사용권', val:'+'+licensePrice.toLocaleString()+'원'});
-  }
-
-  /* 추가 옵션 항목별 */
-  Object.keys(_calcState).forEach(function(k){
-    var cb = document.getElementById('cb_opt_'+k);
-    if(cb){
-      var nm = cb.parentNode.querySelector('.ci-name');
-      rows.push({label: nm?nm.textContent.trim():'옵션', val:'+'+Number(_calcState[k]).toLocaleString()+'원~'});
-    }
-  });
-
-  /* 에셋 항목별 */
-  Object.keys(_assetState).forEach(function(k){
-    var cb = document.getElementById('cb_asset_'+k);
-    if(cb){
-      var nm = cb.parentNode.querySelector('.ci-name');
-      rows.push({label: nm?nm.textContent.trim():'에셋', val:'+'+Number(_assetState[k]).toLocaleString()+'원'});
-    }
-  });
-
-  var total = basePrice + licensePrice + optTotal + assetTotal;
-
-  var rowsEl  = document.getElementById('est-rows');
-  var totalEl = document.getElementById('est-total');
-  if(!rowsEl||!totalEl) return;
-
-  if(rows.length===0){
-    rowsEl.innerHTML='<div class="est-empty">신청 타입을 선택하면 견적이 표시됩니다.</div>';
-    totalEl.textContent='—';
-  } else {
-    rowsEl.innerHTML = rows.map(function(r){
-      return '<div class="est-row"><span class="e-label">'+r.label+'</span><span class="e-val">'+r.val+'</span></div>';
-    }).join('');
-    var suffix = (optTotal>0) ? '원~' : '원';
-    totalEl.textContent = total.toLocaleString()+suffix;
-  }
-}
-window.updateEstimate = updateEstimate;
-
-/* ============================================================
-   가격 탭
-   ============================================================ */
-window.switchPrice = function(id, btn){
-  document.querySelectorAll('.price-panel').forEach(function(p){p.classList.remove('active');});
-  document.querySelectorAll('.ptab').forEach(function(b){b.classList.remove('active');});
-  document.getElementById('price-'+id).classList.add('active');
-  btn.classList.add('active');
-};
-
-/* ============================================================
-   협업 작가 렌더
-   예상 컬럼: 이름, 역할, 배너이미지, 링크
-   ============================================================ */
+/* ===== 협업 작가 ===== */
 function renderCollab(rows){
-  if(!rows||rows.length===0){
-    document.getElementById('collab-grid').innerHTML='<div class="collab-loading">협업 작가 정보가 없습니다.</div>';
-    return;
-  }
+  var grid=document.getElementById('collab-grid');
+  if(!rows||!rows.length){grid.innerHTML='<div class="collab-loading">협업 작가 정보가 없습니다.</div>';return;}
 
-  /* 컬럼명 자동 감지 (이름/역할/설명/이미지/링크 등 유연하게) */
-  var nameKey  = findKey(rows[0], ['이름','name','작가명','작가이름']);
-  var roleKey  = findKey(rows[0], ['역할','role','설명','소개','분야','전문']);
-  var imgKey   = findKey(rows[0], ['배너','이미지','image','img','배너이미지','사진']);
-  var linkKey  = findKey(rows[0], ['링크','link','url','포트폴리오','바로가기']);
-
-  /* 리깅작가 드롭다운도 갱신 */
-  var select = document.getElementById('f-rigging');
-  if(select){
-    select.innerHTML = '<option value="">선택해주세요</option>';
-    rows.forEach(function(r){
-      var nm = nameKey ? r[nameKey] : '';
-      if(nm){
-        var opt = document.createElement('option');
-        opt.value = nm; opt.textContent = nm;
-        select.appendChild(opt);
-      }
-    });
-  }
-
-  var html = '';
+  var groups={};var groupOrder=[];
   rows.forEach(function(r){
-    var name = nameKey  ? escHtml(r[nameKey])  : '작가';
-    var role = roleKey  ? escHtml(r[roleKey])  : '';
-    var img  = imgKey   ? r[imgKey]  : '';
-    var link = linkKey  ? r[linkKey] : '#';
-
-    var bannerContent = img
-      ? '<img src="'+escHtml(img)+'" alt="'+name+'" loading="lazy">'
-      : '<span style="font-size:36px">🎭</span>';
-
-    html += '<div class="collab-card">';
-    html += '<div class="collab-banner">'+bannerContent+'</div>';
-    html += '<div class="collab-body">';
-    html += '<div class="collab-name">'+name+'</div>';
-    if(role) html += '<div class="collab-role">'+role+'</div>';
-    html += '<a class="collab-btn" href="'+(link||'#')+'" target="_blank" rel="noopener">포트폴리오 바로가기 →</a>';
-    html += '</div></div>';
+    var cat=(r['분류']||'기타').trim();
+    if(!groups[cat]){groups[cat]=[];groupOrder.push(cat);}
+    groups[cat].push(r);
   });
-  document.getElementById('collab-grid').innerHTML = html;
-}
 
-function findKey(obj, candidates){
-  var keys = Object.keys(obj);
-  for(var i=0;i<candidates.length;i++){
-    var c = candidates[i].toLowerCase();
-    for(var j=0;j<keys.length;j++){
-      if(keys[j].toLowerCase().indexOf(c)>-1) return keys[j];
-    }
+  /* 리깅 작가만 드롭다운에 추가 */
+  var select=document.getElementById('f-rigging');
+  if(select){
+    /* 기본 옵션 유지 */
+    var baseOpts='<option value="">선택해주세요</option><option value="미정">미정</option><option value="타작가">타작가</option>';
+    var riggers=(groups['리깅']||[]);
+    var rigOpts=riggers.map(function(r){
+      var nm=(r['이름']||'').trim();
+      return nm?'<option value="'+escHtml(nm)+'">'+escHtml(nm)+'</option>':'';
+    }).join('');
+    select.innerHTML=baseOpts+rigOpts;
   }
-  return keys[0]||null;
+
+  var html='';
+  var first=true;
+  groupOrder.forEach(function(cat){
+    if(!first) html+='<div class="collab-divider"></div>';
+    first=false;
+    var label=cat==='리깅'?'🎮 리깅 작가':'🎨 디자인 작가';
+    html+='<div class="collab-cat-title">'+label+'</div>';
+    html+='<div class="collab-grid">';
+    groups[cat].forEach(function(r){
+      var name=escHtml((r['이름']||'').trim());
+      var desc=escHtml((r['설명']||'').trim());
+      var img=(r['배너']||'').trim();
+      var link=(r['링크']||'#').trim();
+      var yt=(r['유튜브']||'').trim();
+
+      /* 유튜브 URL 추출 함수 — 배너 or 유튜브 컬럼 어디든 감지 */
+      function extractYtId(url){
+        if(!url) return '';
+        var m=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);
+        return m?m[1]:'';
+      }
+
+      /* 배너 컬럼이 유튜브 URL이면 yt로 처리 */
+      var ytId=extractYtId(yt)||extractYtId(img);
+      /* ytId가 있으면 img는 배너가 아닌 것으로 간주 */
+      if(ytId) img='';
+
+      /* 배너 콘텐츠 결정: 유튜브 > 이미지 > 이모지 */
+      var bannerContent;
+      if(ytId){
+        /* 유튜브: 썸네일+재생버튼, 클릭 시 배너 내부를 iframe으로 교체하여 인라인 재생 */
+        var thumbUrl='https://img.youtube.com/vi/'+ytId+'/hqdefault.jpg';
+        var embedUrl='https://www.youtube.com/embed/'+ytId+'?autoplay=1&rel=0&modestbranding=1';
+        bannerContent=
+          '<div class="collab-banner-yt" onclick="playYt(this,\''+escHtml(embedUrl)+'\')" role="button" aria-label="'+name+' 유튜브 재생">'+
+            '<img src="'+thumbUrl+'" alt="'+name+'" loading="lazy">'+
+          '</div>';
+      } else if(img){
+        bannerContent='<img src="'+escHtml(img)+'" alt="'+name+'" loading="lazy">';
+      } else {
+        bannerContent='<div class="collab-banner-inner"><span style="font-size:30px">🎭</span></div>';
+      }
+      html+='<div class="collab-card">';
+      html+='<div class="collab-banner">'+bannerContent+'</div>';
+      html+='<div class="collab-body">';
+      html+='<div class="collab-name">'+name+'</div>';
+      if(desc) html+='<div class="collab-desc">'+desc+'</div>';
+      /* 버튼: 페이지 이동 + 유튜브(있을 때만) */
+      html+='<div class="collab-btns">';
+      html+='<a class="collab-btn" href="'+escHtml(link)+'" target="_blank" rel="noopener">작가님 페이지로 이동 →</a>';
+      if(yt) html+='<a class="collab-btn yt" href="'+escHtml(yt)+'" target="_blank" rel="noopener">▶ 유튜브</a>';
+      html+='</div>';
+      html+='</div></div>';
+    });
+    html+='</div>';
+  });
+  grid.innerHTML=html;
 }
 
-/* ============================================================
-   슬라이더
-   ============================================================ */
-var _sl = {
-  v:{cur:0,total:0},
-  i:{cur:0,total:0}
-};
+/* ===== 슬라이더 ===== */
+var _sl={v:{cur:0,total:0},i:{cur:0,total:0},s:{cur:0,total:0}};
 
-function renderSlider(key, items){
-  var s = _sl[key];
-  s.total = items.length; s.cur = 0;
-  var trackEl  = document.getElementById(key+'-track');
-  var dotsEl   = document.getElementById(key+'-dots');
-  var thumbsEl = document.getElementById(key+'-thumbs');
-  if(!trackEl) return;
+function renderSlider(key,items){
+  var s=_sl[key];s.total=items.length;s.cur=0;
+  var trEl=document.getElementById(key+'-track');
+  var dtEl=document.getElementById(key+'-dots');
+  var thEl=document.getElementById(key+'-thumbs');
+  if(!trEl) return;
 
-  trackEl.innerHTML = items.map(function(item,i){
-    var label = item['제목'] ? '<div class="slide-label">'+escHtml(item['제목'])+'</div>' : '';
-    return '<div class="slide-item"><img src="'+escHtml(item['링크'])+'" alt="'+(item['제목']||'샘플 '+(i+1))+'" loading="'+(i===0?'eager':'lazy')+'">'+label+'</div>';
+  trEl.innerHTML=items.map(function(item,i){
+    return '<div class="slide-item"><img src="'+escHtml(item['링크'])+'" alt="'+(item['제목']||'작품 '+(i+1))+'" loading="'+(i===0?'eager':'lazy')+'"></div>';
   }).join('');
 
-  dotsEl.innerHTML = items.map(function(_,i){
+  dtEl.innerHTML=items.map(function(_,i){
     return '<div class="slider-dot'+(i===0?' active':'')+'" onclick="goSlide(\''+key+'\','+i+')"></div>';
   }).join('');
 
-  thumbsEl.innerHTML = items.map(function(item,i){
+  if(thEl) thEl.innerHTML=items.map(function(item,i){
     return '<div class="thumb'+(i===0?' active':'')+'" onclick="goSlide(\''+key+'\','+i+')"><img src="'+escHtml(item['링크'])+'" alt="thumb" loading="lazy"></div>';
   }).join('');
+
+  /* 제목 텍스트 — thumb 아래 표시, 빈 상태면 안내 문구 */
+  var titleEl=document.getElementById(key+'-slide-title');
+  if(titleEl){
+    var _updateTitle=function(){
+      var cur=_sl[key].cur;
+      var t=(items[cur]&&items[cur]['제목'])||'';
+      titleEl.textContent=t||'내용이 없습니다';
+      titleEl.style.color=t?'var(--text)':'var(--text-light)';
+      titleEl.style.fontStyle=t?'normal':'italic';
+    };
+    _updateTitle();
+    titleEl._update=_updateTitle;
+  }
 }
 
-function sliderError(key, msg){
+/* 샘플 전용 렌더 — sample-item 클래스, 미리보기 없음, 1장 시 버튼 숨김 */
+function renderSample(items){
+  var key='s';
+  var s=_sl[key];s.total=items.length;s.cur=0;
+  var trEl=document.getElementById('s-track');
+  var dtEl=document.getElementById('s-dots');
+  if(!trEl) return;
+
+  trEl.innerHTML=items.map(function(item,i){
+    return '<div class="sample-item"><img src="'+escHtml(item['링크'])+'" alt="'+(item['제목']||'샘플 '+(i+1))+'" loading="'+(i===0?'eager':'lazy')+'"></div>';
+  }).join('');
+
+  /* dots: 1장이면 숨김 */
+  if(dtEl){
+    if(items.length>1){
+      dtEl.innerHTML=items.map(function(_,i){
+        return '<div class="slider-dot'+(i===0?' active':'')+'" onclick="goSlide(\'s\','+i+')"></div>';
+      }).join('');
+      dtEl.style.display='';
+    } else {
+      dtEl.innerHTML='';
+      dtEl.style.display='none';
+    }
+  }
+
+  /* 버튼: 1장이면 완전히 숨김 */
+  var prev=document.getElementById('s-prev');
+  var next=document.getElementById('s-next');
+  if(prev) prev.style.display=items.length>1?'':'none';
+  if(next) next.style.display=items.length>1?'':'none';
+
+  /* 제목 텍스트 */
+  var titleEl=document.getElementById('s-slide-title');
+  if(titleEl){
+    var _updateSTitle=function(){
+      var cur=_sl[key].cur;
+      var t=(items[cur]&&items[cur]['제목'])||'';
+      titleEl.textContent=t;
+      titleEl.style.display=t?'block':'none';
+    };
+    _updateSTitle();
+    titleEl._update=_updateSTitle;
+  }
+}
+function sliderError(key,msg){
   var el=document.getElementById(key+'-track');
-  if(el) el.innerHTML='<div class="slide-item"><div class="slide-placeholder"><div class="ph-icon">⚠</div><div>'+msg+'</div></div></div>';
+  var cls=(key==='s')?'sample-item':'slide-item';
+  if(el) el.innerHTML='<div class="'+cls+'"><div class="slide-placeholder"><div class="ph-icon">⚠</div><div>'+msg+'</div></div></div>';
 }
-
 function upSl(k){
-  var s=_sl[k]; if(s.total===0)return;
-  var tr=document.getElementById(k+'-track');
-  var dt=document.getElementById(k+'-dots');
+  var s=_sl[k];if(!s.total) return;
+  document.getElementById(k+'-track').style.transform='translateX(-'+(s.cur*100)+'%)';
+  Array.from(document.getElementById(k+'-dots').children).forEach(function(d,i){d.classList.toggle('active',i===s.cur);});
   var th=document.getElementById(k+'-thumbs');
-  tr.style.transform='translateX(-'+(s.cur*100)+'%)';
-  Array.from(dt.children).forEach(function(d,i){d.classList.toggle('active',i===s.cur);});
-  Array.from(th.children).forEach(function(d,i){d.classList.toggle('active',i===s.cur);});
+  if(th) Array.from(th.children).forEach(function(d,i){d.classList.toggle('active',i===s.cur);});
+  /* 제목 텍스트 갱신 */
+  var titleEl=document.getElementById(k+'-slide-title');
+  if(titleEl&&titleEl._update) titleEl._update();
 }
+window.slide=function(k,d){if(!_sl[k].total)return;_sl[k].cur=(_sl[k].cur+d+_sl[k].total)%_sl[k].total;upSl(k);};
+window.goSlide=function(k,i){_sl[k].cur=i;upSl(k);};
 
-window.slide  = function(k,d){if(_sl[k].total===0)return; _sl[k].cur=(_sl[k].cur+d+_sl[k].total)%_sl[k].total; upSl(k);};
-window.goSlide= function(k,i){_sl[k].cur=i; upSl(k);};
-
-/* ============================================================
-   말풍선 툴팁
-   ============================================================ */
-window.showTooltip = function(){
-  var el=document.getElementById('copy-tooltip');
-  if(el) el.classList.add('show');
-};
-window.hideTooltip = function(){
-  var el=document.getElementById('copy-tooltip');
-  if(el) el.classList.remove('show');
+/* 협업 배너 유튜브 인라인 재생 — 썸네일 클릭 시 배너를 iframe으로 교체 */
+window.playYt=function(el,embedUrl){
+  var banner=el.parentNode; /* .collab-banner */
+  /* 기존 콘텐츠 제거 후 iframe 삽입 */
+  banner.innerHTML='<iframe src="'+embedUrl+'" allowfullscreen></iframe>';
 };
 
-/* ============================================================
-   복사하기
-   ============================================================ */
-window.checkCopy = function(){
-  document.getElementById('copy-btn').disabled =
-    !document.getElementById('agree-check').checked;
+/* ===== 폼 인터랙션 ===== */
+window.onTypeChange=function(){updateEstimate();};
+
+/* 리깅 작가 선택 — 타작가 선택 시 텍스트박스 표시 */
+window.onRiggingChange=function(){
+  var val=document.getElementById('f-rigging').value;
+  var wrap=document.getElementById('other-rigger-wrap');
+  if(wrap) wrap.classList.toggle('show', val==='타작가');
+  updateEstimate();
 };
 
-window.copyForm = function(){
-  var name    = (document.getElementById('f-name')||{}).value||'';
-  var concept = (document.getElementById('f-concept')||{}).value||'';
-  var etc     = (document.getElementById('f-etc')||{}).value||'';
-  var rigging = (document.getElementById('f-rigging')||{}).value||'';
-  var type    = (document.getElementById('f-type')||{}).value||'';
-  var licEl   = document.querySelector('input[name="license"]:checked');
-  var snsEl   = document.querySelector('input[name="sns"]:checked');
-  var license = licEl ? licEl.value : '';
-  var sns     = snsEl ? snsEl.value : '';
-  var basePrice = type ? (_typePrices[type]||0) : 0;
+window.selectToggle=function(groupId,name,value){
+  document.querySelectorAll('input[name="'+name+'"]').forEach(function(r){r.checked=(r.value===value);});
+  var group=document.getElementById(groupId);
+  if(group) group.querySelectorAll('.toggle-item').forEach(function(item){
+    var inp=item.querySelector('input[type=radio]');
+    item.classList.toggle('checked',inp?inp.checked:false);
+  });
+  updateEstimate();
+};
 
-  if(!name.trim()||!concept.trim()||!rigging||!type||!license||!sns){
-    /* 말풍선으로만 안내, alert 없음 */
-    var tooltip = document.getElementById('copy-tooltip');
+/* ===== 견적 계산 ===== */
+function updateEstimate(){
+  var typeVal=(document.getElementById('f-type')||{}).value||'';
+  var basePrice=typeVal?(_typePrices[typeVal]||0):0;
+  var licEl=document.querySelector('input[name="license"]:checked');
+  var licensePrice=(licEl&&licEl.value.indexOf('500,000')>-1)?500000:0;
+  var optTotal=0; Object.values(_calcState).forEach(function(p){optTotal+=p;});
+  var assetTotal=0; Object.values(_assetState).forEach(function(p){assetTotal+=p;});
+  var rows=[];
+  if(basePrice>0) rows.push({label:typeVal+' 기본가',val:basePrice.toLocaleString()+'원'});
+  if(licensePrice>0) rows.push({label:'모델 사용권',val:'+'+licensePrice.toLocaleString()+'원'});
+  Object.keys(_calcState).forEach(function(k){
+    var cb=document.getElementById('cb_opt_'+k);
+    if(cb){var nm=cb.parentNode.querySelector('.ci-name');rows.push({label:nm?nm.textContent.trim():'옵션',val:'+'+Number(_calcState[k]).toLocaleString()+'원~'});}
+  });
+  Object.keys(_assetState).forEach(function(k){
+    var cb=document.getElementById('cb_asset_'+k);
+    if(cb){var nm=cb.parentNode.querySelector('.ci-name');rows.push({label:nm?nm.textContent.trim():'에셋',val:'+'+Number(_assetState[k]).toLocaleString()+'원'});}
+  });
+  var total=basePrice+licensePrice+optTotal+assetTotal;
+  var rowsEl=document.getElementById('est-rows');
+  var totalEl=document.getElementById('est-total');
+  if(!rowsEl||!totalEl) return;
+  if(!rows.length){
+    rowsEl.innerHTML='<div class="est-empty">신청 타입을 선택하면 견적이 표시됩니다.</div>';
+    totalEl.textContent='—';
+  } else {
+    rowsEl.innerHTML=rows.map(function(r){return '<div class="est-row"><span class="e-label">'+r.label+'</span><span class="e-val">'+r.val+'</span></div>';}).join('');
+    totalEl.textContent=total.toLocaleString()+(optTotal>0?'원~':'원');
+  }
+}
+window.updateEstimate=updateEstimate;
+
+/* ===== 툴팁 ===== */
+window.showTooltip=function(){var el=document.getElementById('copy-tooltip');if(el)el.classList.add('show');};
+window.hideTooltip=function(){var el=document.getElementById('copy-tooltip');if(el)el.classList.remove('show');};
+
+/* ===== 복사 ===== */
+window.checkCopy=function(){
+  document.getElementById('copy-btn').disabled=!document.getElementById('agree-check').checked;
+};
+
+window.copyForm=function(){
+  var name=(document.getElementById('f-name')||{}).value||'';
+  var concept=(document.getElementById('f-concept')||{}).value||'';
+  var etc=(document.getElementById('f-etc')||{}).value||'';
+  var riggingSel=(document.getElementById('f-rigging')||{}).value||'';
+  var riggingOther=(document.getElementById('f-other-rigger')||{}).value||'';
+  var rigging=riggingSel==='타작가'?'타작가 ('+riggingOther+')':riggingSel;
+  var type=(document.getElementById('f-type')||{}).value||'';
+  var licEl=document.querySelector('input[name="license"]:checked');
+  var snsEl=document.querySelector('input[name="sns"]:checked');
+  var license=licEl?licEl.value:'';
+  var sns=snsEl?snsEl.value:'';
+  var basePrice=type?(_typePrices[type]||0):0;
+
+  if(!name.trim()||!concept.trim()||!riggingSel||!type||!license||!sns){
+    var tooltip=document.getElementById('copy-tooltip');
     if(tooltip){
-      tooltip.textContent = '⚠ 필수 항목을 모두 입력·선택해 주세요!';
+      tooltip.textContent='⚠ 필수 항목을 모두 입력·선택해 주세요!';
       tooltip.classList.add('show');
-      setTimeout(function(){
-        tooltip.classList.remove('show');
-        tooltip.textContent = '신청 내용이 복사됩니다. 문의 채널에 붙여넣기 해주세요!';
-      }, 2500);
+      setTimeout(function(){tooltip.classList.remove('show');tooltip.textContent='신청 내용이 복사됩니다. 문의 채널에 붙여넣기 해주세요!';},2500);
     }
     return;
   }
 
-  /* 선택된 옵션 목록 (이름 + 금액) */
-  var optLines = [];
+  var optLines=[];
   Object.keys(_calcState).forEach(function(k){
-    var cb = document.getElementById('cb_opt_'+k);
-    if(cb){
-      var nm = cb.parentNode.querySelector('.ci-name');
-      var pr = cb.parentNode.querySelector('.ci-price');
-      if(nm) optLines.push('  - '+(nm.textContent.trim())+(pr?' ('+pr.textContent.trim()+')':''));
-    }
+    var cb=document.getElementById('cb_opt_'+k);
+    if(cb){var nm=cb.parentNode.querySelector('.ci-name');var pr=cb.parentNode.querySelector('.ci-price');if(nm)optLines.push('  - '+(nm.textContent.trim())+(pr?' ('+pr.textContent.trim()+')':''));}
   });
-  var assetLines = [];
+  var assetLines=[];
   Object.keys(_assetState).forEach(function(k){
-    var cb = document.getElementById('cb_asset_'+k);
-    if(cb){
-      var nm = cb.parentNode.querySelector('.ci-name');
-      var pr = cb.parentNode.querySelector('.ci-price');
-      if(nm) assetLines.push('  - '+(nm.textContent.trim())+(pr?' ('+pr.textContent.trim()+')':''));
-    }
+    var cb=document.getElementById('cb_asset_'+k);
+    if(cb){var nm=cb.parentNode.querySelector('.ci-name');var pr=cb.parentNode.querySelector('.ci-price');if(nm)assetLines.push('  - '+(nm.textContent.trim())+(pr?' ('+pr.textContent.trim()+')':''));}
   });
+  var estRows=document.querySelectorAll('#est-rows .est-row');
+  var estLines=[];
+  estRows.forEach(function(row){var lbl=row.querySelector('.e-label');var val=row.querySelector('.e-val');if(lbl&&val)estLines.push('  '+lbl.textContent.trim()+': '+val.textContent.trim());});
+  var estTotal=(document.getElementById('est-total')||{}).textContent||'—';
 
-  /* 견적 내역 텍스트 */
-  var estRows = document.querySelectorAll('#est-rows .est-row');
-  var estLines = [];
-  estRows.forEach(function(row){
-    var lbl = row.querySelector('.e-label');
-    var val = row.querySelector('.e-val');
-    if(lbl&&val) estLines.push('  '+lbl.textContent.trim()+': '+val.textContent.trim());
-  });
-  var estTotal = (document.getElementById('est-total')||{}).textContent||'—';
-
-  var lines = [
-    '【 양초 커미션 신청 내용 】',
-    '',
+  var lines=[
+    '【 양초 커미션 신청 내용 】','',
     '■ 신청자명: '+name,
     '■ 신청 타입: '+type+(basePrice>0?' ('+basePrice.toLocaleString()+'원)':''),
     '■ 리깅 작가: '+rigging,
     '■ 사용권 구매: '+license,
     '■ SNS 공개: '+sns,
   ];
-  if(optLines.length>0){
-    lines.push('■ 추가 옵션:');
-    optLines.forEach(function(l){ lines.push(l); });
-  }
-  if(assetLines.length>0){
-    lines.push('■ 에셋 작업:');
-    assetLines.forEach(function(l){ lines.push(l); });
-  }
-  if(estLines.length>0){
-    lines.push('');
-    lines.push('■ 예상 견적:');
-    estLines.forEach(function(l){ lines.push(l); });
-    lines.push('  합계 (최소): '+estTotal);
-  }
-  lines.push('');
-  lines.push('■ 캐릭터 컨셉:');
-  lines.push(concept);
-  if(etc.trim()){
-    lines.push('');
-    lines.push('■ 기타 요청사항:');
-    lines.push(etc);
-  }
+  if(optLines.length){lines.push('■ 추가 옵션:');optLines.forEach(function(l){lines.push(l);});}
+  if(assetLines.length){lines.push('■ 에셋 작업:');assetLines.forEach(function(l){lines.push(l);});}
+  if(estLines.length){lines.push('');lines.push('■ 예상 견적:');estLines.forEach(function(l){lines.push(l);});lines.push('  합계 (최소): '+estTotal);}
+  lines.push('');lines.push('■ 캐릭터 컨셉:');lines.push(concept);
+  if(etc.trim()){lines.push('');lines.push('■ 기타 요청사항:');lines.push(etc);}
 
-  var text = lines.join('\n');
-
+  var text=lines.join('\n');
   function doSuccess(){
-    var btn = document.getElementById('copy-btn');
-    var tooltip = document.getElementById('copy-tooltip');
-    btn.textContent = '✓ 복사 완료!';
-    btn.classList.add('copied');
-    if(tooltip){
-      tooltip.textContent = '복사되었습니다! 문의 채널에 붙여넣기 해주세요 ♡';
-      tooltip.classList.add('show');
-      setTimeout(function(){
-        tooltip.classList.remove('show');
-        tooltip.textContent = '신청 내용이 복사됩니다. 문의 채널에 붙여넣기 해주세요!';
-        btn.textContent = '📋 신청 내용 복사하기';
-        btn.classList.remove('copied');
-      }, 2500);
-    }
+    var btn=document.getElementById('copy-btn');var tooltip=document.getElementById('copy-tooltip');
+    btn.textContent='✓ 복사 완료!';btn.classList.add('copied');
+    if(tooltip){tooltip.textContent='복사되었습니다! 문의 채널에 붙여넣기 해주세요 ♡';tooltip.classList.add('show');
+      setTimeout(function(){tooltip.classList.remove('show');tooltip.textContent='신청 내용이 복사됩니다. 문의 채널에 붙여넣기 해주세요!';btn.textContent='📋 신청 내용 복사하기';btn.classList.remove('copied');},2500);}
   }
-
-  if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(text).then(doSuccess).catch(function(){ fallbackCopy(text, doSuccess); });
-  } else {
-    fallbackCopy(text, doSuccess);
-  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(doSuccess).catch(function(){fallbackCopy(text,doSuccess);});}
+  else{fallbackCopy(text,doSuccess);}
 };
 
-function fallbackCopy(text, cb){
-  var ta=document.createElement('textarea');
-  ta.value=text; ta.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0';
-  document.body.appendChild(ta); ta.focus(); ta.select();
-  try{ document.execCommand('copy'); if(cb) cb(); }
-  catch(e){
-    var tooltip=document.getElementById('copy-tooltip');
-    if(tooltip){ tooltip.textContent='⚠ 복사 실패. 내용을 직접 선택해 주세요.'; tooltip.classList.add('show'); setTimeout(function(){tooltip.classList.remove('show');},2500); }
-  }
+function fallbackCopy(text,cb){
+  var ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0';
+  document.body.appendChild(ta);ta.focus();ta.select();
+  try{document.execCommand('copy');if(cb)cb();}
+  catch(e){var t=document.getElementById('copy-tooltip');if(t){t.textContent='⚠ 복사 실패. 직접 선택해 주세요.';t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}}
   document.body.removeChild(ta);
 }
 
-/* ============================================================
-   FAQ
-   ============================================================ */
-window.toggleFaq = function(btn){
-  var panel=btn.nextElementSibling;
-  var isOpen=btn.classList.contains('open');
-  document.querySelectorAll('.faq-q.open').forEach(function(b){
-    b.classList.remove('open'); b.nextElementSibling.style.maxHeight='0';
-  });
-  if(!isOpen){ btn.classList.add('open'); panel.style.maxHeight=panel.scrollHeight+'px'; }
+/* ===== FAQ ===== */
+window.toggleFaq=function(btn){
+  var panel=btn.nextElementSibling;var isOpen=btn.classList.contains('open');
+  document.querySelectorAll('.faq-q.open').forEach(function(b){b.classList.remove('open');b.nextElementSibling.style.maxHeight='0';});
+  if(!isOpen){btn.classList.add('open');panel.style.maxHeight=panel.scrollHeight+'px';}
 };
 
-/* ============================================================
-   유틸
-   ============================================================ */
-function escHtml(s){
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+/* ===== 유틸 ===== */
+function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-/* ============================================================
-   데이터 로드
-   ============================================================ */
-/* 작가 소개 — raw text fetch (parseArtistCSV 사용) */
-fetch(ARTIST_URL)
-  .then(function(r){ return r.text(); })
-  .then(function(t){
-    var data = parseArtistCSV(t);
-    renderArtist(data);
-  })
-  .catch(function(){
-    var body = document.getElementById('artist-body');
-    if(body) body.innerHTML='<div class="price-loading" style="color:#E05A7A">작가 정보를 불러올 수 없습니다.</div>';
-  });
+/* ===== 데이터 로드 ===== */
+fetch(ARTIST_URL).then(function(r){return r.text();}).then(function(t){renderArtist(parseArtistCSV(t));}).catch(function(){
+  var b=document.getElementById('artist-body');if(b)b.innerHTML='<div class="price-loading" style="color:#E05A7A">작가 정보를 불러올 수 없습니다.</div>';
+});
 
-/* 가격 */
-fetchCSV(PRICE_URL, function(err, rows){
+fetchCSV(PRICE_URL,function(err,rows){
   if(err||!rows||!rows.length){
-    document.getElementById('price-live2d').innerHTML='<div class="price-loading" style="color:#E05A7A">가격 정보를 불러올 수 없습니다.</div>';
-    document.getElementById('price-options').innerHTML='<div class="price-loading" style="color:#E05A7A">옵션 정보를 불러올 수 없습니다.</div>';
-    document.getElementById('price-asset').innerHTML='<div class="price-loading" style="color:#E05A7A">에셋 정보를 불러올 수 없습니다.</div>';
+    ['price-live2d','price-options','price-asset'].forEach(function(id){document.getElementById(id).innerHTML='<div class="price-loading" style="color:#E05A7A">불러올 수 없습니다.</div>';});
     document.getElementById('calc-items').innerHTML='<div style="color:#E05A7A;font-size:13px">옵션 정보를 불러올 수 없습니다.</div>';
     return;
   }
   renderPriceData(rows);
 });
 
-/* 포트폴리오 */
-fetchCSV(PF_URL, function(err, rows){
-  if(err||!rows||!rows.length){ sliderError('v','포트폴리오를 불러올 수 없습니다.'); sliderError('i','포트폴리오를 불러올 수 없습니다.'); return; }
+fetchCSV(PF_URL,function(err,rows){
+  if(err||!rows||!rows.length){
+    sliderError('v','포트폴리오를 불러올 수 없습니다.');
+    sliderError('i','포트폴리오를 불러올 수 없습니다.');
+    sliderError('s','샘플을 불러올 수 없습니다.');
+    return;
+  }
   var vItems=rows.filter(function(r){return r['카테고리']==='버츄얼';});
   var iItems=rows.filter(function(r){return r['카테고리']==='일러스트';});
+  var sItems=rows.filter(function(r){return r['카테고리']==='샘플';});
   if(vItems.length) renderSlider('v',vItems); else sliderError('v','버츄얼 포트폴리오가 없습니다.');
   if(iItems.length) renderSlider('i',iItems); else sliderError('i','일러스트 포트폴리오가 없습니다.');
+  if(sItems.length) renderSample(sItems); else sliderError('s','샘플이 없습니다.');
 });
 
-/* 협업 작가 */
-fetchCSV(COLLAB_URL, function(err, rows){
+fetchCSV(COLLAB_URL,function(err,rows){
   if(err||!rows||!rows.length){
-    document.getElementById('collab-grid').innerHTML =
-      '<div class="collab-loading" style="color:#E05A7A">협업 작가 정보를 불러올 수 없습니다.<br><small style="color:var(--text-light)">구글 시트 공개 설정을 확인해 주세요.</small></div>';
-    return;
+    document.getElementById('collab-grid').innerHTML='<div class="collab-loading" style="color:#E05A7A">협업 작가 정보를 불러올 수 없습니다.</div>';return;
   }
   renderCollab(rows);
 });
 
-/* ============================================================
-   높이 자동 조절 (임베드 iframe 대응)
-   — 콘텐츠 높이가 바뀔 때마다 부모 프레임에 높이를 전달
-   — ResizeObserver로 실시간 감지
-   ============================================================ */
+/* ===== 높이 자동 조절 ===== */
 function sendHeight(){
-  var h = document.documentElement.scrollHeight || document.body.scrollHeight;
-  try{
-    /* postMessage로 부모 페이지에 높이 전달 */
-    window.parent.postMessage({type:'resize', height:h}, '*');
-  }catch(e){}
+  var h=document.documentElement.scrollHeight||document.body.scrollHeight;
+  try{window.parent.postMessage({type:'resize',height:h},'*');}catch(e){}
 }
-
-/* ResizeObserver: DOM 크기 변화 실시간 감지 */
-if(window.ResizeObserver){
-  var _ro = new ResizeObserver(function(){ sendHeight(); });
-  _ro.observe(document.body);
-} else {
-  /* 폴백: 100ms 폴링 */
-  setInterval(sendHeight, 100);
-}
-
-/* 초기 전송 + 이미지/폰트 로드 후 재전송 */
+if(window.ResizeObserver){var _ro=new ResizeObserver(function(){sendHeight();});_ro.observe(document.body);}
+else{setInterval(sendHeight,100);}
 sendHeight();
-window.addEventListener('load', sendHeight);
+window.addEventListener('load',sendHeight);
 
-/* ============================================================
-   커스텀 메뉴 네비게이션 지원
-   — 외부 사이트의 커스텀 메뉴가 #섹션id 링크를 사용할 때,
-     iframe 내부에서 해당 섹션으로 스크롤하고
-     부모에게 스크롤 위치를 알려줌
-   — 두 가지 방식 모두 지원:
-     1. postMessage: {type:'scrollTo', id:'섹션id'} 수신
-     2. URL hash 변경: location.hash = '#섹션id'
-   ============================================================ */
-
-/* 섹션 id 목록 (네비게이션 대상) */
-var NAV_IDS = ['artist','process','price','collab','portfolio','virtual','illust','apply','faq'];
-
+/* ===== 커스텀 메뉴 네비게이션 ===== */
+var NAV_IDS=['artist','process','price','collab','portfolio','virtual','illust','sample','apply','faq'];
 function scrollToSection(id){
   if(!id) return;
-  var el = document.getElementById(id);
-  if(!el) return;
-  /* iframe 내부 스크롤 */
-  el.scrollIntoView({behavior:'smooth', block:'start'});
-  /* 부모에게 오프셋 전달 (부모가 직접 스크롤해야 하는 경우) */
-  try{
-    var offsetTop = el.getBoundingClientRect().top + window.pageYOffset;
-    window.parent.postMessage({type:'scrollTo', id:id, offsetTop:offsetTop}, '*');
-  }catch(e){}
+  var el=document.getElementById(id);if(!el) return;
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+  try{var top=el.getBoundingClientRect().top+window.pageYOffset;window.parent.postMessage({type:'scrollTo',id:id,offsetTop:top},'*');}catch(e){}
 }
-
-/* postMessage 수신 */
-window.addEventListener('message', function(e){
+window.addEventListener('message',function(e){
   if(!e.data) return;
-  /* {type:'scrollTo', id:'섹션id'} 형태 수신 */
-  if(e.data.type==='scrollTo' && e.data.id){
-    scrollToSection(e.data.id);
-  }
-  /* {type:'navTo', hash:'#섹션id'} 형태도 지원 */
-  if(e.data.type==='navTo' && e.data.hash){
-    var id = e.data.hash.replace('#','');
-    scrollToSection(id);
-  }
+  if(e.data.type==='scrollTo'&&e.data.id) scrollToSection(e.data.id);
+  if(e.data.type==='navTo'&&e.data.hash) scrollToSection(e.data.hash.replace('#',''));
 });
-
-/* URL hash로 직접 접근 시 처리 */
-function handleHash(){
-  var hash = location.hash.replace('#','');
-  if(hash && NAV_IDS.indexOf(hash)>-1){
-    scrollToSection(hash);
-  }
-}
-window.addEventListener('hashchange', handleHash);
+function handleHash(){var h=location.hash.replace('#','');if(h&&NAV_IDS.indexOf(h)>-1)scrollToSection(h);}
+window.addEventListener('hashchange',handleHash);
 handleHash();
-
-/* 섹션 id를 외부에서 조회할 수 있도록 전역 노출 */
-window.commissionNavIds = NAV_IDS;
-window.commissionScrollTo = scrollToSection;
+window.commissionNavIds=NAV_IDS;
+window.commissionScrollTo=scrollToSection;
 
 })();
 </script>
