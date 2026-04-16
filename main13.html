@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>양초 커미션 상세페이지</title>
 <style>
 @font-face{font-family:'Paperozi';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2');font-weight:100;font-display:swap}
 @font-face{font-family:'Paperozi';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2');font-weight:200;font-display:swap}
@@ -48,10 +49,51 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
 /* ===== SECTION ===== */
 .section{margin-bottom:32px;background:var(--card);border-radius:var(--radius);border:1.5px solid var(--border);overflow:visible;box-shadow:var(--shadow);transition:box-shadow 0.25s}
 .section:hover{box-shadow:var(--shadow-up)}
-.section-header{background:var(--main-light);padding:18px 26px 16px;border-bottom:1.5px solid var(--border);border-radius:calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;display:flex;align-items:center;gap:10px}
-.section-header .icon{width:30px;height:30px;background:var(--main);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;line-height:1}
-.section-title{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
+.section-header{background:#AED9FE;padding:18px 26px 16px;border-bottom:1.5px solid var(--border);border-radius:calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;display:flex;align-items:center;gap:10px}
+.section-header .icon{width:30px;height:30px;background:rgba(255,255,255,0.3);color:#FFFFFF;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;line-height:1}
+.section-title{font-size:17px;font-weight:700;color:#FFFFFF;letter-spacing:-0.3px}
 .section-body{padding:24px 26px}
+
+/* 가격 접기/펴기 */
+.price-toggle-header{cursor:pointer;user-select:none;border-radius:calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;transition:border-radius 0.35s}
+.price-toggle-header.collapsed{border-radius:calc(var(--radius) - 1px);border-bottom:none}
+.price-toggle-header .toggle-arrow{
+  margin-left:auto;
+  font-size:20px;color:rgba(255,255,255,0.95);
+  font-weight:700;
+  transition:transform 0.35s ease;
+  flex-shrink:0;line-height:1;
+}
+.price-toggle-header.collapsed .toggle-arrow{transform:rotate(-90deg)}
+.price-body-wrap{overflow:hidden;transition:max-height 0.45s ease,opacity 0.3s ease;max-height:3000px;opacity:1}
+.price-body-wrap.collapsed{max-height:0;opacity:0}
+
+/* 접혔을 때 레이어 쌓임 효과 — 2겹, section 아래로 튀어나옴 */
+#price{position:relative;transition:margin-bottom 0.35s ease}
+#price.stacked{margin-bottom:42px}  /* 레이어 공간 확보 */
+#price::after,#price::before{
+  content:'';
+  position:absolute;
+  left:0;right:0;top:0;
+  height:100%;
+  background:#AED9FE;
+  border-radius:var(--radius);
+  border:1.5px solid var(--border);
+  z-index:-1;
+  opacity:0;
+  transition:opacity 0.35s ease, transform 0.35s ease;
+  transform:translateY(0);
+}
+#price::after{transform:translateY(0) scaleX(0.94)}
+#price::before{transform:translateY(0) scaleX(0.88);filter:brightness(0.97)}
+#price.stacked::after{
+  opacity:1;
+  transform:translateY(5.3px) scaleX(0.97);
+}
+#price.stacked::before{
+  opacity:0.6;
+  transform:translateY(9px) scaleX(0.94);
+}
 
 /* ===== PROFILE — 세로 중앙 정렬 ===== */
 .profile-center{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px}
@@ -89,13 +131,8 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
   font-size:16px;color:var(--main-mid);font-weight:700;flex-shrink:0;
 }
 .process-notes{display:flex;flex-direction:column;gap:8px;margin-top:16px}
-.process-note{
-  padding:11px 16px;
-  border-radius:var(--radius-sm);
-  font-size:13px;line-height:1.75;
-}
-.process-note.warn{background:var(--warn-bg);border:1px solid var(--warn-border);color:var(--warn-text)}
-.process-note.info{background:var(--main-light);border:1px solid var(--border);color:var(--text-sub)}
+.process-plain{font-size:13px;color:var(--text-sub);line-height:1.75}
+.price-plain-note{font-size:12px;color:var(--text-sub);margin-top:8px;line-height:1.7}
 
 /* ===== PRICE — 탭 없음, 카테고리별 표 ===== */
 .price-cat{margin-bottom:28px}
@@ -126,7 +163,7 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
   background:var(--main-dark);color:#fff;
   padding:2px 8px;border-radius:20px;vertical-align:middle;
 }
-.price-note-small{font-size:12px;color:var(--warn-text);margin-top:8px;padding:8px 12px;background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:var(--radius-sm);line-height:1.7}
+.price-note-small{font-size:12px;color:var(--text-sub);margin-top:8px;line-height:1.7}
 
 /* 사용권 표 */
 .license-table-wrap{overflow-x:auto;border-radius:var(--radius-sm);border:1.5px solid var(--border);margin-top:0}
@@ -403,15 +440,20 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
       <div class="process-pill">완성</div>
     </div>
     <div class="process-notes">
-      <div class="process-note warn">⚠ 다음 단계로 넘어간 이후 작업에 대한 수정은 추가금이 발생됩니다. 각 단계에서 충분히 검토 후 말씀해주세요.</div>
-      <div class="process-note info">📌 아트머그 규정 상 전액 입금 후 예약이 확정됩니다.</div>
+      <p class="process-plain" style="color:var(--warn-text)">⚠ 다음 단계로 넘어간 이후 작업에 대한 수정은 추가금이 발생됩니다. 각 단계에서 충분히 검토 후 말씀해주세요.</p>
+      <p class="process-plain">📌 아트머그 규정 상 전액 입금 후 예약이 확정됩니다.</p>
     </div>
   </div>
 </section>
 
 <!-- ===== 가격 안내 ===== -->
-<section class="section" id="price">
-  <div class="section-header"><div class="icon">✦</div><span class="section-title">가격 안내</span></div>
+<section class="section stacked" id="price">
+  <div class="section-header price-toggle-header collapsed" id="price-toggle" onclick="togglePrice()">
+    <div class="icon">✦</div>
+    <span class="section-title">가격 안내</span>
+    <span class="toggle-arrow" id="price-arrow">▼</span>
+  </div>
+  <div class="price-body-wrap collapsed" id="price-body-wrap">
   <div class="section-body">
 
     <div class="price-cat">
@@ -451,19 +493,10 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
     </div>
 
   </div>
+  </div><!-- /price-body-wrap -->
 </section>
 
-<!-- ===== 협업 작가 ===== -->
-<section class="section" id="collab">
-  <div class="section-header"><div class="icon">✦</div><span class="section-title">협업 작가</span></div>
-  <div class="section-body">
-    <div id="collab-grid">
-      <div class="collab-loading">협업 작가 정보를 불러오는 중...</div>
-    </div>
-  </div>
-</section>
 
-<!-- ===== 포트폴리오 ===== -->
 <div id="portfolio">
 
 <section class="section" id="virtual">
@@ -528,6 +561,16 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
   </div>
 </section>
 
+<!-- ===== 협업 작가 ===== -->
+<section class="section" id="collab">
+  <div class="section-header"><div class="icon">✦</div><span class="section-title">협업 작가</span></div>
+  <div class="section-body">
+    <div id="collab-grid">
+      <div class="collab-loading">협업 작가 정보를 불러오는 중...</div>
+    </div>
+  </div>
+</section>
+
 <!-- ===== 신청 양식 + 견적 계산기 ===== -->
 <section class="section" id="apply">
   <div class="section-header"><div class="icon">✦</div><span class="section-title">신청 양식 &amp; 견적 계산기</span></div>
@@ -565,7 +608,7 @@ body{font-family:'Paperozi',sans-serif;color:var(--text);font-weight:400;line-he
         <select class="form-select" id="f-rigging" onchange="onRiggingChange()">
           <option value="">선택해주세요</option>
           <option value="미정">미정</option>
-          <option value="타작가">타작가</option>
+          <option value="직접 입력">직접 입력</option>
         </select>
         <div class="other-rigger-wrap" id="other-rigger-wrap">
           <input class="form-input" type="text" id="f-other-rigger"
@@ -833,7 +876,7 @@ function renderPriceData(rows){
     lHtml+='<tr'+(isBest?' class="price-best"':'')+'><td>'+escHtml(r['옵션명'])+'</td><td>'+Number(r['가격']).toLocaleString()+'원</td></tr>';
   });
   lHtml+='</tbody></table></div>';
-  lHtml+='<p class="price-note-small">※ 위 가격은 기본 금액이며 캐릭터 복잡도에 따라 변동될 수 있습니다. 신의상 제작 예정이라면 마네킹 추가가 필수입니다.</p>';
+  lHtml+='<p class="price-plain-note">※ 위 가격은 기본 금액이며 캐릭터 복잡도에 따라 변동될 수 있습니다. 신의상 제작 예정이라면 마네킹 추가가 필수입니다.</p>';
   document.getElementById('price-live2d').innerHTML=lHtml;
 
   var oHtml='<div class="price-tbl-wrap"><table class="price-tbl"><thead><tr><th>옵션명</th><th style="text-align:right">최소 금액</th></tr></thead><tbody>';
@@ -962,7 +1005,7 @@ function renderCollab(rows){
 
   var select=document.getElementById('f-rigging');
   if(select){
-    var baseOpts='<option value="">선택해주세요</option><option value="미정">미정</option><option value="타작가">타작가</option>';
+    var baseOpts='<option value="">선택해주세요</option><option value="미정">미정</option><option value="직접 입력">직접 입력</option>';
     var riggers=(groups['리깅']||[]);
     var rigOpts=riggers.map(function(r){
       var nm=(r['이름']||'').trim();
@@ -1128,7 +1171,7 @@ window.onTypeChange=function(){updateEstimate();};
 window.onRiggingChange=function(){
   var val=document.getElementById('f-rigging').value;
   var wrap=document.getElementById('other-rigger-wrap');
-  if(wrap) wrap.classList.toggle('show', val==='타작가');
+  if(wrap) wrap.classList.toggle('show', val==='직접 입력');
   updateEstimate();
 };
 
@@ -1190,7 +1233,7 @@ window.copyForm=function(){
   var etc=(document.getElementById('f-etc')||{}).value||'';
   var riggingSel=(document.getElementById('f-rigging')||{}).value||'';
   var riggingOther=(document.getElementById('f-other-rigger')||{}).value||'';
-  var rigging=riggingSel==='타작가'?'타작가 ('+riggingOther+')':riggingSel;
+  var rigging=riggingSel==='직접 입력'?'직접 입력 ('+riggingOther+')':riggingSel;
   var type=(document.getElementById('f-type')||{}).value||'';
   var licEl=document.querySelector('input[name="license"]:checked');
   var snsEl=document.querySelector('input[name="sns"]:checked');
@@ -1223,19 +1266,23 @@ window.copyForm=function(){
   estRows.forEach(function(row){var lbl=row.querySelector('.e-label');var val=row.querySelector('.e-val');if(lbl&&val)estLines.push('  '+lbl.textContent.trim()+': '+val.textContent.trim());});
   var estTotal=(document.getElementById('est-total')||{}).textContent||'—';
 
+  /* 순서: 신청자명 → 신청타입 → 캐릭터컨셉 → 리깅작가 → 사용권 → SNS → 추가옵션/에셋 → 기타요청사항 → 견적 */
   var lines=[
     '【 양초 커미션 신청 내용 】','',
     '■ 신청자명: '+name,
     '■ 신청 타입: '+type+(basePrice>0?' ('+basePrice.toLocaleString()+'원)':''),
+    '',
+    '■ 캐릭터 컨셉:',
+    concept,
+    '',
     '■ 리깅 작가: '+rigging,
     '■ 사용권 구매: '+license,
     '■ SNS 공개: '+sns,
   ];
-  if(optLines.length){lines.push('■ 추가 옵션:');optLines.forEach(function(l){lines.push(l);});}
-  if(assetLines.length){lines.push('■ 에셋 작업:');assetLines.forEach(function(l){lines.push(l);});}
-  if(estLines.length){lines.push('');lines.push('■ 예상 견적:');estLines.forEach(function(l){lines.push(l);});lines.push('  합계 (최소): '+estTotal);}
-  lines.push('');lines.push('■ 캐릭터 컨셉:');lines.push(concept);
+  if(optLines.length){lines.push('');lines.push('■ 추가 옵션:');optLines.forEach(function(l){lines.push(l);});}
+  if(assetLines.length){lines.push('');lines.push('■ 에셋 작업:');assetLines.forEach(function(l){lines.push(l);});}
   if(etc.trim()){lines.push('');lines.push('■ 기타 요청사항:');lines.push(etc);}
+  if(estLines.length){lines.push('');lines.push('■ 예상 견적:');estLines.forEach(function(l){lines.push(l);});lines.push('  합계 (최소): '+estTotal);}
 
   var text=lines.join('\n');
   function doSuccess(){
@@ -1261,6 +1308,18 @@ window.toggleFaq=function(btn){
   var panel=btn.nextElementSibling;var isOpen=btn.classList.contains('open');
   document.querySelectorAll('.faq-q.open').forEach(function(b){b.classList.remove('open');b.nextElementSibling.style.maxHeight='0';});
   if(!isOpen){btn.classList.add('open');panel.style.maxHeight=panel.scrollHeight+'px';}
+};
+
+/* ===== 가격 접기/펴기 ===== */
+window.togglePrice=function(){
+  var header=document.getElementById('price-toggle');
+  var body=document.getElementById('price-body-wrap');
+  var section=document.getElementById('price');
+  if(!header||!body) return;
+  var isCollapsed=body.classList.contains('collapsed');
+  body.classList.toggle('collapsed',!isCollapsed);
+  header.classList.toggle('collapsed',!isCollapsed);
+  section.classList.toggle('stacked',!isCollapsed);
 };
 
 /* ===== 유틸 ===== */
