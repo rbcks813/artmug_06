@@ -507,8 +507,14 @@
                 <textarea id="inquiryStructure" class="form-control" rows="2" placeholder="예: 소개 - 작업 순서 - 포트폴리오"></textarea>
             </div>
 
-            <div class="form-group">
-                <label>6. 기타 요청사항</label>
+            <!-- ★ 맞춤 오마카세 선택 시 표시 -->
+            <div class="form-group" id="budgetGroup" style="display:none; overflow:hidden; transition: all 0.3s;">
+                <label>6. 예산 <span style="font-size:12px; color:#868e96; font-weight:400;">(맞춤 오마카세 선택 시)</span></label>
+                <input type="text" id="inquiryBudget" class="form-control" placeholder="예: 5만원 이하 / 10만원 내외 / 자유롭게 적어주세요">
+            </div>
+
+            <div class="form-group" id="etcGroup">
+                <label id="etcLabel">6. 기타 요청사항</label>
                 <textarea id="inquiryEtc" class="form-control" rows="3" placeholder="자유롭게 기재해주세요."></textarea>
             </div>
         </div>
@@ -1328,7 +1334,24 @@ function updateCalcCheckbox(cb) {
         }
         selectedItems.delete(name);
     }
-    updateSummary(); setTimeout(sendHeight, 150); 
+    updateSummary();
+    toggleBudgetField();
+    setTimeout(sendHeight, 150);
+}
+
+// =================== ★ 맞춤 오마카세 예산 필드 토글 ===================
+function toggleBudgetField() {
+    const hasOmakase = Array.from(selectedItems.keys()).some(k => k.includes('맞춤 오마카세'));
+    const budgetGroup = document.getElementById('budgetGroup');
+    const etcLabel = document.getElementById('etcLabel');
+
+    if (hasOmakase) {
+        budgetGroup.style.display = 'block';
+        etcLabel.textContent = '7. 기타 요청사항';
+    } else {
+        budgetGroup.style.display = 'none';
+        etcLabel.textContent = '6. 기타 요청사항';
+    }
 }
 
 function updateCalcQty(input) {
@@ -1394,6 +1417,7 @@ function resetCalc(btnElement) {
     document.getElementById('inquiryMethod').value = '';
     document.getElementById('inquiryPageLink').value = '';
     document.getElementById('inquiryReference').value = '';
+    document.getElementById('inquiryBudget').value = '';
     document.getElementById('inquiryStructure').value = '';
     document.getElementById('inquiryEtc').value = '';
 
@@ -1412,6 +1436,7 @@ function resetCalc(btnElement) {
     });
 
     selectedItems.clear(); updateSummary();
+    toggleBudgetField();
     document.getElementById('termsCheckbox').checked = false;
     document.getElementById('btnCopy').classList.remove('active');
     
@@ -1430,6 +1455,9 @@ function copyEstimate(btnElement) {
     const method = document.getElementById('inquiryMethod').value || '미선택';
     const pageLink = document.getElementById('inquiryPageLink').value.trim() || '없음';
     const ref = document.getElementById('inquiryReference').value || '없음';
+    const budget = document.getElementById('budgetGroup').style.display !== 'none'
+        ? (document.getElementById('inquiryBudget').value.trim() || '미기재')
+        : null;
     
     let colors = [];
     document.querySelectorAll('.inquiryColorHex').forEach(el => colors.push(el.value));
@@ -1445,7 +1473,8 @@ function copyEstimate(btnElement) {
     textPart += `3. 디자인 레퍼런스: ${ref}\n`;
     textPart += `4. 메인 색상: ${colorStr}\n`;
     textPart += `5. 상세페이지 구성: ${structure}\n`;
-    textPart += `6. 기타 요청사항: ${etc}\n\n`;
+    if (budget !== null) textPart += `6. 예산: ${budget}\n`;
+    textPart += `${budget !== null ? '7' : '6'}. 기타 요청사항: ${etc}\n\n`;
 
     textPart += "[ 의뢰 및 견적 내역 ]\n";
     let total = 0;
