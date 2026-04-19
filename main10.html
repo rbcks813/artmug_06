@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* 폰트 설정 */
         @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight: 100; font-display: swap; }
         @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2'); font-weight: 200; font-display: swap; }
         @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
@@ -198,6 +197,7 @@
             <button class="tab-btn" onclick="filterCategory('YOUTUBE')">YOUTUBE</button>
             <button class="tab-btn" onclick="filterCategory('SCHEDULE')">SCHEDULE</button>
             <button class="tab-btn" onclick="filterCategory('THUMBNAIL')">THUMBNAIL</button>
+            <button class="tab-btn" onclick="filterCategory('NAVER')">NAVER</button>
         </div>
         <div class="portfolio-grid" id="portfolioGrid"></div>
         <div class="pagination">
@@ -319,7 +319,7 @@
         } catch (e) { console.error('Portfolio Load Error'); }
     }
 
-    /* 패키지 연동 설정 (추가됨) */
+    /* 패키지 연동 설정 */
     const packageSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTH03PGVgFdh1F6NcXkK6YqEEH-iaRudUtjCQvRBz991-ln1zo562B9j83lPqLhmPrGlOlSBcri-199/pub?gid=1993391211&single=true&output=csv';
 
     async function fetchPackages() {
@@ -346,9 +346,7 @@
                 const [tag, title, desc, items, highlight] = cols.map(c => c.replace(/^"|"$/g, '').trim());
                 if (!tag || !title) continue;
 
-                // 콤마를 +로 변경
                 let itemsList = items.split(',').map(item => item.trim()).join(' + ');
-                // 강조할 상품 굵게 처리
                 if (highlight && highlight.trim() && itemsList.includes(highlight)) {
                     itemsList = itemsList.replace(highlight, `<b>${highlight}</b>`);
                 }
