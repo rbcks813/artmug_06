@@ -689,17 +689,24 @@
         });
     }
 
-    // ---------------- [ 임베드 높이 자동 감지 로직 추가 ] ----------------
+    // ---------------- [ 임베드 높이 자동 감지 로직 추가 (수정됨: 줄어들기 지원) ] ----------------
     function sendHeight() {
         if (window.parent && window.parent !== window) {
-            const height = document.documentElement.scrollHeight || document.body.scrollHeight;
-            window.parent.postMessage({ type: 'setHeight', height: height }, '*');
+            const container = document.getElementById('mainContainer');
+            if (container) {
+                // scrollHeight 대신 실제 컨텐츠 높이(offsetHeight)를 측정하여 줄어드는 것도 감지
+                const bodyStyle = window.getComputedStyle(document.body);
+                const paddingTop = parseFloat(bodyStyle.paddingTop) || 0;
+                const paddingBottom = parseFloat(bodyStyle.paddingBottom) || 0;
+                const height = container.offsetHeight + paddingTop + paddingBottom;
+                window.parent.postMessage({ type: 'setHeight', height: height }, '*');
+            }
         }
     }
     window.addEventListener('resize', sendHeight);
     if (window.ResizeObserver) {
         const ro = new ResizeObserver(sendHeight);
-        ro.observe(document.body);
+        ro.observe(document.getElementById('mainContainer') || document.body);
     }
 
     // ---------------- [ 포트폴리오 연동 로직 ] ----------------
@@ -849,6 +856,7 @@
         reader.onerror = error => reject(error);
     });
 
+    // ---------------- [ 복사 기능 로직 수정 (모바일 호환성 강화) ] ----------------
     async function copyFormData() {
         const btn = document.getElementById('copyBtn');
         const noticeCheck = document.getElementById('noticeCheck');
@@ -858,6 +866,7 @@
         }
         btn.innerText = "복사 중...";
         await new Promise(resolve => setTimeout(resolve, 50)); 
+        
         try {
             const nickname = document.getElementById('nickname').value || '(공백)';
             const type = document.querySelector('input[name="boardType"]:checked').value;
@@ -883,17 +892,63 @@
                 scale: 1 
             });
             const boardImageBase64 = boardCanvas.toDataURL("image/png");
+            
             const plainText = `[주루마블 신청 양식]\n1. 방송 닉네임: ${nickname}\n2. 신청 타입: ${type}\n3. 선택 색상: ${color1}, ${color2}\n5. 메뉴판 문구: ${menu}\n6. 모서리 모양: ${shape}\n8. 추가 요청사항: ${extra}`;
             const htmlContent = `<div style="font-family: sans-serif;"><h3>주루마블 신청서</h3><p><b>1. 방송 닉네임:</b> ${nickname}</p><p><b>2. 신청 타입:</b> ${type}</p><p><b>3. 선택 색상:</b> ${color1}, ${color2}</p><p><b>5. 메뉴판 문구:</b> ${menu}</p><p><b>6. 모서리 모양:</b> ${shape}</p><p><b>8. 추가 요청사항:</b> ${extra}</p><br><p><b>[캐릭터 이미지]</b></p><div>${charImagesHtml}</div><br><p><b>[작성된 보드판 이미지]</b></p><img src="${boardImageBase64}" style="max-width: 100%; border: 1px solid #eee;" /></div>`;
-            const clipboardData = [
-                new ClipboardItem({ "text/plain": new Blob([plainText], { type: "text/plain" }), "text/html": new Blob([htmlContent], { type: "text/html" }) })
-            ];
-            await navigator.clipboard.write(clipboardData);
-            showTooltip("복사되었습니다");
-            btn.innerText = "양식 복사하기";
+
+            let copySuccess = false;
+
+            // 모바일 및 호환성 브라우저를 위한 Fallback 복사 기능 (execCommand)
+            const fallbackCopy = () => {
+                const container = document.createElement('div');
+                container.innerHTML = htmlContent;
+                container.style.position = 'fixed';
+                container.style.left = '-9999px'; // 화면 밖으로 숨김
+                container.style.top = '0';
+                document.body.appendChild(container);
+
+                const range = document.createRange();
+                range.selectNodeContents(container);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+
+                const successful = document.execCommand('copy');
+                selection.removeAllRanges();
+                document.body.removeChild(container);
+                return successful;
+            };
+
+            // 1순위: 최신 Clipboard API 시도
+            if (navigator.clipboard && window.ClipboardItem) {
+                try {
+                    const clipboardData = [
+                        new ClipboardItem({ 
+                            "text/plain": new Blob([plainText], { type: "text/plain" }), 
+                            "text/html": new Blob([htmlContent], { type: "text/html" }) 
+                        })
+                    ];
+                    await navigator.clipboard.write(clipboardData);
+                    copySuccess = true;
+                } catch (err) {
+                    console.warn("Clipboard API failed, trying fallback...", err);
+                    // API가 실패할 경우(주로 모바일 비동기 시간초과) Fallback 실행
+                    copySuccess = fallbackCopy();
+                }
+            } else {
+                // Clipboard API 미지원 환경 (일부 인앱 브라우저 등)
+                copySuccess = fallbackCopy();
+            }
+
+            if (copySuccess) {
+                showTooltip("복사되었습니다");
+            } else {
+                showTooltip("복사 지원이 되지 않는 환경입니다");
+            }
         } catch (err) {
             console.error(err);
             showTooltip("복사 중 오류가 발생했습니다");
+        } finally {
             btn.innerText = "양식 복사하기";
         }
     }
