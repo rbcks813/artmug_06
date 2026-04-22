@@ -394,7 +394,7 @@
         .port-item iframe { width: 100%; height: 100%; border: none; }
 
         .port-grid > .port-item { aspect-ratio: 16 / 9; }
-        #tab-shorts-game .port-item, #tab-shorts-chat .port-item, .port-item.shorts-item { aspect-ratio: 9 / 16; }
+        #tab-shorts-game .port-item, #tab-shorts-chat .port-item, #tab-all-shorts .port-item, .port-item.shorts-item { aspect-ratio: 9 / 16; }
 
         .video-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -634,6 +634,7 @@
 
     #tab-shorts-game .port-item,
     #tab-shorts-chat .port-item,
+    #tab-all-shorts .port-item,
     .port-item.shorts-item {
         width: calc(220px * 9 / 16) !important;
         aspect-ratio: unset !important;
@@ -763,21 +764,27 @@
 
         <div class="content-section" id="sec-portfolio">
             <h2 class="section-title">포트폴리오</h2>
-            <p style="font-size: 0.8rem; color: #bbb; margin-top: -15px; margin-bottom: 15px;">* 옆으로 밀어서 확인하세요. 클릭 시 영상이 재생됩니다.</p>
-            
-            <div class="tab-wrapper">
-                <button class="tab-btn active" onclick="showTab('tab-all', this)">전체</button>
-                <button class="tab-btn" onclick="showTab('tab-game', this)">게임</button>
-                <button class="tab-btn" onclick="showTab('tab-justchat', this)">저스트 채팅</button>
-                <button class="tab-btn" onclick="showTab('tab-debut', this)">데뷔 영상</button>
-                <button class="tab-btn" onclick="showTab('tab-shorts-game', this)">쇼츠 게임</button>
-                <button class="tab-btn" onclick="showTab('tab-shorts-chat', this)">쇼츠 저챗</button>
-            </div>
+            <p style="font-size: 0.8rem; color: #bbb; margin-top: -15px; margin-bottom: 25px;">* 옆으로 밀어서 확인하세요. 클릭 시 영상이 재생됩니다.</p>
 
-            <div id="tab-all" class="port-grid active"></div>
+            <p style="font-size: 1rem; font-weight: 800; color: var(--dark-tea); margin: 0 0 12px 0;">📽️ 롱폼</p>
+            <div class="tab-wrapper" id="longform-tab-wrapper">
+                <button class="tab-btn active" onclick="showTabInGroup('tab-all-long', this, 'longform-tab-wrapper')">전체</button>
+                <button class="tab-btn" onclick="showTabInGroup('tab-game', this, 'longform-tab-wrapper')">게임</button>
+                <button class="tab-btn" onclick="showTabInGroup('tab-justchat', this, 'longform-tab-wrapper')">저스트 채팅</button>
+                <button class="tab-btn" onclick="showTabInGroup('tab-debut', this, 'longform-tab-wrapper')">데뷔 영상</button>
+            </div>
+            <div id="tab-all-long" class="port-grid active"></div>
             <div id="tab-game" class="port-grid"></div>
             <div id="tab-justchat" class="port-grid"></div>
             <div id="tab-debut" class="port-grid"></div>
+
+            <p style="font-size: 1rem; font-weight: 800; color: var(--dark-tea); margin: 30px 0 12px 0;">📱 숏폼</p>
+            <div class="tab-wrapper" id="shorts-tab-wrapper">
+                <button class="tab-btn active" onclick="showTabInGroup('tab-all-shorts', this, 'shorts-tab-wrapper')">전체</button>
+                <button class="tab-btn" onclick="showTabInGroup('tab-shorts-game', this, 'shorts-tab-wrapper')">게임</button>
+                <button class="tab-btn" onclick="showTabInGroup('tab-shorts-chat', this, 'shorts-tab-wrapper')">저스트 채팅</button>
+            </div>
+            <div id="tab-all-shorts" class="port-grid active"></div>
             <div id="tab-shorts-game" class="port-grid"></div>
             <div id="tab-shorts-chat" class="port-grid"></div>
         </div>
@@ -1054,13 +1061,16 @@
 
         async function loadPortfolio() {
             const grids = { '게임': document.getElementById('tab-game'), '저스트 채팅': document.getElementById('tab-justchat'), '데뷔': document.getElementById('tab-debut'), '쇼츠 게임': document.getElementById('tab-shorts-game'), '쇼츠 저챗': document.getElementById('tab-shorts-chat') };
-            const allGrid = document.getElementById('tab-all');
+            const allLongGrid = document.getElementById('tab-all-long');
+            const allShortsGrid = document.getElementById('tab-all-shorts');
+            const shortsCategories = ['쇼츠 게임', '쇼츠 저챗'];
             try {
                 const response = await fetch(PORTFOLIO_CSV_URL);
                 const data = await response.text();
                 const rows = data.split('\n').filter(r => r.trim() !== '');
                 Object.values(grids).forEach(g => g.innerHTML = '');
-                allGrid.innerHTML = '';
+                allLongGrid.innerHTML = '';
+                allShortsGrid.innerHTML = '';
                 for (let i = 1; i < rows.length; i++) {
                     const cols = parseCSVLine(rows[i]);
                     if (cols.length >= 2) {
@@ -1070,9 +1080,10 @@
                         const target = grids[cat];
                         if (target && youtubeId) {
                             const thumbUrl = `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
+                            const isShorts = shortsCategories.includes(cat);
 
                             const item = document.createElement('div');
-                            item.className = cat.includes('쇼츠') ? 'port-item shorts-item' : 'port-item';
+                            item.className = isShorts ? 'port-item shorts-item' : 'port-item';
                             item.dataset.videoId = youtubeId;
                             item.dataset.thumb = thumbUrl;
                             item.innerHTML = `<img src="${thumbUrl}" alt="portfolio">`;
@@ -1091,7 +1102,7 @@
                             target.appendChild(item);
 
                             const itemAll = document.createElement('div');
-                            itemAll.className = cat.includes('쇼츠') ? 'port-item shorts-item' : 'port-item';
+                            itemAll.className = isShorts ? 'port-item shorts-item' : 'port-item';
                             itemAll.dataset.videoId = youtubeId;
                             itemAll.dataset.thumb = thumbUrl;
                             itemAll.innerHTML = `<img src="${thumbUrl}" alt="portfolio">`;
@@ -1107,12 +1118,17 @@
                                     activeVideoItem = this;
                                 }
                             };
-                            allGrid.appendChild(itemAll);
+                            if (isShorts) {
+                                allShortsGrid.appendChild(itemAll);
+                            } else {
+                                allLongGrid.appendChild(itemAll);
+                            }
                         }
                     }
                 }
                 Object.values(grids).forEach(g => { if (g.innerHTML === '') g.innerHTML = '<div style="width: 100%; text-align:center; padding: 60px 0; color:#bbb; font-size: 0.95rem;">아직 포트폴리오가 없습니다! 🍵</div>'; });
-                if (allGrid.innerHTML === '') allGrid.innerHTML = '<div style="width: 100%; text-align:center; padding: 60px 0; color:#bbb; font-size: 0.95rem;">아직 포트폴리오가 없습니다! 🍵</div>';
+                if (allLongGrid.innerHTML === '') allLongGrid.innerHTML = '<div style="width: 100%; text-align:center; padding: 60px 0; color:#bbb; font-size: 0.95rem;">아직 포트폴리오가 없습니다! 🍵</div>';
+                if (allShortsGrid.innerHTML === '') allShortsGrid.innerHTML = '<div style="width: 100%; text-align:center; padding: 60px 0; color:#bbb; font-size: 0.95rem;">아직 포트폴리오가 없습니다! 🍵</div>';
             } catch (e) { console.error(e); }
         }
 
@@ -1137,6 +1153,18 @@
         function showTab(tabId, btn) {
             document.querySelectorAll('.port-grid').forEach(g => g.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+            setTimeout(sendHeightToParent, 300);
+        }
+
+        function showTabInGroup(tabId, btn, wrapperId) {
+            const wrapper = document.getElementById(wrapperId);
+            const longformIds = ['tab-all-long', 'tab-game', 'tab-justchat', 'tab-debut'];
+            const shortsIds = ['tab-all-shorts', 'tab-shorts-game', 'tab-shorts-chat'];
+            const groupIds = longformIds.includes(tabId) ? longformIds : shortsIds;
+            groupIds.forEach(id => document.getElementById(id).classList.remove('active'));
+            wrapper.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             btn.classList.add('active');
             setTimeout(sendHeightToParent, 300);
