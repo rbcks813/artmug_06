@@ -127,6 +127,7 @@
   }
   .price-label.blue { color: #639AD4; }
   .price-label.cyan { color: #00acc1; }
+  .price-label.gray { color: #64748b; }
 
   .price-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
   .price-rows:last-of-type { margin-bottom: 0; }
@@ -137,12 +138,16 @@
     display: flex; justify-content: space-between; align-items: center;
   }
   .price-row.cyan-row { background: #e0f7fa; border-color: #b2ebf2; }
+  .price-row.gray-row { background: #f1f5f9; border-color: #e2e8f0; }
   .price-row .info .name { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
   .price-row.cyan-row .info .name { color: #006064; }
+  .price-row.gray-row .info .name { color: #334155; }
   .price-row .info .desc { font-size: 11px; color: #64748b; }
   .price-row.cyan-row .info .desc { color: #00838f; }
+  .price-row.gray-row .info .desc { color: #64748b; }
   .price-row .amount { font-size: 16px; font-weight: 800; color: #639AD4; white-space: nowrap; margin-left: 12px; }
   .price-row.cyan-row .amount { color: #00838f; }
+  .price-row.gray-row .amount { color: #475569; }
   .price-note { font-size: 11px; color: #94a3b8; text-align: center; margin-top: 10px; }
 
   #price-loading { text-align: center; padding: 20px; font-size: 13px; color: #94a3b8; }
@@ -409,7 +414,6 @@
     <div id="price-container">
       <div id="price-loading">불러오는 중...</div>
     </div>
-    <div class="price-note">※ 모든 영상은 편집자의 포트폴리오로 사용될 수 있습니다. 비공개 요청 시 +5,000원</div>
   </div>
 
   <!-- ③ 작업 순서 + 캘린더 -->
@@ -675,30 +679,31 @@ function loadPrice() {
       var order = [];
       for (var i = 1; i < rows.length; i++) {
         var r = rows[i];
-        if (!r || r.length < 4) continue;
+        if (!r || r.length < 2) continue;
         var cat  = r[0];
         var name = r[1];
-        var desc = r[2];
-        var price = r[3];
+        var desc = r[2] || '';
+        var price = r[3] || '';
         if (!groups[cat]) { groups[cat] = []; order.push(cat); }
         groups[cat].push({ name: name, desc: desc, price: price });
       }
 
       var html = '';
-      order.forEach(function(cat, idx) {
-        var isCyan = (cat === '숏폼');
-        var labelClass = isCyan ? 'price-label cyan' : 'price-label blue';
-        var emoji = isCyan ? '📱' : '🎬';
+      order.forEach(function(cat) {
+        var isCyan  = (cat === '숏폼');
+        var isGray  = (cat === '기타');
+        var labelClass = isGray ? 'price-label gray' : isCyan ? 'price-label cyan' : 'price-label blue';
+        var emoji = isGray ? '➕' : isCyan ? '📱' : '🎬';
         html += '<div class="' + labelClass + '">' + emoji + ' ' + cat + '</div>';
         html += '<div class="price-rows">';
         groups[cat].forEach(function(item) {
-          var rowClass = isCyan ? 'price-row cyan-row' : 'price-row';
+          var rowClass = isGray ? 'price-row gray-row' : isCyan ? 'price-row cyan-row' : 'price-row';
           html += '<div class="' + rowClass + '">'
             + '<div class="info">'
             + '<div class="name">' + item.name + '</div>'
-            + '<div class="desc">' + item.desc + '</div>'
+            + (item.desc ? '<div class="desc">' + item.desc + '</div>' : '')
             + '</div>'
-            + '<div class="amount">' + item.price + '</div>'
+            + (item.price ? '<div class="amount gray-amount">' + item.price + '</div>' : '')
             + '</div>';
         });
         html += '</div>';
