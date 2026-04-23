@@ -23,6 +23,12 @@
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  html, body {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
   body {
     font-family: 'Paperlogy', 'Noto Sans KR', sans-serif;
     background: #f4f7fa;
@@ -938,24 +944,27 @@ loadPortfolio();
 
 /* ═══════════════════════════════════════
    1. 자동 높이 조절 (부모 iframe에 실시간 전달)
-   - ResizeObserver로 body 크기 변화를 감지
-   - postMessage({ type:'resize', height }) 전송
+   - .wrap 요소의 실제 높이만 측정 → scrollHeight 루프 방지
+   - ResizeObserver로 콘텐츠 변화 감지
 ═══════════════════════════════════════ */
 function sendHeight() {
-  var h = document.documentElement.scrollHeight;
+  var wrap = document.querySelector('.wrap');
+  if (!wrap) return;
+  // offsetHeight + body padding(위아래 각 15px) + 여유 2px
+  var h = wrap.offsetHeight + 32;
   window.parent.postMessage({ type: 'jt-resize', height: h }, '*');
 }
 
+var _observeTarget = document.querySelector('.wrap') || document.body;
+
 if (typeof ResizeObserver !== 'undefined') {
   var ro = new ResizeObserver(function() { sendHeight(); });
-  ro.observe(document.body);
+  ro.observe(_observeTarget);
 } else {
-  // 폴백: MutationObserver
   var mo = new MutationObserver(function() { sendHeight(); });
-  mo.observe(document.body, { childList: true, subtree: true, attributes: true });
+  mo.observe(_observeTarget, { childList: true, subtree: true, attributes: true });
 }
 
-// 초기 로드 + 이미지/폰트 완료 후 한 번 더
 window.addEventListener('load', sendHeight);
 sendHeight();
 
