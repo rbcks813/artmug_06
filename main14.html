@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>영상 편집 서비스 | 제티제티</title>
+<style>
+  @font-face {
+    font-family: 'Paperlogy';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
+    font-weight: 400; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Paperlogy';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2');
+    font-weight: 600; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Paperlogy';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');
+    font-weight: 800; font-display: swap;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Paperlogy', 'Noto Sans KR', sans-serif;
+    background: #f4f7fa;
+    color: #1e293b;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 15px 10px;
+  }
+
+  .wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 12px;
+    background: #e8f0fe;
+    color: #639AD4;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #1e293b;
+    margin-bottom: 18px;
+  }
+
+  /* ════ ① 소개 ════ */
+  .hero { text-align: center; }
+  .hero h2 {
+    font-size: 26px; font-weight: 800; letter-spacing: -1px;
+    color: #1e293b; margin-bottom: 6px;
+  }
+  .hero h2 span { color: #639AD4; }
+  .hero .sub {
+    font-size: 14px; color: #64748b; font-weight: 400;
+    word-break: keep-all;
+  }
+
+  /* 이벤트 박스 */
+  #event-box {
+    background: #fffbeb;
+    border: 1.5px solid #fde68a;
+    border-radius: 15px;
+    padding: 14px 18px;
+    margin-top: 16px;
+    text-align: center;
+    display: none;
+  }
+  #event-box .event-title {
+    font-size: 14px; font-weight: 800; color: #b45309; margin-bottom: 6px;
+  }
+  #event-box .event-body {
+    font-size: 12px; color: #78350f; line-height: 1.8;
+  }
+
+  .intro-body {
+    text-align: left;
+    background: #f8faff;
+    border-radius: 15px;
+    border: 1px solid #eef2f6;
+    padding: 18px 20px;
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .intro-body p { font-size: 14px; color: #475569; line-height: 1.85; }
+  .intro-body strong { color: #1e293b; font-weight: 700; }
+  .intro-body .red { color: #e74c3c; }
+
+  /* ════ ② 금액 ════ */
+  .price-label {
+    font-size: 13px; font-weight: 800; margin-bottom: 10px; padding-left: 5px;
+  }
+  .price-label.blue { color: #639AD4; }
+  .price-label.cyan { color: #00acc1; }
+
+  .price-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+  .price-rows:last-of-type { margin-bottom: 0; }
+
+  .price-row {
+    background: #f8faff; padding: 15px; border-radius: 15px;
+    border: 1px solid #eef2f6;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .price-row.cyan-row { background: #e0f7fa; border-color: #b2ebf2; }
+  .price-row .info .name { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
+  .price-row.cyan-row .info .name { color: #006064; }
+  .price-row .info .desc { font-size: 11px; color: #64748b; }
+  .price-row.cyan-row .info .desc { color: #00838f; }
+  .price-row .amount { font-size: 16px; font-weight: 800; color: #639AD4; white-space: nowrap; margin-left: 12px; }
+  .price-row.cyan-row .amount { color: #00838f; }
+  .price-note { font-size: 11px; color: #94a3b8; text-align: center; margin-top: 10px; }
+
+  #price-loading { text-align: center; padding: 20px; font-size: 13px; color: #94a3b8; }
+
+  /* ════ ③ 작업 순서 ════ */
+  .process-note {
+    background: #f8faff; border: 1px dashed #c3daff;
+    border-radius: 12px; padding: 12px 16px;
+    font-size: 13px; color: #475569; line-height: 1.75;
+    text-align: center; margin-bottom: 14px;
+  }
+  .process-note strong { color: #e74c3c; font-weight: 700; }
+
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 7px; margin-bottom: 14px;
+  }
+  .process-step {
+    background: #f8faff; padding: 15px 5px;
+    border-radius: 15px; text-align: center; border: 1px solid #eef2f6;
+  }
+  .process-step .num { font-size: 10px; color: #639AD4; font-weight: 800; margin-bottom: 4px; }
+  .process-step .name { font-weight: 600; font-size: 12px; line-height: 1.3; }
+
+  .duration-box {
+    background: #f8faff; border-radius: 15px;
+    border: 1px solid #eef2f6; padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .duration-box .dur-title { font-size: 13px; font-weight: 800; color: #334155; margin-bottom: 10px; }
+  .dur-rows { display: flex; flex-direction: column; gap: 8px; }
+  .dur-row {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; color: #475569;
+    padding-bottom: 8px; border-bottom: 1px dashed #e2e8f0;
+  }
+  .dur-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .dur-row .day { font-size: 14px; font-weight: 800; color: #639AD4; }
+  .dur-footer { margin-top: 10px; font-size: 11px; color: #94a3b8; text-align: center; }
+
+  /* ════ 캘린더 ════ */
+  .cal-tab-row {
+    display: flex; gap: 8px; margin-bottom: 14px;
+  }
+  .cal-tab-btn {
+    flex: 1; padding: 10px 0;
+    background: #f8faff; border: 1.5px solid #eef2f6;
+    border-radius: 12px; font-family: 'Paperlogy', sans-serif;
+    font-size: 13px; font-weight: 800; color: #94a3b8;
+    cursor: pointer; transition: 0.2s;
+  }
+  .cal-tab-btn.active {
+    background: #639AD4; border-color: #639AD4; color: #fff;
+  }
+
+  .cal-panel { display: none; }
+  .cal-panel.active { display: block; }
+
+  .cal-block { }
+  .cal-header {
+    text-align: center;
+    font-size: 14px; font-weight: 800; color: #334155;
+    margin-bottom: 10px;
+  }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+  }
+  .cal-dow {
+    text-align: center;
+    font-size: 10px; font-weight: 800; color: #94a3b8;
+    padding: 4px 0;
+  }
+  .cal-dow:first-child { color: #f87171; }
+  .cal-dow:last-child  { color: #60a5fa; }
+
+  .cal-day {
+    text-align: center;
+    font-size: 12px; font-weight: 600;
+    padding: 6px 2px;
+    border-radius: 8px;
+    background: #f8faff;
+    border: 1px solid #eef2f6;
+    cursor: default;
+    line-height: 1.2;
+    min-height: 38px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+  /* 이전달/다음달 ghost */
+  .cal-day.ghost {
+    background: transparent; border-color: transparent;
+    color: #c8d5e8; font-weight: 400;
+  }
+  .cal-day.ghost.sun { color: #f7c5c5; }
+  .cal-day.ghost.sat { color: #b3cfe8; }
+
+  .cal-day.sun { color: #f87171; }
+  .cal-day.sat { color: #60a5fa; }
+  .cal-day.today { border-color: #639AD4; font-weight: 800; }
+  .cal-day.vacation {
+    background: #fff3cd; border-color: #fde68a; color: #92400e;
+  }
+  .cal-day.closed {
+    background: #fee2e2; border-color: #fca5a5; color: #991b1b;
+  }
+  .cal-day .day-num { font-size: 12px; }
+  .cal-day .day-label { font-size: 9px; font-weight: 700; margin-top: 1px; }
+  .cal-day.vacation .day-label { color: #b45309; }
+  .cal-day.closed  .day-label  { color: #b91c1c; }
+
+  .cal-legend {
+    display: flex; gap: 12px; justify-content: center;
+    margin-top: 12px; flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 11px; color: #475569;
+  }
+  .legend-dot {
+    width: 12px; height: 12px; border-radius: 4px;
+  }
+  .legend-dot.vacation { background: #fff3cd; border: 1px solid #fde68a; }
+  .legend-dot.closed   { background: #fee2e2; border: 1px solid #fca5a5; }
+  .legend-dot.today    { background: #fff; border: 2px solid #639AD4; }
+
+  #cal-loading { text-align: center; padding: 20px; font-size: 13px; color: #94a3b8; }
+
+  /* ════ ④ 포트폴리오 ════ */
+  details summary::-webkit-details-marker { display: none; }
+  details summary {
+    display: flex; align-items: center; justify-content: center;
+    padding: 15px; background: #fff; border-radius: 15px; cursor: pointer;
+    list-style: none; font-weight: 800; color: #64748b;
+    border: 2px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    transition: 0.3s;
+  }
+  details[open] summary {
+    background: #639AD4 !important; color: #fff !important;
+    border-color: #639AD4 !important;
+  }
+  .portfolio-inner {
+    background: #fff; margin-top: 10px; padding: 25px;
+    border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.03);
+  }
+  .portfolio-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 15px;
+  }
+  .portfolio-item { display: flex; flex-direction: column; gap: 8px; }
+  .portfolio-item iframe { width: 100%; aspect-ratio: 16/9; border-radius: 10px; border: none; }
+  .shorts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; }
+  .shorts-item { display: flex; flex-direction: column; gap: 8px; }
+  .shorts-item iframe { width: 100%; aspect-ratio: 9/16; border-radius: 10px; border: none; }
+
+  /* 템플릿 — 1개씩 크게, 여러 개면 2열 */
+  .template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr));
+    gap: 16px;
+  }
+  .template-item { display: flex; flex-direction: column; gap: 8px; }
+  .template-item iframe { width: 100%; aspect-ratio: 16/9; border-radius: 12px; border: none; }
+  .portfolio-loading { text-align: center; padding: 30px; font-size: 13px; color: #94a3b8; }
+  .portfolio-error { text-align: center; padding: 20px; font-size: 13px; color: #e74c3c; background: #fff0f0; border-radius: 12px; }
+
+  /* ════ ⑤ 주의사항 ════ */
+  .notice-card { border-left: 6px solid #639AD4; }
+  .notice-card > h3 { font-size: 19px; font-weight: 800; margin-bottom: 20px; }
+  .notice-list { display: flex; flex-direction: column; gap: 10px; }
+  .notice-item {
+    background: #f8faff; border: 1px solid #eef2f6;
+    border-radius: 14px; padding: 14px 16px;
+    font-size: 14px; color: #475569; line-height: 1.8;
+  }
+  .notice-item strong { color: #1e293b; font-weight: 700; }
+  .notice-item.warn { background: #fff8f0; border-color: #fed7aa; }
+  .notice-item.warn strong { color: #c2410c; }
+  .notice-item.red-item { background: #fff0f0; border-color: #fecaca; color: #b91c1c; }
+  .notice-item.red-item strong { color: #991b1b; }
+  .notice-highlight {
+    background: #639AD4; color: #fff;
+    font-size: 15px; font-weight: 800;
+    text-align: center; padding: 16px 18px; border-radius: 15px;
+  }
+  .notice-highlight small {
+    display: block; font-size: 12px; font-weight: 400;
+    opacity: 0.88; margin-top: 5px; line-height: 1.6;
+  }
+
+  /* ════ 문의 양식 ════ */
+  .inquiry-card h3 { font-size: 19px; font-weight: 800; margin-bottom: 6px; text-align: center; }
+  .inquiry-card .inquiry-desc { text-align: center; font-size: 13px; color: #64748b; margin-bottom: 20px; }
+  .inquiry-form { display: flex; flex-direction: column; gap: 10px; }
+  .form-field { display: flex; flex-direction: column; gap: 5px; }
+  .form-field label { font-size: 12px; font-weight: 800; color: #334155; padding-left: 4px; }
+  .form-field label .hint { font-size: 11px; font-weight: 400; color: #94a3b8; margin-left: 6px; }
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    width: 100%; padding: 12px 14px;
+    border: 1px solid #e2e8f0; border-radius: 12px;
+    font-size: 13px; font-family: 'Paperlogy', sans-serif;
+    background: #f8faff; outline: none;
+    appearance: none; -webkit-appearance: none;
+    color: #1e293b;
+    transition: border-color 0.2s;
+  }
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus { border-color: #639AD4; background: #fff; }
+  /* 스크롤 고정 높이 — resize 제거 */
+  .form-field textarea {
+    height: 90px;
+    overflow-y: auto;
+    resize: none;
+  }
+  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .btn-copy {
+    width: 100%; height: 58px;
+    background: #1e293b; color: #fff;
+    border: none; border-radius: 16px;
+    font-size: 16px; font-weight: 800;
+    font-family: 'Paperlogy', sans-serif;
+    cursor: pointer; margin-top: 6px;
+    box-shadow: 0 8px 20px rgba(30,41,59,0.18);
+    transition: opacity 0.2s;
+  }
+  .btn-copy:hover { opacity: 0.88; }
+  .copy-done {
+    display: none; text-align: center; font-size: 13px;
+    color: #639AD4; font-weight: 700; margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ① 소개 -->
+  <div class="card hero" id="sec-intro">
+    <div class="badge">VIDEO EDITOR</div>
+    <h2>안녕하세요, <span>제티제티</span>입니다.</h2>
+    <p class="sub">버츄얼 스트리머가 직접 하는 편집 · 쇼츠 · 롱폼 · 저챗 · 게임</p>
+
+    <!-- 이벤트 (시트 연동) -->
+    <div id="event-box">
+      <div class="event-title" id="event-title"></div>
+      <div class="event-body" id="event-body"></div>
+    </div>
+
+    <div class="intro-body">
+      <p>작게 유튜브도 운영 중이고, <strong>버츄얼 스트리머로 활동 중</strong>이라 버츄얼 작업에 특화되어 있으며 저챗을 사랑합니다!</p>
+      <p>원하는 레퍼런스 혹은 스타일대로 제작해드리는 것에서 뿌듯함을 느낍니다.<br>레퍼런스가 많을수록 참고가 많이 되며, 글로만 표현해주셔도 원하는 영상이 나올 수 있도록 최선을 다합니다!</p>
+      <p><strong>자막 템플릿이 없는 경우 오마카세로</strong> 제작해서 편집해드립니다.<br>
+      종겜 영상 편집도 받습니다! <span class="red">(너무 모르는 게임이거나 살릴 수 없는 영상일 시 정중히 거절할 수 있습니다)</span></p>
+    </div>
+  </div>
+
+  <!-- ② 금액 -->
+  <div class="card" id="sec-price">
+    <div class="section-title">가격 안내</div>
+    <div id="price-container">
+      <div id="price-loading">불러오는 중...</div>
+    </div>
+    <div class="price-note">※ 모든 영상은 편집자의 포트폴리오로 사용될 수 있습니다. 비공개 요청 시 +1,000원</div>
+  </div>
+
+  <!-- ③ 작업 순서 + 캘린더 -->
+  <div class="card" id="sec-process">
+    <div class="section-title">작업 순서</div>
+
+    <div class="process-note">
+      <strong>문의부터 부탁드립니다 :D</strong><br>
+      수정사항 1회 한정 무한, 다음 작업부턴 3회 제한<br>
+      수정사항은 최대한 한 번에 정리해서 천천히 보내주시는 편이 좋습니다!
+    </div>
+
+    <div class="process-grid">
+      <div class="process-step"><div class="num">01</div><div class="name">입금 확인</div></div>
+      <div class="process-step"><div class="num">02</div><div class="name">컷편집</div></div>
+      <div class="process-step"><div class="num">03</div><div class="name">컨펌</div></div>
+      <div class="process-step"><div class="num">04</div><div class="name">자막 및<br>효과 작업</div></div>
+      <div class="process-step"><div class="num">05</div><div class="name">컨펌</div></div>
+      <div class="process-step"><div class="num">06</div><div class="name">최종 작업</div></div>
+      <div class="process-step"><div class="num">07</div><div class="name">전달</div></div>
+    </div>
+
+    <div class="duration-box">
+      <div class="dur-title">⏱️ 예상 작업 기간</div>
+      <div class="dur-rows">
+        <div class="dur-row">
+          <span>📱 쇼츠</span>
+          <span class="day">주문 완료 후 1~2일</span>
+        </div>
+        <div class="dur-row">
+          <span>🎬 롱폼 — 원본이 길거나 합방 영상</span>
+          <span class="day">4~5일</span>
+        </div>
+        <div class="dur-row">
+          <span>🎬 롱폼 — 원본 2시간 이내</span>
+          <span class="day">2~4일</span>
+        </div>
+      </div>
+      <div class="dur-footer">빠른 마감을 원하시는 분은 문의 부탁드립니다!</div>
+    </div>
+
+    <!-- 캘린더 -->
+    <div class="section-title" id="sec-calendar" style="margin-top:20px;">📅 작업 일정</div>
+    <div id="cal-loading">불러오는 중...</div>
+    <div id="cal-wrap" style="display:none;">
+      <div class="cal-tab-row">
+        <button class="cal-tab-btn active" id="tab-this" onclick="switchCal(0)">이번달</button>
+        <button class="cal-tab-btn"        id="tab-next" onclick="switchCal(1)">다음달</button>
+      </div>
+      <div class="cal-panel active" id="cal-panel-0"></div>
+      <div class="cal-panel"        id="cal-panel-1"></div>
+      <div class="cal-legend">
+        <div class="legend-item"><div class="legend-dot today"></div> 오늘</div>
+        <div class="legend-item"><div class="legend-dot vacation"></div> 휴가</div>
+        <div class="legend-item"><div class="legend-dot closed"></div> 마감</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ④ 포트폴리오 -->
+  <div id="sec-portfolio" style="display:flex;flex-direction:column;gap:12px;">
+    <details open>
+      <summary>🎬 LONG-FORM PORTFOLIO (전체보기)</summary>
+      <div class="portfolio-inner">
+        <div id="longform-container"><div class="portfolio-loading">불러오는 중...</div></div>
+      </div>
+    </details>
+    <details>
+      <summary>📱 SHORT-FORM PORTFOLIO (쇼츠)</summary>
+      <div class="portfolio-inner">
+        <div id="shortform-container"><div class="portfolio-loading">불러오는 중...</div></div>
+      </div>
+    </details>
+    <details id="template-details" style="display:none;">
+      <summary>🎨 자막 템플릿 샘플</summary>
+      <div class="portfolio-inner">
+        <div id="template-container"><div class="portfolio-loading">불러오는 중...</div></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ⑤ 주의사항 -->
+  <div class="card notice-card" id="sec-notice">
+    <h3>📋 주의사항</h3>
+    <div class="notice-list">
+
+      <div class="notice-item">
+        편집 완료된 롱폼 영상의 <strong>쇼츠 2차 가공은 허용</strong>합니다.<br>
+        단, 해당 영상의 설명란에 반드시 <strong>편집자 : 제티제티</strong>를 기재해 주시기 바랍니다.
+      </div>
+
+      <div class="notice-item">
+        작업 중 화면을 가린 채(소리 포함 무음) 방송을 병행하는 경우가 있습니다.<br>
+        원하지 않으실 경우 사전에 말씀해 주시면 해당 없이 진행합니다.
+      </div>
+
+      <div class="notice-item warn">
+        <strong>⚠️ 프로젝트 파일 및 최종본 영상은 납품 후 30일이 경과하면 삭제됩니다.</strong><br>
+        별도 보관이 필요하신 경우 반드시 사전에 요청해 주시기 바랍니다.
+      </div>
+
+      <div class="notice-item red-item">
+        <strong>🚫 썸네일 · 인트로 · 아웃트로 제작은 제공하지 않습니다.</strong>
+      </div>
+
+      <div class="notice-item">
+        스트리머라는 이유로 작업 품질에 차등을 두지 않습니다.<br>
+        작업 중 방송을 켜는 경우가 있으나, 이는 개인 일과 중 하나로 작업 완성도와는 무관합니다.
+      </div>
+
+      <div class="notice-highlight">
+        마감 기한을 준수하며, 연락에 신속히 응대합니다.
+        <small>응답이 2시간 이상 지연될 경우 수면 중일 가능성이 높습니다.<br>기다려 주시면 기상 즉시 답변드립니다.</small>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 문의 양식 -->
+  <div class="card inquiry-card" id="sec-inquiry">
+    <h3>📝 문의 양식</h3>
+    <p class="inquiry-desc">아래 내용을 작성하고 복사 버튼을 눌러주세요!</p>
+
+    <div class="inquiry-form">
+      <div class="form-row-2">
+        <div class="form-field">
+          <label>유튜브 채널</label>
+          <input type="text" id="f_channel" placeholder="채널명 또는 URL">
+        </div>
+        <div class="form-field">
+          <label>영상 타입</label>
+          <select id="f_type">
+            <option value="">선택해주세요</option>
+            <option value="쇼츠">쇼츠</option>
+            <option value="롱폼">롱폼</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>영상 설명</label>
+        <textarea id="f_desc" placeholder="어떤 영상인지 간단히 설명해주세요"></textarea>
+      </div>
+      <div class="form-field">
+        <label>편집점 <span class="hint">없으면 비워두세요</span></label>
+        <input type="text" id="f_editpoint" placeholder="ex) 3:15~6:20, 10:20~12:30 사용해주세요">
+      </div>
+      <div class="form-field">
+        <label>작업 맡기실 영상 링크 <span class="hint">드라이브 링크</span></label>
+        <input type="text" id="f_drive" placeholder="https://drive.google.com/...">
+      </div>
+      <div class="form-field">
+        <label>유튜브 소스 <span class="hint">캐릭터 이미지, 인트로, 아웃트로 — 없으면 비워두세요</span></label>
+        <input type="text" id="f_source" placeholder="소스 파일 링크 또는 없음">
+      </div>
+      <div class="form-field">
+        <label>자막 템플릿 <span class="hint">있으시다면 첨부 부탁드립니다</span></label>
+        <input type="text" id="f_template" placeholder="템플릿 파일 링크 또는 없음">
+      </div>
+      <div class="form-field">
+        <label>원하는 스타일 / 레퍼런스 <span class="hint">없을 시 오마카세로 진행</span></label>
+        <textarea id="f_style" placeholder="레퍼런스 링크나 원하는 분위기를 알려주세요"></textarea>
+      </div>
+      <div class="form-field">
+        <label>마감기한</label>
+        <input type="text" id="f_deadline" placeholder="ex) 5월 10일까지, 급하지 않아요 등">
+      </div>
+
+      <button class="btn-copy" onclick="copyForm()">📋 양식 복사하기</button>
+      <div class="copy-done" id="copyDone">✅ 클립보드에 복사됐어요!</div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+/* ═══════════════════════════════════════
+   CSV 파싱 헬퍼
+═══════════════════════════════════════ */
+function parseCSVRows(text) {
+  // 멀티라인 셀을 제대로 파싱하는 CSV 파서
+  var rows = [];
+  var row = [];
+  var cell = '';
+  var inQuote = false;
+
+  for (var i = 0; i < text.length; i++) {
+    var ch = text[i];
+    var next = text[i + 1];
+
+    if (inQuote) {
+      if (ch === '"' && next === '"') { cell += '"'; i++; }
+      else if (ch === '"') { inQuote = false; }
+      else { cell += ch; }
+    } else {
+      if (ch === '"') { inQuote = true; }
+      else if (ch === ',') { row.push(cell.trim()); cell = ''; }
+      else if (ch === '\r' && next === '\n') { row.push(cell.trim()); rows.push(row); row = []; cell = ''; i++; }
+      else if (ch === '\n' || ch === '\r') { row.push(cell.trim()); rows.push(row); row = []; cell = ''; }
+      else { cell += ch; }
+    }
+  }
+  if (cell !== '' || row.length > 0) { row.push(cell.trim()); rows.push(row); }
+  return rows;
+}
+
+/* ═══════════════════════════════════════
+   이벤트 박스
+═══════════════════════════════════════ */
+var EVENT_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTnVjpluwVOd0KzHhPNglVpT8_mOpvWCSGt4i_4yVmPu_QCqXLcBd_F3crrHVs7BcyOCuLKwJL86gMX/pub?gid=1949773266&single=true&output=csv';
+
+function loadEvent() {
+  fetch(EVENT_URL)
+    .then(function(r){ return r.text(); })
+    .then(function(text) {
+      var rows = parseCSVRows(text);
+      // header: 활성화 여부, 제목, 내용, 강조할 문장
+      for (var i = 1; i < rows.length; i++) {
+        var r = rows[i];
+        if (!r || r.length < 2) continue;
+        var active = r[0].toUpperCase() === 'TRUE';
+        if (!active) continue;
+
+        var title   = r[1] || '';
+        var content = r[2] || '';
+        var emphRaw = r[3] || '';
+
+        // 강조 문장 파싱 — 콤마로 구분
+        var emphList = emphRaw.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+
+        // 줄바꿈 적용 + 강조 처리
+        var lines = content.split('\n');
+        var htmlLines = lines.map(function(line) {
+          emphList.forEach(function(emph) {
+            if (emph && line.indexOf(emph) !== -1) {
+              line = line.split(emph).join('<strong>' + emph + '</strong>');
+            }
+          });
+          return line;
+        });
+        var bodyHtml = htmlLines.join('<br>');
+
+        document.getElementById('event-title').textContent = title;
+        document.getElementById('event-body').innerHTML = bodyHtml;
+        document.getElementById('event-box').style.display = 'block';
+        break;
+      }
+    })
+    .catch(function(){});
+}
+
+/* ═══════════════════════════════════════
+   가격 안내
+═══════════════════════════════════════ */
+var PRICE_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTnVjpluwVOd0KzHhPNglVpT8_mOpvWCSGt4i_4yVmPu_QCqXLcBd_F3crrHVs7BcyOCuLKwJL86gMX/pub?gid=1402714953&single=true&output=csv';
+
+function loadPrice() {
+  fetch(PRICE_URL)
+    .then(function(r){ return r.text(); })
+    .then(function(text) {
+      var rows = parseCSVRows(text);
+      // 카테고리,옵션명,설명,가격
+      var groups = {};
+      var order = [];
+      for (var i = 1; i < rows.length; i++) {
+        var r = rows[i];
+        if (!r || r.length < 4) continue;
+        var cat  = r[0];
+        var name = r[1];
+        var desc = r[2];
+        var price = r[3];
+        if (!groups[cat]) { groups[cat] = []; order.push(cat); }
+        groups[cat].push({ name: name, desc: desc, price: price });
+      }
+
+      var html = '';
+      order.forEach(function(cat, idx) {
+        var isCyan = (cat === '숏폼');
+        var labelClass = isCyan ? 'price-label cyan' : 'price-label blue';
+        var emoji = isCyan ? '📱' : '🎬';
+        html += '<div class="' + labelClass + '">' + emoji + ' ' + cat + '</div>';
+        html += '<div class="price-rows">';
+        groups[cat].forEach(function(item) {
+          var rowClass = isCyan ? 'price-row cyan-row' : 'price-row';
+          html += '<div class="' + rowClass + '">'
+            + '<div class="info">'
+            + '<div class="name">' + item.name + '</div>'
+            + '<div class="desc">' + item.desc + '</div>'
+            + '</div>'
+            + '<div class="amount">' + item.price + '</div>'
+            + '</div>';
+        });
+        html += '</div>';
+      });
+
+      document.getElementById('price-container').innerHTML = html;
+    })
+    .catch(function(){
+      document.getElementById('price-container').innerHTML = '<div style="text-align:center;color:#e74c3c;font-size:13px;padding:16px;">가격 정보를 불러오지 못했습니다.</div>';
+    });
+}
+
+/* ═══════════════════════════════════════
+   캘린더
+═══════════════════════════════════════ */
+var CAL_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTnVjpluwVOd0KzHhPNglVpT8_mOpvWCSGt4i_4yVmPu_QCqXLcBd_F3crrHVs7BcyOCuLKwJL86gMX/pub?gid=923178362&single=true&output=csv';
+
+function parseDateKey(str) {
+  str = str.trim();
+  var parts = str.split('-');
+  if (parts.length !== 3) return null;
+  return parts[0] + '-' + parseInt(parts[1]) + '-' + parseInt(parts[2]);
+}
+
+function dateKey(y, m, d) {
+  return y + '-' + m + '-' + d;
+}
+
+function daysInMonth(y, m) {
+  return new Date(y, m, 0).getDate();
+}
+
+function buildCalendar(year, month, statusMap) {
+  var today = new Date();
+  var todayKey = dateKey(today.getFullYear(), today.getMonth() + 1, today.getDate());
+
+  var monthNames = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  var dows = ['일','월','화','수','목','금','토'];
+
+  var firstDow = new Date(year, month - 1, 1).getDay(); // 0=Sun
+  var totalDays = daysInMonth(year, month);
+
+  // 이전 달 정보
+  var prevMonth = month - 1, prevYear = year;
+  if (prevMonth < 1) { prevMonth = 12; prevYear--; }
+  var prevTotal = daysInMonth(prevYear, prevMonth);
+
+  // 다음 달 정보
+  var nextMonth = month + 1, nextYear = year;
+  if (nextMonth > 12) { nextMonth = 1; nextYear++; }
+
+  var html = '<div class="cal-block">';
+  html += '<div class="cal-header">' + year + '년 ' + monthNames[month - 1] + '</div>';
+  html += '<div class="cal-grid">';
+
+  // 요일 헤더
+  dows.forEach(function(d){ html += '<div class="cal-dow">' + d + '</div>'; });
+
+  // 이전달 ghost 칸
+  for (var e = 0; e < firstDow; e++) {
+    var ghostDay = prevTotal - (firstDow - 1 - e);
+    var dow = e; // 0=Sun…
+    var ghostCls = 'cal-day ghost' + (dow === 0 ? ' sun' : '') + (dow === 6 ? ' sat' : '');
+    html += '<div class="' + ghostCls + '"><span class="day-num">' + ghostDay + '</span></div>';
+  }
+
+  // 이번달 날짜
+  for (var d = 1; d <= totalDays; d++) {
+    var dow2 = (firstDow + d - 1) % 7;
+    var key = dateKey(year, month, d);
+    var status = statusMap[key] || '';
+
+    var cls = 'cal-day';
+    if (dow2 === 0) cls += ' sun';
+    if (dow2 === 6) cls += ' sat';
+    if (key === todayKey) cls += ' today';
+    if (status === '휴가') cls += ' vacation';
+    if (status === '마감') cls += ' closed';
+
+    html += '<div class="' + cls + '">';
+    html += '<span class="day-num">' + d + '</span>';
+    if (status) html += '<span class="day-label">' + status + '</span>';
+    html += '</div>';
+  }
+
+  // 다음달 ghost 칸 — 마지막 행을 7칸으로 채움
+  var filled = firstDow + totalDays;
+  var remainder = filled % 7 === 0 ? 0 : 7 - (filled % 7);
+  for (var n = 1; n <= remainder; n++) {
+    var ndow = (filled + n - 1) % 7;
+    var nCls = 'cal-day ghost' + (ndow === 0 ? ' sun' : '') + (ndow === 6 ? ' sat' : '');
+    html += '<div class="' + nCls + '"><span class="day-num">' + n + '</span></div>';
+  }
+
+  html += '</div></div>'; // cal-grid / cal-block
+  return html;
+}
+
+function switchCal(idx) {
+  document.querySelectorAll('.cal-panel').forEach(function(p, i){
+    p.classList.toggle('active', i === idx);
+  });
+  document.getElementById('tab-this').classList.toggle('active', idx === 0);
+  document.getElementById('tab-next').classList.toggle('active', idx === 1);
+}
+
+function loadCalendar() {
+  fetch(CAL_URL)
+    .then(function(r){ return r.text(); })
+    .then(function(text) {
+      var rows = parseCSVRows(text);
+      var statusMap = {};
+      for (var i = 1; i < rows.length; i++) {
+        var r = rows[i];
+        if (!r || r.length < 2) continue;
+        var k = parseDateKey(r[0]);
+        if (k) statusMap[k] = r[1].trim();
+      }
+
+      var now = new Date();
+      var y1 = now.getFullYear(), m1 = now.getMonth() + 1;
+      var m2 = m1 + 1, y2 = y1;
+      if (m2 > 12) { m2 = 1; y2++; }
+
+      document.getElementById('cal-panel-0').innerHTML = buildCalendar(y1, m1, statusMap);
+      document.getElementById('cal-panel-1').innerHTML = buildCalendar(y2, m2, statusMap);
+      document.getElementById('cal-loading').style.display = 'none';
+      document.getElementById('cal-wrap').style.display = 'block';
+    })
+    .catch(function(){
+      document.getElementById('cal-loading').textContent = '일정을 불러오지 못했습니다.';
+    });
+}
+
+/* ═══════════════════════════════════════
+   포트폴리오
+═══════════════════════════════════════ */
+var PORTFOLIO_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTnVjpluwVOd0KzHhPNglVpT8_mOpvWCSGt4i_4yVmPu_QCqXLcBd_F3crrHVs7BcyOCuLKwJL86gMX/pub?gid=200735157&single=true&output=csv';
+
+function getYoutubeId(url) {
+  url = url.trim();
+  var m;
+  m = url.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/);
+  if (m) return { id: m[1], type: 'shorts' };
+  m = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
+  if (m) return { id: m[1], type: 'long' };
+  m = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+  if (m) return { id: m[1], type: 'long' };
+  return null;
+}
+
+function loadPortfolio() {
+  fetch(PORTFOLIO_URL)
+    .then(function(r){ return r.text(); })
+    .then(function(text) {
+      var rows = parseCSVRows(text);
+      var longs = [], shorts = [], templates = [];
+      for (var i = 1; i < rows.length; i++) {
+        var r = rows[i];
+        if (!r || r.length < 2) continue;
+        var cat = r[0], link = r[1];
+        var info = getYoutubeId(link);
+        if (!info) continue;
+        if (cat === '롱폼') longs.push(info.id);
+        else if (cat === '숏폼') shorts.push(info.id);
+        else if (cat === '템플릿') templates.push(info.id);
+      }
+
+      // 롱폼
+      if (longs.length) {
+        var h = '<div class="portfolio-grid">';
+        longs.forEach(function(id){
+          h += '<div class="portfolio-item"><iframe src="https://www.youtube.com/embed/' + id + '" loading="lazy" allowfullscreen></iframe></div>';
+        });
+        h += '</div>';
+        document.getElementById('longform-container').innerHTML = h;
+      } else {
+        document.getElementById('longform-container').innerHTML = '<div class="portfolio-loading">등록된 영상이 없습니다.</div>';
+      }
+
+      // 숏폼
+      if (shorts.length) {
+        var h2 = '<div class="shorts-grid">';
+        shorts.forEach(function(id){
+          h2 += '<div class="shorts-item"><iframe src="https://www.youtube.com/embed/' + id + '" loading="lazy" allowfullscreen></iframe></div>';
+        });
+        h2 += '</div>';
+        document.getElementById('shortform-container').innerHTML = h2;
+      } else {
+        document.getElementById('shortform-container').innerHTML = '<div class="portfolio-loading">등록된 영상이 없습니다.</div>';
+      }
+
+      // 템플릿
+      if (templates.length) {
+        var h3 = '<div class="template-grid">';
+        templates.forEach(function(id){
+          h3 += '<div class="template-item"><iframe src="https://www.youtube.com/embed/' + id + '" loading="lazy" allowfullscreen></iframe></div>';
+        });
+        h3 += '</div>';
+        document.getElementById('template-container').innerHTML = h3;
+        document.getElementById('template-details').style.display = 'block';
+      }
+    })
+    .catch(function(){
+      var err = '<div class="portfolio-error">포트폴리오를 불러오지 못했습니다.</div>';
+      document.getElementById('longform-container').innerHTML = err;
+      document.getElementById('shortform-container').innerHTML = err;
+    });
+}
+
+/* ═══════════════════════════════════════
+   문의 양식 복사
+═══════════════════════════════════════ */
+function copyForm() {
+  var n = '\n';
+  var text =
+    '📝 영상 편집 문의\n──────────────────\n' +
+    '유튜브 채널 : '             + (document.getElementById('f_channel').value   || '-') + n +
+    '영상 타입 : '               + (document.getElementById('f_type').value      || '-') + n +
+    '영상 설명 : '               + (document.getElementById('f_desc').value      || '-') + n +
+    '편집점 : '                  + (document.getElementById('f_editpoint').value || '없음') + n +
+    '영상 링크 : '               + (document.getElementById('f_drive').value     || '-') + n +
+    '유튜브 소스 : '             + (document.getElementById('f_source').value    || '없음') + n +
+    '자막 템플릿 : '             + (document.getElementById('f_template').value  || '없음') + n +
+    '원하는 스타일/레퍼런스 : '  + (document.getElementById('f_style').value     || '오마카세로 진행해주세요') + n +
+    '마감기한 : '                + (document.getElementById('f_deadline').value  || '-') + n +
+    '──────────────────';
+
+  var el = document.createElement('textarea');
+  el.value = text;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+
+  var done = document.getElementById('copyDone');
+  done.style.display = 'block';
+  setTimeout(function(){ done.style.display = 'none'; }, 3000);
+}
+
+/* ── 초기 로드 ── */
+loadEvent();
+loadPrice();
+loadCalendar();
+loadPortfolio();
+
+/* ═══════════════════════════════════════
+   1. 자동 높이 조절 (부모 iframe에 실시간 전달)
+   - ResizeObserver로 body 크기 변화를 감지
+   - postMessage({ type:'resize', height }) 전송
+═══════════════════════════════════════ */
+function sendHeight() {
+  var h = document.documentElement.scrollHeight;
+  window.parent.postMessage({ type: 'jt-resize', height: h }, '*');
+}
+
+if (typeof ResizeObserver !== 'undefined') {
+  var ro = new ResizeObserver(function() { sendHeight(); });
+  ro.observe(document.body);
+} else {
+  // 폴백: MutationObserver
+  var mo = new MutationObserver(function() { sendHeight(); });
+  mo.observe(document.body, { childList: true, subtree: true, attributes: true });
+}
+
+// 초기 로드 + 이미지/폰트 완료 후 한 번 더
+window.addEventListener('load', sendHeight);
+sendHeight();
+
+/* ═══════════════════════════════════════
+   2. 네비게이션 — 부모 메뉴에서 메시지 수신 시 스크롤
+   커스텀 메뉴에서 이렇게 보내면 됩니다:
+     iframe.contentWindow.postMessage({ type:'jt-nav', id:'sec-intro' }, '*')
+
+   또는 부모가 id를 직접 읽어야 할 경우,
+   iframe 내 섹션 목록을 부모로 전송해 줍니다.
+═══════════════════════════════════════ */
+
+// 섹션 id 목록을 부모에게 알려줌 (커스텀 메뉴가 목록을 자동 구성할 수 있도록)
+var NAV_SECTIONS = [
+  { id: 'sec-intro',     label: '소개' },
+  { id: 'sec-price',     label: '가격 안내' },
+  { id: 'sec-process',   label: '작업 순서' },
+  { id: 'sec-calendar',  label: '작업 일정' },
+  { id: 'sec-portfolio', label: '포트폴리오' },
+  { id: 'sec-notice',    label: '주의사항' },
+  { id: 'sec-inquiry',   label: '문의 양식' }
+];
+
+window.addEventListener('load', function() {
+  window.parent.postMessage({ type: 'jt-sections', sections: NAV_SECTIONS }, '*');
+});
+
+// 부모로부터 네비게이션 명령 수신
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.type !== 'jt-nav') return;
+  var target = document.getElementById(e.data.id);
+  if (!target) return;
+  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+</script>
+</body>
+</html>
