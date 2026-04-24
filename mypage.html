@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>상세페이지 및 포트폴리오</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -251,6 +250,36 @@
         .event-card.selected { border-color: #0056b3; background: #e7f5ff; box-shadow: 0 0 0 3px rgba(0,86,179,0.12); }
         .event-card.unavailable { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
 
+        /* ★ 최대 할인 이벤트 강조 스타일 */
+        .event-card.best-deal {
+            border-color: #f59f00;
+            background: #fff9db;
+            box-shadow: 0 0 0 2px rgba(245,159,0,0.25);
+            animation: bestDealPulse 2.5s ease-in-out infinite;
+        }
+        .event-card.best-deal:hover { border-color: #e67700; background: #fff3bf; }
+        .event-card.best-deal.selected { border-color: #f59f00; background: #fff3bf; box-shadow: 0 0 0 3px rgba(245,159,0,0.35); animation: none; }
+        @keyframes bestDealPulse {
+            0%, 100% { box-shadow: 0 0 0 2px rgba(245,159,0,0.2); }
+            50% { box-shadow: 0 0 0 4px rgba(245,159,0,0.45); }
+        }
+        .best-deal-badge {
+            position: absolute;
+            top: -1px;
+            right: 12px;
+            background: linear-gradient(135deg, #f59f00, #e67700);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 900;
+            padding: 3px 10px;
+            border-radius: 0 0 8px 8px;
+            letter-spacing: 0.3px;
+            box-shadow: 0 2px 6px rgba(245,159,0,0.4);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         .event-card input[type="radio"] { margin-top: 3px; accent-color: #0056b3; transform: scale(1.2); flex-shrink: 0; cursor: pointer; }
         .event-card-body { flex: 1; min-width: 0; }
         .event-card-title { font-size: 15px; font-weight: 800; color: #111; margin-bottom: 4px; }
@@ -259,6 +288,9 @@
         .event-card-desc .event-cond { color: #888; font-size: 12px; margin-top: 3px; }
         .event-card-deadline { position: absolute; top: 12px; right: 14px; font-size: 11px; font-weight: 700; color: #868e96; background: #f1f3f5; padding: 2px 8px; border-radius: 20px; }
 
+        /* best-deal일 때 마감일 배지 위치 조정 (배지가 위에 생겼으므로) */
+        .event-card.best-deal .event-card-deadline { top: 30px; }
+
         /* 이벤트 없음 라디오 카드 */
         .event-card.event-none-card { border-style: dashed; }
 
@@ -266,6 +298,25 @@
         .discount-row { display: flex; justify-content: space-between; margin-bottom: 10px; color: #f8f9fa; font-weight: 500; gap: 10px; }
         .discount-row span:last-child { color: #63e6be; font-weight: 700; white-space: nowrap; }
         .discount-divider { border: none; border-top: 1px dashed #3c424a; margin: 8px 0 12px; }
+
+        /* ================= ★ 오마카세 안내 멘트 ================= */
+        .omakase-notice {
+            display: none;
+            background: linear-gradient(135deg, #fff9db 0%, #fffbe8 100%);
+            border-left: 4px solid #f59f00;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #7c5a00;
+            line-height: 1.7;
+            word-break: keep-all;
+            box-shadow: 0 4px 15px rgba(245,159,0,0.12);
+            animation: fadeInDown 0.3s ease-out;
+        }
+        .omakase-notice.show { display: block; }
+        .omakase-notice strong { font-weight: 800; }
 
         /* ================= 7. 안내사항 ================= */
         .terms-accordion { width: 100%; background: #fcfcfc; border: 1px solid #eee; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); overflow: hidden; }
@@ -490,6 +541,13 @@
         
         <div class="inquiry-form-container">
             <h4><i class="fa-solid fa-pen-to-square"></i> 문의 양식 작성</h4>
+
+            <!-- ★ 오마카세 안내 멘트 -->
+            <div class="omakase-notice" id="omakaseNotice">
+                <i class="fa-solid fa-circle-info" style="margin-right: 6px;"></i>
+                <strong>오마카세 선택 시 안내</strong><br>
+                오마카세는 <strong>페이지 링크</strong>와 <strong>상세페이지 구성</strong> 이외의 내용은 별도로 입력하지 않으셔도 됩니다. 나머지는 작업자가 직접 기획하여 제안드립니다 😊
+            </div>
             
             <div class="form-group">
                 <label>1. 제작 방식 선택</label>
@@ -1139,8 +1197,6 @@ let priceData = {};
 let selectedItems = new Map();
 
 // =================== ★ 이벤트 데이터 ===================
-// activeEvents: 마감일이 안 지난 이벤트 목록
-// selectedEvent: 현재 선택된 이벤트 객체 (없으면 null)
 let activeEvents = [];
 let selectedEvent = null;
 
@@ -1178,7 +1234,6 @@ function loadEventData() {
             activeEvents = results.data
                 .filter(row => row['제목'] && row['제목'].trim() !== '')
                 .filter(row => {
-                    // 마감일 파싱 – 없으면 항상 유효
                     const dl = (row['마감일'] || '').trim();
                     if (!dl) return true;
                     const d = new Date(dl);
@@ -1187,9 +1242,8 @@ function loadEventData() {
                     return d >= today;
                 })
                 .map(row => {
-                    // 할인가 파싱
                     const discountRaw = (row['할인가'] || '').trim();
-                    let discountType = null; // 'percent' | 'amount'
+                    let discountType = null;
                     let discountValue = 0;
                     if (discountRaw.endsWith('%')) {
                         discountType = 'percent';
@@ -1199,11 +1253,9 @@ function loadEventData() {
                         discountValue = parseInt(discountRaw.replace(/[^0-9]/g, ''), 10) || 0;
                     }
 
-                    // 가격 조건 파싱
-                    // '최소적용가격, 최대할인가' 형태 또는 숫자 하나
                     const condRaw = (row['가격 조건'] || '').trim();
-                    let minPrice = 0;      // 최소 선택 금액
-                    let maxDiscount = Infinity; // 최대 할인액 (없으면 무제한)
+                    let minPrice = 0;
+                    let maxDiscount = Infinity;
                     if (condRaw !== '') {
                         const parts = condRaw.split(',').map(s => s.trim());
                         minPrice = parseInt(parts[0], 10) || 0;
@@ -1212,16 +1264,14 @@ function loadEventData() {
                         }
                     }
 
-                    // 상품명 파싱 (콤마 구분, '전체' 포함)
                     const productRaw = (row['상품명'] || '').trim();
                     const products = productRaw === '' ? [] : productRaw.split(',').map(s => s.trim());
 
-                    // 마감일 표시용
                     const deadlineStr = (row['마감일'] || '').trim();
 
                     return {
                         title: row['제목'].trim(),
-                        products,          // [] 이면 아직 상품명 없는 경우 (비어있음)
+                        products,
                         discountType,
                         discountValue,
                         minPrice,
@@ -1240,12 +1290,65 @@ function loadEventData() {
     });
 }
 
+// =================== ★ 이벤트 할인 계산 (단독 함수) ===================
+function calcEventDiscountForEvent(ev, baseTotal, items) {
+    if (!ev) return 0;
+    if (ev.minPrice > 0 && baseTotal < ev.minPrice) return 0;
+
+    let applicableTotal = 0;
+    const isAll = ev.products.length === 0 || ev.products.some(p => p === '전체');
+
+    items.forEach((data, name) => {
+        if (data.isConsult) return;
+        const itemTotal = data.price * data.qty;
+        if (isAll) {
+            applicableTotal += itemTotal;
+        } else {
+            const pureName = name.replace(/^\[.*?\]\s*/, '');
+            const matched = ev.products.some(p => pureName.includes(p) || p.includes(pureName));
+            if (matched) applicableTotal += itemTotal;
+        }
+    });
+
+    if (applicableTotal === 0) return 0;
+
+    let rawDiscount = 0;
+    if (ev.discountType === 'percent') {
+        rawDiscount = Math.floor(applicableTotal * ev.discountValue / 100);
+    } else if (ev.discountType === 'amount') {
+        rawDiscount = ev.discountValue;
+    }
+
+    if (ev.maxDiscount !== Infinity) rawDiscount = Math.min(rawDiscount, ev.maxDiscount);
+    rawDiscount = Math.min(rawDiscount, applicableTotal);
+
+    return rawDiscount;
+}
+
 // =================== ★ 이벤트 UI 렌더링 ===================
 function renderEventSelect() {
     const container = document.getElementById('eventSelectContainer');
     container.innerHTML = '';
 
-    // 이벤트 없음 카드 (항상 첫 번째)
+    // 현재 선택 항목 기준으로 각 이벤트의 할인액 계산
+    const baseTotal = Array.from(selectedItems.values())
+        .filter(d => !d.isConsult)
+        .reduce((s, d) => s + d.price * d.qty, 0);
+
+    // 최대 할인 이벤트 찾기 (선택된 항목이 있을 때만)
+    let bestEventIdx = -1;
+    let bestDiscount = 0;
+    if (selectedItems.size > 0 && baseTotal > 0) {
+        activeEvents.forEach((ev, idx) => {
+            const discount = calcEventDiscountForEvent(ev, baseTotal, selectedItems);
+            if (discount > bestDiscount) {
+                bestDiscount = discount;
+                bestEventIdx = idx;
+            }
+        });
+    }
+
+    // 이벤트 없음 카드
     const noneCard = document.createElement('label');
     noneCard.className = 'event-card event-none-card' + (selectedEvent === null ? ' selected' : '');
     noneCard.innerHTML = `
@@ -1265,17 +1368,21 @@ function renderEventSelect() {
     container.appendChild(noneCard);
 
     if (activeEvents.length === 0) {
-        // 이벤트 카드 없음 안내
         setTimeout(sendHeight, 200);
         return;
     }
 
     activeEvents.forEach((ev, idx) => {
+        const isBestDeal = (idx === bestEventIdx && bestDiscount > 0);
         const card = document.createElement('label');
-        card.className = 'event-card';
+        card.className = 'event-card' + (isBestDeal ? ' best-deal' : '');
         card.dataset.idx = idx;
 
-        // 할인 설명 텍스트 생성
+        // 선택 상태 유지
+        const isChecked = selectedEvent && selectedEvent.title === ev.title;
+        if (isChecked) card.classList.add('selected');
+
+        // 할인 배지
         let discDesc = '';
         if (ev.discountType === 'percent') {
             discDesc = `<span class="event-badge">-${ev.discountValue}%</span>`;
@@ -1287,26 +1394,41 @@ function renderEventSelect() {
         let condParts = [];
         if (ev.minPrice > 0) condParts.push(`${formatPriceStr(ev.minPrice)}원 이상 선택 시`);
         if (ev.maxDiscount !== Infinity) condParts.push(`최대 ${formatPriceStr(ev.maxDiscount)}원 할인`);
+
+        // 현재 선택 항목에서 실제 할인 예상액 표시
+        let actualDiscountText = '';
+        if (isBestDeal && bestDiscount > 0) {
+            actualDiscountText = `<div class="event-cond" style="color:#e67700; font-weight:700; margin-top:4px;">→ 현재 선택 기준 <strong>${formatPriceStr(bestDiscount)}원</strong> 할인 예상</div>`;
+        } else if (selectedItems.size > 0 && baseTotal > 0) {
+            const myDiscount = calcEventDiscountForEvent(ev, baseTotal, selectedItems);
+            if (myDiscount > 0) {
+                actualDiscountText = `<div class="event-cond" style="color:#555; margin-top:4px;">→ 현재 선택 기준 ${formatPriceStr(myDiscount)}원 할인 예상</div>`;
+            }
+        }
+
         const condText = condParts.length > 0
             ? `<div class="event-cond">· ${condParts.join(' / ')}</div>` : '';
 
-        // 적용 상품
         let productText = '';
         if (ev.products.length > 0) {
             const isAll = ev.products.some(p => p === '전체');
             productText = `<div class="event-cond">· 적용 상품: ${isAll ? '전체' : ev.products.join(', ')}</div>`;
         }
 
-        // 마감일 배지
+        // best-deal 배지 (마감일 배지와 겹치지 않도록 순서 주의)
+        const bestDealBadge = isBestDeal
+            ? `<div class="best-deal-badge"><i class="fa-solid fa-bolt"></i> 지금 가장 유리!</div>` : '';
+
         const deadlineBadge = ev.deadlineStr
             ? `<span class="event-card-deadline"><i class="fa-regular fa-clock"></i> ~${ev.deadlineStr}</span>` : '';
 
         card.innerHTML = `
+            ${bestDealBadge}
             ${deadlineBadge}
-            <input type="radio" name="eventRadio" value="${idx}">
+            <input type="radio" name="eventRadio" value="${idx}" ${isChecked ? 'checked' : ''}>
             <div class="event-card-body">
                 <div class="event-card-title">${ev.title}</div>
-                <div class="event-card-desc">${discDesc}${condText}${productText}</div>
+                <div class="event-card-desc">${discDesc}${condText}${productText}${actualDiscountText}</div>
             </div>
         `;
 
@@ -1335,18 +1457,12 @@ function updateCardSelected() {
     });
 }
 
-// =================== ★ 이벤트 할인 계산 ===================
-/**
- * selectedItems의 각 항목에 이벤트 적용 여부를 확인하여 할인 금액 반환
- * @param {number} baseTotal - 이벤트 미적용 원가 합계
- * @returns {{ discountAmount: number, discountLabel: string, applicable: boolean }}
- */
+// =================== ★ 이벤트 할인 계산 (updateSummary용) ===================
 function calcEventDiscount(baseTotal) {
     if (!selectedEvent) return { discountAmount: 0, discountLabel: '', applicable: false };
 
     const ev = selectedEvent;
 
-    // 최소 가격 조건 확인
     if (ev.minPrice > 0 && baseTotal < ev.minPrice) {
         return {
             discountAmount: 0,
@@ -1355,7 +1471,6 @@ function calcEventDiscount(baseTotal) {
         };
     }
 
-    // 이벤트 적용 대상 항목 합계 계산
     let applicableTotal = 0;
     const isAll = ev.products.length === 0 || ev.products.some(p => p === '전체');
 
@@ -1366,8 +1481,6 @@ function calcEventDiscount(baseTotal) {
         if (isAll) {
             applicableTotal += itemTotal;
         } else {
-            // 상품명 포함 여부 확인 (카테고리 제거한 상품명 기준)
-            // name 형태: "[카테고리] 상품명"
             const pureName = name.replace(/^\[.*?\]\s*/, '');
             const matched = ev.products.some(p => pureName.includes(p) || p.includes(pureName));
             if (matched) applicableTotal += itemTotal;
@@ -1378,7 +1491,6 @@ function calcEventDiscount(baseTotal) {
         return { discountAmount: 0, discountLabel: '', applicable: false };
     }
 
-    // 할인액 계산
     let rawDiscount = 0;
     if (ev.discountType === 'percent') {
         rawDiscount = Math.floor(applicableTotal * ev.discountValue / 100);
@@ -1386,12 +1498,10 @@ function calcEventDiscount(baseTotal) {
         rawDiscount = ev.discountValue;
     }
 
-    // 최대 할인액 제한
     if (ev.maxDiscount !== Infinity) {
         rawDiscount = Math.min(rawDiscount, ev.maxDiscount);
     }
 
-    // 총액 초과 방지
     rawDiscount = Math.min(rawDiscount, applicableTotal);
 
     let discLabel = ev.title;
@@ -1607,6 +1717,20 @@ function updateCalcCheckbox(cb) {
     }
     updateSummary();
     toggleBudgetField();
+    toggleOmakaseNotice(); // ★ 오마카세 안내 업데이트
+    renderEventSelect();   // ★ 이벤트 best-deal 재계산
+    setTimeout(sendHeight, 150);
+}
+
+// =================== ★ 오마카세 안내 멘트 토글 ===================
+function toggleOmakaseNotice() {
+    const hasOmakase = Array.from(selectedItems.keys()).some(k => k.includes('오마카세'));
+    const notice = document.getElementById('omakaseNotice');
+    if (hasOmakase) {
+        notice.classList.add('show');
+    } else {
+        notice.classList.remove('show');
+    }
     setTimeout(sendHeight, 150);
 }
 
@@ -1632,10 +1756,11 @@ function updateCalcQty(input) {
     if(selectedItems.has(name)) {
         selectedItems.set(name, { price: price, qty: qty, isConsult: price === -1 });
         updateSummary();
+        renderEventSelect(); // ★ 수량 변경 시도 best-deal 재계산
     }
 }
 
-// =================== ★ 견적 요약 업데이트 (이벤트 할인 포함) ===================
+// =================== ★ 견적 요약 업데이트 ===================
 function updateSummary() {
     const list = document.getElementById('selectedList');
     const totalDisplay = document.getElementById('totalPriceDisplay');
@@ -1649,7 +1774,6 @@ function updateSummary() {
         return;
     }
 
-    // 항목별 내역 출력
     selectedItems.forEach((data, name) => {
         if (data.isConsult) {
             hasConsult = true;
@@ -1670,17 +1794,14 @@ function updateSummary() {
         }
     });
 
-    // 이벤트 할인 계산 및 표시
     const { discountAmount, discountLabel, applicable } = calcEventDiscount(baseTotal);
 
     if (selectedEvent) {
-        // 구분선
         const hr = document.createElement('hr');
         hr.className = 'discount-divider';
         list.appendChild(hr);
 
         if (!applicable && selectedEvent.minPrice > 0 && baseTotal < selectedEvent.minPrice) {
-            // 조건 미충족 안내
             const warnLi = document.createElement('li');
             warnLi.innerHTML = `<span style="color:#ffc107;"><i class="fa-solid fa-triangle-exclamation"></i> ${selectedEvent.title}</span><span style="color:#ffc107; font-size:12px;">${formatPriceStr(selectedEvent.minPrice)}원 미만 — 미적용</span>`;
             list.appendChild(warnLi);
@@ -1692,7 +1813,6 @@ function updateSummary() {
         }
     }
 
-    // 최종 총액 계산
     const finalTotal = Math.max(0, baseTotal - discountAmount);
 
     if (hasConsult && finalTotal === 0 && baseTotal === 0) {
@@ -1732,13 +1852,16 @@ function resetCalc(btnElement) {
         }
     });
 
-    // 이벤트 초기화
     selectedEvent = null;
     const noneRadio = document.querySelector('input[name="eventRadio"][value="__none__"]');
     if (noneRadio) { noneRadio.checked = true; updateCardSelected(); }
 
-    selectedItems.clear(); updateSummary();
+    selectedItems.clear();
+    updateSummary();
     toggleBudgetField();
+    toggleOmakaseNotice(); // ★ 초기화 시 오마카세 안내도 숨김
+    renderEventSelect();   // ★ 초기화 시 best-deal 뱃지도 리셋
+
     document.getElementById('termsCheckbox').checked = false;
     document.getElementById('btnCopy').classList.remove('active');
     
@@ -1746,7 +1869,7 @@ function resetCalc(btnElement) {
     setTimeout(sendHeight, 150);
 }
 
-// =================== ★ 문의 복사 (이벤트 포함) ===================
+// =================== ★ 문의 복사 ===================
 function copyEstimate(btnElement) {
     const termsCb = document.getElementById('termsCheckbox');
     if (!termsCb.checked) {
@@ -1768,7 +1891,6 @@ function copyEstimate(btnElement) {
     const structure = document.getElementById('inquiryStructure').value || '미기재';
     const etc = document.getElementById('inquiryEtc').value || '없음';
 
-    // 이벤트 텍스트
     let eventText = '없음';
     if (selectedEvent) {
         const { discountAmount, applicable } = calcEventDiscount(
@@ -1783,7 +1905,6 @@ function copyEstimate(btnElement) {
         }
     }
 
-    // ─── 텍스트 파트 빌드 ───
     let labelNum = 1;
     let textPart = "[ 문의 양식 ]\n";
     textPart += `${labelNum++}. 제작 방식: ${method}\n`;
@@ -1812,7 +1933,6 @@ function copyEstimate(btnElement) {
         }
     });
 
-    // 할인 반영
     const { discountAmount, discountLabel, applicable } = calcEventDiscount(baseTotal);
     const finalTotal = Math.max(0, baseTotal - discountAmount);
 
@@ -1831,7 +1951,6 @@ function copyEstimate(btnElement) {
     }
     textPart += "안내사항(규정)을 모두 읽고 동의하였습니다.\n";
 
-    // ─── 이미지가 없으면 텍스트만 복사 ───
     if (refImages.length === 0) {
         navigator.clipboard.writeText(textPart).then(() => {
             showToast("문의 양식과 견적이 복사되었습니다. 문의창에 붙여넣기 해주세요!", btnElement);
@@ -1839,7 +1958,6 @@ function copyEstimate(btnElement) {
         return;
     }
 
-    // ─── 이미지가 있으면 HTML + 이미지를 ClipboardItem으로 복사 ───
     let imgTagsHtml = refImages.map(img =>
         `<img src="${img.dataUrl}" alt="${img.name}" style="max-width:400px; display:block; margin:4px 0;">`
     ).join('');
