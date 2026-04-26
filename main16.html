@@ -81,6 +81,8 @@
             padding: 40px 16px 80px;
             position: relative;
             overflow-x: hidden;
+            height: auto;
+            min-height: 0;
         }
 
         /* ── 배경 장식 ── */
@@ -1396,17 +1398,31 @@ const ETC_PORT_URL    = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQyt_9H
 
 
 /* ─── 임베드 높이 자동 조절 ────────────────────────────────────
-   ResizeObserver + MutationObserver로 콘텐츠 변화를 실시간 감지.
-   늘어나고 줄어드는 것 모두 즉시 부모에게 전송한다.            */
+   body.scrollHeight는 한번 커지면 줄어들지 않으므로
+   실제 콘텐츠 wrapper 높이를 기준으로 측정한다.              */
 function sendHeightToParent() {
-    const h = Math.max(
-        document.body.scrollHeight,
-        document.documentElement.scrollHeight
-    );
-    window.parent.postMessage({ type: 'resize_iframe', height: h }, '*');
+    // page-wrap(실제 콘텐츠)의 높이를 기준으로 측정
+    const wrap = document.querySelector('.page-wrap');
+    const h = wrap ? wrap.getBoundingClientRect().height + 80 : document.documentElement.scrollHeight;
+
+    window.parent.postMessage({ type: 'resize_iframe', height: Math.ceil(h) }, '*');
+
+    // 부모가 postMessage를 처리하지 못하는 경우를 대비해
+    // 부모 document의 iframe을 직접 찾아 높이를 세팅
+    try {
+        const iframes = window.parent.document.querySelectorAll('iframe');
+        iframes.forEach(iframe => {
+            if (iframe.contentWindow === window) {
+                iframe.style.height = Math.ceil(h) + 'px';
+            }
+        });
+    } catch(e) {
+        // cross-origin 환경에서는 직접 접근 불가 → postMessage만 사용
+    }
 }
+
 // 레이아웃 변화 실시간 감지
-new ResizeObserver(sendHeightToParent).observe(document.body);
+new ResizeObserver(sendHeightToParent).observe(document.querySelector('.page-wrap') || document.body);
 // DOM 추가/제거(이미지 로드, 아코디언 열기 등)도 감지
 new MutationObserver(sendHeightToParent).observe(document.body, {
     childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class']
