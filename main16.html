@@ -739,8 +739,11 @@
             padding-bottom: 10px;
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
+            cursor: grab;
+            user-select: none;
         }
         .scroll-grid.active { display: flex; }
+        .scroll-grid.dragging { cursor: grabbing; scroll-snap-type: none; }
         .scroll-grid::-webkit-scrollbar { height: 5px; }
         .scroll-grid::-webkit-scrollbar-thumb {
             background: var(--pink-200);
@@ -1313,7 +1316,7 @@
                 <div style="background:rgba(255,180,200,0.1);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:0.82rem;line-height:1.65;color:var(--text-mid);border:1px dashed rgba(255,180,200,0.4);">
                     <strong style="color:var(--text-dark);">💡 견적 예시</strong><br>
                     전용헤어 3개, 전용의상 2개를 신청하시는 경우<br>
-                    <span style="color:var(--pink-500);font-weight:700;">전용헤어 ×3 &nbsp;·&nbsp; 전용의상 ×2 &nbsp;·&nbsp; 옷장 ×5</span> 이렇게 선택해야 합니다.
+                    <span style="color:var(--pink-500);font-weight:700;">전용헤어 ×3 &nbsp;·&nbsp; 전용의상 ×2 &nbsp;·&nbsp; 옷장 ×5</span> 이렇게 선택해주셔야합니다.
                 </div>
                 <table class="est-table" id="calc-options">
                     <tbody id="est-tbody"></tbody>
@@ -2028,7 +2031,46 @@ ${est}`;
         .catch(() => showBubble('submit-bubble', '복사에 실패했습니다. 다시 시도해주세요', true, 2500));
 }
 
-/* ─── 초기화 ─────────────────────────────────────────────────── */
+/* ─── 포트폴리오 드래그 스크롤 ──────────────────────────────── */
+function initDragScroll(el) {
+    let isDown = false, startX = 0, scrollLeft = 0;
+    el.addEventListener('mousedown', (e) => {
+        isDown = true;
+        el.classList.add('dragging');
+        startX = e.pageX - el.offsetLeft;
+        scrollLeft = el.scrollLeft;
+        e.preventDefault();
+    });
+    el.addEventListener('mouseleave', () => {
+        isDown = false;
+        el.classList.remove('dragging');
+    });
+    el.addEventListener('mouseup', () => {
+        isDown = false;
+        el.classList.remove('dragging');
+    });
+    el.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        const x = e.pageX - el.offsetLeft;
+        const walk = (x - startX) * 1.2;
+        el.scrollLeft = scrollLeft - walk;
+    });
+}
+
+// 현재 존재하는 scroll-grid에 적용
+document.querySelectorAll('.scroll-grid').forEach(initDragScroll);
+
+// 탭 전환으로 새로 생성되는 grid도 감지해서 적용
+new MutationObserver((mutations) => {
+    mutations.forEach(m => {
+        m.addedNodes.forEach(node => {
+            if (node.nodeType === 1) {
+                if (node.classList?.contains('scroll-grid')) initDragScroll(node);
+                node.querySelectorAll?.('.scroll-grid').forEach(initDragScroll);
+            }
+        });
+    });
+}).observe(document.body, { childList: true, subtree: true });
 document.addEventListener('DOMContentLoaded', () => {
     loadIntro();
     loadCollabArtists();
