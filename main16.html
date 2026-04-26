@@ -1459,11 +1459,11 @@ window.addEventListener('message', (e) => {
     if (e.data.type === 'scrollTo' && e.data.id) {
         const el = document.getElementById(e.data.id);
         if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            // 부모에게 현재 요소의 iframe 내 Y 오프셋을 전달해 부모가 스크롤할 수도 있게
-            const rect = el.getBoundingClientRect();
+            // iframe 내부에서 scrollIntoView를 쓰면 부모 페이지가 엉뚱하게 스크롤됨.
+            // 대신 해당 요소의 iframe 내 offsetTop을 부모에게 전달해
+            // 부모가 (iframe의 상단 위치 + offsetTop)으로 스크롤하게 한다.
             window.parent.postMessage({
-                type: 'scrolled',
+                type: 'scrollToOffset',
                 id: e.data.id,
                 offsetTop: el.offsetTop
             }, '*');
