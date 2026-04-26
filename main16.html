@@ -755,7 +755,7 @@
             height: 360px;
             background: var(--pink-100);
             border-radius: 20px;
-            scroll-snap-align: center;
+            scroll-snap-align: start;
             overflow: hidden;
             border: 2px solid var(--border);
             box-shadow: var(--shadow-sm);
@@ -2033,28 +2033,43 @@ ${est}`;
 
 /* ─── 포트폴리오 드래그 스크롤 ──────────────────────────────── */
 function initDragScroll(el) {
-    let isDown = false, startX = 0, scrollLeft = 0;
+    let isDown = false, startX = 0, scrollLeft = 0, didDrag = false;
+
     el.addEventListener('mousedown', (e) => {
         isDown = true;
+        didDrag = false;
         el.classList.add('dragging');
+        el.style.scrollSnapType = 'none'; // 드래그 중 snap 해제
         startX = e.pageX - el.offsetLeft;
         scrollLeft = el.scrollLeft;
         e.preventDefault();
     });
-    el.addEventListener('mouseleave', () => {
+
+    const endDrag = () => {
+        if (!isDown) return;
         isDown = false;
         el.classList.remove('dragging');
-    });
-    el.addEventListener('mouseup', () => {
-        isDown = false;
-        el.classList.remove('dragging');
-    });
+        // snap 복구 안 함 — 드래그 후엔 자유 위치 유지
+    };
+
+    el.addEventListener('mouseleave', endDrag);
+    el.addEventListener('mouseup', endDrag);
     el.addEventListener('mousemove', (e) => {
         if (!isDown) return;
+        didDrag = true;
         const x = e.pageX - el.offsetLeft;
-        const walk = (x - startX) * 1.2;
-        el.scrollLeft = scrollLeft - walk;
+        el.scrollLeft = scrollLeft - (x - startX) * 1.2;
     });
+
+    // 카드 클릭 시에만 해당 카드로 snap 정렬
+    el.addEventListener('click', (e) => {
+        if (didDrag) { didDrag = false; return; } // 드래그 후 클릭 무시
+        const card = e.target.closest('.img-card');
+        if (!card) return;
+        el.style.scrollSnapType = 'x mandatory';
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        setTimeout(() => { el.style.scrollSnapType = 'none'; }, 600);
+    }, true);
 }
 
 // 현재 존재하는 scroll-grid에 적용
