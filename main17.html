@@ -25,8 +25,8 @@
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Paperozi',sans-serif; background:var(--bg); color:var(--text-dark); line-height:1.6; overflow-x:hidden; }
 
-  body::before { content:''; position:fixed; top:-200px; right:-200px; width:600px; height:600px; border-radius:50%; background:radial-gradient(circle,rgba(186,208,231,.35) 0%,transparent 70%); pointer-events:none; z-index:0; }
-  body::after  { content:''; position:fixed; bottom:-150px; left:-150px; width:500px; height:500px; border-radius:50%; background:radial-gradient(circle,rgba(147,160,198,.25) 0%,transparent 70%); pointer-events:none; z-index:0; }
+  body::before { display:none; }
+  body::after  { display:none; }
 
   .page-wrap { max-width:780px; margin:0 auto; padding:0 16px 80px; position:relative; z-index:1; }
   section { margin-bottom:32px; }
