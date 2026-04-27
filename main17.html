@@ -235,7 +235,28 @@
   .av-page-btn:disabled { opacity:.35; cursor:default; }
 
   /* ─── 포트폴리오 탭 ─── */
-  .tab-wrap { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px; }
+  .tab-wrap { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+
+  /* 카테고리 설명 */
+  .pf-desc-box {
+    min-height: 0;
+    overflow: hidden;
+    transition: max-height .3s ease, opacity .25s ease, margin .25s ease;
+    max-height: 0; opacity: 0; margin-bottom: 0;
+  }
+  .pf-desc-box.visible {
+    max-height: 120px; opacity: 1; margin-bottom: 14px;
+  }
+  .pf-desc-inner {
+    padding: 10px 14px;
+    background: rgba(147,160,198,.08);
+    border-left: 3px solid var(--c3);
+    border-radius: var(--radius-sm);
+    font-size: .84rem;
+    color: var(--text-mid);
+    line-height: 1.65;
+    white-space: pre-line;
+  }
   .tab-btn {
     background:rgba(255,255,255,.7);
     border:1.5px solid rgba(147,160,198,.3);
@@ -404,6 +425,7 @@
     <div class="section-title">포트폴리오 <span class="pill">PORTFOLIO</span></div>
     <div class="card">
       <div class="tab-wrap" id="pf-tab-bar"></div>
+      <div class="pf-desc-box" id="pf-desc-box"><div class="pf-desc-inner" id="pf-desc-text"></div></div>
       <div id="pf-scroll-grid" class="scroll-grid">
         <div class="skeleton-card"></div>
         <div class="skeleton-card"></div>
@@ -608,11 +630,38 @@ function normalizeImgUrl(url) {
 
 /* ── 4. 포트폴리오 ── */
 (function() {
-  const PF_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-UUywux4aKjZScK6nDwFpyjJCMZpw2e5UIsoj9d9yG4xp81o0VWhc10IsQFlqwNF9bSf4IlFGd5iH/pub?gid=125514881&single=true&output=csv';
-  // 시트 컬럼: 카테고리 | 설명 | 링크
+  const PF_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-UUywux4aKjZScK6nDwFpyjJCMZpw2e5UIsoj9d9yG4xp81o0VWhc10IsQFlqwNF9bSf4IlFGd5iH/pub?gid=125514881&single=true&output=csv';
+  const DESC_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-UUywux4aKjZScK6nDwFpyjJCMZpw2e5UIsoj9d9yG4xp81o0VWhc10IsQFlqwNF9bSf4IlFGd5iH/pub?gid=1227380179&single=true&output=csv';
+  // 이미지 시트: 카테고리 | 설명 | 링크
+  // 설명 시트:   카테고리 | 설명
 
   const tabBar  = document.getElementById('pf-tab-bar');
   const gridEl  = document.getElementById('pf-scroll-grid');
+  const descBox  = document.getElementById('pf-desc-box');
+  const descText = document.getElementById('pf-desc-text');
+
+  // 카테고리 설명 맵
+  const catDescs = new Map();
+
+  // 설명 표시 함수
+  function showDesc(cat) {
+    const txt = catDescs.get(cat) || '';
+    if (txt) {
+      descText.textContent = txt;
+      descBox.classList.add('visible');
+    } else {
+      descBox.classList.remove('visible');
+    }
+  }
+
+  // 설명 시트 사전 로드
+  fetchCSV(DESC_URL).then(text => {
+    parseCSV(text).slice(1).forEach(r => {
+      const cat  = (r[0] || '').trim();
+      const desc = (r[1] || '').trim();
+      if (cat) catDescs.set(cat, desc);
+    });
+  }).catch(() => {});
 
   function isYoutube(url) { return url && (url.includes('youtube.com') || url.includes('youtu.be')); }
   function getYoutubeId(url) { const m = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/); return m ? m[1] : null; }
@@ -748,6 +797,7 @@ function normalizeImgUrl(url) {
       allBtn.classList.add('active');
       const all = []; order.forEach(c => all.push(...groups.get(c)));
       renderGrid(all);
+      showDesc('전체');
     };
     tabBar.appendChild(allBtn);
 
@@ -759,6 +809,7 @@ function normalizeImgUrl(url) {
         tabBar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         renderGrid(groups.get(cat));
+        showDesc(cat);
       };
       tabBar.appendChild(btn);
     });
@@ -766,6 +817,8 @@ function normalizeImgUrl(url) {
     const allItems = []; order.forEach(c => allItems.push(...groups.get(c)));
     renderGrid(allItems);
     initDragScroll(gridEl);
+    // DESC 시트가 먼저 로드된 경우 즉시, 아닌 경우 로드 후 표시
+    showDesc('전체');
 
   }).catch(() => {
     tabBar.innerHTML = '';
