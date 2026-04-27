@@ -745,12 +745,30 @@ function normalizeImgUrl(url) {
     return card;
   }
 
-  function renderGrid(items) {
-    gridEl.innerHTML = '';
-    items.forEach(({ url, caption }) => gridEl.appendChild(createMediaCard(url, caption)));
+  // 카테고리별 미리 만들어둔 카드 DOM 저장소
+  // { cat: [cardEl, cardEl, ...] }
+  const cardCache = new Map();
+
+  // 현재 보이는 카테고리 키 ('전체' 또는 카테고리명)
+  let currentCat = '전체';
+
+  function showCat(cat, items) {
+    currentCat = cat;
+
+    // 모든 카드 숨기기
+    gridEl.querySelectorAll('.img-card').forEach(el => { el.style.display = 'none'; });
+
+    // 해당 카테고리 카드만 표시
+    const keys = cat === '전체' ? [...cardCache.keys()] : [cat];
+    keys.forEach(k => {
+      (cardCache.get(k) || []).forEach(el => { el.style.display = ''; });
+    });
+
+    // 스크롤 위치 초기화
+    gridEl.scrollLeft = 0;
   }
 
-  // 드래그 스크롤 (참고 코드 방식 그대로)
+  // 드래그 스크롤
   function initDragScroll(el) {
     let isDown = false, startX = 0, scrollLeft = 0, didDrag = false;
     el.addEventListener('mousedown', e => {
@@ -788,6 +806,23 @@ function normalizeImgUrl(url) {
       groups.get(cat).push({ url: mediaUrl, caption });
     });
 
+    // ── 모든 카드를 한 번에 생성해서 gridEl에 추가 & 캐시 저장 ──
+    // 이미지는 loading='eager'로 미리 전부 로딩
+    gridEl.innerHTML = '';
+    order.forEach(cat => {
+      const cards = [];
+      groups.get(cat).forEach(({ url, caption }) => {
+        const card = createMediaCard(url, caption);
+        // eager 로딩으로 선로딩 (createMediaCard 내부는 lazy → 여기서 덮어씀)
+        const img = card.querySelector('img');
+        if (img) img.loading = 'eager';
+        gridEl.appendChild(card);
+        cards.push(card);
+      });
+      cardCache.set(cat, cards);
+    });
+
+    // 탭 버튼 생성
     tabBar.innerHTML = '';
     const allBtn = document.createElement('button');
     allBtn.className = 'tab-btn active';
@@ -795,8 +830,7 @@ function normalizeImgUrl(url) {
     allBtn.onclick = () => {
       tabBar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       allBtn.classList.add('active');
-      const all = []; order.forEach(c => all.push(...groups.get(c)));
-      renderGrid(all);
+      showCat('전체', null);
       showDesc('전체');
     };
     tabBar.appendChild(allBtn);
@@ -808,16 +842,15 @@ function normalizeImgUrl(url) {
       btn.onclick = () => {
         tabBar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        renderGrid(groups.get(cat));
+        showCat(cat, null);
         showDesc(cat);
       };
       tabBar.appendChild(btn);
     });
 
-    const allItems = []; order.forEach(c => allItems.push(...groups.get(c)));
-    renderGrid(allItems);
+    // 초기: 전체 표시
+    showCat('전체', null);
     initDragScroll(gridEl);
-    // DESC 시트가 먼저 로드된 경우 즉시, 아닌 경우 로드 후 표시
     showDesc('전체');
 
   }).catch(() => {
