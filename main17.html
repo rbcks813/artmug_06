@@ -863,7 +863,8 @@ function normalizeImgUrl(url) {
 (function() {
   const AV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-UUywux4aKjZScK6nDwFpyjJCMZpw2e5UIsoj9d9yG4xp81o0VWhc10IsQFlqwNF9bSf4IlFGd5iH/pub?gid=1685083324&single=true&output=csv';
   const COL_MIN = 130, GAP = 14;
-  let allAvatars = [], curPage = 1;
+  let allItems = [];   // 미리 만든 카드 DOM 배열
+  let curPage  = 1;
   const grid    = document.getElementById('avatar-grid');
   const paginEl = document.getElementById('av-pagination');
 
@@ -873,32 +874,90 @@ function normalizeImgUrl(url) {
   }
   function getPerPage() { return calcCols() * 2; }
 
-  function renderPage(page) {
+  // DOM 재생성 없이 show/hide만으로 페이지 전환
+  function showPage(page) {
     curPage = page;
     const perPage    = getPerPage();
-    const totalPages = Math.ceil(allAvatars.length / perPage);
+    const totalPages = Math.ceil(allItems.length / perPage);
     const start      = (page - 1) * perPage;
-    const slice      = allAvatars.slice(start, start + perPage);
+    const end        = start + perPage;
+
+    allItems.forEach((el, i) => {
+      el.style.display = (i >= start && i < end) ? '' : 'none';
+    });
+
+    // 페이지네이션 업데이트 (버튼 active만 갱신)
+    paginEl.querySelectorAll('.av-page-btn[data-pg]').forEach(btn => {
+      btn.classList.toggle('active', Number(btn.dataset.pg) === page);
+    });
+    const prev = paginEl.querySelector('.av-prev');
+    const next = paginEl.querySelector('.av-next');
+    if (prev) prev.disabled = page === 1;
+    if (next) next.disabled = page === totalPages;
+
+    if (totalPages <= 1) { paginEl.style.display = 'none'; }
+    else { paginEl.style.display = 'flex'; }
+  }
+
+  // 페이지네이션 버튼 최초 1회 생성
+  function buildPagination(totalPages) {
+    paginEl.innerHTML = '';
+    if (totalPages <= 1) { paginEl.style.display = 'none'; return; }
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'av-page-btn av-prev';
+    prevBtn.textContent = '‹';
+    prevBtn.onclick = () => showPage(curPage - 1);
+    paginEl.appendChild(prevBtn);
+
+    for (let p = 1; p <= totalPages; p++) {
+      const btn = document.createElement('button');
+      btn.className = 'av-page-btn' + (p === 1 ? ' active' : '');
+      btn.dataset.pg = p;
+      btn.textContent = p;
+      btn.onclick = ((pg) => () => showPage(pg))(p);
+      paginEl.appendChild(btn);
+    }
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'av-page-btn av-next';
+    nextBtn.textContent = '›';
+    nextBtn.onclick = () => showPage(curPage + 1);
+    paginEl.appendChild(nextBtn);
+  }
+
+  fetchCSV(AV_URL).then(text => {
+    const rows = parseCSV(text).slice(1).filter(r => r[0] && r[1]);
+    if (!rows.length) {
+      grid.innerHTML = '<div class="load-msg">등록된 아바타가 없습니다.</div>';
+      return;
+    }
+
     const bgs = ['av-bg1','av-bg2','av-bg3','av-bg4','av-bg5','av-bg6'];
 
+    // 모든 카드를 한 번에 생성 + eager 로딩
     grid.innerHTML = '';
-    slice.forEach(({ name, imgUrl }, i) => {
+    rows.forEach(({ 0: name_, 1: imgUrl_ }, i) => {
+      const name   = name_.trim();
+      const imgUrl = imgUrl_.trim();
+
       const item  = document.createElement('div');
       item.className = 'avatar-item';
 
       const thumb = document.createElement('div');
-      thumb.className = 'avatar-thumb ' + bgs[(start + i) % bgs.length];
+      thumb.className = 'avatar-thumb ' + bgs[i % bgs.length];
 
       const skel = document.createElement('div');
       skel.className = 'av-skel';
       thumb.appendChild(skel);
 
       const img = document.createElement('img');
-      img.alt = name;
-      img.loading = 'lazy';
+      img.alt     = name;
+      img.loading = 'eager';   // 전부 미리 로딩
       img.onload  = () => skel.classList.add('hide');
       img.onerror = () => skel.classList.add('hide');
       img.src = normalizeImgUrl(imgUrl);
+      img.style.cssText = '-webkit-user-drag:none;user-drag:none;pointer-events:none;';
       thumb.appendChild(img);
       item.appendChild(thumb);
 
@@ -906,46 +965,24 @@ function normalizeImgUrl(url) {
       info.className = 'avatar-info';
       info.innerHTML = '<div class="av-name">' + escHtml(name) + '</div>';
       item.appendChild(info);
+
       grid.appendChild(item);
+      allItems.push(item);
     });
 
-    // 페이지네이션
-    if (totalPages <= 1) { paginEl.style.display = 'none'; return; }
-    paginEl.style.display = 'flex';
-    paginEl.innerHTML = '';
+    // 초기 페이지 표시 + 페이지네이션 생성
+    const perPage    = getPerPage();
+    const totalPages = Math.ceil(allItems.length / perPage);
+    buildPagination(totalPages);
+    showPage(1);
 
-    const prevBtn = document.createElement('button');
-    prevBtn.className = 'av-page-btn';
-    prevBtn.textContent = '‹';
-    prevBtn.disabled = page === 1;
-    prevBtn.onclick = () => renderPage(page - 1);
-    paginEl.appendChild(prevBtn);
+    // 창 크기 바뀌면 perPage 재계산 후 현재 페이지 재표시
+    window.addEventListener('resize', () => {
+      const newTotal = Math.ceil(allItems.length / getPerPage());
+      buildPagination(newTotal);
+      showPage(Math.min(curPage, newTotal));
+    });
 
-    for (let p = 1; p <= totalPages; p++) {
-      const btn = document.createElement('button');
-      btn.className = 'av-page-btn' + (p === page ? ' active' : '');
-      btn.textContent = p;
-      btn.onclick = ((pg) => () => renderPage(pg))(p);
-      paginEl.appendChild(btn);
-    }
-
-    const nextBtn = document.createElement('button');
-    nextBtn.className = 'av-page-btn';
-    nextBtn.textContent = '›';
-    nextBtn.disabled = page === totalPages;
-    nextBtn.onclick = () => renderPage(page + 1);
-    paginEl.appendChild(nextBtn);
-  }
-
-  fetchCSV(AV_URL).then(text => {
-    const rows = parseCSV(text).slice(1).filter(r => r[0] && r[1]);
-    allAvatars = rows.map(r => ({ name: r[0].trim(), imgUrl: r[1].trim() }));
-    if (!allAvatars.length) {
-      grid.innerHTML = '<div class="load-msg">등록된 아바타가 없습니다.</div>';
-      return;
-    }
-    renderPage(1);
-    window.addEventListener('resize', () => renderPage(curPage));
   }).catch(() => {
     grid.innerHTML = '<div class="load-msg">아바타 목록을 불러오지 못했습니다.</div>';
   });
