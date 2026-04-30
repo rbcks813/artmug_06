@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>주루마블 신청 상세페이지</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* 폰트 설정 */
@@ -634,7 +633,7 @@
         </div>
     </div>
 
-    <div class="section">
+    <div class="section" id="portfolioSection">
         <h2 class="section-title">포트폴리오</h2>
         <div class="portfolio-container">
             <div class="category-tabs">
@@ -711,12 +710,23 @@
 
     // ---------------- [ 포트폴리오 연동 로직 ] ----------------
     const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSvCNLWPH7eJa3TetSQ1IdzXF2fxWN6DqoNlyVP1tplEht_JJInhgmsN2vuAXdLXJbS6oyAoV_UL5FY/pub?gid=0&single=true&output=csv';
+    const STATUS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSvCNLWPH7eJa3TetSQ1IdzXF2fxWN6DqoNlyVP1tplEht_JJInhgmsN2vuAXdLXJbS6oyAoV_UL5FY/pub?gid=1463736334&single=true&output=csv';
+    
     let portfolioData = [];
     let currentFilteredData = [];
     let currentSlide = 0;
 
     async function fetchPortfolio() {
         try {
+            // 포트폴리오 노출 상태 확인
+            const statusResponse = await fetch(STATUS_URL);
+            const statusText = await statusResponse.text();
+            if (statusText.toUpperCase().includes('FALSE')) {
+                const portfolioSection = document.getElementById('portfolioSection');
+                if(portfolioSection) portfolioSection.style.display = 'none';
+                return; // FALSE면 데이터를 가져오지 않고 종료
+            }
+
             const response = await fetch(CSV_URL);
             const csvText = await response.text();
             const rows = csvText.split('\r\n').slice(1);
@@ -915,6 +925,7 @@
 
                 const successful = document.execCommand('copy');
                 selection.removeAllRanges();
+                selection.addRange(range);
                 document.body.removeChild(container);
                 return successful;
             };
