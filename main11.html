@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>시그니처풍 신청 상세페이지</title>
     <style>
         /* 폰트 설정 수정: 형식(format) 및 안정적인 CDN 경로 적용 */
         @font-face {
@@ -692,7 +691,8 @@
         </div>
     </div>
 
-    <div class="section">
+    <!-- 포트폴리오 섹션에 id 추가 -->
+    <div class="section" id="portfolioSection">
         <h2 class="section-title">포트폴리오</h2>
         <div class="portfolio-container">
             <div class="category-tabs">
@@ -976,6 +976,7 @@
     setInterval(sendHeight, 500);
 
     // ---------------- [ 구글 시트 연동 (샘플 및 포트폴리오) ] ----------------
+    const STATUS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQPivKMHVD5mVBUL70fJx7zDjFQ4AluCmxF4uxH_ykWFE5kBv477UwUEDGadtSuX7Tr03NJXfLM3QN4/pub?gid=448399551&single=true&output=csv';
     const SAMPLE_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQPivKMHVD5mVBUL70fJx7zDjFQ4AluCmxF4uxH_ykWFE5kBv477UwUEDGadtSuX7Tr03NJXfLM3QN4/pub?gid=0&single=true&output=csv';
     const PORTFOLIO_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQPivKMHVD5mVBUL70fJx7zDjFQ4AluCmxF4uxH_ykWFE5kBv477UwUEDGadtSuX7Tr03NJXfLM3QN4/pub?gid=407992278&single=true&output=csv';
 
@@ -1037,6 +1038,15 @@
 
     async function fetchPortfolio() {
         try {
+            // 사용여부 상태 체크 추가
+            const statusResponse = await fetch(STATUS_CSV_URL);
+            const statusCsvText = await statusResponse.text();
+            if (statusCsvText.toUpperCase().includes('FALSE')) {
+                const portfolioSection = document.getElementById('portfolioSection');
+                if (portfolioSection) portfolioSection.style.display = 'none';
+                return; // FALSE면 포트폴리오 로직 중단
+            }
+
             const response = await fetch(PORTFOLIO_CSV_URL);
             const csvText = await response.text();
             const rows = csvText.split(/\r?\n/).slice(1);
