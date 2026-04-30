@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>디자인 신청 페이지</title>
     <style>
         @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight: 100; font-display: swap; }
         @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2'); font-weight: 200; font-display: swap; }
@@ -552,17 +551,19 @@ function scrollTabs(direction) {
 async function loadSheetData() {
     const BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQySVlQBMqlL7tguFKcH3yqvzfr2hic0llevvFPC0v2Bc-ipA1ZZrHHSwmv-MLrAJYUUIOq9xJU_LVk/pub';
     const urls = {
-        cal:       `${BASE}?gid=0&single=true&output=csv`,
-        collab:    `${BASE}?gid=374369761&single=true&output=csv`,
-        notice:    `${BASE}?gid=556599998&single=true&output=csv`,
-        portfolio: `${BASE}?gid=756653649&single=true&output=csv`,
+        cal:         `${BASE}?gid=0&single=true&output=csv`,
+        collab:      `${BASE}?gid=374369761&single=true&output=csv`,
+        notice:      `${BASE}?gid=556599998&single=true&output=csv`,
+        portfolio:   `${BASE}?gid=756653649&single=true&output=csv`,
+        port_status: `${BASE}?gid=282408873&single=true&output=csv`,
     };
 
-    const [noticeRes, calRes, collabRes, portRes] = await Promise.allSettled([
+    const [noticeRes, calRes, collabRes, portRes, portStatusRes] = await Promise.allSettled([
         fetch(urls.notice),
         fetch(urls.cal),
         fetch(urls.collab),
         fetch(urls.portfolio),
+        fetch(urls.port_status),
     ]);
 
     try {
@@ -621,6 +622,27 @@ async function loadSheetData() {
                 }
             }
         });
+    } catch(e) {}
+
+    // 포트폴리오 사용여부 상태 체크 로직
+    try {
+        if (portStatusRes.status === 'fulfilled') {
+            const rows = parseCSV(await portStatusRes.value.text());
+            let usePortfolio = true;
+            for (let i = 0; i < rows.length; i++) {
+                for (let j = 0; j < rows[i].length; j++) {
+                    if (rows[i][j] && rows[i][j].trim().toUpperCase() === 'FALSE') {
+                        usePortfolio = false;
+                    }
+                }
+            }
+            if (!usePortfolio) {
+                const portSection = document.getElementById('portfolio-tabs');
+                if (portSection && portSection.closest('section')) {
+                    portSection.closest('section').style.display = 'none';
+                }
+            }
+        }
     } catch(e) {}
 
     renderPortfolio();
