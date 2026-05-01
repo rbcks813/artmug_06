@@ -1536,57 +1536,61 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 /* ═══════════════════════════════════════════════════════
    임베드 높이 자동 조절
-   - .wrap의 실제 렌더 높이(offsetHeight)를 기준으로 측정
-     → scrollHeight와 달리 줄어드는 것도 즉시 반영
-   - resize 이벤트 + MutationObserver 이중 감지
+   핵심 원칙:
+   1. lastH 비교 제거 — 항상 전송해 줄어드는 것도 빠짐없이 반영
+   2. iframe transition:none 강제 — 부모 사이트 CSS 애니메이션 차단
+   3. wrap.offsetHeight 기준 — scrollHeight 캐싱 문제 없음
 ═══════════════════════════════════════════════════════ */
 (function() {
-  let lastH = 0;
-  let timer = null;
+  var raf = null;
 
   function sendHeight() {
-    const wrap = document.querySelector('.wrap');
+    var wrap = document.querySelector('.wrap');
     if (!wrap) return;
 
-    // wrap의 실제 높이 + body 상단 padding(36px) + 하단 padding(24px)
-    const h = Math.ceil(wrap.offsetHeight + 36 + 24);
+    // wrap 실제 높이 + body 상하 패딩
+    var h = Math.ceil(wrap.offsetHeight + 36 + 24);
 
-    if (h === lastH) return;
-    lastH = h;
+    // ① postMessage (transition 없이 즉시 반영 지시 포함)
+    window.parent.postMessage({ type: 'iframeResize', height: h, instant: true }, '*');
 
-    // ① postMessage
-    window.parent.postMessage({ type: 'iframeResize', height: h }, '*');
-
-    // ② 직접 접근 (동일 도메인)
+    // ② 직접 접근 (동일 도메인) — transition 강제 제거 후 높이 적용
     try {
-      const frames = window.parent.document.querySelectorAll('iframe');
-      frames.forEach(f => {
-        if (f.contentWindow === window) f.style.height = h + 'px';
-      });
+      var frames = window.parent.document.querySelectorAll('iframe');
+      for (var i = 0; i < frames.length; i++) {
+        if (frames[i].contentWindow === window) {
+          frames[i].style.transition = 'none';   // 애니메이션 차단
+          frames[i].style.height     = h + 'px'; // 즉시 적용
+        }
+      }
     } catch(e) {}
   }
 
+  // rAF으로 레이아웃 완료 직후 측정 (setTimeout 0보다 정확)
   function scheduleHeight() {
-    clearTimeout(timer);
-    // 0ms: 현재 레이아웃 반영 직후 측정
-    timer = setTimeout(sendHeight, 0);
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(function() {
+      raf = null;
+      sendHeight();
+    });
   }
 
   // resize 이벤트
   window.addEventListener('resize', scheduleHeight);
 
-  // DOM·스타일 변화 감지
-  const mo = new MutationObserver(scheduleHeight);
+  // DOM·스타일 변화 감지 — 줄어드는 경우도 감지
+  var mo = new MutationObserver(scheduleHeight);
 
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', function() {
     mo.observe(document.body, {
-      childList: true, subtree: true,
-      attributes: true, attributeFilter: ['style', 'class']
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['style', 'class']
     });
     sendHeight();
   });
 
-  // 이미지 등 리소스 로드 완료 후 재측정
   window.addEventListener('load', scheduleHeight);
 })();
 
