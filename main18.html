@@ -1536,62 +1536,35 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 /* ═══════════════════════════════════════════════════════
    임베드 높이 자동 조절
-   핵심 원칙:
-   1. lastH 비교 제거 — 항상 전송해 줄어드는 것도 빠짐없이 반영
-   2. iframe transition:none 강제 — 부모 사이트 CSS 애니메이션 차단
-   3. wrap.offsetHeight 기준 — scrollHeight 캐싱 문제 없음
+   참고 코드 방식: ResizeObserver로 .wrap을 직접 관찰
+   → 크기가 실제로 바뀐 후 콜백이므로 늘어남·줄어듦 모두 정확
 ═══════════════════════════════════════════════════════ */
 (function() {
-  var raf = null;
-
   function sendHeight() {
     var wrap = document.querySelector('.wrap');
-    if (!wrap) return;
+    var h = wrap ? wrap.offsetHeight + 36 + 24 : document.documentElement.scrollHeight;
 
-    // wrap 실제 높이 + body 상하 패딩
-    var h = Math.ceil(wrap.offsetHeight + 36 + 24);
+    window.parent.postMessage({ type: 'iframeResize', height: h }, '*');
 
-    // ① postMessage (transition 없이 즉시 반영 지시 포함)
-    window.parent.postMessage({ type: 'iframeResize', height: h, instant: true }, '*');
-
-    // ② 직접 접근 (동일 도메인) — transition 강제 제거 후 높이 적용
     try {
       var frames = window.parent.document.querySelectorAll('iframe');
       for (var i = 0; i < frames.length; i++) {
         if (frames[i].contentWindow === window) {
-          frames[i].style.transition = 'none';   // 애니메이션 차단
-          frames[i].style.height     = h + 'px'; // 즉시 적용
+          frames[i].style.transition = 'none';
+          frames[i].style.height = h + 'px';
         }
       }
     } catch(e) {}
   }
 
-  // rAF으로 레이아웃 완료 직후 측정 (setTimeout 0보다 정확)
-  function scheduleHeight() {
-    if (raf) cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(function() {
-      raf = null;
-      sendHeight();
-    });
-  }
-
-  // resize 이벤트
-  window.addEventListener('resize', scheduleHeight);
-
-  // DOM·스타일 변화 감지 — 줄어드는 경우도 감지
-  var mo = new MutationObserver(scheduleHeight);
-
-  document.addEventListener('DOMContentLoaded', function() {
-    mo.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['style', 'class']
-    });
+  // ResizeObserver로 .wrap 직접 관찰 — 실제 크기 변화 시점에 정확히 호출됨
+  var ro = new ResizeObserver(sendHeight);
+  window.addEventListener('load', function() {
+    var wrap = document.querySelector('.wrap');
+    if (wrap) ro.observe(wrap);
     sendHeight();
   });
-
-  window.addEventListener('load', scheduleHeight);
+  window.addEventListener('resize', sendHeight);
 })();
 
 /* ═══════════════════════════════════════════════════════
