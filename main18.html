@@ -429,7 +429,6 @@ html,body{height:auto!important;min-height:0!important}body{font-family:'Paperoz
 </head>
 <body>
 <div class="wrap">
-
 <!-- ① 작가 소개 -->
 <div class="card" id="sec-intro">
   <div class="profile-area" id="profile-area">
@@ -453,18 +452,6 @@ html,body{height:auto!important;min-height:0!important}body{font-family:'Paperoz
   </div>
 </div>
 
-<!-- ③ 패키지 -->
-<div class="card" id="sec-package">
-  <div class="inner">
-    <div class="sec-title">패키지 구성</div>
-    <div id="pkg-wrap">
-      <div class="skeleton skel-pkg"></div>
-      <div class="skeleton skel-pkg"></div>
-      <div class="skeleton skel-pkg" style="margin-bottom:0"></div>
-    </div>
-  </div>
-</div>
-
 <!-- ④ 협업 작가 -->
 <div class="card" id="sec-collab">
   <div class="inner">
@@ -484,11 +471,37 @@ html,body{height:auto!important;min-height:0!important}body{font-family:'Paperoz
   </div>
 </div>
 
+<!-- ③ 패키지 -->
+<div class="card" id="sec-package">
+  <div class="inner">
+    <div class="sec-title">패키지 구성</div>
+    <div id="pkg-wrap">
+      <div class="skeleton skel-pkg"></div>
+      <div class="skeleton skel-pkg"></div>
+      <div class="skeleton skel-pkg" style="margin-bottom:0"></div>
+    </div>
+  </div>
+</div>
+
 <!-- ⑤ 작업 순서 -->
 <div class="card" id="sec-process">
   <div class="inner">
     <div class="sec-title">작업 진행 순서</div>
     <div class="flow-container" id="flow-container"></div>
+  </div>
+</div>
+
+<!-- ⑧ 캘린더 -->
+<div class="card" id="sec-calendar">
+  <div class="inner">
+    <div class="sec-title">작업 일정 캘린더</div>
+    <div class="cal-tab-row">
+      <button class="cal-tab active" onclick="switchCal('pkg',this)">패키지 작업</button>
+      <button class="cal-tab" onclick="switchCal('nilo',this)">닐로툰 &amp; 뚜따</button>
+    </div>
+    <div id="cal-outer">
+      <div class="skeleton skel-cal"></div>
+    </div>
   </div>
 </div>
 
@@ -594,6 +607,23 @@ html,body{height:auto!important;min-height:0!important}body{font-family:'Paperoz
         </div>
       </div>
 
+    </div>
+  </div>
+</div>
+
+<!-- ⑨ 포트폴리오 -->
+<div class="card" id="sec-portfolio">
+  <div class="inner">
+    <div class="sec-title">포트폴리오</div>
+    <div class="port-tab-row" id="port-tab-row">
+      <div class="skeleton skel-badge" style="width:70px;height:32px"></div>
+      <div class="skeleton skel-badge" style="width:70px;height:32px"></div>
+      <div class="skeleton skel-badge" style="width:70px;height:32px"></div>
+    </div>
+    <div id="port-panel" class="port-scroll">
+      <div class="skeleton port-skel"></div>
+      <div class="skeleton port-skel"></div>
+      <div class="skeleton port-skel"></div>
     </div>
   </div>
 </div>
@@ -727,37 +757,6 @@ html,body{height:auto!important;min-height:0!important}body{font-family:'Paperoz
         <div class="copy-balloon" id="bal-nilo">양식이 복사되었습니다! 📋</div>
         <button class="copy-btn" onclick="copyNilo()">작성한 양식 복사하기 📋</button>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- ⑧ 캘린더 -->
-<div class="card" id="sec-calendar">
-  <div class="inner">
-    <div class="sec-title">작업 일정 캘린더</div>
-    <div class="cal-tab-row">
-      <button class="cal-tab active" onclick="switchCal('pkg',this)">패키지 작업</button>
-      <button class="cal-tab" onclick="switchCal('nilo',this)">닐로툰 &amp; 뚜따</button>
-    </div>
-    <div id="cal-outer">
-      <div class="skeleton skel-cal"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ⑨ 포트폴리오 -->
-<div class="card" id="sec-portfolio">
-  <div class="inner">
-    <div class="sec-title">포트폴리오</div>
-    <div class="port-tab-row" id="port-tab-row">
-      <div class="skeleton skel-badge" style="width:70px;height:32px"></div>
-      <div class="skeleton skel-badge" style="width:70px;height:32px"></div>
-      <div class="skeleton skel-badge" style="width:70px;height:32px"></div>
-    </div>
-    <div id="port-panel" class="port-scroll">
-      <div class="skeleton port-skel"></div>
-      <div class="skeleton port-skel"></div>
-      <div class="skeleton port-skel"></div>
     </div>
   </div>
 </div>
@@ -1536,13 +1535,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 /* ═══════════════════════════════════════════════════════
    임베드 높이 자동 조절
-   참고 코드 방식: ResizeObserver로 .wrap을 직접 관찰
-   → 크기가 실제로 바뀐 후 콜백이므로 늘어남·줄어듦 모두 정확
+   ResizeObserver + debounce(16ms)
+   - 연속 콜백을 한 번으로 묶어 뽀잉 현상 제거
+   - iframe transition:none 강제로 애니메이션 차단
 ═══════════════════════════════════════════════════════ */
 (function() {
+  var _t = null;
+
   function sendHeight() {
     var wrap = document.querySelector('.wrap');
-    var h = wrap ? wrap.offsetHeight + 36 + 24 : document.documentElement.scrollHeight;
+    var h = wrap ? (wrap.offsetHeight + 36 + 24) : document.documentElement.scrollHeight;
 
     window.parent.postMessage({ type: 'iframeResize', height: h }, '*');
 
@@ -1550,21 +1552,28 @@ document.addEventListener('DOMContentLoaded', async () => {
       var frames = window.parent.document.querySelectorAll('iframe');
       for (var i = 0; i < frames.length; i++) {
         if (frames[i].contentWindow === window) {
-          frames[i].style.transition = 'none';
+          frames[i].style.transition = 'none'; /* 애니메이션 완전 차단 */
           frames[i].style.height = h + 'px';
         }
       }
     } catch(e) {}
   }
 
-  // ResizeObserver로 .wrap 직접 관찰 — 실제 크기 변화 시점에 정확히 호출됨
-  var ro = new ResizeObserver(sendHeight);
+  /* 16ms debounce — 연속 콜백을 한 번으로 묶음 */
+  function debounced() {
+    clearTimeout(_t);
+    _t = setTimeout(sendHeight, 16);
+  }
+
+  var ro = new ResizeObserver(debounced);
+
   window.addEventListener('load', function() {
     var wrap = document.querySelector('.wrap');
     if (wrap) ro.observe(wrap);
-    sendHeight();
+    sendHeight(); /* 최초 1회 즉시 전송 */
   });
-  window.addEventListener('resize', sendHeight);
+
+  window.addEventListener('resize', debounced);
 })();
 
 /* ═══════════════════════════════════════════════════════
