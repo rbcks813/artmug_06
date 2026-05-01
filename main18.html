@@ -1086,32 +1086,39 @@ function getImgHtml(previewId) {
 
 /* HTML + 일반 텍스트 동시 클립보드 복사 */
 function copyHtml(html, balloonId) {
-  // ClipboardItem API 지원 여부 확인
-  if (typeof ClipboardItem !== 'undefined' && navigator.clipboard.write) {
-    const blob = new Blob([html], { type: 'text/html' });
-    const item = new ClipboardItem({ 'text/html': blob });
-    navigator.clipboard.write([item])
-      .then(() => showBalloon(balloonId))
-      .catch(() => {
-        // 폴백: 텍스트만 복사
-        navigator.clipboard.writeText(html.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim())
-          .then(() => showBalloon(balloonId));
-      });
-  } else {
-    // execCommand 폴백 (구형 브라우저)
+  // 1순위: execCommand — iframe 환경에서 가장 호환성 높음
+  try {
     const el = document.createElement('div');
     el.innerHTML = html;
-    el.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0';
+    el.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;pointer-events:none';
     document.body.appendChild(el);
     const sel = window.getSelection();
     const range = document.createRange();
     range.selectNodeContents(el);
     sel.removeAllRanges();
     sel.addRange(range);
-    try { document.execCommand('copy'); showBalloon(balloonId); } catch(e) {}
+    const ok = document.execCommand('copy');
     sel.removeAllRanges();
     document.body.removeChild(el);
+    if (ok) { showBalloon(balloonId); return; }
+  } catch(e) {}
+
+  // 2순위: ClipboardItem API (HTTPS + 권한 있을 때)
+  if (typeof ClipboardItem !== 'undefined' && navigator.clipboard && navigator.clipboard.write) {
+    const blob = new Blob([html], { type: 'text/html' });
+    navigator.clipboard.write([new ClipboardItem({ 'text/html': blob })])
+      .then(() => showBalloon(balloonId))
+      .catch(() => {
+        // 3순위: 부모 페이지에 복사 요청 (postMessage)
+        window.parent.postMessage({ type: 'clipboardWrite', html: html }, '*');
+        showBalloon(balloonId);
+      });
+    return;
   }
+
+  // 4순위: 부모에게 postMessage로 위임
+  window.parent.postMessage({ type: 'clipboardWrite', html: html }, '*');
+  showBalloon(balloonId);
 }
 
 function showBalloon(id) {
