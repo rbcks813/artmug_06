@@ -1375,38 +1375,35 @@ async function loadPrice(){
   }catch(e){console.error('가격 로드 실패:',e);buildWizard();}
 }
 
-/* ── 위자드 빌드 ── 고정 5스텝: 패키지 선택 → 뚜따 선택 → 기타 옵션 → 추가정보 입력 → 총 예상합계 ── */
+/* ── 위자드 빌드 ── 고정 5스텝: 신청양식 → 패키지 선택 → 뚜따 선택 → 기타 옵션 → 총 예상합계 ── */
 function buildWizard(){
   const indicator=document.getElementById('stepIndicator');
   const container=document.getElementById('wizardPanels');
   indicator.innerHTML=''; container.innerHTML=''; wizSteps=[]; wizCur=0;
 
-  /* 카테고리 3그룹으로 분류 */
   const OTHER_NAMES=['포트폴리오','수정 작업','빠른 마감'];
   const PKG_CATS   = priceOrder.filter(c=>c.includes('패키지')||c.includes('개인작'));
   const OTHER_CATS = priceOrder.filter(c=>OTHER_NAMES.includes(c));
   const DDUTA_CATS = priceOrder.filter(c=>!PKG_CATS.includes(c)&&!OTHER_CATS.includes(c));
 
-  // 모든 카테고리 selections 초기화
   priceOrder.forEach(cat=>{ selections[cat]=selections[cat]||{}; });
 
-  /* 스텝 0: 패키지 선택 */
-  wizSteps.push({label:'패키지 선택', el: buildMultiCatPanel('패키지 선택', PKG_CATS.length?PKG_CATS:priceOrder.slice(0,2), 0)});
+  /* 스텝 0: 신청양식 */
+  wizSteps.push({label:'신청양식',    el: buildFormPanel()});
 
-  /* 스텝 1: 뚜따 선택 */
-  wizSteps.push({label:'뚜따 선택',   el: buildMultiCatPanel('뚜따 선택',   DDUTA_CATS.length?DDUTA_CATS:[], 1)});
+  /* 스텝 1: 패키지 선택 */
+  wizSteps.push({label:'패키지 선택', el: buildMultiCatPanel('패키지 선택', PKG_CATS.length?PKG_CATS:priceOrder.slice(0,2), 1)});
 
-  /* 스텝 2: 기타 옵션 */
-  wizSteps.push({label:'기타 옵션',   el: buildMultiCatPanel('기타 옵션',   OTHER_CATS.length?OTHER_CATS:[], 2)});
+  /* 스텝 2: 뚜따 선택 */
+  wizSteps.push({label:'뚜따 선택',   el: buildMultiCatPanel('뚜따 선택',   DDUTA_CATS.length?DDUTA_CATS:[], 2)});
 
-  /* 스텝 3: 추가정보 입력 */
-  wizSteps.push({label:'추가정보',    el: buildFormPanel()});
+  /* 스텝 3: 기타 옵션 */
+  wizSteps.push({label:'기타 옵션',   el: buildMultiCatPanel('기타 옵션',   OTHER_CATS.length?OTHER_CATS:[], 3)});
 
   /* 스텝 4: 총 예상합계 */
   wizSteps.push({label:'총 예상합계', el: buildFinalPanel()});
 
-  /* 인디케이터 렌더 */
-  const LABELS=['패키지 선택','뚜따 선택','기타 옵션','추가정보','예상합계'];
+  const LABELS=['신청양식','패키지 선택','뚜따 선택','기타 옵션','예상합계'];
   wizSteps.forEach((s,i)=>{
     if(i>0){const line=document.createElement('div');line.className='step-ind-line';line.id='wizLine'+i;indicator.appendChild(line);}
     const item=document.createElement('div'); item.className='step-ind-item'+(i===0?' active':''); item.id='wizItem'+i;
@@ -1415,7 +1412,6 @@ function buildWizard(){
     item.appendChild(circle); item.appendChild(label); indicator.appendChild(item);
   });
 
-  /* 패널 append */
   wizSteps.forEach((s,i)=>{
     s.el.classList.add('wiz-panel');
     if(i===0)s.el.classList.add('active');
@@ -1474,33 +1470,40 @@ function buildMultiCatPanel(title, cats, stepIdx){
     body.appendChild(listEl);
   });
 
-  const isFirst=stepIdx===0;
-  const nav=makeNav(!isFirst, true, '다음 →',
+  const isFirst=stepIdx===1;  // 패키지가 첫 번째 선택 스텝
+  const nav=makeNav(true, true, '다음 →',
     ()=>goStep(stepIdx+1),
-    isFirst?null:()=>goStep(stepIdx-1)
+    ()=>goStep(stepIdx-1)
   );
   panel.appendChild(nav);
   return panel;
 }
 
-/* ─ 신청 폼 패널 (스텝 2) ─ */
+/* ─ 신청 폼 패널 (스텝 0 — 첫 화면) ─ */
 function buildFormPanel(){
   const panel=document.createElement('div');
   panel.innerHTML=`
-    <div class="wiz-head"><div class="osh-bar"></div><span class="wiz-title">추가정보 입력</span><span class="wiz-sub">* 필수항목</span></div>
+    <div class="wiz-head"><div class="osh-bar"></div><span class="wiz-title">신청양식</span><span class="wiz-sub">* 필수항목</span></div>
     <div class="wiz-body">
+      <div style="background:rgba(144,196,244,0.12);border:1px dashed rgba(144,196,244,0.5);border-radius:12px;padding:11px 14px;margin-bottom:16px;font-size:0.83rem;color:var(--text-mid);line-height:1.7;">
+        📝 신청양식을 적고 <strong style="color:var(--b500);">다음</strong>을 클릭하면 견적을 볼 수 있습니다.
+      </div>
       <div class="wiz-form-grid">
         <div>
           <label class="wiz-label">스트리머 성함 + 방송국 주소 <span class="req">*</span></label>
           <input type="text" id="f_name" class="form-input" placeholder="데뷔 예정이실 경우 데뷔예정(○월 예상)이라고 작성해주세요">
         </div>
         <div>
+          <label class="wiz-label">신청하는 아바타 <span class="hint">ex) 시나노</span></label>
+          <input type="text" id="f_avatar" class="form-input" placeholder="사용하실 아바타 이름을 입력해주세요">
+        </div>
+        <div>
           <label class="wiz-label">원하는 이미지 / 색상 컨셉 <span class="hint">(선택)</span></label>
           <textarea id="f_vibe" class="form-input" rows="3" placeholder="고민되시면 비워두셔도 됩니다. 저랑 상담 진행 후 정하셔도 괜찮습니다."></textarea>
         </div>
         <div>
-          <label class="wiz-label">파츠 링크 <span class="hint">(선택)</span></label>
-          <textarea id="f_link" class="form-input" rows="2" placeholder="잘 모르시겠다면 부스 추천 추가금액을 넣어주세요."></textarea>
+          <label class="wiz-label">Booth 파츠 링크 <span class="hint">(선택)</span></label>
+          <textarea id="f_link" class="form-input" rows="4" placeholder="옷 링크:&#10;헤어 링크:&#10;파츠 링크를 첨부해주세요.&#10;부스 추천을 원하신다면 부스 추천금액을 넣어주세요."></textarea>
         </div>
         <div>
           <label class="wiz-label">문의 내용 <span class="hint">(선택)</span></label>
@@ -1508,17 +1511,18 @@ function buildFormPanel(){
         </div>
       </div>
     </div>`;
-  const nav=makeNav(true, true, '다음 →',
+  const nav=makeNav(false, true, '다음 →',
     ()=>{
       const n=document.getElementById('f_name').value.trim();
       if(!n){showBubbleAt('f_name','이름/방송국 주소를 입력해주세요',true);return;}
       formState.name=n;
+      formState.avatar=document.getElementById('f_avatar').value;
       formState.vibe=document.getElementById('f_vibe').value;
       formState.link=document.getElementById('f_link').value;
       formState.task=document.getElementById('f_task').value;
-      goStep(4);   // 총 예상합계(스텝 4)으로
+      goStep(1);   // 패키지 선택(스텝 1)으로
     },
-    ()=>goStep(2)  // 기타 옵션(스텝 2)으로
+    null
   );
   panel.appendChild(nav); return panel;
 }
@@ -1541,7 +1545,7 @@ function buildFinalPanel(){
         <button class="submit-btn disabled" id="submitBtn" onclick="copyForm()">📋 신청 내용 복사하기</button>
       </div>
     </div>`;
-  const nav=makeNav(true, false, '', null, ()=>goStep(3));  // 이전 → 추가정보(스텝 3)
+  const nav=makeNav(true, false, '', null, ()=>goStep(3));  // 이전 → 기타 옵션(스텝 3)
   panel.insertBefore(nav, panel.firstChild);
   return panel;
 }
@@ -1655,13 +1659,16 @@ ${document.getElementById('f_notice')?.value||'미확인'}
 2. 스트리머 성함 + 방송국 주소 :
 ${formState.name||'(미작성)'}
 
-3. 원하는 이미지 / 색상 컨셉 :
+3. 신청하는 아바타 :
+${formState.avatar||'(미작성)'}
+
+4. 원하는 이미지 / 색상 컨셉 :
 ${formState.vibe||'(미기재)'}
 
-4. 파츠 링크 :
+5. Booth 파츠 링크 :
 ${formState.link||'미정'}
 
-5. 문의 내용 :
+6. 문의 내용 :
 ${formState.task||'(미작성)'}
 
 ─────────────────────────
