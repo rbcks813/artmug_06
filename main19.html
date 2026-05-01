@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>김바니 작업실</title>
 <style>
 @font-face { font-family:'Paperozi'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight:100; font-display:swap; }
 @font-face { font-family:'Paperozi'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2'); font-weight:200; font-display:swap; }
@@ -53,6 +52,8 @@ body {
   padding: 36px 14px 80px;
   overflow-x: hidden;
   position: relative;
+  height: auto;
+  min-height: 0;
 }
 
 /* ── 배경 장식 (시나모롤 느낌 — 아주 은은한 원형 그라디언트) ── */
@@ -1689,7 +1690,10 @@ loadPrice();   // 위자드 빌드 포함
    부모가 처리 못할 경우 iframe 직접 접근도 시도
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function sendHeight() {
-  const h = document.documentElement.scrollHeight;
+  // iframe 자체 height를 auto로 리셋한 뒤 콘텐츠 실제 높이 측정
+  // (scrollHeight는 한번 커지면 안 줄어드는 문제 방지)
+  const wrap = document.querySelector('.page-wrap');
+  const h = wrap ? Math.ceil(wrap.getBoundingClientRect().height) + 80 : document.documentElement.scrollHeight;
   // postMessage 방식
   try { window.parent.postMessage({ type: 'iframeHeight', height: h }, '*'); } catch(e) {}
   // 직접 접근 방식 (동일 origin일 때)
