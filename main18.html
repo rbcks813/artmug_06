@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>이나비 버추얼 작업실</title>
 <style>
 @font-face{font-family:'Paperozi';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2')format('woff2');font-weight:300;font-display:swap}
 @font-face{font-family:'Paperozi';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2')format('woff2');font-weight:400;font-display:swap}
@@ -1535,27 +1534,29 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 /* ═══════════════════════════════════════════════════════
-   임베드 높이 자동 조절
-   - ResizeObserver로 실시간 감지 (늘어남 + 줄어듦 모두 처리)
-   - 이전 높이보다 작아질 때도 즉시 반영
-   - postMessage + iframe 직접 접근 이중 처리
+   임베드 높이 자동 조절 (resize 이벤트 기반)
+   - iframe 내부 body를 height:auto 유지 후 실제 scrollHeight 전달
+   - 늘어남 + 줄어듦 모두 처리 (body를 잠깐 shrink-wrap 후 측정)
 ═══════════════════════════════════════════════════════ */
 (function() {
   let lastH = 0;
+  let timer = null;
 
   function sendHeight() {
-    const wrap = document.querySelector('.wrap');
-    if (!wrap) return;
-    // getBoundingClientRect()로 실제 렌더된 높이 측정 (body scrollHeight는 줄어들 때 반영 안됨)
-    const rect = wrap.getBoundingClientRect();
-    const h = Math.ceil(rect.height + rect.top + 32); // 상단 패딩 포함
+    // body를 auto로 풀어서 실제 콘텐츠 높이를 정확히 측정
+    document.body.style.overflow = 'hidden';
+    document.body.style.height   = 'auto';
+    const h = Math.ceil(document.documentElement.scrollHeight);
+    document.body.style.overflow = '';
+    document.body.style.height   = '';
+
     if (h === lastH) return;
     lastH = h;
 
-    // ① postMessage — 부모가 message 이벤트로 수신
+    // ① postMessage
     window.parent.postMessage({ type: 'iframeResize', height: h }, '*');
 
-    // ② 직접 접근 (동일 도메인일 때)
+    // ② 직접 접근 (동일 도메인)
     try {
       const frames = window.parent.document.querySelectorAll('iframe');
       frames.forEach(f => {
@@ -1564,26 +1565,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch(e) {}
   }
 
-  // 레이아웃 변화 실시간 감지
-  const ro = new ResizeObserver(() => sendHeight());
-  // .wrap 전체를 관찰
-  const observeWrap = () => {
-    const wrap = document.querySelector('.wrap');
-    if (wrap) ro.observe(wrap);
-  };
-  // DOM 변화도 감지 (아코디언, 탭 전환 등)
-  const mo = new MutationObserver(() => {
-    sendHeight();
-  });
+  function scheduleHeight() {
+    clearTimeout(timer);
+    timer = setTimeout(sendHeight, 0);
+  }
 
+  // resize 이벤트 — 뷰포트 크기 변화 시 (폰트/줌 등 포함)
+  window.addEventListener('resize', scheduleHeight);
+
+  // DOM/스타일 변화 감지 (아코디언·탭·이미지 로드 등)
+  const mo = new MutationObserver(scheduleHeight);
   document.addEventListener('DOMContentLoaded', () => {
-    observeWrap();
-    mo.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style','class'] });
+    mo.observe(document.body, {
+      childList: true, subtree: true,
+      attributes: true, attributeFilter: ['style','class']
+    });
     sendHeight();
   });
   window.addEventListener('load', sendHeight);
-  // 이미지 로드로 높이 바뀔 때 대응
-  window.addEventListener('resize', sendHeight);
 })();
 
 /* ═══════════════════════════════════════════════════════
