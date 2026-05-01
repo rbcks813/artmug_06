@@ -406,6 +406,34 @@ html,body{height:auto!important;min-height:0!important}body{font-family:'Paperoz
 /* 탭 전환 전 스켈레톤 카드 */
 .port-skel{flex-shrink:0;width:200px;height:360px;border-radius:20px}
 .port-empty{color:var(--light);font-size:.85rem;padding:30px;text-align:center;align-self:center}
+/* 포트폴리오 팝업 오버레이 — 부모 페이지 body에 주입 */
+.port-popup-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.85);
+  display:flex;align-items:center;justify-content:center;
+  z-index:999999;
+  cursor:zoom-out;
+  padding:20px;
+}
+.port-popup-overlay img{
+  max-width:90vw;max-height:90vh;
+  border-radius:12px;
+  object-fit:contain;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  cursor:default;
+  display:block;
+}
+.port-popup-close{
+  position:fixed;top:16px;right:20px;
+  width:38px;height:38px;
+  background:rgba(255,255,255,.15);
+  border:2px solid rgba(255,255,255,.4);
+  border-radius:50%;
+  color:#fff;font-size:1.2rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  z-index:1000000;
+}
 
 /* ── FAQ ── */
 .faq-list{display:flex;flex-direction:column;gap:9px}
@@ -1178,40 +1206,71 @@ function normDateStr(s) {
   return s;
 }
 
+/* 날짜 문자열 → Date 객체 */
+function parseDate(s) {
+  const m = normDateStr(s).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return null;
+  return new Date(+m[1], +m[2]-1, +m[3]);
+}
+
+/* 날짜 범위 "2026-5-1~2026-5-10" → 사이 모든 날짜 배열 반환 */
+function expandDateRange(rawDate) {
+  const s = (rawDate||'').trim();
+  if (s.includes('~')) {
+    const parts = s.split('~');
+    const start = parseDate(parts[0].trim());
+    const end   = parseDate(parts[1].trim());
+    if (!start || !end) return [];
+    const dates = [];
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate()+1)) {
+      dates.push(normDateStr(`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`));
+    }
+    return dates;
+  }
+  const single = normDateStr(s);
+  return single ? [single] : [];
+}
+
+/* calData에 하나의 날짜 적용 */
+function applyCalEntry(bucket, dateStr, text, workStr, closeStr) {
+  if (!calData[bucket])          calData[bucket] = {};
+  if (!calData[bucket][dateStr]) calData[bucket][dateStr] = { status:'', events:[] };
+
+  if (closeStr === '마감') {
+    calData[bucket][dateStr].status = 'closed';
+  } else if (closeStr === '휴일') {
+    if (calData[bucket][dateStr].status !== 'closed')
+      calData[bucket][dateStr].status = 'holiday';
+  }
+
+  if (text) {
+    let workCls = 'none';
+    if      (workStr === '대기중') workCls = 'waiting';
+    else if (workStr === '작업중') workCls = 'working';
+    else if (workStr === '완료')   workCls = 'done';
+    calData[bucket][dateStr].events.push({ text, workCls });
+  }
+}
+
 async function loadCalendar() {
   try {
     const rows = parseCSV(await fetchCSV(CAL_CSV_URL));
-    // 헤더: 카테고리 | 날짜 | 내용 | 작업 여부 | 마감여부
+    // 헤더: 카테고리 | 날짜(단일 or 범위) | 내용 | 작업 여부 | 마감여부
     for (let i = 1; i < rows.length; i++) {
       const r = rows[i];
       if (!r || r.length < 2) continue;
       const cat      = (r[0]||'').trim();
-      const dateStr  = normDateStr(r[1]);
+      const rawDate  = (r[1]||'').trim();
       const text     = (r[2]||'').trim();
-      const workStr  = (r[3]||'').trim(); // 대기중 / 작업중 / 완료
-      const closeStr = (r[4]||'').trim(); // 마감 / 휴일
-      if (!dateStr || !cat) continue;
+      const workStr  = (r[3]||'').trim();
+      const closeStr = (r[4]||'').trim();
+      if (!rawDate || !cat) continue;
 
       const bucket = (cat.includes('닐로툰') || cat.includes('뚜따')) ? 'nilo' : 'pkg';
-      if (!calData[bucket])          calData[bucket] = {};
-      if (!calData[bucket][dateStr]) calData[bucket][dateStr] = { status:'', events:[] };
-
-      // 마감여부 — closed 우선
-      if (closeStr === '마감') {
-        calData[bucket][dateStr].status = 'closed';
-      } else if (closeStr === '휴일') {
-        if (calData[bucket][dateStr].status !== 'closed')
-          calData[bucket][dateStr].status = 'holiday';
-      }
-
-      // 내용 + 작업 여부
-      if (text) {
-        // 작업 여부 → CSS 클래스
-        let workCls = 'none';
-        if      (workStr === '대기중') workCls = 'waiting';
-        else if (workStr === '작업중') workCls = 'working';
-        else if (workStr === '완료')   workCls = 'done';
-        calData[bucket][dateStr].events.push({ text, workCls });
+      // 날짜 범위 확장 후 각 날짜에 적용
+      const dates = expandDateRange(rawDate);
+      for (const dateStr of dates) {
+        applyCalEntry(bucket, dateStr, text, workStr, closeStr);
       }
     }
   } catch(e) { console.error('캘린더 로드 실패', e); }
@@ -1408,6 +1467,9 @@ function createPortCard(url, scrollEl) {
       skel.classList.add('hide');
       img.classList.add('loaded');
     };
+    // 클릭 시 팝업
+    card.style.cursor = 'zoom-in';
+    card.addEventListener('click', () => openPortPopup(url));
 
     img.onerror = () => {
       skel.classList.add('hide');
@@ -1461,6 +1523,51 @@ function renderPort(cat) {
   panel.innerHTML = '';
   urls.forEach(url => panel.appendChild(createPortCard(url, panel)));
 }
+
+/* 포트폴리오 팝업
+   임베드 환경: postMessage로 부모에게 이미지 URL 전달
+   독립 환경: 내부에서 직접 오버레이 생성                */
+function openPortPopup(url) {
+  // 부모 페이지에 postMessage 전달 (임베드 환경)
+  try {
+    window.parent.postMessage({ type: 'portPopup', url: url }, '*');
+  } catch(e) {}
+
+  // 독립 실행 환경 (부모가 처리 못할 경우 내부 fallback)
+  _showPopupInDoc(document, url);
+}
+
+function _showPopupInDoc(doc, url) {
+  if (doc.querySelector('.port-popup-overlay')) return; // 중복 방지
+  const overlay = doc.createElement('div');
+  overlay.className = 'port-popup-overlay';
+
+  const closeBtn = doc.createElement('div');
+  closeBtn.className = 'port-popup-close';
+  closeBtn.textContent = '×';
+
+  const img = doc.createElement('img');
+  img.src = url;
+  img.alt = '포트폴리오 확대';
+
+  const close = () => overlay.remove();
+  overlay.addEventListener('click', close);
+  img.addEventListener('click', e => e.stopPropagation());
+  closeBtn.addEventListener('click', close);
+  // ESC 키로 닫기
+  const onKey = e => { if (e.key === 'Escape') { close(); doc.removeEventListener('keydown', onKey); } };
+  doc.addEventListener('keydown', onKey);
+
+  overlay.appendChild(closeBtn);
+  overlay.appendChild(img);
+  doc.body.appendChild(overlay);
+}
+
+// 부모로부터 팝업 CSS가 없을 경우를 위해 스타일도 주입
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.type !== 'portPopupReady') return;
+  // 부모가 준비됐다고 응답하면 별도 처리 불필요
+});
 
 /* 구글시트 로드 */
 async function loadPortfolio() {
