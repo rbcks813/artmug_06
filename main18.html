@@ -1528,13 +1528,9 @@ function renderPort(cat) {
    임베드 환경: postMessage로 부모에게 이미지 URL 전달
    독립 환경: 내부에서 직접 오버레이 생성                */
 function openPortPopup(url) {
-  // 부모 페이지에 postMessage 전달 (임베드 환경)
-  try {
-    window.parent.postMessage({ type: 'portPopup', url: url }, '*');
-  } catch(e) {}
-
-  // 독립 실행 환경 (부모가 처리 못할 경우 내부 fallback)
-  _showPopupInDoc(document, url);
+  // 부모 페이지에만 postMessage 전달 — 내부 fallback 제거
+  // (임베드 환경에서 부모가 팝업을 띄우므로 내부에서 중복 생성하지 않음)
+  window.parent.postMessage({ type: 'portPopup', url: url }, '*');
 }
 
 function _showPopupInDoc(doc, url) {
