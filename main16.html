@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>버추얼 작업실</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <style>
         @font-face {
@@ -85,7 +84,6 @@
             min-height: 0;
         }
 
-        /* ── 배경 장식 ── */
         body::before {
             content: '';
             position: fixed;
@@ -110,7 +108,6 @@
             z-index: 1;
         }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━ 공통 섹션 ━━━━━━━━━━━━━━━━━━━━━━ */
         .section {
             background: var(--white-glass);
             backdrop-filter: blur(16px);
@@ -141,7 +138,6 @@
             color: var(--text-dark);
         }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━ HERO ━━━━━━━━━━━━━━━━━━━━━━ */
         .hero-section {
             background: var(--white-glass);
             backdrop-filter: blur(20px);
@@ -214,7 +210,6 @@
             box-shadow: var(--shadow-sm);
         }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━ 협업 작가 카드 ━━━━━━━━━━━━━━━━━━━━━━ */
         .collab-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -297,7 +292,6 @@
             border-color: transparent;
         }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━ 필독사항 (아코디언) ━━━━━━━━━━━━━━━━━━━━━━ */
         .notice-accordion { display: flex; flex-direction: column; gap: 8px; }
         .na-item {
             border-radius: 16px;
@@ -358,7 +352,6 @@
             opacity: 1;
         }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━ 작업 과정 (pill flow) ━━━━━━━━━━━━━━━━━━━━━━ */
         .pill-flow {
             display: flex;
             flex-wrap: wrap;
@@ -417,7 +410,6 @@
         }
         .pill-note-row.warn { color: var(--pink-500); font-weight: 700; }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━ 가격 표 ━━━━━━━━━━━━━━━━━━━━━━ */
         .price-section-title {
             display: flex;
             align-items: center;
@@ -481,8 +473,6 @@
             margin-left: 16px;
         }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━ 견적 계산기 ━━━━━━━━━━━━━━━━━━━━━━ */
-        /* 수량 행 */
         .est-qty-row { display: none; }
         .est-qty-row.open { display: table-row; }
         .est-qty-row td { padding: 0 8px; overflow: hidden; }
@@ -575,7 +565,6 @@
         }
         .est-result-box .er-label { font-size: 0.8rem; color: var(--text-light); font-weight: 700; }
         .est-result-box .er-total { font-size: 1.2rem; font-weight: 700; color: var(--pink-500); }
-        /* ━━━━━━━━━━━━━━━━━━━━━━ 신청양식 카드 ━━━━━━━━━━━━━━━━━━━━━━ */
         .order-card {
             border: 1.5px solid rgba(255,180,200,0.3);
             border-radius: 22px;
@@ -706,7 +695,6 @@
         }
         .submit-btn:hover { filter: brightness(1.06); }
         .submit-btn:active { transform: scale(0.998); }
-        /* ━━━━━━━━━━━━━━━━━━━━━━ 포트폴리오 탭 ━━━━━━━━━━━━━━━━━━━━━━ */
         .tab-bar {
             display: flex;
             gap: 6px;
@@ -804,10 +792,8 @@
         }
         .img-card .card-skeleton.hide { opacity: 0; pointer-events: none; }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━ 보유 아바타 ━━━━━━━━━━━━━━━━━━━━━━ */
         #owned-chars-grid.scroll-grid { display: flex; }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━ 신청 양식 ━━━━━━━━━━━━━━━━━━━━━━ */
         .form-grid {
             display: flex;
             flex-direction: column;
@@ -872,7 +858,6 @@
         }
         .submit-btn:hover { filter: brightness(1.06); }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━ 말풍선 툴팁 ━━━━━━━━━━━━━━━━━━━━━━ */
         .btn-wrap {
             position: relative;
         }
@@ -919,7 +904,6 @@
         }
         .submit-btn.disabled:hover { filter: none; }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━ FAQ ━━━━━━━━━━━━━━━━━━━━━━ */
         .faq-list { display: flex; flex-direction: column; gap: 10px; }
         .faq-item {
             background: var(--white-solid);
@@ -984,7 +968,6 @@
             opacity: 1;
         }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━ 스켈레톤 ━━━━━━━━━━━━━━━━━━━━━━ */
         @keyframes shimmer {
             0% { background-position: -600px 0; }
             100% { background-position: 600px 0; }
@@ -998,7 +981,6 @@
             animation: shimmer 1.4s infinite linear;
         }
 
-        /* ━━━━━━━━━━━━━━━━━━━━━━ 반응형 ━━━━━━━━━━━━━━━━━━━━━━ */
         @media (max-width: 768px) {
             body { padding: 20px 12px 60px; }
             .section { padding: 28px 20px; border-radius: 26px; }
@@ -1282,6 +1264,7 @@
                             <button class="radio-btn" onclick="setRadio('f_private_group','f_private',this)">비공개 (O)</button>
                         </div>
                         <input type="hidden" id="f_private" value="공개 (X)">
+                        <div style="margin-top:7px;font-size:0.78rem;color:var(--pink-500);font-weight:700;">※ 포트폴리오 비공개 시 10만원의 추가금이 있습니다.</div>
                     </div>
                     <div class="input-group">
                         <label>3. 문의내용 <span class="req">*</span></label>
@@ -1400,18 +1383,12 @@ const COLLAB_PORT_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQyt_9H
 const ETC_PORT_URL    = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQyt_9HBBTAsNwUz9f_QKj4aS9PmbebMVzR-6R0Yrck15kRNbi9oSvVJiwmWXOOPEyHg96rcPmQzJ_b/pub?gid=381855268&single=true&output=csv";
 
 
-/* ─── 임베드 높이 자동 조절 ────────────────────────────────────
-   body.scrollHeight는 한번 커지면 줄어들지 않으므로
-   실제 콘텐츠 wrapper 높이를 기준으로 측정한다.              */
 function sendHeightToParent() {
-    // page-wrap(실제 콘텐츠)의 높이를 기준으로 측정
     const wrap = document.querySelector('.page-wrap');
     const h = wrap ? wrap.getBoundingClientRect().height + 80 : document.documentElement.scrollHeight;
 
     window.parent.postMessage({ type: 'resize_iframe', height: Math.ceil(h) }, '*');
 
-    // 부모가 postMessage를 처리하지 못하는 경우를 대비해
-    // 부모 document의 iframe을 직접 찾아 높이를 세팅
     try {
         const iframes = window.parent.document.querySelectorAll('iframe');
         iframes.forEach(iframe => {
@@ -1419,52 +1396,19 @@ function sendHeightToParent() {
                 iframe.style.height = Math.ceil(h) + 'px';
             }
         });
-    } catch(e) {
-        // cross-origin 환경에서는 직접 접근 불가 → postMessage만 사용
-    }
+    } catch(e) {}
 }
 
-// 레이아웃 변화 실시간 감지
 new ResizeObserver(sendHeightToParent).observe(document.querySelector('.page-wrap') || document.body);
-// DOM 추가/제거(이미지 로드, 아코디언 열기 등)도 감지
 new MutationObserver(sendHeightToParent).observe(document.body, {
     childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class']
 });
 
-/* ─── 네비게이션 postMessage 시스템 ────────────────────────────
-   임베드 사이트의 커스텀 메뉴는 iframe 내부 id를 직접 읽지 못함.
-   부모 페이지에서 postMessage로 스크롤 요청을 보내면 내부에서 실행.
-
-   ▸ 부모 페이지 커스텀 메뉴 코드 예시:
-     const iframe = document.querySelector('iframe');
-     function goTo(id) {
-       iframe.contentWindow.postMessage({ type: 'scrollTo', id: id }, '*');
-     }
-
-   ▸ 각 메뉴 항목에서 goTo('sec-intro') 형식으로 호출
-
-   ▸ id 목록:
-     sec-intro        작가 소개
-     sec-collab       협업 작가
-     sec-notice       필독사항
-     sec-process      작업 과정
-     sec-port1        VSF, 일반 와루도
-     sec-port2        닐로툰
-     sec-port3        페이셜, 뽀잉눈
-     sec-port-collab  오리지널 텍스쳐 (협업)
-     sec-port-etc     기타 포트폴리오
-     sec-avatar       보유 중인 아바타
-     sec-form         신청 양식
-     sec-faq          자주 묻는 질문                             */
 window.addEventListener('message', (e) => {
     if (!e.data) return;
-    // 스크롤 요청 처리
     if (e.data.type === 'scrollTo' && e.data.id) {
         const el = document.getElementById(e.data.id);
         if (el) {
-            // iframe 내부에서 scrollIntoView를 쓰면 부모 페이지가 엉뚱하게 스크롤됨.
-            // 대신 해당 요소의 iframe 내 offsetTop을 부모에게 전달해
-            // 부모가 (iframe의 상단 위치 + offsetTop)으로 스크롤하게 한다.
             window.parent.postMessage({
                 type: 'scrollToOffset',
                 id: e.data.id,
@@ -1472,7 +1416,6 @@ window.addEventListener('message', (e) => {
             }, '*');
         }
     }
-    // 섹션 목록 요청 처리
     if (e.data.type === 'getSections') {
         window.parent.postMessage({
             type: 'sections',
@@ -1524,12 +1467,9 @@ async function fetchCSV(url) {
     return text;
 }
 
-/* Dropbox dl=0 → dl=1 직접 이미지화, Drive 변환, 일반 URL 그대로 */
 function normalizeImgUrl(url) {
     if (!url) return '';
-    // Dropbox: dl=0 → dl=1
     if (url.includes('dropbox.com')) return url.replace(/[?&]dl=0/,'').replace(/dl=1/,'dl=1') + (url.includes('dl=') ? '' : (url.includes('?')?'&':'?')+'dl=1');
-    // Google Drive
     const m1 = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
     if (m1) return `https://lh3.googleusercontent.com/d/${m1[1]}=w800`;
     const m2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
@@ -1546,7 +1486,6 @@ function getYoutubeId(url) {
     return m ? m[1] : null;
 }
 
-/* ─── 이미지/유튜브 카드 생성 ───────────────────────────────── */
 function createMediaCard(url, gridEl) {
     const CARD_H = 360;
 
@@ -1580,13 +1519,11 @@ function createMediaCard(url, gridEl) {
             skel.classList.add('hide');
             img.classList.add('loaded');
 
-            // scroll-grid 실제 너비 기준으로 비교
             const gridWidth = gridEl ? gridEl.offsetWidth : 0;
             const ratio = img.naturalWidth / img.naturalHeight;
-            const displayW = CARD_H * ratio; // height:360px 시 자연스럽게 나오는 가로
+            const displayW = CARD_H * ratio;
 
             if (gridWidth > 0 && displayW > gridWidth) {
-                // 이미지가 scroll-grid보다 가로가 긴 경우
                 const cappedW = Math.round(gridWidth * 0.96);
                 card.style.width = cappedW + 'px';
                 card.style.flexShrink = '0';
@@ -1594,7 +1531,6 @@ function createMediaCard(url, gridEl) {
                 img.style.objectFit = 'contain';
                 bg.style.display = '';
             }
-            // 그 외(세로/정사각형) → cover 그대로, bg 숨김 유지
         };
         img.onerror = () => { skel.classList.add('hide'); bg.style.display = 'none'; card.style.background = '#fce4e8'; };
         img.src = imgUrl;
@@ -1603,10 +1539,9 @@ function createMediaCard(url, gridEl) {
     return card;
 }
 
-/* ─── 포트폴리오 렌더링 ─────────────────────────────────────── */
 async function loadPortfolio(csvUrl, gridId, tabBarId) {
     const text = await fetchCSV(csvUrl);
-    const rows = parseCSVFull(text).slice(1); // skip header
+    const rows = parseCSVFull(text).slice(1);
     const byCategory = {};
     const order = [];
     rows.forEach(r => {
@@ -1621,7 +1556,6 @@ async function loadPortfolio(csvUrl, gridId, tabBarId) {
     tabBar.innerHTML = '';
     grid.innerHTML   = '';
 
-    // 전체 버튼
     const allBtn = document.createElement('button');
     allBtn.className = 'tab-btn active';
     allBtn.textContent = '전체';
@@ -1634,7 +1568,6 @@ async function loadPortfolio(csvUrl, gridId, tabBarId) {
     };
     tabBar.appendChild(allBtn);
 
-    // 카테고리 버튼
     order.forEach(cat => {
         const btn = document.createElement('button');
         btn.className = 'tab-btn';
@@ -1649,12 +1582,10 @@ async function loadPortfolio(csvUrl, gridId, tabBarId) {
         tabBar.appendChild(btn);
     });
 
-    // 전체 기본 렌더
     order.forEach(cat => byCategory[cat].forEach(url => grid.appendChild(createMediaCard(url, grid))));
     setTimeout(sendHeightToParent, 200);
 }
 
-/* ─── 소개 로드 ─────────────────────────────────────────────── */
 async function loadIntro() {
     try {
         const rows = parseCSVFull(await fetchCSV(INTRO_CSV_URL));
@@ -1685,7 +1616,6 @@ async function loadIntro() {
     } catch(e) { console.error('소개 로드 실패:', e); }
 }
 
-/* ─── 협업 작가 로드 ────────────────────────────────────────── */
 async function loadCollabArtists() {
     try {
         const rows = parseCSVFull(await fetchCSV(COLLAB_CSV_URL)).slice(1);
@@ -1697,7 +1627,6 @@ async function loadCollabArtists() {
             if (!name) return;
             const card = document.createElement('div'); card.className='collab-card';
 
-            // 썸네일 (이미지 or 유튜브)
             const thumb = document.createElement('div'); thumb.className='collab-thumb';
             const skel = document.createElement('div'); skel.className='collab-thumb-skeleton'; thumb.appendChild(skel);
             if (imgOrYt && isYoutube(imgOrYt)) {
@@ -1718,7 +1647,6 @@ async function loadCollabArtists() {
                 thumb.appendChild(img);
             } else { skel.classList.add('hide'); }
 
-            // 바디
             const body=document.createElement('div'); body.className='collab-body';
             const nameEl=document.createElement('div'); nameEl.className='collab-name'; nameEl.textContent=name;
             const descEl=document.createElement('div'); descEl.className='collab-desc'; descEl.textContent=desc||'';
@@ -1734,25 +1662,21 @@ async function loadCollabArtists() {
     } catch(e) { console.error('협업 작가 로드 실패:', e); }
 }
 
-/* ─── 가격 로드 ─────────────────────────────────────────────── */
 async function loadPrice() {
     try {
         const rows = parseCSVFull(await fetchCSV(PRICE_CSV_URL)).slice(1);
 
-        // 파싱: 카테고리별 그룹핑
-        // 가격 컬럼 형식: "30000" | "10000/개당" | "50000~" | "0" (문의)
         const catMap = {}; const catOrder = [];
         rows.forEach(r => {
             const cat = r[0]?.trim(), name = r[1]?.trim(), priceRaw = r[2]?.trim();
             if (!cat || !name) return;
-            const isPer   = priceRaw?.includes('/개당');        // 개당 여부
-            const isTilde = priceRaw?.includes('~') && !isPer; // 물결(~) 여부
-            const price   = parseInt(priceRaw) || 0;           // 숫자만 추출
+            const isPer   = priceRaw?.includes('/개당');
+            const isTilde = priceRaw?.includes('~') && !isPer;
+            const price   = parseInt(priceRaw) || 0;
             if (!catMap[cat]) { catMap[cat] = []; catOrder.push(cat); }
             catMap[cat].push({ name, price, isPer, isTilde });
         });
 
-        /* ── 가격 안내 렌더 (price-list-container가 있을 때만) ── */
         const container = document.getElementById('price-list-container');
         if (container) {
             container.innerHTML = '';
@@ -1784,7 +1708,6 @@ async function loadPrice() {
             });
         }
 
-        /* ── 견적 계산기 렌더 ── */
         const tbody = document.getElementById('est-tbody');
         if (tbody) {
             tbody.innerHTML = '';
@@ -1793,7 +1716,7 @@ async function loadPrice() {
                 secTr.innerHTML = `<td colspan="3">${cat}</td>`; tbody.appendChild(secTr);
 
                 catMap[cat].forEach(item => {
-                    if (item.price === 0) return; // 문의 항목은 계산기 제외
+                    if (item.price === 0) return;
                     const tr = document.createElement('tr');
                     tr.dataset.price = item.price;
                     tr.dataset.per   = item.isPer   ? '1' : '0';
@@ -1815,7 +1738,6 @@ async function loadPrice() {
                     }
                     tbody.appendChild(tr);
 
-                    // 개당 항목 수량 입력 행
                     if (item.isPer) {
                         const qtr = document.createElement('tr');
                         qtr.className = 'est-qty-row';
@@ -1835,13 +1757,11 @@ async function loadPrice() {
     } catch(e) { console.error('가격 로드 실패:', e); }
 }
 
-/* ─── 보유 아바타 로드 ───────────────────────────────────────── */
 async function loadChars() {
     try {
         const rows = parseCSVFull(await fetchCSV(CHAR_CSV_URL));
         const container = document.getElementById('owned-chars-grid');
         container.innerHTML = '';
-        // 첫 행은 헤더(링크)이므로 slice(1)로 스킵
         rows.slice(1).forEach(row => {
             const val = row[0]?.trim();
             if (val && val.startsWith('http')) {
@@ -1854,7 +1774,6 @@ async function loadChars() {
     } catch(e) { console.error('아바타 로드 실패:', e); }
 }
 
-/* ─── 견적 계산기 행 토글 ────────────────────────────────────── */
 function toggleEstRow(tr) {
     if(tr.classList.contains('est-section-row')) return;
     tr.classList.toggle('selected');
@@ -1899,14 +1818,12 @@ function updateEstTotal() {
     if (el) el.textContent = total > 0 ? '₩' + total.toLocaleString() + (hasTilde ? '~' : '') : '—';
 }
 
-// 하위 호환
 function toggleEstRow(tr) {
     if(tr.classList.contains('est-section-row')) return;
     tr.classList.toggle('selected');
     updateEstTotal();
 }
 
-/* ─── 기타 UI 함수 ───────────────────────────────────────────── */
 function toggleNotice(headerEl) {
     const item=headerEl.closest('.na-item');
     const isOpen=item.classList.contains('open');
@@ -1921,7 +1838,6 @@ function toggleFaq(qEl) {
     if(!isOpen) item.classList.add('open');
 }
 
-/* ─── 말풍선 툴팁 ────────────────────────────────────────────── */
 function showBubble(id, msg, isWarn, duration) {
     const el = document.getElementById(id);
     if (!el) return;
@@ -1941,7 +1857,6 @@ function toggleNoticeAgree() {
     if (btn)    btn.classList.toggle('disabled', !on);
 }
 
-// 하위 호환 (구 agree-row 혹시 남아있을 경우)
 function toggleAgree() { toggleNoticeAgree(); }
 
 function setRadio(groupId, inputId, btnEl) {
@@ -1950,7 +1865,6 @@ function setRadio(groupId, inputId, btnEl) {
     document.getElementById(inputId).value=btnEl.innerText;
 }
 
-/* ─── 신청 양식 복사 ─────────────────────────────────────────── */
 function copyOrderForm() {
     const agreed = document.getElementById('notice-agree-check')?.classList.contains('checked');
     if (!agreed) {
@@ -1966,7 +1880,6 @@ function copyOrderForm() {
     const etc     = document.getElementById('f_etc').value || '없음';
     const est     = document.getElementById('calc-result').textContent;
 
-    // 선택된 견적 옵션 목록 수집
     const selectedLines = [];
     document.querySelectorAll('#est-tbody tr.selected').forEach(tr => {
         const nameEl = tr.querySelector('.item-name');
@@ -1975,7 +1888,6 @@ function copyOrderForm() {
         const name = nameEl.innerText.trim().replace(/\s*\([^)]*\)/g, '').trim();
         const price = priceEl?.innerText.trim() || '';
 
-        // 카테고리 찾기 — 위로 올라가며 est-section-row 탐색
         let cat = '';
         let prev = tr.previousElementSibling;
         while (prev) {
@@ -2031,7 +1943,6 @@ ${est}`;
         .catch(() => showBubble('submit-bubble', '복사에 실패했습니다. 다시 시도해주세요', true, 2500));
 }
 
-/* ─── 포트폴리오 드래그 스크롤 ──────────────────────────────── */
 function initDragScroll(el) {
     let isDown = false, startX = 0, scrollLeft = 0, didDrag = false;
 
@@ -2039,7 +1950,7 @@ function initDragScroll(el) {
         isDown = true;
         didDrag = false;
         el.classList.add('dragging');
-        el.style.scrollSnapType = 'none'; // 드래그 중 snap 해제
+        el.style.scrollSnapType = 'none';
         startX = e.pageX - el.offsetLeft;
         scrollLeft = el.scrollLeft;
         e.preventDefault();
@@ -2049,7 +1960,6 @@ function initDragScroll(el) {
         if (!isDown) return;
         isDown = false;
         el.classList.remove('dragging');
-        // snap 복구 안 함 — 드래그 후엔 자유 위치 유지
     };
 
     el.addEventListener('mouseleave', endDrag);
@@ -2061,9 +1971,8 @@ function initDragScroll(el) {
         el.scrollLeft = scrollLeft - (x - startX) * 1.2;
     });
 
-    // 카드 클릭 시에만 해당 카드로 snap 정렬
     el.addEventListener('click', (e) => {
-        if (didDrag) { didDrag = false; return; } // 드래그 후 클릭 무시
+        if (didDrag) { didDrag = false; return; }
         const card = e.target.closest('.img-card');
         if (!card) return;
         el.style.scrollSnapType = 'x mandatory';
@@ -2072,10 +1981,8 @@ function initDragScroll(el) {
     }, true);
 }
 
-// 현재 존재하는 scroll-grid에 적용
 document.querySelectorAll('.scroll-grid').forEach(initDragScroll);
 
-// 탭 전환으로 새로 생성되는 grid도 감지해서 적용
 new MutationObserver((mutations) => {
     mutations.forEach(m => {
         m.addedNodes.forEach(node => {
@@ -2099,7 +2006,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 window.addEventListener('load', () => {
     sendHeightToParent();
-    // 로드 완료 후 섹션 목록을 부모에게 자동 전송
     setTimeout(() => {
         window.parent.postMessage({
             type: 'sections',
