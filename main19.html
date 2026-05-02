@@ -827,9 +827,16 @@ body::after {
 <div class="section" id="sec-sale">
   <div class="sec-header"><div class="sec-bar"></div><div class="sec-title">개인작 안내</div></div>
 
-  <!-- 개인작 이미지 가로 스크롤 (구글 시트 연동) -->
-  <div class="img-scroll" id="saleScroll" style="margin-bottom:18px;">
-    <div class="port-skel"></div><div class="port-skel"></div><div class="port-skel"></div>
+  <!-- 개인작 이미지 슬라이더 (구글 시트 연동) -->
+  <div id="saleSliderWrap" style="margin-bottom:18px;">
+    <div class="slider-wrap">
+      <div class="slider-track" id="saleTrack">
+        <div class="slide-item"><div class="slide-skel"></div></div>
+      </div>
+      <button class="sl-prev" id="salePrev">&#8249;</button>
+      <button class="sl-next" id="saleNext">&#8250;</button>
+    </div>
+    <div class="sl-dots" id="saleDots"></div>
   </div>
 
   <!-- 개인작 안내 아코디언 -->
@@ -1026,7 +1033,7 @@ body::after {
     </div>
   </div>
   <div class="pkg-note-list">
-    <div class="pkg-note">Magica Cloth 2로 → 390,000원</div>
+    <div class="pkg-note">Magica Cloth 2로 변경 시 → 390,000원</div>
     <div class="pkg-note">Magica Cloth 2는 초기 세팅비(1회)가 있습니다.</div>
     <div class="pkg-note">풀트래킹으로 방송하시는 분들에게 추천드리고 있습니다.</div>
     <div class="pkg-note">Magica Cloth 2는 의상만 작업합니다. 옷장 세팅은 블루 프린트로 전달해드리고 있습니다.</div>
@@ -1233,16 +1240,23 @@ async function loadIntro(){
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   개인작 로드
+   개인작 로드 — 슬라이더 방식
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 async function loadSale(){
-  const cont=document.getElementById('saleScroll');
+  const wrap=document.getElementById('saleSliderWrap');
   try{
-    const rows=parseCSV(await fetchCSV(SALE_CSV)); cont.innerHTML='';
+    const rows=parseCSV(await fetchCSV(SALE_CSV));
     const start=rows[0]?.[0]?.trim()==='이미지'?1:0;
-    rows.slice(start).forEach(row=>{const url=(row[0]||'').trim();if(!url||!url.startsWith('http'))return;cont.appendChild(makeImgCard(url));});
-    if(!cont.children.length)cont.innerHTML='<div style="padding:20px;color:var(--text-soft);font-size:.85rem;">등록된 개인작이 없습니다.</div>';
-    initDrag(cont);
+    const urls=rows.slice(start).map(r=>(r[0]||'').trim()).filter(u=>u.startsWith('http'));
+
+    if(!urls.length){
+      wrap.innerHTML='<div style="padding:20px;color:var(--text-soft);font-size:.85rem;">등록된 개인작이 없습니다.</div>';
+      return;
+    }
+
+    // makeSlider로 슬라이더 생성 후 wrap에 교체
+    const slider=makeSlider(urls);
+    if(slider){ wrap.innerHTML=''; wrap.appendChild(slider); }
   }catch(e){console.error('개인작 로드 실패:',e);}
 }
 
