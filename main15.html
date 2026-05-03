@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>도트 아이콘 커미션</title>
 <style>
   @font-face { font-family:'Paperozi'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight:100; font-display:swap; }
   @font-face { font-family:'Paperozi'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2'); font-weight:200; font-display:swap; }
@@ -684,7 +685,7 @@ fetchCSV(IMAGES_CSV).then(text => {
     styleGrid.innerHTML = '';
     styleRows.forEach((r, i) => {
       const imgUrl = getUrl(r);
-      const px = getLabel(r) || (i === 0 ? '16px' : '32px');
+      const px = getLabel(r) || (i === 0 ? '18px' : '36px');
       const item = document.createElement('div');
       item.className = 'style-item';
       const boxId = 'sbox' + i;
