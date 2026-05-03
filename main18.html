@@ -1357,16 +1357,23 @@ function renderCalendar() {
     let badgeHtml= '';
     let evHtml   = '';
 
+    // 일요일이고 시트에서 '마감'으로 지정되지 않은 경우 자동 휴일 처리
+    const autoHoliday = dow === 0 && (!entry || (entry.status !== 'closed' && entry.status !== 'holiday'));
+
     // 셀 배경
     if (isToday) {
       cellCls = ' today';
+    } else if (autoHoliday) {
+      cellCls = ' holiday';
     } else if (entry) {
       if      (entry.status === 'closed')  cellCls = ' closed';
       else if (entry.status === 'holiday') cellCls = ' holiday';
     }
 
     // 마감여부 뱃지 (날짜 오른쪽)
-    if (entry && entry.status) {
+    if (autoHoliday) {
+      badgeHtml = `<span class="cal-badge holiday">휴일</span>`;
+    } else if (entry && entry.status) {
       const badgeLabel = entry.status === 'closed' ? '마감' : '휴일';
       const badgeCls   = entry.status === 'closed' ? 'closed' : 'holiday';
       badgeHtml = `<span class="cal-badge ${badgeCls}">${badgeLabel}</span>`;
