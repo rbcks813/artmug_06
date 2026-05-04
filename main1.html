@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>맛챠 영상 작업실 - Video Edit Commission</title>
     <style>
         @font-face {
             font-family: 'Paperozi';
@@ -574,6 +573,45 @@
         .price-label { font-weight: 600; color: var(--dark-tea); }
         .price-val { font-weight: 800; color: #333; }
 
+        /* ── 협업작가 섹션 ── */
+        .collab-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .collab-card {
+            display: block;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.07);
+            border: 3px solid white;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.3s;
+            text-decoration: none;
+            background: #f0ede9;
+            width: 100%;
+        }
+
+        .collab-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 32px rgba(0,0,0,0.12);
+        }
+
+        .collab-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .collab-empty {
+            text-align: center;
+            padding: 40px 0;
+            color: #bbb;
+            font-size: 0.95rem;
+            width: 100%;
+        }
+
         @media (max-width: 768px) {
     body { padding: 15px 5px; }
     .content-section { padding: 20px 15px; margin: 15px 5px; border-radius: 20px; }
@@ -641,6 +679,9 @@
     }
 
     .price-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+
+    /* 협업작가 모바일 - 세로 정렬 유지, 가로 꽉차게 */
+    .collab-card { width: 100%; }
     }
     </style>
 </head>
@@ -759,6 +800,15 @@
                 <ul id="notice-list" class="notice-list">
                     <li>공지사항을 불러오는 중입니다...</li>
                 </ul>
+            </div>
+        </div>
+
+        <!-- ── 협업 작가 섹션 ── -->
+        <div class="content-section" id="sec-collab">
+            <h2 class="section-title">협업 작가</h2>
+            <p style="font-size: 0.8rem; color: #bbb; margin-top: -15px; margin-bottom: 20px;">* 배너 클릭 시 해당 작가님 페이지로 이동합니다.</p>
+            <div class="collab-grid" id="collab-grid">
+                <div class="collab-empty">협업 작가 정보를 불러오는 중...</div>
             </div>
         </div>
 
@@ -917,21 +967,11 @@
         const NOTICE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=1056547103&single=true&output=csv";
         const PORTFOLIO_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=528155867&single=true&output=csv";
         const PACKAGE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=490749441&single=true&output=csv";
+        const COLLAB_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTc10YGXcBQD_HjeS5Yqq7-y42_qeX3JFhw__ghAy6CRpFjgx7zpm1-HVuRaCSCjI03TH4stZ_fCeX-/pub?gid=1125762054&single=true&output=csv";
 
-        // ─── 유튜브 ID 추출 함수 ──────────────────────────────────────────────
-        // 구글시트에 ID만 입력하거나 유튜브 링크를 입력해도 모두 정상 동작합니다.
-        // 지원 형식:
-        //   - ID만           : dQw4w9WgXcQ
-        //   - 일반 링크      : https://www.youtube.com/watch?v=dQw4w9WgXcQ
-        //   - 단축 링크      : https://youtu.be/dQw4w9WgXcQ
-        //   - 쇼츠 링크      : https://www.youtube.com/shorts/dQw4w9WgXcQ
-        //   - 라이브 링크    : https://www.youtube.com/live/dQw4w9WgXcQ
-        //   - 임베드 링크    : https://www.youtube.com/embed/dQw4w9WgXcQ
         function extractYoutubeId(input) {
             const cleaned = input.replace(/^"|"$/g, '').trim();
-            // 이미 ID만 있는 경우 (11자리 영숫자 + - _)
             if (/^[\w-]{11}$/.test(cleaned)) return cleaned;
-            // 다양한 유튜브 링크 형식에서 ID 추출
             const patterns = [
                 /(?:youtube\.com\/watch\?.*v=)([\w-]{11})/,
                 /(?:youtu\.be\/)([\w-]{11})/,
@@ -943,10 +983,9 @@
                 const match = cleaned.match(pattern);
                 if (match) return match[1];
             }
-            return cleaned; // 매칭 실패 시 원본 반환
+            return cleaned;
         }
 
-        // ─── postMessage 수신 리스너 ───────────────────────────────────────────
         window.addEventListener('message', function(event) {
             if (!event.data || event.data.type !== 'scroll_to') return;
             const targetId = event.data.id;
@@ -956,7 +995,6 @@
             }
         });
 
-        // ─── 부모 페이지로 높이 정보 전송 ────────────────────────────────────────
         function sendHeightToParent() {
             const wrapper = document.querySelector('.main-wrapper');
             if (wrapper) {
@@ -1059,6 +1097,42 @@
             } catch (e) { container.innerHTML = '<p style="color: #ff8b8b;">로드 실패</p>'; }
         }
 
+        async function loadCollabArtists() {
+            const grid = document.getElementById('collab-grid');
+            try {
+                const response = await fetch(COLLAB_CSV_URL);
+                const data = await response.text();
+                const rows = data.split('\n').filter(r => r.trim() !== '');
+                if (rows.length <= 1) {
+                    grid.innerHTML = '<div class="collab-empty">등록된 협업 작가가 없습니다 🍵</div>';
+                    return;
+                }
+                grid.innerHTML = '';
+                for (let i = 1; i < rows.length; i++) {
+                    const cols = parseCSVLine(rows[i]);
+                    if (cols.length < 2) continue;
+                    // 드롭박스 링크는 dl=0 → dl=1 로 변환하여 직접 이미지 로드
+                    const imgUrl = cols[0].replace(/^"|"$/g, '').trim().replace('dl=0', 'dl=1');
+                    const pageUrl = cols[1].replace(/^"|"$/g, '').trim();
+                    if (!imgUrl || !pageUrl) continue;
+                    const card = document.createElement('a');
+                    card.className = 'collab-card';
+                    card.href = pageUrl;
+                    card.target = '_blank';
+                    card.rel = 'noopener noreferrer';
+                    card.innerHTML = `<img src="${imgUrl}" alt="협업 작가 배너" onerror="this.parentElement.style.display='none'">`;
+                    grid.appendChild(card);
+                }
+                if (grid.children.length === 0) {
+                    grid.innerHTML = '<div class="collab-empty">등록된 협업 작가가 없습니다 🍵</div>';
+                }
+                sendHeightToParent();
+            } catch (e) {
+                grid.innerHTML = '<div class="collab-empty">로드에 실패했습니다.</div>';
+                console.error(e);
+            }
+        }
+
         async function loadPortfolio() {
             const grids = { '게임': document.getElementById('tab-game'), '저스트 채팅': document.getElementById('tab-justchat'), '데뷔': document.getElementById('tab-debut'), '쇼츠 게임': document.getElementById('tab-shorts-game'), '쇼츠 저챗': document.getElementById('tab-shorts-chat') };
             const allLongGrid = document.getElementById('tab-all-long');
@@ -1075,7 +1149,6 @@
                     const cols = parseCSVLine(rows[i]);
                     if (cols.length >= 2) {
                         const cat = cols[0].trim();
-                        // ★ 수정: ID 직접 입력과 유튜브 링크 입력 모두 지원
                         const youtubeId = extractYoutubeId(cols[1]);
                         const target = grids[cat];
                         if (target && youtubeId) {
@@ -1278,7 +1351,8 @@
                 updateCommissionStatus(), 
                 loadNotices(), 
                 loadPortfolio(), 
-                loadPackages()
+                loadPackages(),
+                loadCollabArtists()
             ]);
             setTimeout(sendHeightToParent, 500);
         }
