@@ -25,10 +25,10 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Paperozi', sans-serif; background: #fff; min-height: 100vh; color: var(--c-text); }
+body { font-family: 'Paperozi', sans-serif; background: #fff; color: var(--c-text); }
 
 .wrap {
-  max-width: 760px; margin: 0 auto; padding-bottom: 120px; min-height: 100vh;
+  max-width: 760px; margin: 0 auto; padding-bottom: 120px;
   background: linear-gradient(180deg, #F6D1DC 0%, #fbe0e9 7%, #fff6f9 16%, #ffffff 27%, #ffffff 73%, #fff6f9 84%, #fbe0e9 93%, #F6D1DC 100%);
 }
 
@@ -1180,17 +1180,44 @@ function resetForm(){
 
 /* ─── 임베드 높이 자동조절 ─── */
 (function(){
-  function sendHeight(){
-    var h = document.documentElement.scrollHeight || document.body.scrollHeight;
-    window.parent.postMessage({ type: 'ddn-resize', height: h }, '*');
+  var lastH = 0;
+
+  function getHeight(){
+    // wrap의 실제 렌더링 높이 기준 (scrollHeight 사용 안 함)
+    var wrap = document.querySelector('.wrap');
+    if (!wrap) return 0;
+    var rect = wrap.getBoundingClientRect();
+    // 페이지 상단 기준 절대 bottom 위치 = 실제 콘텐츠 높이
+    return Math.ceil(wrap.offsetTop + wrap.offsetHeight + 20);
   }
-  // 초기 + 주기적으로 전송 (이미지/콘텐츠 로드 후 높이 변화 대응)
+
+  function sendHeight(){
+    var h = getHeight();
+    if (h !== lastH && h > 0) {
+      lastH = h;
+      window.parent.postMessage({ type: 'ddn-resize', height: h }, '*');
+    }
+  }
+
+  // 초기 전송
   sendHeight();
   window.addEventListener('load', sendHeight);
   window.addEventListener('resize', sendHeight);
-  // MutationObserver로 DOM 변화 감지 (아코디언, 탭 전환 등)
-  var mo = new MutationObserver(sendHeight);
-  mo.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style','class'] });
+
+  // MutationObserver: DOM/스타일 변화 감지 (탭 전환, 항목 추가/삭제 등)
+  var mo = new MutationObserver(function(){
+    // 변화 후 레이아웃 확정될 때까지 두 번 체크
+    sendHeight();
+    setTimeout(sendHeight, 100);
+    setTimeout(sendHeight, 300);
+  });
+  mo.observe(document.body, {
+    childList: true, subtree: true,
+    attributes: true, attributeFilter: ['style','class','hidden']
+  });
+
+  // 폴백: 200ms마다 주기적 체크 (이미지 로드, 폰트 로드 등 비동기 변화 대응)
+  setInterval(sendHeight, 200);
 })();
 
 /* ─── 부모창에서 네비게이션 메시지 수신 → 해당 섹션으로 스크롤 ─── */
@@ -1199,8 +1226,6 @@ window.addEventListener('message', function(e){
   var target = document.getElementById(e.data.id);
   if (target) {
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    // 스크롤 후 높이 재전송
-    setTimeout(function(){ window.parent.postMessage({ type: 'ddn-resize', height: document.documentElement.scrollHeight }, '*'); }, 400);
   }
 });
 
