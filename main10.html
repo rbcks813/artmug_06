@@ -100,6 +100,9 @@
         .pg-btn, .pg-num { flex-shrink: 0; width: 34px; height: 34px; border: 1px solid var(--bg-light); background: white; cursor: pointer; font-family: 'Paperozi'; font-size: 14px; color: var(--primary); font-weight: 700; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
         .pg-num.active { background: var(--primary); color: white; border-color: var(--primary); }
 
+        /* 포트폴리오 비활성화 상태 */
+        #portfolioSection.portfolio-disabled { display: none; }
+
         @media (max-width: 768px) { 
             .container { padding: 20px 15px; }
             h2 { font-size: 20px; }
@@ -183,10 +186,11 @@
     <section>
         <h2>PACKAGE</h2>
         <div class="package-container" id="packageContainer">
-            </div>
+        </div>
     </section>
 
-    <section>
+    <!-- 포트폴리오 섹션 -->
+    <section id="portfolioSection">
         <h2>PORTFOLIO</h2>
         <div class="portfolio-tabs" id="categoryTabs">
             <button class="tab-btn active" onclick="filterCategory('ALL')">ALL</button>
@@ -302,6 +306,31 @@
         }
     }
 
+    /* ────────────────────────────────────────────
+       포트폴리오 활성화 여부 시트 URL
+       gid=1351006185 → A1 셀에 TRUE / FALSE
+    ──────────────────────────────────────────── */
+    const portfolioActiveSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTH03PGVgFdh1F6NcXkK6YqEEH-iaRudUtjCQvRBz991-ln1zo562B9j83lPqLhmPrGlOlSBcri-199/pub?gid=1351006185&single=true&output=csv';
+
+    async function checkPortfolioActive() {
+        try {
+            const res = await fetch(portfolioActiveSheetUrl);
+            const text = await res.text();
+            const value = text.trim().toUpperCase();
+            const section = document.getElementById('portfolioSection');
+            if (value === 'TRUE') {
+                section.classList.remove('portfolio-disabled');
+                fetchPortfolio(); // 활성화 상태일 때만 데이터 로드
+            } else {
+                section.classList.add('portfolio-disabled');
+            }
+        } catch (e) {
+            console.error('Portfolio active check failed', e);
+            // 오류 시 기본값: 비활성화 유지
+            document.getElementById('portfolioSection').classList.add('portfolio-disabled');
+        }
+    }
+
     /* 포트폴리오 연동 설정 */
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTH03PGVgFdh1F6NcXkK6YqEEH-iaRudUtjCQvRBz991-ln1zo562B9j83lPqLhmPrGlOlSBcri-199/pub?gid=0&single=true&output=csv';
     let portfolioData = [];
@@ -383,7 +412,11 @@
         currentPage = p; renderPortfolio();
     }
 
-    fetchPortfolio();
+    /* 초기 로드 순서:
+       1. 포트폴리오 활성화 여부 확인 → TRUE면 내부에서 fetchPortfolio() 호출
+       2. 패키지는 독립적으로 항상 로드
+    */
+    checkPortfolioActive();
     fetchPackages();
 </script>
 </body>
