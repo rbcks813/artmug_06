@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>사김장 커미션</title>
 
 <style>
 /* ===== 폰트 설정 ===== */
@@ -153,7 +152,7 @@ html { scroll-behavior: smooth; }
     </div>
 
     <div style="display: flex; justify-content: center;">
-      <img src="https://i.postimg.cc/KvPvBkb2/1-2.png" style="width: 100%; max-width: 750px;">
+      <img id="noticeImage" src="https://i.postimg.cc/KvPvBkb2/1-2.png" style="width: 100%; max-width: 750px;">
     </div>
     <div class="divider"></div>
   </div>
@@ -368,6 +367,18 @@ function peopleThumbRight() { document.getElementById("peopleThumbnails").scroll
 // DOMContentLoaded 적용: 페이지 고정 이미지가 다 로드되기 전에 시트 데이터를 즉시 가져오기 시작함
 document.addEventListener("DOMContentLoaded", async () => { 
   fetchSlotData(); 
+  
+  // 공지 이미지 구글 시트 연동 추가 부분
+  const noticeCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1at9oIfDbzBF-RDm4cWg-28HXKBXQ0jiXoI--vwojSZaiNHcWzkwDRUhnkHVHZxvyBwFrK_rhg9MK/pub?gid=641420212&single=true&output=csv";
+  fetch(noticeCsvUrl)
+    .then(res => res.text())
+    .then(text => {
+      const rows = text.trim().split('\n');
+      if (rows.length > 1) {
+        const imgUrl = rows[1].replace(/"/g, '').split(',')[0].trim();
+        if (imgUrl) document.getElementById('noticeImage').src = imgUrl;
+      }
+    }).catch(e => console.error("Notice image load failed:", e));
   
   const cheeseUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1at9oIfDbzBF-RDm4cWg-28HXKBXQ0jiXoI--vwojSZaiNHcWzkwDRUhnkHVHZxvyBwFrK_rhg9MK/pub?gid=782464752&single=true&output=csv";
   const fanUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1at9oIfDbzBF-RDm4cWg-28HXKBXQ0jiXoI--vwojSZaiNHcWzkwDRUhnkHVHZxvyBwFrK_rhg9MK/pub?gid=139715570&single=true&output=csv";
