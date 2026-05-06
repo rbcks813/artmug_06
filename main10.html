@@ -320,14 +320,15 @@
             const section = document.getElementById('portfolioSection');
             if (value === 'TRUE') {
                 section.classList.remove('portfolio-disabled');
-                fetchPortfolio(); // 활성화 상태일 때만 데이터 로드
+                fetchPortfolio();
             } else {
                 section.classList.add('portfolio-disabled');
+                sendHeightToParent();
             }
         } catch (e) {
             console.error('Portfolio active check failed', e);
-            // 오류 시 기본값: 비활성화 유지
             document.getElementById('portfolioSection').classList.add('portfolio-disabled');
+            sendHeightToParent();
         }
     }
 
