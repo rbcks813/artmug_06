@@ -318,6 +318,40 @@
         .omakase-notice.show { display: block; }
         .omakase-notice strong { font-weight: 800; }
 
+        /* ================= ★ 일정 캘린더 ================= */
+        .calendar-section { margin-top: 25px; background: #fcfcfc; border: 1px solid #eee; border-radius: 20px; padding: 30px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02); }
+        .calendar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; gap: 16px; flex-wrap: wrap; }
+        .calendar-nav { display: flex; align-items: center; gap: 12px; }
+        .calendar-nav button { background: #fff; border: 1px solid #dee2e6; border-radius: 8px; width: 36px; height: 36px; font-size: 18px; font-weight: 700; cursor: pointer; color: #495057; transition: 0.2s; font-family: 'Paperozi', sans-serif; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+        .calendar-nav button:hover { background: #0056b3; color: #fff; border-color: #0056b3; box-shadow: 0 4px 12px rgba(0,86,179,0.2); }
+        .calendar-nav-title { font-size: 20px; font-weight: 800; color: #111; min-width: 140px; text-align: center; letter-spacing: -0.5px; }
+        .calendar-legend { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .calendar-legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #666; font-weight: 700; background: #fff; border: 1px solid #eee; padding: 4px 10px; border-radius: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.03); }
+        .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .legend-dot.available { background: #0056b3; }
+        .legend-dot.closed { background: #e03131; }
+        .legend-dot.holiday { background: #ced4da; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+        .calendar-dow { text-align: center; font-size: 11px; font-weight: 800; color: #adb5bd; padding: 6px 0 10px; letter-spacing: 0.3px; }
+        .calendar-dow.sun { color: #e03131; }
+        .calendar-dow.sat { color: #339af0; }
+        .calendar-day { min-height: 68px; border-radius: 12px; padding: 8px 9px 7px; display: flex; flex-direction: column; gap: 5px; border: 1.5px solid transparent; background: #fff; transition: 0.15s; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+        .calendar-day.empty { background: transparent; border-color: transparent; box-shadow: none; }
+        .calendar-day.today { border-color: #0056b3 !important; box-shadow: 0 0 0 2px rgba(0,86,179,0.12), 0 2px 8px rgba(0,86,179,0.08); }
+        .calendar-day .day-num { font-size: 13px; font-weight: 800; color: #333; line-height: 1; }
+        .calendar-day.sun .day-num { color: #e03131; }
+        .calendar-day.sat .day-num { color: #339af0; }
+        .calendar-day.holiday-day { background: #f8f9fa; box-shadow: none; }
+        .calendar-day.holiday-day .day-num { color: #ced4da; }
+        .calendar-day.closed-day { background: #fff5f5; border-color: #ffd8d8; }
+        .calendar-day.closed-day .day-num { color: #c92a2a; }
+        .calendar-day.available-day { background: #fff; border-color: #e7f0ff; }
+        .cal-badge { font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 5px; line-height: 1.4; word-break: keep-all; display: inline-block; width: fit-content; }
+        .cal-badge.available-badge { background: #e7f5ff; color: #0056b3; }
+        .cal-badge.closed-badge { background: #ffe3e3; color: #c92a2a; }
+        .cal-badge.holiday-badge { background: #f1f3f5; color: #adb5bd; }
+        .calendar-loading { text-align: center; padding: 40px; color: #aaa; font-size: 15px; }
+
         /* ================= 7. 안내사항 ================= */
         .terms-accordion { width: 100%; background: #fcfcfc; border: 1px solid #eee; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); overflow: hidden; }
         .terms-accordion summary { font-weight: 700; font-size: 15px; color: #222; outline: none; list-style: none; display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; cursor: pointer; gap: 10px; }
@@ -532,7 +566,26 @@
     </div>
     <div class="pagination" id="portfolioPagination"></div>
 
-    <h2 id="calc-sec" style="margin-top: 70px;">6. 실시간 견적 계산기</h2>
+    <h2 id="calendar-sec" style="margin-top: 70px;">6. 작업 일정 캘린더</h2>
+    <div class="calendar-section">
+        <div class="calendar-header">
+            <div class="calendar-nav">
+                <button onclick="calPrevMonth()">&#8249;</button>
+                <div class="calendar-nav-title" id="calTitle"></div>
+                <button onclick="calNextMonth()">&#8250;</button>
+            </div>
+            <div class="calendar-legend">
+                <div class="calendar-legend-item"><span class="legend-dot available"></span> 작업 가능</div>
+                <div class="calendar-legend-item"><span class="legend-dot closed"></span> 마감 (작업 불가)</div>
+                <div class="calendar-legend-item"><span class="legend-dot holiday"></span> 휴일</div>
+            </div>
+        </div>
+        <div id="calendarContainer">
+            <div class="calendar-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> 일정 데이터를 불러오는 중...</div>
+        </div>
+    </div>
+
+    <h2 id="calc-sec" style="margin-top: 70px;">7. 실시간 견적 계산기</h2>
     <div class="calc-container">
         
         <div class="calc-options" id="calcOptions">
@@ -643,7 +696,7 @@
     </div>
 
 
-    <h2 id="terms-sec">7. 안내사항 및 이용 조건</h2>
+    <h2 id="terms-sec">8. 안내사항 및 이용 조건</h2>
 
     <details class="terms-accordion" ontoggle="sendHeight()">
         <summary><i class="fa-solid fa-circle-info"></i> 상담 시간 및 문의</summary>
@@ -1186,9 +1239,10 @@ function toggleTheme() {
 }
 
 // =================== URL 변수 ===================
-const portfolioUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSSeX3pWLHORYzu74HfYL39u8-G5s-bQEbPNffQoW5WAXPDSe1MJu8Piz8FKANsgLqUXKOa2ZgbJI_y/pub?gid=1487607827&single=true&output=csv";
-const priceUrl     = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSSeX3pWLHORYzu74HfYL39u8-G5s-bQEbPNffQoW5WAXPDSe1MJu8Piz8FKANsgLqUXKOa2ZgbJI_y/pub?gid=1047411872&single=true&output=csv";
-const eventUrl     = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSSeX3pWLHORYzu74HfYL39u8-G5s-bQEbPNffQoW5WAXPDSe1MJu8Piz8FKANsgLqUXKOa2ZgbJI_y/pub?gid=944738620&single=true&output=csv";
+const portfolioUrl  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSSeX3pWLHORYzu74HfYL39u8-G5s-bQEbPNffQoW5WAXPDSe1MJu8Piz8FKANsgLqUXKOa2ZgbJI_y/pub?gid=1487607827&single=true&output=csv";
+const priceUrl      = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSSeX3pWLHORYzu74HfYL39u8-G5s-bQEbPNffQoW5WAXPDSe1MJu8Piz8FKANsgLqUXKOa2ZgbJI_y/pub?gid=1047411872&single=true&output=csv";
+const eventUrl      = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSSeX3pWLHORYzu74HfYL39u8-G5s-bQEbPNffQoW5WAXPDSe1MJu8Piz8FKANsgLqUXKOa2ZgbJI_y/pub?gid=944738620&single=true&output=csv";
+const calendarUrl   = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSSeX3pWLHORYzu74HfYL39u8-G5s-bQEbPNffQoW5WAXPDSe1MJu8Piz8FKANsgLqUXKOa2ZgbJI_y/pub?gid=491990215&single=true&output=csv";
 
 let portfolios = [];
 let currentPage = 1;
@@ -1200,11 +1254,17 @@ let selectedItems = new Map();
 let activeEvents = [];
 let selectedEvent = null;
 
+// =================== ★ 캘린더 데이터 ===================
+let calendarData = []; // { type: 'closed'|'holiday', dates: [Date,...], label: string }
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth(); // 0-based
+
 // =================== 초기화 ===================
 document.addEventListener("DOMContentLoaded", () => {
     loadPortfolio();
     loadPriceData();
     loadEventData();
+    loadCalendarData();
     typeWriter();
     startLoopingCounter();
     initAccordions();
@@ -1234,12 +1294,25 @@ function loadEventData() {
             activeEvents = results.data
                 .filter(row => row['제목'] && row['제목'].trim() !== '')
                 .filter(row => {
+                    // 마감일 필터: 마감일이 있으면 오늘 이하면 제외
                     const dl = (row['마감일'] || '').trim();
-                    if (!dl) return true;
-                    const d = new Date(dl);
-                    if (isNaN(d.getTime())) return true;
-                    d.setHours(23, 59, 59, 999);
-                    return d >= today;
+                    if (dl) {
+                        const d = new Date(dl);
+                        if (!isNaN(d.getTime())) {
+                            d.setHours(23, 59, 59, 999);
+                            if (d < today) return false;
+                        }
+                    }
+                    // 시작일 필터: 시작일이 있으면 오늘보다 미래면 아직 표시 안함
+                    const sl = (row['시작일'] || '').trim();
+                    if (sl) {
+                        const s = new Date(sl);
+                        if (!isNaN(s.getTime())) {
+                            s.setHours(0, 0, 0, 0);
+                            if (s > today) return false;
+                        }
+                    }
+                    return true;
                 })
                 .map(row => {
                     const discountRaw = (row['할인가'] || '').trim();
@@ -1867,6 +1940,156 @@ function resetCalc(btnElement) {
     
     showToast("모든 폼과 선택 내역이 초기화되었습니다.", btnElement);
     setTimeout(sendHeight, 150);
+}
+
+// =================== ★ 캘린더 데이터 로드 ===================
+function parseFlexibleDate(str) {
+    // "2026-4-28", "2026/4/28", "2026.4.28" 등 유연하게 파싱
+    if (!str || !str.trim()) return null;
+    const s = str.trim().replace(/[\/\.]/g, '-');
+    // YYYY-M-D 형태 허용
+    const m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+    if (!m) return null;
+    const d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]));
+    return isNaN(d.getTime()) ? null : d;
+}
+
+function expandDateRange(str) {
+    // "2026-4-28~2026-5-14" 또는 단일 날짜 "2026-8-13"
+    const parts = str.split('~').map(s => s.trim());
+    if (parts.length === 2) {
+        const start = parseFlexibleDate(parts[0]);
+        const end = parseFlexibleDate(parts[1]);
+        if (!start || !end) return [];
+        const dates = [];
+        const cur = new Date(start);
+        while (cur <= end) {
+            dates.push(new Date(cur));
+            cur.setDate(cur.getDate() + 1);
+        }
+        return dates;
+    } else {
+        const d = parseFlexibleDate(parts[0]);
+        return d ? [d] : [];
+    }
+}
+
+function loadCalendarData() {
+    Papa.parse(calendarUrl, {
+        download: true,
+        header: true,
+        complete: function(results) {
+            calendarData = [];
+            results.data.forEach(row => {
+                const dateStr = (row['날짜'] || '').trim();
+                const status = (row['현황'] || '').trim();
+                if (!dateStr || !status) return;
+                const dates = expandDateRange(dateStr);
+                if (dates.length === 0) return;
+                let type = 'closed';
+                if (status === '휴일') type = 'holiday';
+                else if (status === '마감') type = 'closed';
+                calendarData.push({ type, dates, label: status });
+            });
+            renderCalendar();
+        },
+        error: function() {
+            document.getElementById('calendarContainer').innerHTML =
+                '<div style="text-align:center; padding:30px; color:#aaa;">일정 데이터를 불러오지 못했습니다.</div>';
+            renderCalendar();
+        }
+    });
+}
+
+function calPrevMonth() {
+    calMonth--;
+    if (calMonth < 0) { calMonth = 11; calYear--; }
+    renderCalendar();
+}
+
+function calNextMonth() {
+    calMonth++;
+    if (calMonth > 11) { calMonth = 0; calYear++; }
+    renderCalendar();
+}
+
+function getDayStatus(date) {
+    // 토, 일은 무조건 휴일
+    const dow = date.getDay();
+    if (dow === 0 || dow === 6) return 'holiday';
+
+    const dateKey = date.toDateString();
+    let closedFound = false;
+    let holidayFound = false;
+
+    for (const entry of calendarData) {
+        for (const d of entry.dates) {
+            if (d.toDateString() === dateKey) {
+                if (entry.type === 'closed') closedFound = true;
+                if (entry.type === 'holiday') holidayFound = true;
+            }
+        }
+    }
+    if (closedFound) return 'closed';
+    if (holidayFound) return 'holiday';
+    return 'available';
+}
+
+function renderCalendar() {
+    const container = document.getElementById('calendarContainer');
+    const titleEl = document.getElementById('calTitle');
+
+    const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월',
+                        '7월', '8월', '9월', '10월', '11월', '12월'];
+    titleEl.textContent = `${calYear}년 ${monthNames[calMonth]}`;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const firstDay = new Date(calYear, calMonth, 1).getDay();
+    const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+
+    const dowLabels = ['일', '월', '화', '수', '목', '금', '토'];
+
+    let html = '<div class="calendar-grid">';
+    dowLabels.forEach((d, i) => {
+        const cls = i === 0 ? 'sun' : i === 6 ? 'sat' : '';
+        html += `<div class="calendar-dow ${cls}">${d}</div>`;
+    });
+
+    for (let i = 0; i < firstDay; i++) {
+        html += '<div class="calendar-day empty"></div>';
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(calYear, calMonth, day);
+        const dow = date.getDay();
+        const isTodayFlag = date.toDateString() === today.toDateString();
+        const status = getDayStatus(date);
+
+        let dayClass = 'calendar-day';
+        if (dow === 0) dayClass += ' sun';
+        if (dow === 6) dayClass += ' sat';
+        if (isTodayFlag) dayClass += ' today';
+
+        let badgeHtml = '';
+        if (status === 'holiday') {
+            dayClass += ' holiday-day';
+            badgeHtml = '<span class="cal-badge holiday-badge">휴일</span>';
+        } else if (status === 'closed') {
+            dayClass += ' closed-day';
+            badgeHtml = '<span class="cal-badge closed-badge">마감</span>';
+        } else {
+            dayClass += ' available-day';
+            badgeHtml = '<span class="cal-badge available-badge">가능</span>';
+        }
+
+        html += `<div class="${dayClass}"><span class="day-num">${day}</span>${badgeHtml}</div>`;
+    }
+
+    html += '</div>';
+    container.innerHTML = html;
+    setTimeout(sendHeight, 200);
 }
 
 // =================== ★ 문의 복사 ===================
