@@ -1205,67 +1205,36 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
          모달 top = 뷰포트 안의 적절한 위치 - iframe 상단까지의 offset
 ══════════════════════════════════════ */
 
-/* iframe이 부모 뷰포트 안에서 차지하는 상단 위치를 추적 */
-let _iframeViewportTop = 0; // iframe 상단이 부모 뷰포트에서 몇 px 아래에 있는지
+/* 부모 페이지에서 postMessage로 받은 iframe 상단 위치 */
+let _iframeViewportTop = 0;
 
-(function initIframePositionTracker() {
-  /* 
-   * 방법: body 상단에 1px짜리 sentinel 엘리먼트를 두고
-   * IntersectionObserver의 boundingClientRect.top을 읽으면
-   * "iframe 문서의 (0,0) 기준점이 부모 뷰포트 기준으로 몇 px에 있는지" 알 수 있음
-   * 
-   * 이 값이 음수면 iframe 상단이 이미 화면 위로 스크롤된 것
-   * 모달이 화면 중앙에 오려면: mbg top = -iframeTopInViewport + 원하는위치
-   */
-  const sentinel = document.createElement('div');
-  sentinel.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:1px;pointer-events:none;opacity:0;';
-  document.body.appendChild(sentinel);
+window.addEventListener('message', function(e) {
+  if (!e.data) return;
 
-  if (!window.IntersectionObserver) return; // 구형 브라우저 fallback: top:0 유지
-
-  const obs = new IntersectionObserver((entries) => {
-    const entry = entries[0];
-    // boundingClientRect.top = sentinel(=iframe 상단)이 부모 뷰포트 기준으로 몇 px인지
-    _iframeViewportTop = entry.boundingClientRect.top;
-    // 모달이 열려있으면 위치 즉시 업데이트
+  /* 부모 스크롤 위치 수신 → 모달 위치 보정 */
+  if (e.data.type === 'orogy-parentscroll') {
+    _iframeViewportTop = e.data.iframeTop;
     if (document.getElementById('mbg').classList.contains('open')) {
       _positionModal();
     }
-  }, {
-    threshold: Array.from({length: 101}, (_, i) => i / 100), // 촘촘하게 관찰
-    rootMargin: '9999px 0px 9999px 0px' // 화면 밖에서도 계속 추적
-  });
-
-  obs.observe(sentinel);
-
-  // IntersectionObserver가 자주 안 쏠 수 있으니 rAF로 보완
-  function rafTrack() {
-    const rect = sentinel.getBoundingClientRect();
-    if (Math.abs(rect.top - _iframeViewportTop) > 1) {
-      _iframeViewportTop = rect.top;
-      if (document.getElementById('mbg').classList.contains('open')) {
-        _positionModal();
-      }
-    }
-    requestAnimationFrame(rafTrack);
   }
-  requestAnimationFrame(rafTrack);
-})();
+
+  /* 기존 orogy-scroll 처리 */
+  if (e.data.type === 'orogy-scroll') {
+    const target = document.getElementById(e.data.id);
+    if (!target) return;
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const iframeTop = target.getBoundingClientRect().top + window.scrollY;
+    window.parent.postMessage({ type: 'orogy-scrollpos', offsetTop: iframeTop }, '*');
+  }
+});
 
 function _positionModal() {
-  const mbg = document.getElementById('mbg');
-  // 뷰포트 높이
   const vh = window.innerHeight;
-  // 모달박스를 뷰포트 상단에서 20px 아래 위치시키려면:
-  // mbg는 position:fixed, top=0이고
-  // mbox의 margin-top = max(20, 뷰포트 안 여유)
-  // _iframeViewportTop이 음수 = iframe 상단이 화면 위로 올라간 것
-  // → mbox를 아래로 내려야 함: margin-top = -_iframeViewportTop + 20
+  /* iframe 상단이 뷰포트 위로 올라간 만큼 모달을 아래로 밀어서 화면 안에 위치 */
   const offset = Math.max(20, -_iframeViewportTop + 20);
-  // 하지만 모달이 뷰포트 아래로 벗어나지 않도록 clamp
-  const maxOffset = vh - 80; // 최소 80px은 화면에 보이도록
-  const finalOffset = Math.min(offset, maxOffset);
-  mbg.style.setProperty('--modal-top', finalOffset + 'px');
+  const finalOffset = Math.min(offset, vh - 80);
+  document.getElementById('mbg').style.setProperty('--modal-top', finalOffset + 'px');
 }
 
 function om(t, s, img) {
@@ -1938,15 +1907,6 @@ loadPriceData();
     const h = document.documentElement.scrollHeight;
     if (h !== lastH) { lastH = h; sendHeight(); }
   }, 300);
-
-  window.addEventListener('message', function(e) {
-    if (!e.data || e.data.type !== 'orogy-scroll') return;
-    const target = document.getElementById(e.data.id);
-    if (!target) return;
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    const iframeTop = target.getBoundingClientRect().top + window.scrollY;
-    window.parent.postMessage({ type: 'orogy-scrollpos', offsetTop: iframeTop }, '*');
-  });
 })();
 </script>
 </body>
