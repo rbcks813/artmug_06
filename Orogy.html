@@ -127,22 +127,19 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 .reset-btn:hover{border-color:var(--accent);color:var(--accent);}
 
 /* ══════════════════════════════════════
-   모달 — iframe 임베드 스크롤 따라오기
-   fixed는 iframe 뷰포트 기준이라 부모 스크롤 무시됨
-   → position:fixed 유지하되, iframe이 뷰포트에서 차지하는
-     실제 offsetTop을 IntersectionObserver로 역산해서 보정
+   모달 — position:absolute + parentScroll postMessage
 ══════════════════════════════════════ */
 .mbg{
   display:none;
-  position:fixed;
+  position:absolute;
   left:0;
+  top:0;
   width:100%;
   z-index:1000;
-  align-items:flex-start;
   justify-content:center;
-  padding:20px;
-  /* 배경 오버레이 없음 */
-  pointer-events:none; /* 닫기 버튼/카드만 클릭 가능 */
+  align-items:flex-start;
+  padding:0 20px;
+  pointer-events:none;
 }
 .mbg.open{display:flex;pointer-events:auto;}
 .mbox{
@@ -153,9 +150,9 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   width:100%;
   position:relative;
   box-shadow:0 8px 40px rgba(180,100,220,.22);
-  align-self:flex-start;
-  /* top은 JS에서 --modal-top 변수로 제어 */
-  margin-top:var(--modal-top, 20px);
+  pointer-events:auto;
+  transition:margin-top 0.1s ease-out;
+  margin-bottom:40px;
 }
 .mclose{position:absolute;top:12px;right:14px;background:none;border:none;font-size:19px;color:var(--gray);cursor:pointer;line-height:1;}
 .mbox h3{font-size:15px;font-weight:700;margin-bottom:3px;}
@@ -1205,37 +1202,52 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
          모달 top = 뷰포트 안의 적절한 위치 - iframe 상단까지의 offset
 ══════════════════════════════════════ */
 
-/* 부모 페이지에서 postMessage로 받은 iframe 상단 위치 */
-let _iframeViewportTop = 0;
+/* ══════════════════════════════════════
+   참고 코드(아트머그) 방식 그대로:
+   - 모달은 position:absolute (문서 좌표 기준)
+   - 부모가 parentScroll 메시지로 rectTop + viewHeight 전송
+   - iframe 안에서 iframeCenterY를 계산해 modal margin-top 결정
+   - sendHeight()로 모달 포함 높이 재계산
+══════════════════════════════════════ */
+
+let parentViewHeight = window.innerHeight;
+let iframeCenterY = window.innerHeight / 2;
+
+function sendHeight() {
+  const modal = document.getElementById('mbg');
+  let h = document.documentElement.scrollHeight;
+  if (modal && modal.style.display === 'flex') {
+    const mbox = document.getElementById('mbox');
+    if (mbox) {
+      const mt = parseFloat(mbox.style.marginTop) || 0;
+      const modalBottom = mt + mbox.offsetHeight + 40;
+      if (modalBottom > h) h = modalBottom;
+    }
+  }
+  window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
+}
 
 window.addEventListener('message', function(e) {
   if (!e.data) return;
 
-  /* 부모 스크롤 위치 수신 → 모달 위치 보정 */
-  if (e.data.type === 'orogy-parentscroll') {
-    _iframeViewportTop = e.data.iframeTop;
-    if (document.getElementById('mbg').classList.contains('open')) {
-      _positionModal();
+  /* 부모 스크롤 → iframeCenterY 갱신 → 모달 위치 재계산 */
+  if (e.data.type === 'parentScroll') {
+    const rectTop = e.data.rectTop;
+    parentViewHeight = e.data.viewHeight;
+    iframeCenterY = (parentViewHeight / 2) - rectTop;
+    if (iframeCenterY < 0) iframeCenterY = 0;
+
+    const modal = document.getElementById('mbg');
+    if (modal && modal.style.display === 'flex') {
+      const mbox = document.getElementById('mbox');
+      if (mbox) {
+        mbox.style.marginTop = Math.max(20, iframeCenterY - (mbox.offsetHeight / 2)) + 'px';
+        mbox.style.maxHeight = (parentViewHeight * 0.85) + 'px';
+        setTimeout(sendHeight, 150);
+      }
     }
   }
-
-  /* 기존 orogy-scroll 처리 */
-  if (e.data.type === 'orogy-scroll') {
-    const target = document.getElementById(e.data.id);
-    if (!target) return;
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    const iframeTop = target.getBoundingClientRect().top + window.scrollY;
-    window.parent.postMessage({ type: 'orogy-scrollpos', offsetTop: iframeTop }, '*');
-  }
 });
-
-function _positionModal() {
-  const vh = window.innerHeight;
-  /* iframe 상단이 뷰포트 위로 올라간 만큼 모달을 아래로 밀어서 화면 안에 위치 */
-  const offset = Math.max(20, -_iframeViewportTop + 20);
-  const finalOffset = Math.min(offset, vh - 80);
-  document.getElementById('mbg').style.setProperty('--modal-top', finalOffset + 'px');
-}
 
 function om(t, s, img) {
   document.getElementById('mtitle').textContent = t;
@@ -1256,27 +1268,28 @@ function omYt(t, url) {
 }
 
 function openModal() {
-  const mbg = document.getElementById('mbg');
-  _positionModal();
-  mbg.classList.add('open');
-
-  mbg._clickHandler = function(e) {
-    if (e.target === mbg) cmc();
-  };
-  mbg.addEventListener('click', mbg._clickHandler);
+  const modal = document.getElementById('mbg');
+  const mbox  = document.getElementById('mbox');
+  mbox.style.maxHeight = (parentViewHeight * 0.85) + 'px';
+  modal.style.display = 'flex';
+  mbox.style.marginTop = Math.max(20, iframeCenterY - (mbox.offsetHeight / 2)) + 'px';
+  setTimeout(sendHeight, 150);
 }
 
 function cmc() {
-  const mbg = document.getElementById('mbg');
-  mbg.classList.remove('open');
-  if (mbg._clickHandler) {
-    mbg.removeEventListener('click', mbg._clickHandler);
-    mbg._clickHandler = null;
-  }
+  document.getElementById('mbg').style.display = 'none';
   const wrap = document.getElementById('mimg-wrap');
   const iframe = wrap ? wrap.querySelector('iframe') : null;
   if (iframe) { const s = iframe.src; iframe.src = ''; iframe.src = s; }
+  setTimeout(sendHeight, 150);
 }
+
+/* 모달 바깥 클릭 시 닫기 */
+window.onclick = function(e) {
+  const modal = document.getElementById('mbg');
+  const mbox  = document.getElementById('mbox');
+  if (modal.style.display === 'flex' && !mbox.contains(e.target)) cmc();
+};
 
 /* ── 구글시트 CSV 파싱 유틸 (멀티라인 지원) ── */
 function parseCSV(text) {
@@ -1893,21 +1906,17 @@ loadEvents();
 loadPriceData();
 
 /* ── 임베드 자동 높이 조절 ── */
-(function() {
-  function sendHeight() {
-    const h = document.documentElement.scrollHeight;
-    window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
-  }
-  sendHeight();
-  if (window.ResizeObserver) {
-    new ResizeObserver(sendHeight).observe(document.body);
-  }
-  let lastH = 0;
-  setInterval(() => {
-    const h = document.documentElement.scrollHeight;
-    if (h !== lastH) { lastH = h; sendHeight(); }
-  }, 300);
-})();
+window.addEventListener('load', sendHeight);
+window.addEventListener('resize', sendHeight);
+if (window.ResizeObserver) {
+  new ResizeObserver(sendHeight).observe(document.body);
+}
+let _lastH = 0;
+setInterval(() => {
+  const h = document.documentElement.scrollHeight;
+  if (h !== _lastH) { _lastH = h; sendHeight(); }
+}, 300);
+sendHeight();
 </script>
 </body>
 </html>
