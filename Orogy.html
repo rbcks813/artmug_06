@@ -20,6 +20,17 @@
   --accent:#b86fd8; --text:#2b2b2b; --gray:#999; --border:#ece7f5;
   --soft:#f7f3fd; --white:#fff; --red:#c0392b;
 }
+
+/* ── 높이 수축을 위한 핵심 설정 ── */
+html {
+  height: auto !important;
+  overflow-x: hidden;
+}
+body {
+  height: auto !important;
+  overflow-x: hidden;
+}
+
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{font-family:'Paperozi',sans-serif;background:var(--cream);color:var(--text);font-size:14px;line-height:1.75;font-weight:400;}
@@ -560,7 +571,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 </section>
 
 <!-- ═══════════ 3. 안내사항 ═══════════ -->
-<!-- ref_04와 내용 동일 (오로지 본인 내용) → 디자인만 심플하게 -->
 <section class="sec" id="notice">
   <div class="page"><div class="inner">
     <div class="sh"><div class="sh-bar"></div><h2>안내사항</h2></div>
@@ -728,7 +738,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 </section>
 
 <!-- ═══════════ 5. 사용 범위 ═══════════ -->
-<!-- ref_07 오로지 본인 내용 → 현재 표 디자인 유지 -->
 <section class="sec" id="usage">
   <div class="page"><div class="inner">
     <div class="sh"><div class="sh-bar"></div><h2>사용 범위</h2></div>
@@ -882,7 +891,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
           <label>작업 유형 <span class="opt-note">(견적 자동계산)</span></label>
           <select id="et" onchange="ce()">
             <option value="">선택하세요</option>
-            <!-- loadPriceData 후 채워짐 -->
           </select>
         </div>
 
@@ -946,7 +954,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
         <!-- 10. 이벤트 선택 -->
         <div class="fg full">
           <label>10. 이벤트 선택 <span class="opt-note">(중복 선택 불가)</span></label>
-          <div id="ev-check-list" class="rg"><!-- loadEvents 후 채워짐 --></div>
+          <div id="ev-check-list" class="rg"></div>
         </div>
 
         <input type="hidden" id="ee" value="0">
@@ -964,7 +972,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
             <option value="">없음</option>
           </select>
         </div>
-
 
         <!-- 예약금 (복사용 hidden) -->
         <input type="hidden" id="edep">
@@ -985,7 +992,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
           </div>
         </div>
 
-        <!-- 견적 결과 — 복사 버튼 바로 위 -->
+        <!-- 견적 결과 -->
         <div class="fg full">
           <div class="est-result-strip">
             <div class="est-result-left">
@@ -1017,7 +1024,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   </div></div>
 </section>
 
-<!-- ═══════════ 협업 작가 (ref_01 레이아웃, 오로지 데이터만) ═══════════ -->
+<!-- ═══════════ 협업 작가 ═══════════ -->
 <section class="sec" id="collab">
   <div class="page"><div class="inner">
     <div class="sh"><div class="sh-bar"></div><h2>협업 작가 리스트</h2></div>
@@ -1042,7 +1049,74 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 
 
 <script>
-/* ── 구글시트 CSV 파싱 유틸 (멀티라인 지원) ── */
+/* ══════════════════════════════════════════
+   임베드 자동 높이 조절 — 늘어남 + 줄어듦 모두 대응
+   핵심: html/body를 height:auto로 리셋한 뒤
+         body.scrollHeight를 측정해야 실제 콘텐츠
+         높이가 잡힌다. 기존 scrollHeight 방식은
+         한번 늘어난 높이를 유지해 줄어들지 않음.
+══════════════════════════════════════════ */
+(function() {
+  var _lastH = 0;
+
+  function getContentHeight() {
+    // html/body 고정 높이를 일시 해제해야 진짜 콘텐츠 높이가 측정됨
+    document.documentElement.style.height = 'auto';
+    document.body.style.height = 'auto';
+    // offsetHeight 대신 scrollHeight — 패딩 포함 전체 높이
+    return document.body.scrollHeight;
+  }
+
+  function sendHeight() {
+    var h = getContentHeight();
+    // 실제로 바뀐 경우에만 postMessage (불필요한 리페인트 방지)
+    if (h === _lastH) return;
+    _lastH = h;
+    window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
+  }
+
+  // 최초 전송
+  sendHeight();
+
+  // ResizeObserver — 콘텐츠 높이 변화(증가/감소) 즉시 감지
+  if (window.ResizeObserver) {
+    new ResizeObserver(function() { sendHeight(); }).observe(document.body);
+  }
+
+  // 폴백 폴링 (ResizeObserver 미지원 브라우저 + 탭 전환 등 edge case)
+  setInterval(sendHeight, 300);
+
+  /* 부모 커스텀 메뉴 → 섹션 스크롤 수신 */
+  window.addEventListener('message', function(e) {
+    if (!e.data || e.data.type !== 'orogy-scroll') return;
+    var target = document.getElementById(e.data.id);
+    if (!target) return;
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    var iframeTop = target.getBoundingClientRect().top + window.scrollY;
+    window.parent.postMessage({ type: 'orogy-scrollpos', offsetTop: iframeTop }, '*');
+  });
+})();
+
+/* ══════════════════════════════════════════
+   탭 전환 — 전환 후 높이 즉시 재측정
+══════════════════════════════════════════ */
+function sw(tid, pid, i) {
+  [...document.getElementById(tid).querySelectorAll('.tb')]
+    .forEach(function(t, j) { t.classList.toggle('on', j === i); });
+  [...document.getElementById(pid).children]
+    .forEach(function(p, j) { p.classList.toggle('on', j === i); });
+  // 탭 전환 후 콘텐츠 높이가 즉시 변하므로 강제 재측정
+  requestAnimationFrame(function() {
+    document.documentElement.style.height = 'auto';
+    document.body.style.height = 'auto';
+    var h = document.body.scrollHeight;
+    window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
+  });
+}
+
+/* ══════════════════════════════════════════
+   CSV 파싱 유틸 (멀티라인 지원)
+══════════════════════════════════════════ */
 function parseCSV(text) {
   const rows = [];
   let row = [];
@@ -1050,52 +1124,36 @@ function parseCSV(text) {
   const len = text.length;
 
   while (i < len) {
-    // 따옴표로 시작하는 필드
     if (text[i] === '"') {
-      i++; // 여는 따옴표 건너뜀
+      i++;
       let val = '';
       while (i < len) {
         if (text[i] === '"') {
-          if (text[i + 1] === '"') {
-            // escaped quote ""
-            val += '"';
-            i += 2;
-          } else {
-            // 닫는 따옴표
-            i++;
-            break;
-          }
-        } else {
-          val += text[i];
-          i++;
-        }
+          if (text[i + 1] === '"') { val += '"'; i += 2; }
+          else { i++; break; }
+        } else { val += text[i]; i++; }
       }
       row.push(val);
     } else {
-      // 따옴표 없는 일반 필드
       let val = '';
       while (i < len && text[i] !== ',' && text[i] !== '\n' && text[i] !== '\r') {
-        val += text[i];
-        i++;
+        val += text[i]; i++;
       }
       row.push(val);
     }
 
-    // 구분자 처리
     if (i < len && text[i] === ',') {
-      i++; // 다음 필드
+      i++;
     } else if (i < len && (text[i] === '\n' || text[i] === '\r')) {
-      if (text[i] === '\r' && text[i + 1] === '\n') i++; // CRLF
+      if (text[i] === '\r' && text[i + 1] === '\n') i++;
       i++;
       rows.push(row);
       row = [];
     } else {
-      // EOF — 마지막 행 push 후 종료
       if (row.length > 0 && !(row.length === 1 && row[0] === '')) rows.push(row);
       break;
     }
   }
-  // EOF 후 남은 row 처리 — 위 else 분기에서 처리됐으므로 제거
   return rows;
 }
 
@@ -1113,7 +1171,6 @@ async function loadIntro() {
       if (key) data[key] = val;
     }
 
-    // 프로필 이미지
     if (data['프로필']) {
       const img = document.getElementById('intro-img');
       img.onload = () => {
@@ -1124,7 +1181,6 @@ async function loadIntro() {
       img.src = data['프로필'];
     }
 
-    // 역할
     if (data['역할']) {
       const el = document.getElementById('intro-role');
       el.textContent = data['역할'];
@@ -1132,7 +1188,6 @@ async function loadIntro() {
       el.style.display = '';
     }
 
-    // 이름
     if (data['이름']) {
       const parts = data['이름'].split(' ');
       const nameEl = document.getElementById('intro-name');
@@ -1145,7 +1200,6 @@ async function loadIntro() {
       nameEl.style.display = '';
     }
 
-    // 소개
     if (data['소개']) {
       const el = document.getElementById('intro-desc');
       el.innerHTML = data['소개'].replace(/\n/g, '<br>');
@@ -1153,7 +1207,6 @@ async function loadIntro() {
       el.style.display = '';
     }
 
-    // 접수 가능여부 + 태그
     const isOpen = (data['접수 가능여부'] || '').toUpperCase() === 'TRUE';
     const statusTag = isOpen
       ? '<span class="htag" style="background:#e8f5e9;border:1px solid #a5d6a7;color:#2e7d32;">#접수가능</span>'
@@ -1174,7 +1227,6 @@ async function loadIntro() {
 
   } catch (e) {
     console.warn('소개 시트 로드 실패:', e);
-    // 스켈레톤을 에러 안내로 교체
     ['intro-img-skel','intro-role-skel','intro-name-skel','intro-desc-skel','intro-tags-skel'].forEach(id => {
       const el = document.getElementById(id);
       if (el) { el.className = ''; el.style.cssText = 'color:var(--gray);font-size:13px;'; el.textContent = ''; }
@@ -1185,20 +1237,19 @@ async function loadIntro() {
 }
 
 /* ── 협업작가 시트 로드 ── */
-// 견적 할인값 매핑 (작가명 → value)
 const COLLAB_DISCOUNT = {
   '고유 작가님': '-100000',
-  '무냥 작가님': 'mi', // 일러/리깅 구분은 별도 처리 생략, 일러 기준
+  '무냥 작가님': 'mi',
 };
 
-let collabData = []; // 전역 보관
+let collabData = [];
 
 async function loadCollab() {
   const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJXlBmNMpCB6yQH5mznODAXBhgywVD7JheDmNqejv0bizcyWAnvj4hCOfcAhWwSFL0n_TihrQ3JktC/pub?gid=582760368&single=true&output=csv';
   try {
     const res = await fetch(URL);
     const text = await res.text();
-    const rows = parseCSV(text).slice(1); // 헤더 제거
+    const rows = parseCSV(text).slice(1);
     collabData = rows.filter(r => r[0] && r[0].trim()).map(r => ({
       name:    (r[0] || '').trim(),
       role:    (r[1] || '').trim(),
@@ -1217,7 +1268,6 @@ async function loadCollab() {
   buildCollabSelect();
 }
 
-/* 협업작가 카드 렌더링 */
 function renderCollab() {
   const grid = document.getElementById('collab-grid');
   grid.innerHTML = collabData.map(a => {
@@ -1238,7 +1288,6 @@ function renderCollab() {
   }).join('');
 }
 
-/* 협업작가 select 옵션 동적 생성 */
 function buildCollabSelect() {
   const sel = document.getElementById('fco');
   sel.innerHTML = '<option value="">없음</option>';
@@ -1251,10 +1300,7 @@ function buildCollabSelect() {
   });
 }
 
-/* 협업작가 선택 → 견적 연동 */
-function syncCollab() {
-  ce();
-}
+function syncCollab() { ce(); }
 
 /* ── 2. 슬롯 데이터 로드 ── */
 async function loadSlot() {
@@ -1263,13 +1309,12 @@ async function loadSlot() {
   try {
     const res = await fetch(URL);
     const text = await res.text();
-    const rows = parseCSV(text).slice(1); // 헤더(월,마감,최대) 제거
+    const rows = parseCSV(text).slice(1);
 
     const validRows = rows.filter(r => parseInt(r[0]));
     const count = Math.min(validRows.length, 6);
     grid.style.gridTemplateColumns = `repeat(${count}, 1fr)`;
 
-    // innerHTML += 대신 한 번에 렌더
     grid.innerHTML = validRows.map(r => {
       const mon    = parseInt(r[0]);
       const filled = parseInt(r[1]) || 0;
@@ -1288,12 +1333,6 @@ async function loadSlot() {
     console.warn('슬롯 시트 로드 실패:', e);
     grid.innerHTML = `<p style="color:var(--gray);font-size:13px;grid-column:1/-1;">슬롯 정보를 불러오지 못했습니다.</p>`;
   }
-}
-
-/* ── 탭 ── */
-function sw(tid,pid,i){
-  [...document.getElementById(tid).querySelectorAll('.tb')].forEach((t,j)=>t.classList.toggle('on',j===i));
-  [...document.getElementById(pid).children].forEach((p,j)=>p.classList.toggle('on',j===i));
 }
 
 /* ── 유튜브 ID 추출 ── */
@@ -1324,73 +1363,68 @@ function omYt(t, url) {
   document.getElementById('mbg').classList.add('open');
 }
 
-function cm(e){if(e.target===document.getElementById('mbg'))cmc();}
-function cmc(){
+function cm(e) { if (e.target === document.getElementById('mbg')) cmc(); }
+function cmc() {
   document.getElementById('mbg').classList.remove('open');
-  // iframe src를 빈값으로 설정해 영상 정지
   const wrap = document.getElementById('mimg-wrap');
   const iframe = wrap ? wrap.querySelector('iframe') : null;
   if (iframe) { const s = iframe.src; iframe.src = ''; iframe.src = s; }
 }
 
 /* ── 견적 계산 ── */
-function ce(){
-  let b=parseInt(document.getElementById('et').value)||0;
-  const u=document.getElementById('eu').value;
-  const ev=document.getElementById('ee').value;
-  const co=document.getElementById('fco')?.value||'0';
-  const ex=parseInt(document.getElementById('ex').value)||0;
-  const priv=document.querySelector('input[name="fs"]:checked')?.value||'';
-  if(ev==='f700000'){b=700000;}
-  else if(ev==='f2000000'){b=2000000;}
-  else{
-    if(u==='50000')b+=50000;
-    else if(u==='x2')b*=2;
-    if(ev==='d10')b=Math.round(b*.9);
-    else if(ev==='d20')b=Math.round(b*.8);
-    else if(ev==='d50')b=Math.round(b*.5);
+function ce() {
+  let b = parseInt(document.getElementById('et').value) || 0;
+  const u  = document.getElementById('eu').value;
+  const ev = document.getElementById('ee').value;
+  const co = document.getElementById('fco')?.value || '0';
+  const ex = parseInt(document.getElementById('ex').value) || 0;
+  const priv = document.querySelector('input[name="fs"]:checked')?.value || '';
+  if (ev === 'f700000') { b = 700000; }
+  else if (ev === 'f2000000') { b = 2000000; }
+  else {
+    if (u === '50000') b += 50000;
+    else if (u === 'x2') b *= 2;
+    if (ev === 'd10') b = Math.round(b * .9);
+    else if (ev === 'd20') b = Math.round(b * .8);
+    else if (ev === 'd50') b = Math.round(b * .5);
   }
-  if(co==='-100000')b-=100000;
-  else if(co==='mi')b=Math.round(b*.9);
-  else if(co==='mr')b=Math.round(b*.7);
-  if(priv.includes('비공개'))b+=50000;
-  b+=ex;if(b<0)b=0;
-  document.getElementById('etotal').textContent=b.toLocaleString()+'원';
-  const dep = Math.round(b*.1).toLocaleString()+'원';
+  if (co === '-100000') b -= 100000;
+  else if (co === 'mi') b = Math.round(b * .9);
+  else if (co === 'mr') b = Math.round(b * .7);
+  if (priv.includes('비공개')) b += 50000;
+  b += ex; if (b < 0) b = 0;
+  document.getElementById('etotal').textContent = b.toLocaleString() + '원';
+  const dep = Math.round(b * .1).toLocaleString() + '원';
   document.getElementById('edep').value = dep;
   const dd = document.getElementById('edep-display');
   if (dd) dd.textContent = dep;
 }
 
 /* ── 포트폴리오 시트 로드 ── */
-const PORT_PER_PAGE = 9; // 3열 × 3행
-const PORT_CATS = ['일반 일러스트','버츄얼 일러스트','판매중인 디자인 목록','삼면도','리깅','썸네일'];
+const PORT_PER_PAGE = 9;
+const PORT_CATS   = ['일반 일러스트','버츄얼 일러스트','판매중인 디자인 목록','삼면도','리깅','썸네일'];
 const PORT_LABELS = ['일반 일러스트','버츄얼 일러스트','판매중인 디자인','삼면도','리깅','썸네일'];
-let portData = {}; // { 카테고리: [{title,desc,img,sold},...] }
-let portPages = {}; // { 카테고리: currentPage }
+let portData  = {};
+let portPages = {};
 let portCatIdx = 0;
-
-function isYoutube(url){ return url && (url.includes('youtu.be') || url.includes('youtube.com')); }
 
 async function loadPortfolio() {
   const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJXlBmNMpCB6yQH5mznODAXBhgywVD7JheDmNqejv0bizcyWAnvj4hCOfcAhWwSFL0n_TihrQ3JktC/pub?gid=944328220&single=true&output=csv';
   try {
     const res = await fetch(URL);
     const text = await res.text();
-    const rows = parseCSV(text).slice(1); // 헤더 제거
+    const rows = parseCSV(text).slice(1);
     portData = {};
     PORT_CATS.forEach(c => { portData[c] = []; portPages[c] = 1; });
     rows.forEach(r => {
-      const cat  = (r[0]||'').trim();
-      const title= (r[1]||'').trim();
-      const desc = (r[2]||'').trim();
-      const img  = (r[3]||'').trim();
-      const sold = (r[4]||'').trim() === '판매';
-      if (portData[cat] !== undefined) {
-        portData[cat].push({title, desc, img, sold});
-      }
+      const cat   = (r[0] || '').trim();
+      const title = (r[1] || '').trim();
+      const desc  = (r[2] || '').trim();
+      const img   = (r[3] || '').trim();
+      const sold  = (r[4] || '').trim() === '판매';
+      if (portData[cat] !== undefined) portData[cat].push({ title, desc, img, sold });
     });
-  } catch(e) {
+  } catch (e) {
     console.warn('포트폴리오 시트 로드 실패:', e);
   }
   renderPortTabs();
@@ -1403,16 +1437,14 @@ function renderPortTabs() {
   panesEl.innerHTML = '';
 
   PORT_CATS.forEach((cat, i) => {
-    // 탭 버튼
     const btn = document.createElement('button');
-    btn.className = 'tb on-p' + (i===0?' on':'');
+    btn.className = 'tb on-p' + (i === 0 ? ' on' : '');
     btn.textContent = PORT_LABELS[i];
     btn.onclick = () => switchPortTab(i);
     tabRow.appendChild(btn);
 
-    // 탭 패널
     const pane = document.createElement('div');
-    pane.className = 'pane' + (i===0?' on':'');
+    pane.className = 'pane' + (i === 0 ? ' on' : '');
     pane.id = `po-pane-${i}`;
     panesEl.appendChild(pane);
     renderPortPane(cat, i);
@@ -1423,8 +1455,15 @@ function switchPortTab(idx) {
   portCatIdx = idx;
   const tabs  = document.getElementById('po-tabs').querySelectorAll('.tb');
   const panes = document.getElementById('po-panes').children;
-  tabs.forEach((t,i)  => t.classList.toggle('on', i===idx));
-  [...panes].forEach((p,i) => p.classList.toggle('on', i===idx));
+  tabs.forEach((t, i)  => t.classList.toggle('on', i === idx));
+  [...panes].forEach((p, i) => p.classList.toggle('on', i === idx));
+  // 탭 전환 후 높이 즉시 재측정
+  requestAnimationFrame(function() {
+    document.documentElement.style.height = 'auto';
+    document.body.style.height = 'auto';
+    var h = document.body.scrollHeight;
+    window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
+  });
 }
 
 function renderPortPane(cat, idx) {
@@ -1436,12 +1475,9 @@ function renderPortPane(cat, idx) {
   const slice   = items.slice(start, start + PORT_PER_PAGE);
 
   if (cat === '리깅') {
-    // 유튜브 썸네일 카드 — 이미지 그리드와 동일한 레이아웃
     const cards = items.map(item => {
-      const ytId = getYtId(item.img);
-      const thumb = ytId
-        ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`
-        : '';
+      const ytId  = getYtId(item.img);
+      const thumb = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
       return `
         <div class="port-card" onclick="omYt('${item.title.replace(/'/g,"\\'")}','${item.img}')">
           <div class="port-thumb">
@@ -1462,7 +1498,6 @@ function renderPortPane(cat, idx) {
     return;
   }
 
-  // 이미지 그리드
   const cards = slice.map(item => {
     const soldBadge = item.sold
       ? `<div class="sold-ov"><span class="sold-txt">SOLD OUT</span></div>` : '';
@@ -1484,20 +1519,19 @@ function renderPortPane(cat, idx) {
 
   const grid = `<div class="port-grid">${cards || '<p style="color:var(--gray);font-size:13px;grid-column:1/-1;">등록된 작업물이 없습니다.</p>'}</div>`;
 
-  // 페이지네이션
   let pgHtml = '';
   if (totalPg > 1) {
-    const prevDis = curPage===1 ? 'disabled' : '';
-    const nextDis = curPage===totalPg ? 'disabled' : '';
+    const prevDis = curPage === 1 ? 'disabled' : '';
+    const nextDis = curPage === totalPg ? 'disabled' : '';
     let nums = '';
-    for (let p=1; p<=totalPg; p++) {
-      nums += `<button class="pg-btn${p===curPage?' active':''}" onclick="goPortPage('${cat}',${idx},${p})">${p}</button>`;
+    for (let p = 1; p <= totalPg; p++) {
+      nums += `<button class="pg-btn${p === curPage ? ' active' : ''}" onclick="goPortPage('${cat}',${idx},${p})">${p}</button>`;
     }
     pgHtml = `
       <div class="port-pagination">
-        <button class="pg-btn arrow" onclick="goPortPage('${cat}',${idx},${curPage-1})" ${prevDis}>‹</button>
+        <button class="pg-btn arrow" onclick="goPortPage('${cat}',${idx},${curPage - 1})" ${prevDis}>‹</button>
         ${nums}
-        <button class="pg-btn arrow" onclick="goPortPage('${cat}',${idx},${curPage+1})" ${nextDis}>›</button>
+        <button class="pg-btn arrow" onclick="goPortPage('${cat}',${idx},${curPage + 1})" ${nextDis}>›</button>
       </div>`;
   }
 
@@ -1505,13 +1539,20 @@ function renderPortPane(cat, idx) {
 }
 
 function goPortPage(cat, idx, page) {
-  const total = Math.max(1, Math.ceil((portData[cat]||[]).length / PORT_PER_PAGE));
+  const total = Math.max(1, Math.ceil((portData[cat] || []).length / PORT_PER_PAGE));
   portPages[cat] = Math.min(Math.max(1, page), total);
   renderPortPane(cat, idx);
+  // 페이지 변경 후 높이 재측정
+  requestAnimationFrame(function() {
+    document.documentElement.style.height = 'auto';
+    document.body.style.height = 'auto';
+    var h = document.body.scrollHeight;
+    window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
+  });
 }
 
 /* ── 말풍선 ── */
-function showBalloon(id, msg, ms=2000) {
+function showBalloon(id, msg, ms = 2000) {
   const el = document.getElementById(id);
   if (!el) return;
   el.textContent = msg;
@@ -1521,15 +1562,15 @@ function showBalloon(id, msg, ms=2000) {
 
 /* ── 견적+문의 한꺼번에 복사 ── */
 function copyAll() {
-  const r  = n => document.querySelector(`input[name="${n}"]:checked`)?.value||'(미선택)';
-  const v  = id => document.getElementById(id)?.value||'없음';
+  const r  = n => document.querySelector(`input[name="${n}"]:checked`)?.value || '(미선택)';
+  const v  = id => document.getElementById(id)?.value || '없음';
   const ev = document.querySelector('input[name="fev"]:checked')?.value || '없음';
-  const etEl   = document.getElementById('et');
-  const euEl   = document.getElementById('eu');
-  const fcoEl  = document.getElementById('fco');
-  const workTxt  = etEl?.selectedIndex>0  ? etEl.options[etEl.selectedIndex].text   : '미선택';
-  const usageTxt = euEl?.selectedIndex>=0 ? euEl.options[euEl.selectedIndex].text   : '미선택';
-  const collabTxt= fcoEl?.selectedIndex>0 ? fcoEl.options[fcoEl.selectedIndex].text : '없음';
+  const etEl  = document.getElementById('et');
+  const euEl  = document.getElementById('eu');
+  const fcoEl = document.getElementById('fco');
+  const workTxt   = etEl?.selectedIndex  > 0 ? etEl.options[etEl.selectedIndex].text   : '미선택';
+  const usageTxt  = euEl?.selectedIndex >= 0 ? euEl.options[euEl.selectedIndex].text   : '미선택';
+  const collabTxt = fcoEl?.selectedIndex > 0 ? fcoEl.options[fcoEl.selectedIndex].text : '없음';
 
   const txt = `[오로지OROGY 문의 양식]
 
@@ -1565,7 +1606,7 @@ ${v('fetc')}
 13. 포트폴리오 공개 여부: ${r('fp')}
 
 ──────────────────
-예상 견적 (참고용): ${document.getElementById('etotal')?.textContent||'0원'}
+예상 견적 (참고용): ${document.getElementById('etotal')?.textContent || '0원'}
 예약금(10%): ${v('edep')}
 ※ 예상 견적은 참고용으로만 확인 부탁드립니다.`;
 
@@ -1580,15 +1621,15 @@ ${v('fetc')}
 }
 
 /* ── 가격 데이터 로드 ── */
-let priceRows = []; // 전역 보관
+let priceRows = [];
 
 async function loadPriceData() {
   const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJXlBmNMpCB6yQH5mznODAXBhgywVD7JheDmNqejv0bizcyWAnvj4hCOfcAhWwSFL0n_TihrQ3JktC/pub?gid=1560320542&single=true&output=csv';
   try {
     const res = await fetch(URL);
     const text = await res.text();
-    priceRows = parseCSV(text).slice(1).filter(r => r[0]); // 헤더 제거
-  } catch(e) {
+    priceRows = parseCSV(text).slice(1).filter(r => r[0]);
+  } catch (e) {
     console.warn('가격 시트 로드 실패:', e);
     priceRows = [];
   }
@@ -1596,22 +1637,18 @@ async function loadPriceData() {
   buildEstSelect();
 }
 
-/* 가격에서 숫자 파싱 ("200,000원" → 200000, "50,000원~" → 50000, 텍스트 → null) */
 function parsePrice(str) {
   if (!str) return null;
   const n = parseInt(str.replace(/[^0-9]/g, ''));
   return isNaN(n) ? null : n;
 }
 
-/* SVG 체크 아이콘 */
 const CHECK_SVG = `<div class="inc-check"><svg viewBox="0 0 12 10" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,5 4,8 11,1"/></svg></div>`;
 
-/* 가격&옵션 섹션 렌더링 */
 function renderPriceSection() {
-  const tabRow  = document.getElementById('pc-tabs');
-  const panes   = document.getElementById('pc-panes');
+  const tabRow = document.getElementById('pc-tabs');
+  const panes  = document.getElementById('pc-panes');
 
-  // 카테고리별 데이터 분류
   const cats = {};
   priceRows.forEach(r => {
     const cat = r[0].trim();
@@ -1625,21 +1662,18 @@ function renderPriceSection() {
     return;
   }
 
-  // 탭 버튼 생성
   tabRow.innerHTML = catNames.map((cat, i) =>
-    `<button class="tb on-b${i===0?' on':''}" onclick="swPrice(${i})">${cat}</button>`
+    `<button class="tb on-b${i === 0 ? ' on' : ''}" onclick="swPrice(${i})">${cat}</button>`
   ).join('');
 
-  // 패널 생성
   panes.innerHTML = catNames.map((cat, i) => {
-    const rows = cats[cat];
+    const rows      = cats[cat];
     const includes  = rows.filter(r => r.title === '기본 제공 목록');
-    const mainItems = rows.filter(r => r.title && r.title !== '기본 제공 목록' && r.price); // 제목 있고 가격 있는 것만 카드
-    const addOns    = rows.filter(r => !r.title && r.price); // 제목 없는 것은 추가옵션 표
+    const mainItems = rows.filter(r => r.title && r.title !== '기본 제공 목록' && r.price);
+    const addOns    = rows.filter(r => !r.title && r.price);
 
     let html = '';
 
-    // 기본 제공 목록
     if (includes.length) {
       html += `<p style="font-size:12px;font-weight:600;color:#555;margin-bottom:9px;">기본 제공 목록</p>
         <div class="inc-grid" style="margin-bottom:20px;">
@@ -1647,13 +1681,12 @@ function renderPriceSection() {
         </div>`;
     }
 
-    // 가격 카드 — 소제목 구분 없이 한 번에 3열로
     if (mainItems.length) {
       const softCats = ['셀식 LD','셀식 SSD'];
       html += `<div class="price-cards">
         ${mainItems.map(r => {
           const isSoft = softCats.some(s => r.title.includes(s));
-          return `<div class="pc${isSoft?' soft':''}">
+          return `<div class="pc${isSoft ? ' soft' : ''}">
             ${r.title ? `<div class="pc-type">${r.title}</div>` : ''}
             <div class="pc-name">${r.opt}</div>
             <div class="pc-amt">${r.price}</div>
@@ -1663,47 +1696,51 @@ function renderPriceSection() {
       </div>`;
     }
 
-    // 추가 옵션 표
     if (addOns.length) {
       const hasDesc = addOns.some(r => r.desc);
       html += `<table class="opt-tbl">
-        <thead><tr><th>추가 옵션</th><th>추가금</th>${hasDesc?'<th>비고</th>':''}</tr></thead>
+        <thead><tr><th>추가 옵션</th><th>추가금</th>${hasDesc ? '<th>비고</th>' : ''}</tr></thead>
         <tbody>
           ${addOns.map(r =>
-            `<tr><td>${r.opt}</td><td class="op-amt">${r.price}</td>${hasDesc?`<td class="op-note">${r.desc}</td>`:''}</tr>`
+            `<tr><td>${r.opt}</td><td class="op-amt">${r.price}</td>${hasDesc ? `<td class="op-note">${r.desc}</td>` : ''}</tr>`
           ).join('')}
         </tbody>
       </table>`;
     }
 
-    return `<div class="pane${i===0?' on':''}">${html}</div>`;
+    return `<div class="pane${i === 0 ? ' on' : ''}">${html}</div>`;
   }).join('');
 }
 
 function swPrice(idx) {
   const tabs  = document.getElementById('pc-tabs').querySelectorAll('.tb');
   const panes = document.getElementById('pc-panes').children;
-  tabs.forEach((t,i)  => t.classList.toggle('on', i===idx));
-  [...panes].forEach((p,i) => p.classList.toggle('on', i===idx));
+  tabs.forEach((t, i)  => t.classList.toggle('on', i === idx));
+  [...panes].forEach((p, i) => p.classList.toggle('on', i === idx));
+  // 탭 전환 후 높이 재측정
+  requestAnimationFrame(function() {
+    document.documentElement.style.height = 'auto';
+    document.body.style.height = 'auto';
+    var h = document.body.scrollHeight;
+    window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
+  });
 }
 
-/* 견적 계산기 select 동적 생성 */
 function buildEstSelect() {
   const sel = document.getElementById('et');
   if (!sel) return;
   sel.innerHTML = '<option value="">선택하세요</option>';
 
-  // 기본 제공 목록과 추가옵션(가격만 있는 항목) 제외, 가격이 숫자인 항목만
   const cats = {};
   priceRows.forEach(r => {
     const cat   = r[0].trim();
     const title = r[1].trim();
     const opt   = r[2].trim();
     const price = r[4].trim();
-    if (title === '기본 제공 목록') return; // 기본제공은 제외
-    if (!title) return; // 소제목 없는 추가옵션 제외
+    if (title === '기본 제공 목록') return;
+    if (!title) return;
     const num = parsePrice(price);
-    if (!num) return; // 숫자 파싱 안 되는 것 제외 (텍스트 가격 등)
+    if (!num) return;
 
     const groupKey = `${cat} — ${title}`;
     if (!cats[groupKey]) cats[groupKey] = [];
@@ -1722,15 +1759,17 @@ function buildEstSelect() {
     sel.appendChild(og);
   });
 }
+
+/* ── 이벤트 로드 ── */
 async function loadEvents() {
   const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJXlBmNMpCB6yQH5mznODAXBhgywVD7JheDmNqejv0bizcyWAnvj4hCOfcAhWwSFL0n_TihrQ3JktC/pub?gid=734879133&single=true&output=csv';
-  const evList = document.getElementById('ev-list');
+  const evList      = document.getElementById('ev-list');
   const evCheckList = document.getElementById('ev-check-list');
   let events = [];
   try {
     const res = await fetch(URL);
     const text = await res.text();
-    const rows = parseCSV(text).slice(1); // 헤더 제거
+    const rows = parseCSV(text).slice(1);
     events = rows.filter(r => r[0] && r[0].trim()).map(r => ({
       title:   (r[0] || '').trim(),
       content: (r[1] || '').trim(),
@@ -1745,16 +1784,11 @@ async function loadEvents() {
     return;
   }
 
-  // 이벤트 카드 렌더링
   if (evList) {
     evList.innerHTML = events.map(ev => {
-      const dlHtml = ev.dl
-        ? `<div class="ev-dl">~ ${formatDate(ev.dl)}</div>` : '';
-      const priceHtml = ev.price
-        ? `<div class="ev-price">${ev.price.toLocaleString()}원</div>` : '';
-      // 내용: \n → 줄바꿈, white-space:pre-line이 처리
-      const bodyHtml = ev.content
-        ? `<div class="ev-body">${escHtml(ev.content)}</div>` : '';
+      const dlHtml    = ev.dl    ? `<div class="ev-dl">~ ${formatDate(ev.dl)}</div>` : '';
+      const priceHtml = ev.price ? `<div class="ev-price">${ev.price.toLocaleString()}원</div>` : '';
+      const bodyHtml  = ev.content ? `<div class="ev-body">${escHtml(ev.content)}</div>` : '';
       return `<div class="ev-card">
         <div class="ev-title">${escHtml(ev.title)}</div>
         ${dlHtml}
@@ -1764,7 +1798,6 @@ async function loadEvents() {
     }).join('');
   }
 
-  // 문의 양식 이벤트 라디오 버튼 (중복 선택 불가)
   if (evCheckList) {
     evCheckList.innerHTML =
       `<label class="rl"><input type="radio" name="fev" value=""> 없음</label>` +
@@ -1775,7 +1808,6 @@ async function loadEvents() {
 }
 
 function formatDate(str) {
-  // "2026-5-16" → "2026년 5월 16일"
   const m = str.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
   return m ? `${m[1]}년 ${m[2]}월 ${m[3]}일` : str;
 }
@@ -1786,7 +1818,6 @@ function escHtml(s) {
 
 /* ── 초기화 ── */
 function resetAll() {
-  // 견적 계산기 셀렉트/인풋 초기화
   ['et','eu'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.selectedIndex = 0;
@@ -1795,22 +1826,19 @@ function resetAll() {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
-  // 문의 양식 텍스트/셀렉트 초기화
   ['fn','fl','fref','fref2','fref3','fart','fpsd','fchar','fetc'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
   const fco = document.getElementById('fco');
   if (fco) fco.selectedIndex = 0;
-  // 라디오/체크박스 초기화
   document.querySelectorAll('input[type="radio"], input[type="checkbox"]')
     .forEach(el => { el.checked = false; });
-  // 견적 다시 계산
   ce();
   showBalloon('reset-balloon', '↺ 초기화되었습니다!');
 }
 
-/* ── 초기화 ── */
+/* ── 초기 실행 ── */
 ce();
 loadIntro();
 loadSlot();
@@ -1818,36 +1846,8 @@ loadCollab();
 loadPortfolio();
 loadEvents();
 loadPriceData();
-
-/* ── 임베드 자동 높이 조절 ── */
-(function() {
-  function sendHeight() {
-    const h = document.documentElement.scrollHeight;
-    window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
-  }
-  sendHeight();
-  if (window.ResizeObserver) {
-    new ResizeObserver(sendHeight).observe(document.body);
-  }
-  let lastH = 0;
-  setInterval(() => {
-    const h = document.documentElement.scrollHeight;
-    if (h !== lastH) { lastH = h; sendHeight(); }
-  }, 300);
-
-  /* ── 부모 커스텀 메뉴 → 섹션 스크롤 수신 ── */
-  window.addEventListener('message', function(e) {
-    if (!e.data || e.data.type !== 'orogy-scroll') return;
-    const target = document.getElementById(e.data.id);
-    if (!target) return;
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    // 스크롤 후 부모에게 현재 섹션 위치(iframe 기준 offsetTop) 전달
-    // → 부모가 iframe 전체 offsetTop을 더해 window.scrollTo 하도록
-    const iframeTop = target.getBoundingClientRect().top + window.scrollY;
-    window.parent.postMessage({ type: 'orogy-scrollpos', offsetTop: iframeTop }, '*');
-  });
-})();
 </script>
+
 <!--
   ════════════════════════════════════════════════
   임베드 사용법 — 부모 페이지에 아래 코드를 붙여넣으세요
@@ -1866,31 +1866,29 @@ loadPriceData();
   <script>
   var orogyFrame = document.getElementById('orogy-frame');
 
-  // ① 자동 높이 조절
   window.addEventListener('message', function(e) {
     if (!e.data) return;
 
-    // iframe 높이 자동 조절
+    // ① iframe 높이 자동 조절 (늘어남 + 줄어듦 모두 대응)
     if (e.data.type === 'orogy-resize') {
+      orogyFrame.style.minHeight = '';          // 중요: min-height 해제
       orogyFrame.style.height = e.data.height + 'px';
     }
 
-    // iframe 내부 섹션으로 스크롤 요청 수신
-    // → iframe의 페이지 내 위치(offsetTop) + 섹션 내부 offsetTop을 합산해 부모가 스크롤
+    // ② iframe 내부 섹션 스크롤 수신
     if (e.data.type === 'orogy-scrollpos') {
       var frameTop = orogyFrame.getBoundingClientRect().top + window.scrollY;
       window.scrollTo({ top: frameTop + e.data.offsetTop, behavior: 'smooth' });
     }
   });
 
-  // ② 커스텀 메뉴 네비게이션 함수
-  // 커스텀 메뉴 각 항목의 링크/클릭 이벤트에 아래 함수를 호출하세요
+  // ③ 커스텀 메뉴 네비게이션 함수
   function scrollToSection(sectionId) {
     orogyFrame.contentWindow.postMessage(
       { type: 'orogy-scroll', id: sectionId }, '*'
     );
   }
-  </script>
+  <\/script>
 
   3) 커스텀 메뉴 항목별 id 목록
   ────────────────────────────────────────────────
@@ -1905,10 +1903,6 @@ loadPriceData();
   이벤트          → scrollToSection('events')
   견적 & 문의    → scrollToSection('inquiry')
   협업 작가       → scrollToSection('collab')
-
-  예시 (커스텀 메뉴 HTML):
-  <a href="javascript:void(0)" onclick="scrollToSection('intro')">작가 소개</a>
-  <a href="javascript:void(0)" onclick="scrollToSection('portfolio')">포트폴리오</a>
   ════════════════════════════════════════════════
 -->
 </body>
