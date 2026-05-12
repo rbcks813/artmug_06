@@ -127,8 +127,23 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 .reset-btn:hover{border-color:var(--accent);color:var(--accent);}
 
 /* ── 모달 ── */
-.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.mbg{
+  display:none;
+  position:fixed;   /* 기본값 — 부모 스크롤 수신 시 JS가 absolute+top으로 전환 */
+  inset:0;
+  background:rgba(0,0,0,.5);
+  z-index:1000;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
 .mbg.open{display:flex;}
+/* 임베드 모드: JS가 .embedded 클래스를 body에 추가하면 모달을 absolute로 전환 */
+body.embedded .mbg{
+  position:absolute;
+  left:0;right:0;
+  /* top / height 는 JS로 동적 설정 */
+}
 .mbox{background:var(--white);border-radius:18px;padding:22px;max-width:520px;width:100%;position:relative;}
 .mclose{position:absolute;top:12px;right:14px;background:none;border:none;font-size:19px;color:var(--gray);cursor:pointer;line-height:1;}
 .mbox h3{font-size:15px;font-weight:700;margin-bottom:3px;}
@@ -1415,11 +1430,26 @@ function getYtId(url) {
 }
 
 /* ── 모달 ── */
+/* 부모로부터 받은 최신 scrollY 값 */
+let _parentScrollY = 0;
+let _viewportH     = window.innerHeight;
+
+/* 임베드 여부: 부모가 scroll 메시지를 보내면 자동 감지 */
+function _openModal() {
+  const mbg = document.getElementById('mbg');
+  if (document.body.classList.contains('embedded')) {
+    /* absolute 모드: 현재 보이는 뷰포트 영역을 덮도록 top/height 설정 */
+    mbg.style.top    = _parentScrollY + 'px';
+    mbg.style.height = _viewportH     + 'px';
+  }
+  mbg.classList.add('open');
+}
+
 function om(t, s, img) {
   document.getElementById('mtitle').textContent = t;
   document.getElementById('msub').textContent   = s || '';
   document.getElementById('mimg-wrap').innerHTML = `<img src="${img}" alt="${t}">`;
-  document.getElementById('mbg').classList.add('open');
+  _openModal();
 }
 function omYt(t, url) {
   document.getElementById('mtitle').textContent = t;
@@ -1428,7 +1458,7 @@ function omYt(t, url) {
   document.getElementById('mimg-wrap').innerHTML = ytId
     ? `<iframe src="https://www.youtube.com/embed/${ytId}" allow="encrypted-media" allowfullscreen></iframe>`
     : `<p style="padding:20px;color:var(--gray);">영상을 불러올 수 없습니다.</p>`;
-  document.getElementById('mbg').classList.add('open');
+  _openModal();
 }
 function cm(e){if(e.target===document.getElementById('mbg'))cmc();}
 function cmc(){
@@ -1848,7 +1878,7 @@ function resetAll() {
   showBalloon('reset-balloon', '↺ 초기화되었습니다!');
 }
 
-/* ── 임베드 자동 높이 ── */
+/* ── 임베드 자동 높이 + 부모 스크롤 수신 ── */
 (function() {
   function sendHeight() {
     const h = document.documentElement.scrollHeight;
@@ -1861,13 +1891,35 @@ function resetAll() {
     const h = document.documentElement.scrollHeight;
     if (h !== lastH) { lastH = h; sendHeight(); }
   }, 300);
+
   window.addEventListener('message', function(e) {
-    if (!e.data || e.data.type !== 'orogy-scroll') return;
-    const target = document.getElementById(e.data.id);
-    if (!target) return;
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    const iframeTop = target.getBoundingClientRect().top + window.scrollY;
-    window.parent.postMessage({ type: 'orogy-scrollpos', offsetTop: iframeTop }, '*');
+    if (!e.data) return;
+
+    /* 기존: 섹션 스크롤 이동 */
+    if (e.data.type === 'orogy-scroll') {
+      const target = document.getElementById(e.data.id);
+      if (!target) return;
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const iframeTop = target.getBoundingClientRect().top + window.scrollY;
+      window.parent.postMessage({ type: 'orogy-scrollpos', offsetTop: iframeTop }, '*');
+    }
+
+    /* 신규: 부모 페이지 스크롤 위치 수신 → 모달 위치 동기화 */
+    if (e.data.type === 'parent-scroll') {
+      /* 처음 메시지가 오면 임베드 모드로 전환 */
+      if (!document.body.classList.contains('embedded')) {
+        document.body.classList.add('embedded');
+      }
+      _parentScrollY = e.data.scrollY   || 0;
+      _viewportH     = e.data.viewportH || window.innerHeight;
+
+      /* 모달이 열려 있으면 위치 즉시 업데이트 */
+      const mbg = document.getElementById('mbg');
+      if (mbg && mbg.classList.contains('open')) {
+        mbg.style.top    = _parentScrollY + 'px';
+        mbg.style.height = _viewportH     + 'px';
+      }
+    }
   });
 })();
 
