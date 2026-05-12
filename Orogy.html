@@ -1192,30 +1192,20 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 
 <script>
 /* ══════════════════════════════════════
-   모달 스크롤 따라오기
-   
-   문제: iframe 안 position:fixed는 부모 페이지가 아닌
-         iframe 뷰포트 기준 → 부모 스크롤해도 모달이 화면 밖으로 사라짐
-   
-   해결: IntersectionObserver로 iframe body가 부모 뷰포트에서
-         얼마나 위에 있는지(iframeOffsetInViewport)를 역산.
-         모달 top = 뷰포트 안의 적절한 위치 - iframe 상단까지의 offset
-══════════════════════════════════════ */
-
-/* ══════════════════════════════════════
-   참고 코드(아트머그) 방식 그대로:
-   - 모달은 position:absolute (문서 좌표 기준)
-   - 부모가 parentScroll 메시지로 rectTop + viewHeight 전송
-   - iframe 안에서 iframeCenterY를 계산해 modal margin-top 결정
-   - sendHeight()로 모달 포함 높이 재계산
+   참고 코드(아트머그) 방식 그대로
+   - sendHeight: container.offsetHeight 기준 (scrollHeight 아님)
+   - 모달 열릴 때 높이 포함해서 재계산
+   - parentScroll 메시지로 iframeCenterY 갱신 → marginTop 보정
 ══════════════════════════════════════ */
 
 let parentViewHeight = window.innerHeight;
 let iframeCenterY = window.innerHeight / 2;
 
 function sendHeight() {
+  const container = document.querySelector('body');
+  let h = container ? container.offsetHeight + 80 : document.documentElement.scrollHeight;
+
   const modal = document.getElementById('mbg');
-  let h = document.documentElement.scrollHeight;
   if (modal && modal.style.display === 'flex') {
     const mbox = document.getElementById('mbox');
     if (mbox) {
@@ -1230,7 +1220,6 @@ function sendHeight() {
 window.addEventListener('message', function(e) {
   if (!e.data) return;
 
-  /* 부모 스크롤 → iframeCenterY 갱신 → 모달 위치 재계산 */
   if (e.data.type === 'parentScroll') {
     const rectTop = e.data.rectTop;
     parentViewHeight = e.data.viewHeight;
@@ -1284,7 +1273,6 @@ function cmc() {
   setTimeout(sendHeight, 150);
 }
 
-/* 모달 바깥 클릭 시 닫기 */
 window.onclick = function(e) {
   const modal = document.getElementById('mbg');
   const mbox  = document.getElementById('mbox');
@@ -1913,7 +1901,7 @@ if (window.ResizeObserver) {
 }
 let _lastH = 0;
 setInterval(() => {
-  const h = document.documentElement.scrollHeight;
+  const h = document.body.offsetHeight;
   if (h !== _lastH) { _lastH = h; sendHeight(); }
 }, 300);
 sendHeight();
