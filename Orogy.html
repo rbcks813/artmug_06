@@ -129,8 +129,9 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 /* ── 모달 ── */
 .mbg{
   display:none;
-  position:fixed;   /* 기본값 — 부모 스크롤 수신 시 JS가 absolute+top으로 전환 */
-  inset:0;
+  position:fixed;
+  left:0;right:0;top:0;
+  height:100vh; /* JS로 덮어씀 */
   background:rgba(0,0,0,.5);
   z-index:1000;
   align-items:center;
@@ -138,12 +139,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   padding:20px;
 }
 .mbg.open{display:flex;}
-/* 임베드 모드: JS가 .embedded 클래스를 body에 추가하면 모달을 absolute로 전환 */
-body.embedded .mbg{
-  position:absolute;
-  left:0;right:0;
-  /* top / height 는 JS로 동적 설정 */
-}
 .mbox{background:var(--white);border-radius:18px;padding:22px;max-width:520px;width:100%;position:relative;}
 .mclose{position:absolute;top:12px;right:14px;background:none;border:none;font-size:19px;color:var(--gray);cursor:pointer;line-height:1;}
 .mbox h3{font-size:15px;font-weight:700;margin-bottom:3px;}
@@ -202,13 +197,9 @@ body.embedded .mbg{
 
 /* ═════════════════════════════
    2. 슬롯 현황
-   ─ PC: 데이터 개수만큼 열
-   ─ 태블릿(≤960): 최대 3열
-   ─ 모바일(≤600): 2열 고정
 ═════════════════════════════ */
 .slot-grid{
   display:grid;
-  /* JS가 --slot-cols 변수를 설정; 기본값 6 */
   grid-template-columns:repeat(var(--slot-cols, 6), 1fr);
   gap:10px;
 }
@@ -248,10 +239,9 @@ body.embedded .mbg{
 
 
 /* ═════════════════════════════
-   4. 작업 순서 — PC: 가로 / 모바일: 세로 타임라인
+   4. 작업 순서
 ═════════════════════════════ */
 .proc-wrap{position:relative;padding:30px 0 10px;}
-/* PC 연결선 */
 .proc-wrap::before{
   content:'';position:absolute;
   top:46px;left:calc(100% / 14);right:calc(100% / 14);
@@ -290,7 +280,6 @@ body.embedded .mbg{
 .tbl tr:nth-child(even) td{background:var(--soft);}
 .ok{color:#1a8f40;font-weight:500;}.no{color:var(--red);}
 .tbl-sub{font-size:11px;color:var(--gray);display:block;margin-top:1px;}
-/* 사용 범위 표 — 모바일에서 최소 너비 확보 */
 @media(max-width:600px){
   .tbl{min-width:460px;}
   .tbl th,.tbl td{padding:8px 10px;font-size:12px;}
@@ -498,7 +487,6 @@ body.embedded .mbg{
   .page{padding:0 32px;}
   .intro-wrap{flex-direction:column;gap:22px;}
   .intro-avatar{width:140px;height:140px;}
-  /* 슬롯: 태블릿에서는 최대 3열 */
   .slot-grid{grid-template-columns:repeat(3,1fr) !important;}
   .price-cards{grid-template-columns:repeat(2,1fr);}
   .inc-grid{grid-template-columns:1fr;}
@@ -514,14 +502,12 @@ body.embedded .mbg{
    반응형 — 모바일 (600px 이하)
 ══════════════════════════════════════ */
 @media(max-width:600px){
-  /* 기본 여백 */
   .page{padding:0 14px;}
   .sec{padding:36px 0;}
   .sh{margin-bottom:18px;}
   .sh h2{font-size:15px;}
   .card{padding:16px;}
 
-  /* ── 소개: 가로 배치 유지하되 overflow 방지 ── */
   #intro{padding-top:28px;}
   .intro-wrap{
     flex-direction:row;
@@ -530,14 +516,14 @@ body.embedded .mbg{
   }
   .intro-avatar{
     width:80px;height:80px;
-    min-width:80px;   /* 축소 방지 */
+    min-width:80px;
     border-radius:12px;
     flex-shrink:0;
   }
   .skel-avatar{width:80px;height:80px;min-width:80px;}
   .intro-body{
     flex:1;
-    min-width:0;     /* 텍스트 overflow 방지 */
+    min-width:0;
     overflow:hidden;
   }
   .intro-role{font-size:10px;margin-bottom:3px;}
@@ -546,7 +532,6 @@ body.embedded .mbg{
   .htag{font-size:11.5px;padding:3px 9px;}
   .hashtag-row{gap:5px;}
 
-  /* ── 슬롯 현황: 2열 고정 ── */
   .slot-grid{
     grid-template-columns:repeat(2,1fr) !important;
     gap:8px;
@@ -557,11 +542,9 @@ body.embedded .mbg{
   .slot-dots{gap:4px;}
   .slot-legend{font-size:11.5px;gap:10px;margin-top:10px;}
 
-  /* ── 안내사항 ── */
   .notice-list li{font-size:12.5px;padding:10px 12px;gap:9px;}
   .notice-list li .nn{width:18px;height:18px;font-size:9px;margin-top:2px;}
 
-  /* ── 작업 순서: 세로 타임라인 ── */
   .proc-wrap{padding:0;}
   .proc-wrap::before{display:none;}
 
@@ -570,13 +553,12 @@ body.embedded .mbg{
     gap:0;
     position:relative;
   }
-  /* 세로 점선: 아이콘(48px) 중앙 = left:24px */
   .proc-steps::before{
     content:'';
     position:absolute;
     left:24px;
-    top:48px;          /* 첫 아이콘 아래부터 */
-    bottom:24px;       /* 마지막 아이콘 중앙까지 */
+    top:48px;
+    bottom:24px;
     width:2px;
     background:repeating-linear-gradient(
       180deg,
@@ -597,7 +579,7 @@ body.embedded .mbg{
   }
   .proc-icon{
     width:48px;height:48px;
-    min-width:48px;    /* 아이콘 축소 방지 */
+    min-width:48px;
     flex-shrink:0;
     background:var(--white);
   }
@@ -611,15 +593,12 @@ body.embedded .mbg{
     min-width:0;
   }
   .proc-step-label br{display:none;}
-  /* 작업 순서 카드 패딩 줄이기 */
   #process .card{padding:14px 12px 12px;}
 
-  /* ── 포트폴리오 ── */
   .port-grid{grid-template-columns:1fr 1fr;gap:8px;}
   .port-name{font-size:11.5px;}
   .port-info{padding:7px 9px;gap:5px;}
 
-  /* ── 가격 ── */
   .price-cards{grid-template-columns:1fr 1fr;gap:8px;}
   .pc{padding:11px;}
   .pc .pc-amt{font-size:16px;}
@@ -629,18 +608,15 @@ body.embedded .mbg{
   .inc-item{font-size:12px;}
   .opt-tbl thead tr th,.opt-tbl tbody td{font-size:12px;padding:7px 9px;}
 
-  /* ── 환불 안내 ── */
   .refund-notice{font-size:12px;}
   .refund-list li{font-size:12.5px;padding:8px 12px;gap:8px;}
   .rp{font-size:12.5px;min-width:54px;}
 
-  /* ── 이벤트 ── */
   .ev-wrap{padding:14px;}
   .ev-card{padding:13px;}
   .ev-title{font-size:13.5px;}
   .ev-body{font-size:12.5px;}
 
-  /* ── 견적 & 문의 ── */
   .fgrid{grid-template-columns:1fr;gap:12px;}
   .fg.full{grid-column:1;}
   .fg label{font-size:11.5px;}
@@ -663,19 +639,16 @@ body.embedded .mbg{
     border-radius:10px;
   }
 
-  /* ── 협업 작가 ── */
   .collab-grid{grid-template-columns:1fr;}
   .collab-card{padding:12px;}
   .collab-name{font-size:13px;}
   .collab-benefit{font-size:11px;}
 
-  /* ── 탭 버튼 — 가로 스크롤 허용 ── */
   .tab-row{
     flex-wrap:nowrap;
     overflow-x:auto;
     -webkit-overflow-scrolling:touch;
     padding-bottom:4px;
-    /* 스크롤바 숨기기 */
     scrollbar-width:none;
   }
   .tab-row::-webkit-scrollbar{display:none;}
@@ -687,7 +660,6 @@ body.embedded .mbg{
 ══════════════════════════════════════ */
 @media(max-width:375px){
   .page{padding:0 10px;}
-  /* 소개: 초소형에서는 세로 배치 */
   .intro-wrap{flex-direction:column;gap:10px;}
   .intro-avatar{width:64px;height:64px;min-width:64px;}
   .intro-name{font-size:17px;}
@@ -696,7 +668,6 @@ body.embedded .mbg{
   .price-cards{grid-template-columns:1fr;}
 }
 
-/* 사용 범위 표 스크롤 힌트 */
 .tbl-scroll-hint{
   display:none;
   font-size:11.5px;
@@ -1382,8 +1353,7 @@ function buildCollabSelect() {
 
 function syncCollab() { ce(); }
 
-/* ── 2. 슬롯 ─
-   JS로 --slot-cols CSS 변수만 설정; 실제 열 제한은 CSS가 담당 */
+/* ── 2. 슬롯 ── */
 async function loadSlot() {
   const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJXlBmNMpCB6yQH5mznODAXBhgywVD7JheDmNqejv0bizcyWAnvj4hCOfcAhWwSFL0n_TihrQ3JktC/pub?gid=653143832&single=true&output=csv';
   const grid = document.getElementById('slot-grid');
@@ -1393,7 +1363,6 @@ async function loadSlot() {
     const rows = parseCSV(text).slice(1);
     const validRows = rows.filter(r => parseInt(r[0]));
 
-    /* CSS 변수로 PC 열 수 지정 — 미디어쿼리가 우선순위로 덮어씀 */
     const cols = Math.min(validRows.length, 6);
     grid.style.setProperty('--slot-cols', cols);
 
@@ -1430,26 +1399,27 @@ function getYtId(url) {
 }
 
 /* ── 모달 ── */
-/* 부모로부터 받은 최신 scrollY 값 */
-let _parentScrollY = 0;
-let _viewportH     = window.innerHeight;
+// 부모로부터 받은 뷰포트 정보
+let _parentScrollY   = 0;
+let _iframeOffsetTop = 0;
+let _parentVH        = window.innerHeight;
 
-/* 임베드 여부: 부모가 scroll 메시지를 보내면 자동 감지 */
-function _openModal() {
+function updateModalPos() {
   const mbg = document.getElementById('mbg');
-  if (document.body.classList.contains('embedded')) {
-    /* absolute 모드: 현재 보이는 뷰포트 영역을 덮도록 top/height 설정 */
-    mbg.style.top    = _parentScrollY + 'px';
-    mbg.style.height = _viewportH     + 'px';
-  }
-  mbg.classList.add('open');
+  if (!mbg || !mbg.classList.contains('open')) return;
+  // iframe 내부에서 "부모 뷰포트 상단"에 해당하는 scrollY 위치
+  const visibleTop = Math.max(0, _parentScrollY - _iframeOffsetTop);
+  mbg.style.top    = visibleTop + 'px';
+  mbg.style.height = _parentVH + 'px';
 }
 
 function om(t, s, img) {
   document.getElementById('mtitle').textContent = t;
   document.getElementById('msub').textContent   = s || '';
   document.getElementById('mimg-wrap').innerHTML = `<img src="${img}" alt="${t}">`;
-  _openModal();
+  const mbg = document.getElementById('mbg');
+  mbg.classList.add('open');
+  updateModalPos();
 }
 function omYt(t, url) {
   document.getElementById('mtitle').textContent = t;
@@ -1458,7 +1428,9 @@ function omYt(t, url) {
   document.getElementById('mimg-wrap').innerHTML = ytId
     ? `<iframe src="https://www.youtube.com/embed/${ytId}" allow="encrypted-media" allowfullscreen></iframe>`
     : `<p style="padding:20px;color:var(--gray);">영상을 불러올 수 없습니다.</p>`;
-  _openModal();
+  const mbg = document.getElementById('mbg');
+  mbg.classList.add('open');
+  updateModalPos();
 }
 function cm(e){if(e.target===document.getElementById('mbg'))cmc();}
 function cmc(){
@@ -1878,8 +1850,11 @@ function resetAll() {
   showBalloon('reset-balloon', '↺ 초기화되었습니다!');
 }
 
-/* ── 임베드 자동 높이 + 부모 스크롤 수신 ── */
+/* ══════════════════════════════════════
+   임베드 자동 높이 + 모달 뷰포트 동기화
+══════════════════════════════════════ */
 (function() {
+  /* 높이 전송 */
   function sendHeight() {
     const h = document.documentElement.scrollHeight;
     window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
@@ -1892,6 +1867,7 @@ function resetAll() {
     if (h !== lastH) { lastH = h; sendHeight(); }
   }, 300);
 
+  /* 부모로부터 뷰포트 정보 수신 → 모달 위치 갱신 */
   window.addEventListener('message', function(e) {
     if (!e.data) return;
 
@@ -1904,23 +1880,21 @@ function resetAll() {
       window.parent.postMessage({ type: 'orogy-scrollpos', offsetTop: iframeTop }, '*');
     }
 
-    /* 신규: 부모 페이지 스크롤 위치 수신 → 모달 위치 동기화 */
-    if (e.data.type === 'parent-scroll') {
-      /* 처음 메시지가 오면 임베드 모드로 전환 */
-      if (!document.body.classList.contains('embedded')) {
-        document.body.classList.add('embedded');
-      }
-      _parentScrollY = e.data.scrollY   || 0;
-      _viewportH     = e.data.viewportH || window.innerHeight;
-
-      /* 모달이 열려 있으면 위치 즉시 업데이트 */
-      const mbg = document.getElementById('mbg');
-      if (mbg && mbg.classList.contains('open')) {
-        mbg.style.top    = _parentScrollY + 'px';
-        mbg.style.height = _viewportH     + 'px';
-      }
+    /* 신규: 부모 뷰포트 정보 수신 */
+    if (e.data.type === 'orogy-viewport') {
+      _parentScrollY   = e.data.scrollY   || 0;
+      _iframeOffsetTop = e.data.iframeTop || 0;
+      _parentVH        = e.data.vh        || window.innerHeight;
+      updateModalPos();
     }
   });
+
+  /* 부모에게 뷰포트 정보 요청 (폴링 + 빠른 갱신) */
+  function askViewport() {
+    window.parent.postMessage({ type: 'orogy-needViewport' }, '*');
+  }
+  askViewport();
+  setInterval(askViewport, 200);
 })();
 
 /* ── 초기 실행 ── */
@@ -1932,5 +1906,36 @@ loadPortfolio();
 loadEvents();
 loadPriceData();
 </script>
+
+<!-- ══════════════════════════════════════
+     ★ 부모 페이지에 아래 스크립트를 추가하세요 ★
+     (이 파일과 같은 도메인이 아니어도 됩니다)
+
+<script>
+(function() {
+  // iframe 요소를 실제 id/class로 바꿔주세요
+  const iframe = document.querySelector('iframe');
+
+  function sendViewport() {
+    if (!iframe || !iframe.contentWindow) return;
+    const rect = iframe.getBoundingClientRect();
+    iframe.contentWindow.postMessage({
+      type:      'orogy-viewport',
+      scrollY:   window.scrollY,
+      iframeTop: rect.top + window.scrollY,
+      vh:        window.innerHeight
+    }, '*');
+  }
+
+  window.addEventListener('scroll', sendViewport, { passive: true });
+  window.addEventListener('resize', sendViewport, { passive: true });
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'orogy-needViewport') sendViewport();
+  });
+
+  sendViewport();
+})();
+</script>
+══════════════════════════════════════ -->
 </body>
 </html>
