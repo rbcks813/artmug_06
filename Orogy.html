@@ -127,22 +127,24 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 .reset-btn:hover{border-color:var(--accent);color:var(--accent);}
 
 /* ══════════════════════════════════════
-   모달 — 임베드 스크롤 따라오기
-   position:fixed 대신 position:absolute + JS로 직접 top 계산
+   모달 — iframe 임베드 스크롤 따라오기
+   fixed는 iframe 뷰포트 기준이라 부모 스크롤 무시됨
+   → position:fixed 유지하되, iframe이 뷰포트에서 차지하는
+     실제 offsetTop을 IntersectionObserver로 역산해서 보정
 ══════════════════════════════════════ */
 .mbg{
   display:none;
-  position:absolute; /* fixed → absolute: iframe 내부 좌표 기준 */
+  position:fixed;
   left:0;
   width:100%;
-  min-height:100%;
   z-index:1000;
   align-items:flex-start;
   justify-content:center;
   padding:20px;
-  /* 반투명 오버레이 제거 — 배경색 없음 */
+  /* 배경 오버레이 없음 */
+  pointer-events:none; /* 닫기 버튼/카드만 클릭 가능 */
 }
-.mbg.open{display:flex;}
+.mbg.open{display:flex;pointer-events:auto;}
 .mbox{
   background:var(--white);
   border-radius:18px;
@@ -150,11 +152,10 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   max-width:520px;
   width:100%;
   position:relative;
-  box-shadow:0 8px 40px rgba(180,100,220,.18);
-  /* 뷰포트 안에서 스티키하게 보이도록 sticky top 활용 */
+  box-shadow:0 8px 40px rgba(180,100,220,.22);
   align-self:flex-start;
-  position:sticky;
-  top:16px;
+  /* top은 JS에서 --modal-top 변수로 제어 */
+  margin-top:var(--modal-top, 20px);
 }
 .mclose{position:absolute;top:12px;right:14px;background:none;border:none;font-size:19px;color:var(--gray);cursor:pointer;line-height:1;}
 .mbox h3{font-size:15px;font-weight:700;margin-bottom:3px;}
@@ -1195,10 +1196,78 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 <script>
 /* ══════════════════════════════════════
    모달 스크롤 따라오기
-   - .mbg: position:absolute, width:100%, top은 JS로 현재 scrollY에 맞게 설정
-   - .mbox: position:sticky; top:16px  → 스크롤해도 뷰포트 안에 붙어있음
-   - 배경 dimming 없음 (투명)
+   
+   문제: iframe 안 position:fixed는 부모 페이지가 아닌
+         iframe 뷰포트 기준 → 부모 스크롤해도 모달이 화면 밖으로 사라짐
+   
+   해결: IntersectionObserver로 iframe body가 부모 뷰포트에서
+         얼마나 위에 있는지(iframeOffsetInViewport)를 역산.
+         모달 top = 뷰포트 안의 적절한 위치 - iframe 상단까지의 offset
 ══════════════════════════════════════ */
+
+/* iframe이 부모 뷰포트 안에서 차지하는 상단 위치를 추적 */
+let _iframeViewportTop = 0; // iframe 상단이 부모 뷰포트에서 몇 px 아래에 있는지
+
+(function initIframePositionTracker() {
+  /* 
+   * 방법: body 상단에 1px짜리 sentinel 엘리먼트를 두고
+   * IntersectionObserver의 boundingClientRect.top을 읽으면
+   * "iframe 문서의 (0,0) 기준점이 부모 뷰포트 기준으로 몇 px에 있는지" 알 수 있음
+   * 
+   * 이 값이 음수면 iframe 상단이 이미 화면 위로 스크롤된 것
+   * 모달이 화면 중앙에 오려면: mbg top = -iframeTopInViewport + 원하는위치
+   */
+  const sentinel = document.createElement('div');
+  sentinel.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:1px;pointer-events:none;opacity:0;';
+  document.body.appendChild(sentinel);
+
+  if (!window.IntersectionObserver) return; // 구형 브라우저 fallback: top:0 유지
+
+  const obs = new IntersectionObserver((entries) => {
+    const entry = entries[0];
+    // boundingClientRect.top = sentinel(=iframe 상단)이 부모 뷰포트 기준으로 몇 px인지
+    _iframeViewportTop = entry.boundingClientRect.top;
+    // 모달이 열려있으면 위치 즉시 업데이트
+    if (document.getElementById('mbg').classList.contains('open')) {
+      _positionModal();
+    }
+  }, {
+    threshold: Array.from({length: 101}, (_, i) => i / 100), // 촘촘하게 관찰
+    rootMargin: '9999px 0px 9999px 0px' // 화면 밖에서도 계속 추적
+  });
+
+  obs.observe(sentinel);
+
+  // IntersectionObserver가 자주 안 쏠 수 있으니 rAF로 보완
+  function rafTrack() {
+    const rect = sentinel.getBoundingClientRect();
+    if (Math.abs(rect.top - _iframeViewportTop) > 1) {
+      _iframeViewportTop = rect.top;
+      if (document.getElementById('mbg').classList.contains('open')) {
+        _positionModal();
+      }
+    }
+    requestAnimationFrame(rafTrack);
+  }
+  requestAnimationFrame(rafTrack);
+})();
+
+function _positionModal() {
+  const mbg = document.getElementById('mbg');
+  // 뷰포트 높이
+  const vh = window.innerHeight;
+  // 모달박스를 뷰포트 상단에서 20px 아래 위치시키려면:
+  // mbg는 position:fixed, top=0이고
+  // mbox의 margin-top = max(20, 뷰포트 안 여유)
+  // _iframeViewportTop이 음수 = iframe 상단이 화면 위로 올라간 것
+  // → mbox를 아래로 내려야 함: margin-top = -_iframeViewportTop + 20
+  const offset = Math.max(20, -_iframeViewportTop + 20);
+  // 하지만 모달이 뷰포트 아래로 벗어나지 않도록 clamp
+  const maxOffset = vh - 80; // 최소 80px은 화면에 보이도록
+  const finalOffset = Math.min(offset, maxOffset);
+  mbg.style.setProperty('--modal-top', finalOffset + 'px');
+}
+
 function om(t, s, img) {
   document.getElementById('mtitle').textContent = t;
   document.getElementById('msub').textContent   = s || '';
@@ -1219,19 +1288,9 @@ function omYt(t, url) {
 
 function openModal() {
   const mbg = document.getElementById('mbg');
-  /* 현재 스크롤 위치에 모달 배치 — 뷰포트 전체를 덮도록 top/height 설정 */
-  mbg.style.top    = window.scrollY + 'px';
-  mbg.style.height = window.innerHeight + 'px';
+  _positionModal();
   mbg.classList.add('open');
 
-  /* 스크롤 시 mbg.top 업데이트해서 항상 화면 안에 위치 */
-  window._modalScrollHandler = function() {
-    mbg.style.top    = window.scrollY + 'px';
-    mbg.style.height = window.innerHeight + 'px';
-  };
-  window.addEventListener('scroll', window._modalScrollHandler, { passive: true });
-
-  /* 모달 바깥 클릭 시 닫기 */
   mbg._clickHandler = function(e) {
     if (e.target === mbg) cmc();
   };
@@ -1241,15 +1300,10 @@ function openModal() {
 function cmc() {
   const mbg = document.getElementById('mbg');
   mbg.classList.remove('open');
-  if (window._modalScrollHandler) {
-    window.removeEventListener('scroll', window._modalScrollHandler);
-    window._modalScrollHandler = null;
-  }
   if (mbg._clickHandler) {
     mbg.removeEventListener('click', mbg._clickHandler);
     mbg._clickHandler = null;
   }
-  /* 유튜브 iframe 재생 중지 */
   const wrap = document.getElementById('mimg-wrap');
   const iframe = wrap ? wrap.querySelector('iframe') : null;
   if (iframe) { const s = iframe.src; iframe.src = ''; iframe.src = s; }
