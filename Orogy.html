@@ -20,17 +20,6 @@
   --accent:#b86fd8; --text:#2b2b2b; --gray:#999; --border:#ece7f5;
   --soft:#f7f3fd; --white:#fff; --red:#c0392b;
 }
-
-/* ── 높이 수축을 위한 핵심 설정 ── */
-html {
-  height: auto !important;
-  overflow-x: hidden;
-}
-body {
-  height: auto !important;
-  overflow-x: hidden;
-}
-
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{font-family:'Paperozi',sans-serif;background:var(--cream);color:var(--text);font-size:14px;line-height:1.75;font-weight:400;}
@@ -56,7 +45,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 .tab-row{display:flex;gap:7px;margin-bottom:18px;flex-wrap:wrap;}
 .tb{padding:6px 16px;border-radius:999px;border:1.5px solid var(--border);font-size:12.5px;font-weight:500;background:var(--white);cursor:pointer;transition:all .15s;}
 .tb:hover{border-color:var(--main);}
-/* 선택된 탭 — 색상별 */
 .tb.on            {background:var(--main);border-color:var(--main);color:#5a2e80;}
 .tb.on-p.on       {background:var(--pink);border-color:var(--pink);color:#7a1a4a;}
 .tb.on-b.on       {background:var(--blue);border-color:var(--blue);color:#1a6070;}
@@ -66,7 +54,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 .port-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
 .port-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s;}
 .port-card:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(180,100,220,.12);}
-/* 16:9 썸네일 — 위 기준으로 표시 */
 .port-thumb{aspect-ratio:16/9;overflow:hidden;position:relative;}
 .port-thumb img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .3s;}
 .port-card:hover .port-thumb img{transform:scale(1.04);}
@@ -129,7 +116,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   border-top-color:#2b2b2b;
 }
 .balloon.show{opacity:1;transform:translateX(-50%) scale(1);}
-/* 버튼 묶음 */
 .copy-btn-row{display:flex;align-items:center;gap:8px;justify-content:flex-end;}
 .reset-btn{
   padding:10px 18px;
@@ -171,7 +157,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 .intro-name{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1.1;margin-bottom:14px;}
 .intro-name em{color:var(--accent);font-style:normal;}
 
-/* 뱃지 — ref_02 스타일: 아웃라인 알약형 */
 .status-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px;}
 .sbadge{
   display:inline-flex;align-items:center;gap:5px;
@@ -189,7 +174,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 
 .intro-desc{font-size:13px;line-height:1.9;color:#666;border-left:3px solid var(--main);padding:10px 14px;background:rgba(228,192,247,.1);border-radius:0 10px 10px 0;margin-bottom:16px;}
 
-/* 해시태그 — ref_03 스타일: 단순 아웃라인 없음, 배경 없음, 글씨체만 */
 .hashtag-row{display:flex;flex-wrap:wrap;gap:8px;}
 .htag{
   font-size:13px;font-weight:500;color:#7a40a0;
@@ -207,8 +191,8 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 .slot-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
 .slot-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center;}
 .slot-mon{font-size:11.5px;font-weight:500;color:var(--gray);margin-bottom:10px;}
-.slot-dots{display:flex;justify-content:center;gap:5px;}
-.sd{width:16px;height:16px;border-radius:50%;border:2px solid var(--border);background:var(--white);}
+.slot-dots{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;}
+.sd{width:16px;height:16px;border-radius:50%;border:2px solid var(--border);background:var(--white);flex-shrink:0;}
 .sd.f{background:var(--main);border-color:var(--main);}
 .sd.p{background:var(--pink);border-color:var(--pink);}
 .slot-legend{display:flex;gap:14px;margin-top:14px;font-size:12px;color:var(--gray);}
@@ -218,7 +202,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 
 /* ═════════════════════════════
    3. 안내사항
-   ref_04: 번호 + 텍스트, 심플한 단색 나열
 ═════════════════════════════ */
 .notice-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
 .notice-list li{
@@ -242,11 +225,10 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 
 
 /* ═════════════════════════════
-   4. 작업 순서
-   ref_06 스타일: 아이콘 원 + 수평 점선 + 라벨
+   4. 작업 순서 — PC: 가로 스텝 / 모바일: 세로 스텝
 ═════════════════════════════ */
 .proc-wrap{position:relative;padding:30px 0 10px;}
-/* 연결선 */
+/* PC 연결선 */
 .proc-wrap::before{
   content:'';position:absolute;
   top:46px;left:calc(100% / 14);right:calc(100% / 14);
@@ -275,7 +257,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 
 
 /* ═════════════════════════════
-   5. 사용 범위
+   5. 사용 범위 — 모바일 가로 스크롤
 ═════════════════════════════ */
 .tbl-wrap{overflow:hidden;border-radius:13px;border:1.5px solid var(--border);}
 .tbl{width:100%;border-collapse:collapse;}
@@ -288,15 +270,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 
 
 /* ═════════════════════════════
-   6. 포트폴리오
-   ref_09 스타일: 2열 카드, 문서 아이콘, 이름
-═════════════════════════════ */
-/* ── 리깅/링크 (구버전 제거됨, 유튜브는 port-grid로 통합) ── */
-
-
-/* ═════════════════════════════
    7. 가격
-   ref_11 스타일: 헤더 배너 + 체크리스트 + 추가금표
 ═════════════════════════════ */
 .price-header{
   background:var(--soft);
@@ -309,13 +283,11 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 .ph-left .ph-name{font-size:15px;font-weight:700;}
 .ph-price{font-size:26px;font-weight:900;color:var(--accent);}
 
-/* 기본제공 체크리스트 (ref_11 스타일) */
 .inc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;margin-bottom:18px;}
 .inc-item{display:flex;align-items:flex-start;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:9px;font-size:12.5px;background:var(--white);}
 .inc-check{width:17px;height:17px;border-radius:4px;background:var(--accent);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;}
 .inc-check svg{width:10px;height:10px;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
 
-/* 가격 카드 격자 */
 .price-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px;}
 .pc{border:1.5px solid var(--border);border-radius:11px;padding:14px;background:var(--white);}
 .pc .pc-type{font-size:11px;color:var(--gray);margin-bottom:2px;}
@@ -324,7 +296,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 .pc .pc-note{font-size:11px;color:var(--gray);margin-top:2px;}
 .pc.soft{background:var(--soft);}
 
-/* 추가금 표 */
 .opt-tbl{width:100%;border-collapse:collapse;}
 .opt-tbl thead tr th{background:#f0e8f8;padding:9px 12px;text-align:left;font-size:12.5px;font-weight:600;color:#6030a0;}
 .opt-tbl tbody td{padding:8px 12px;font-size:13px;border-bottom:1px solid var(--border);}
@@ -332,14 +303,12 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 .opt-tbl .op-amt{color:var(--accent);font-weight:700;white-space:nowrap;}
 .opt-tbl .op-note{font-size:11px;color:var(--gray);}
 .opt-tbl tbody tr:nth-child(odd) td{background:var(--soft);}
-/* 마지막 행 긴급 강조 스타일 (ref_11 참고) */
 .opt-tbl .warn-row td{background:#fff8ee;color:#a06000;}
 .opt-tbl .warn-row .op-amt{color:#d08000;}
 
 
 /* ═════════════════════════════
    8. 환불 안내
-   ref_12 스타일: 단순 불릿 리스트
 ═════════════════════════════ */
 .refund-notice{
   border:1.5px solid #f0e080;background:#fffef0;
@@ -375,8 +344,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 /* ═════════════════════════════
    견적 복사기
 ═════════════════════════════ */
-/* 견적+문의 2단 레이아웃 */
-/* ── 견적+문의 통합 결과바 ── */
 .divider{height:1px;background:var(--border);margin:8px 0;}
 .inq-result-bar{
   display:flex;align-items:center;justify-content:space-between;
@@ -411,9 +378,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 .cp-btn{padding:10px 22px;background:var(--accent);color:#fff;border:none;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s;white-space:nowrap;}
 .cp-btn:hover{opacity:.83;}.cp-btn.done{background:#1a8f40;}
 
-
-
-/* ── 견적/문의 영역 구분 ── */
 .area-label{
   display:inline-flex;align-items:center;gap:8px;
   font-size:13px;font-weight:700;
@@ -472,7 +436,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 
 /* ═════════════════════════════
    협업 작가
-   ref_01 스타일: 썸네일 + 이름 + 혜택 카드 3열
 ═════════════════════════════ */
 .collab-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;}
 .collab-card{
@@ -498,7 +461,9 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 .collab-arrow{color:var(--gray);font-size:13px;flex-shrink:0;}
 
 
-/* ── 반응형 ── */
+/* ══════════════════════════════════════
+   반응형 — 태블릿 (960px 이하)
+══════════════════════════════════════ */
 @media(max-width:960px){
   .page{padding:0 32px;}
   .intro-wrap{flex-direction:column;gap:22px;}
@@ -513,13 +478,164 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   .est-grid{grid-template-columns:1fr;}
   .proc-wrap::before{display:none;}
 }
+
+/* ══════════════════════════════════════
+   반응형 — 모바일 (600px 이하)
+══════════════════════════════════════ */
 @media(max-width:600px){
-  .page{padding:0 16px;}
-  .slot-grid{grid-template-columns:repeat(2,1fr);}
-  .price-cards{grid-template-columns:1fr;}
-  .port-grid{grid-template-columns:1fr;}
+  /* 기본 여백 */
+  .page{padding:0 14px;}
+  .sec{padding:40px 0;}
+  .sh h2{font-size:15px;}
+  .card{padding:16px;}
+
+  /* ── 소개 ── */
+  #intro{padding-top:32px;}
+  .intro-wrap{flex-direction:row;gap:16px;align-items:flex-start;}
+  .intro-avatar{
+    width:88px;height:88px;border-radius:14px;flex-shrink:0;
+  }
+  .skel-avatar{width:88px;height:88px;}
+  .intro-role{font-size:10px;}
+  .intro-name{font-size:20px;margin-bottom:10px;}
+  .intro-desc{font-size:12px;padding:8px 10px;margin-bottom:12px;}
+  .htag{font-size:12px;padding:3px 10px;}
+
+  /* ── 슬롯 현황: 3열 → 2열, 카드 넉넉하게 ── */
+  .slot-grid{
+    grid-template-columns:repeat(2,1fr) !important;
+    gap:8px;
+  }
+  .slot-card{padding:14px 8px;}
+  .slot-mon{font-size:12px;margin-bottom:8px;}
+  .sd{width:14px;height:14px;}
+  .slot-dots{gap:4px;}
+  .slot-legend{font-size:11.5px;gap:10px;margin-top:10px;}
+
+  /* ── 안내사항 ── */
+  .notice-list li{font-size:12.5px;padding:10px 12px;gap:9px;}
+  .notice-list li .nn{width:18px;height:18px;font-size:9px;margin-top:2px;}
+
+  /* ── 작업 순서: 세로 타임라인으로 전환 ── */
+  .proc-wrap{padding:0;}
+  .proc-wrap::before{display:none;}
+  /* 세로 연결선 */
+  .proc-steps{
+    flex-direction:column;
+    gap:0;
+    position:relative;
+  }
+  /* 세로 점선 */
+  .proc-steps::before{
+    content:'';
+    position:absolute;
+    left:25px;
+    top:26px;
+    bottom:26px;
+    width:2px;
+    background:repeating-linear-gradient(
+      180deg,
+      var(--main) 0,var(--main) 8px,
+      transparent 8px,transparent 16px
+    );
+    z-index:0;
+  }
+  .proc-step{
+    flex-direction:row;
+    align-items:center;
+    gap:16px;
+    text-align:left;
+    flex:none;
+    padding:10px 0;
+    position:relative;
+    z-index:1;
+  }
+  .proc-icon{
+    width:48px;height:48px;
+    flex-shrink:0;
+    background:var(--white);
+  }
+  .proc-step-label{
+    font-size:13px;
+    text-align:left;
+    line-height:1.5;
+    color:#444;
+    font-weight:600;
+  }
+  /* br 태그 숨기기 — 가로 배치에서 불필요 */
+  .proc-step-label br{display:none;}
+
+  /* ── 사용 범위 표: 가로 스크롤 ── */
+  .tbl-wrap{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    border-radius:10px;
+  }
+  .tbl{min-width:480px;font-size:12px;}
+  .tbl th{padding:8px 10px;font-size:11.5px;}
+  .tbl td{padding:7px 10px;}
+  .tbl-sub{font-size:10px;}
+
+  /* ── 포트폴리오 ── */
+  .port-grid{grid-template-columns:1fr 1fr;gap:8px;}
+  .port-name{font-size:11.5px;}
+  .port-info{padding:7px 9px;gap:5px;}
+
+  /* ── 가격 ── */
+  .price-cards{grid-template-columns:1fr 1fr;gap:8px;}
+  .pc{padding:12px;}
+  .pc .pc-amt{font-size:16px;}
+  .pc .pc-name{font-size:12px;}
+  .inc-grid{grid-template-columns:1fr;gap:6px;}
+  .inc-item{font-size:12px;}
+  .opt-tbl thead tr th,.opt-tbl tbody td{font-size:12px;padding:7px 10px;}
+
+  /* ── 환불 안내 ── */
+  .refund-notice{font-size:12px;}
+  .refund-list li{font-size:12.5px;padding:8px 12px;gap:8px;}
+  .rp{font-size:12.5px;min-width:54px;}
+
+  /* ── 이벤트 ── */
+  .ev-wrap{padding:16px;}
+  .ev-card{padding:14px;}
+  .ev-title{font-size:13.5px;}
+  .ev-body{font-size:12.5px;}
+
+  /* ── 견적 & 문의 양식 ── */
+  .fgrid{grid-template-columns:1fr;gap:12px;}
+  .fg.full{grid-column:1;}
+  .fg label{font-size:11.5px;}
+  .fg input,.fg select,.fg textarea{font-size:13px;padding:9px 11px;}
+  .rl,.cl{font-size:12px;padding:5px 10px;}
+  .est-result-strip{padding:12px 14px;}
+  .est-total{font-size:22px;}
+  .est-dep{font-size:12px;}
+  .est-note-box{font-size:11.5px;padding:10px 12px;}
+  .copy-btn-row{flex-direction:column;align-items:stretch;}
+  .cp-btn,.reset-btn{width:100%;text-align:center;justify-content:center;padding:12px;}
+
+  /* ── 협업 작가 ── */
   .collab-grid{grid-template-columns:1fr;}
-  .proc-steps{flex-wrap:wrap;gap:14px;justify-content:center;}
+  .collab-card{padding:12px;}
+  .collab-name{font-size:13px;}
+  .collab-benefit{font-size:11px;}
+
+  /* ── 탭 버튼 ── */
+  .tab-row{gap:5px;}
+  .tb{font-size:12px;padding:5px 13px;}
+}
+
+/* ══════════════════════════════════════
+   반응형 — 초소형 (375px 이하)
+══════════════════════════════════════ */
+@media(max-width:375px){
+  .page{padding:0 10px;}
+  .intro-wrap{flex-direction:column;gap:12px;}
+  .intro-avatar{width:72px;height:72px;}
+  .intro-name{font-size:18px;}
+  .slot-grid{grid-template-columns:repeat(2,1fr) !important;}
+  .port-grid{grid-template-columns:1fr;}
+  .price-cards{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -590,7 +706,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   </div></div>
 </section>
 
-<!-- ═══════════ 4. 작업 순서 (ref_06 스타일) ═══════════ -->
+<!-- ═══════════ 4. 작업 순서 ═══════════ -->
 <section class="sec" id="process">
   <div class="page"><div class="inner">
     <div class="sh"><div class="sh-bar"></div><h2>작업 순서</h2></div>
@@ -764,10 +880,12 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
         </tbody>
       </table>
     </div>
+    <!-- 모바일 스크롤 안내 -->
+    <p class="tbl-scroll-hint">← 좌우로 스크롤해서 전체 내용을 확인하세요</p>
   </div></div>
 </section>
 
-<!-- ═══════════ 6. 포트폴리오 (ref_09 스타일) ═══════════ -->
+<!-- ═══════════ 6. 포트폴리오 ═══════════ -->
 <section class="sec" id="portfolio">
   <div class="page"><div class="inner">
     <div class="sh"><div class="sh-bar"></div><h2>포트폴리오</h2></div>
@@ -816,7 +934,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   </div></div>
 </section>
 
-<!-- ═══════════ 8. 환불 안내 (ref_12 스타일) ═══════════ -->
+<!-- ═══════════ 8. 환불 안내 ═══════════ -->
 <section class="sec" id="refund">
   <div class="page"><div class="inner">
     <div class="sh"><div class="sh-bar"></div><h2>환불 안내</h2></div>
@@ -855,7 +973,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
     <div class="card">
       <div class="fgrid">
 
-        <!-- 1. 닉네임 / 방송링크 -->
         <div class="fg">
           <label>1. 닉네임 <span class="req">*</span></label>
           <input type="text" id="fn" placeholder="닉네임 입력">
@@ -865,7 +982,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
           <input type="text" id="fl" placeholder="https://...">
         </div>
 
-        <!-- 2. 신청 타입 -->
         <div class="fg full">
           <label>2. 신청 타입 <span class="req">*</span></label>
           <div class="rg">
@@ -877,7 +993,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
           </div>
         </div>
 
-        <!-- 3. 작업 범위 / 작업 유형(견적) -->
         <div class="fg">
           <label>3. 작업 범위 <span class="req">*</span></label>
           <div class="rg">
@@ -894,7 +1009,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
           </select>
         </div>
 
-        <!-- 4. 상업용 여부 / 이용 목적(견적) -->
         <div class="fg">
           <label>4. 상업용 구매 여부</label>
           <div class="rg">
@@ -912,7 +1026,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
           </select>
         </div>
 
-        <!-- 5. 캐릭터 정보 -->
         <div class="fg full">
           <label>5-1. 캐릭터 디자인 이미지 또는 자료 링크</label>
           <input type="text" id="fref" placeholder="이미지 / 자료 공유 링크">
@@ -926,19 +1039,16 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
           <textarea id="fchar" placeholder="메인 컬러, 성별 및 나이, 분위기 및 성격 등을 적어주세요."></textarea>
         </div>
 
-        <!-- 6. 기타 요청사항 -->
         <div class="fg full">
           <label>6. 기타 요청사항</label>
           <textarea id="fetc" placeholder="기타 요청사항을 적어주세요."></textarea>
         </div>
 
-        <!-- 7. 작가님 연락처 -->
         <div class="fg full">
           <label>7. 리깅 / 일러 작가님 연락처 <span class="opt-note">(SNS 또는 사이트 주소)</span></label>
           <input type="text" id="fart" placeholder="SNS 또는 사이트 주소">
         </div>
 
-        <!-- 8. 작업비공개 / 9. PSD -->
         <div class="fg">
           <label>8. 작업 과정 비공개 여부 <span class="opt-note">(+50,000원)</span></label>
           <div class="rg">
@@ -951,7 +1061,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
           <input type="text" id="fpsd" placeholder="파일 공유 링크">
         </div>
 
-        <!-- 10. 이벤트 선택 -->
         <div class="fg full">
           <label>10. 이벤트 선택 <span class="opt-note">(중복 선택 불가)</span></label>
           <div id="ev-check-list" class="rg"></div>
@@ -959,13 +1068,11 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 
         <input type="hidden" id="ee" value="0">
 
-        <!-- 추가 옵션 금액(견적) -->
         <div class="fg">
           <label>추가 옵션 금액 <span class="opt-note">(견적 자동계산)</span></label>
           <input type="number" id="ex" placeholder="예: 50000" oninput="ce()">
         </div>
 
-        <!-- 11. 협업 작가 선택 -->
         <div class="fg full">
           <label>11. 협업 작가 선택 <span class="opt-note">(선택사항)</span></label>
           <select id="fco" onchange="syncCollab()">
@@ -973,16 +1080,13 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
           </select>
         </div>
 
-        <!-- 예약금 (복사용 hidden) -->
         <input type="hidden" id="edep">
 
-        <!-- 12. 참고자료 -->
         <div class="fg full">
           <label>12. 참고자료 링크</label>
           <input type="text" id="fref3" placeholder="참고자료 링크">
         </div>
 
-        <!-- 13. 포트폴리오 공개 여부 -->
         <div class="fg full">
           <label>13. 포트폴리오 공개 여부</label>
           <div class="rg">
@@ -992,7 +1096,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
           </div>
         </div>
 
-        <!-- 견적 결과 -->
         <div class="fg full">
           <div class="est-result-strip">
             <div class="est-result-left">
@@ -1005,16 +1108,15 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
           </div>
         </div>
 
-        <!-- 복사 버튼 -->
         <div class="fg full">
           <div class="copy-btn-row">
             <div class="balloon-wrap">
               <div class="balloon" id="reset-balloon">↺ 초기화되었습니다!</div>
               <button class="reset-btn" onclick="resetAll()">↺ 초기화</button>
             </div>
-            <div class="balloon-wrap">
+            <div class="balloon-wrap" style="flex:1;">
               <div class="balloon" id="copy-balloon">📋 복사되었습니다!</div>
-              <button class="cp-btn" id="fcbtn" onclick="copyAll()">📋 견적 + 문의 양식 복사</button>
+              <button class="cp-btn" id="fcbtn" onclick="copyAll()" style="width:100%;">📋 견적 + 문의 양식 복사</button>
             </div>
           </div>
         </div>
@@ -1047,76 +1149,24 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   </div>
 </div>
 
+<style>
+/* 사용 범위 표 스크롤 힌트 — 모바일에서만 표시 */
+.tbl-scroll-hint{
+  display:none;
+  font-size:11.5px;
+  color:var(--gray);
+  text-align:center;
+  margin-top:8px;
+}
+@media(max-width:600px){
+  .tbl-scroll-hint{display:block;}
+  /* 작업 순서 카드 패딩 축소 */
+  #process .card{padding:16px 14px 14px;}
+}
+</style>
 
 <script>
-/* ══════════════════════════════════════════
-   임베드 자동 높이 조절 — 늘어남 + 줄어듦 모두 대응
-   핵심: html/body를 height:auto로 리셋한 뒤
-         body.scrollHeight를 측정해야 실제 콘텐츠
-         높이가 잡힌다. 기존 scrollHeight 방식은
-         한번 늘어난 높이를 유지해 줄어들지 않음.
-══════════════════════════════════════════ */
-(function() {
-  var _lastH = 0;
-
-  function getContentHeight() {
-    // html/body 고정 높이를 일시 해제해야 진짜 콘텐츠 높이가 측정됨
-    document.documentElement.style.height = 'auto';
-    document.body.style.height = 'auto';
-    // offsetHeight 대신 scrollHeight — 패딩 포함 전체 높이
-    return document.body.scrollHeight;
-  }
-
-  function sendHeight() {
-    var h = getContentHeight();
-    // 실제로 바뀐 경우에만 postMessage (불필요한 리페인트 방지)
-    if (h === _lastH) return;
-    _lastH = h;
-    window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
-  }
-
-  // 최초 전송
-  sendHeight();
-
-  // ResizeObserver — 콘텐츠 높이 변화(증가/감소) 즉시 감지
-  if (window.ResizeObserver) {
-    new ResizeObserver(function() { sendHeight(); }).observe(document.body);
-  }
-
-  // 폴백 폴링 (ResizeObserver 미지원 브라우저 + 탭 전환 등 edge case)
-  setInterval(sendHeight, 300);
-
-  /* 부모 커스텀 메뉴 → 섹션 스크롤 수신 */
-  window.addEventListener('message', function(e) {
-    if (!e.data || e.data.type !== 'orogy-scroll') return;
-    var target = document.getElementById(e.data.id);
-    if (!target) return;
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    var iframeTop = target.getBoundingClientRect().top + window.scrollY;
-    window.parent.postMessage({ type: 'orogy-scrollpos', offsetTop: iframeTop }, '*');
-  });
-})();
-
-/* ══════════════════════════════════════════
-   탭 전환 — 전환 후 높이 즉시 재측정
-══════════════════════════════════════════ */
-function sw(tid, pid, i) {
-  [...document.getElementById(tid).querySelectorAll('.tb')]
-    .forEach(function(t, j) { t.classList.toggle('on', j === i); });
-  [...document.getElementById(pid).children]
-    .forEach(function(p, j) { p.classList.toggle('on', j === i); });
-  // 탭 전환 후 콘텐츠 높이가 즉시 변하므로 강제 재측정
-  requestAnimationFrame(function() {
-    document.documentElement.style.height = 'auto';
-    document.body.style.height = 'auto';
-    var h = document.body.scrollHeight;
-    window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
-  });
-}
-
-/* ══════════════════════════════════════════
-   CSV 파싱 유틸 (멀티라인 지원)
-══════════════════════════════════════════ */
+/* ── 구글시트 CSV 파싱 유틸 (멀티라인 지원) ── */
 function parseCSV(text) {
   const rows = [];
   let row = [];
@@ -1129,15 +1179,24 @@ function parseCSV(text) {
       let val = '';
       while (i < len) {
         if (text[i] === '"') {
-          if (text[i + 1] === '"') { val += '"'; i += 2; }
-          else { i++; break; }
-        } else { val += text[i]; i++; }
+          if (text[i + 1] === '"') {
+            val += '"';
+            i += 2;
+          } else {
+            i++;
+            break;
+          }
+        } else {
+          val += text[i];
+          i++;
+        }
       }
       row.push(val);
     } else {
       let val = '';
       while (i < len && text[i] !== ',' && text[i] !== '\n' && text[i] !== '\r') {
-        val += text[i]; i++;
+        val += text[i];
+        i++;
       }
       row.push(val);
     }
@@ -1313,7 +1372,12 @@ async function loadSlot() {
 
     const validRows = rows.filter(r => parseInt(r[0]));
     const count = Math.min(validRows.length, 6);
-    grid.style.gridTemplateColumns = `repeat(${count}, 1fr)`;
+
+    // 모바일(≤600px)이면 2열, 아니면 count열
+    const isMobile = window.innerWidth <= 600;
+    if (!isMobile) {
+      grid.style.gridTemplateColumns = `repeat(${count}, 1fr)`;
+    }
 
     grid.innerHTML = validRows.map(r => {
       const mon    = parseInt(r[0]);
@@ -1333,6 +1397,12 @@ async function loadSlot() {
     console.warn('슬롯 시트 로드 실패:', e);
     grid.innerHTML = `<p style="color:var(--gray);font-size:13px;grid-column:1/-1;">슬롯 정보를 불러오지 못했습니다.</p>`;
   }
+}
+
+/* ── 탭 ── */
+function sw(tid,pid,i){
+  [...document.getElementById(tid).querySelectorAll('.tb')].forEach((t,j)=>t.classList.toggle('on',j===i));
+  [...document.getElementById(pid).children].forEach((p,j)=>p.classList.toggle('on',j===i));
 }
 
 /* ── 유튜브 ID 추출 ── */
@@ -1363,8 +1433,8 @@ function omYt(t, url) {
   document.getElementById('mbg').classList.add('open');
 }
 
-function cm(e) { if (e.target === document.getElementById('mbg')) cmc(); }
-function cmc() {
+function cm(e){if(e.target===document.getElementById('mbg'))cmc();}
+function cmc(){
   document.getElementById('mbg').classList.remove('open');
   const wrap = document.getElementById('mimg-wrap');
   const iframe = wrap ? wrap.querySelector('iframe') : null;
@@ -1372,29 +1442,29 @@ function cmc() {
 }
 
 /* ── 견적 계산 ── */
-function ce() {
-  let b = parseInt(document.getElementById('et').value) || 0;
-  const u  = document.getElementById('eu').value;
-  const ev = document.getElementById('ee').value;
-  const co = document.getElementById('fco')?.value || '0';
-  const ex = parseInt(document.getElementById('ex').value) || 0;
-  const priv = document.querySelector('input[name="fs"]:checked')?.value || '';
-  if (ev === 'f700000') { b = 700000; }
-  else if (ev === 'f2000000') { b = 2000000; }
-  else {
-    if (u === '50000') b += 50000;
-    else if (u === 'x2') b *= 2;
-    if (ev === 'd10') b = Math.round(b * .9);
-    else if (ev === 'd20') b = Math.round(b * .8);
-    else if (ev === 'd50') b = Math.round(b * .5);
+function ce(){
+  let b=parseInt(document.getElementById('et').value)||0;
+  const u=document.getElementById('eu').value;
+  const ev=document.getElementById('ee').value;
+  const co=document.getElementById('fco')?.value||'0';
+  const ex=parseInt(document.getElementById('ex').value)||0;
+  const priv=document.querySelector('input[name="fs"]:checked')?.value||'';
+  if(ev==='f700000'){b=700000;}
+  else if(ev==='f2000000'){b=2000000;}
+  else{
+    if(u==='50000')b+=50000;
+    else if(u==='x2')b*=2;
+    if(ev==='d10')b=Math.round(b*.9);
+    else if(ev==='d20')b=Math.round(b*.8);
+    else if(ev==='d50')b=Math.round(b*.5);
   }
-  if (co === '-100000') b -= 100000;
-  else if (co === 'mi') b = Math.round(b * .9);
-  else if (co === 'mr') b = Math.round(b * .7);
-  if (priv.includes('비공개')) b += 50000;
-  b += ex; if (b < 0) b = 0;
-  document.getElementById('etotal').textContent = b.toLocaleString() + '원';
-  const dep = Math.round(b * .1).toLocaleString() + '원';
+  if(co==='-100000')b-=100000;
+  else if(co==='mi')b=Math.round(b*.9);
+  else if(co==='mr')b=Math.round(b*.7);
+  if(priv.includes('비공개'))b+=50000;
+  b+=ex;if(b<0)b=0;
+  document.getElementById('etotal').textContent=b.toLocaleString()+'원';
+  const dep = Math.round(b*.1).toLocaleString()+'원';
   document.getElementById('edep').value = dep;
   const dd = document.getElementById('edep-display');
   if (dd) dd.textContent = dep;
@@ -1402,11 +1472,13 @@ function ce() {
 
 /* ── 포트폴리오 시트 로드 ── */
 const PORT_PER_PAGE = 9;
-const PORT_CATS   = ['일반 일러스트','버츄얼 일러스트','판매중인 디자인 목록','삼면도','리깅','썸네일'];
+const PORT_CATS = ['일반 일러스트','버츄얼 일러스트','판매중인 디자인 목록','삼면도','리깅','썸네일'];
 const PORT_LABELS = ['일반 일러스트','버츄얼 일러스트','판매중인 디자인','삼면도','리깅','썸네일'];
-let portData  = {};
+let portData = {};
 let portPages = {};
 let portCatIdx = 0;
+
+function isYoutube(url){ return url && (url.includes('youtu.be') || url.includes('youtube.com')); }
 
 async function loadPortfolio() {
   const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJXlBmNMpCB6yQH5mznODAXBhgywVD7JheDmNqejv0bizcyWAnvj4hCOfcAhWwSFL0n_TihrQ3JktC/pub?gid=944328220&single=true&output=csv';
@@ -1417,14 +1489,16 @@ async function loadPortfolio() {
     portData = {};
     PORT_CATS.forEach(c => { portData[c] = []; portPages[c] = 1; });
     rows.forEach(r => {
-      const cat   = (r[0] || '').trim();
-      const title = (r[1] || '').trim();
-      const desc  = (r[2] || '').trim();
-      const img   = (r[3] || '').trim();
-      const sold  = (r[4] || '').trim() === '판매';
-      if (portData[cat] !== undefined) portData[cat].push({ title, desc, img, sold });
+      const cat  = (r[0]||'').trim();
+      const title= (r[1]||'').trim();
+      const desc = (r[2]||'').trim();
+      const img  = (r[3]||'').trim();
+      const sold = (r[4]||'').trim() === '판매';
+      if (portData[cat] !== undefined) {
+        portData[cat].push({title, desc, img, sold});
+      }
     });
-  } catch (e) {
+  } catch(e) {
     console.warn('포트폴리오 시트 로드 실패:', e);
   }
   renderPortTabs();
@@ -1438,13 +1512,13 @@ function renderPortTabs() {
 
   PORT_CATS.forEach((cat, i) => {
     const btn = document.createElement('button');
-    btn.className = 'tb on-p' + (i === 0 ? ' on' : '');
+    btn.className = 'tb on-p' + (i===0?' on':'');
     btn.textContent = PORT_LABELS[i];
     btn.onclick = () => switchPortTab(i);
     tabRow.appendChild(btn);
 
     const pane = document.createElement('div');
-    pane.className = 'pane' + (i === 0 ? ' on' : '');
+    pane.className = 'pane' + (i===0?' on':'');
     pane.id = `po-pane-${i}`;
     panesEl.appendChild(pane);
     renderPortPane(cat, i);
@@ -1455,15 +1529,8 @@ function switchPortTab(idx) {
   portCatIdx = idx;
   const tabs  = document.getElementById('po-tabs').querySelectorAll('.tb');
   const panes = document.getElementById('po-panes').children;
-  tabs.forEach((t, i)  => t.classList.toggle('on', i === idx));
-  [...panes].forEach((p, i) => p.classList.toggle('on', i === idx));
-  // 탭 전환 후 높이 즉시 재측정
-  requestAnimationFrame(function() {
-    document.documentElement.style.height = 'auto';
-    document.body.style.height = 'auto';
-    var h = document.body.scrollHeight;
-    window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
-  });
+  tabs.forEach((t,i)  => t.classList.toggle('on', i===idx));
+  [...panes].forEach((p,i) => p.classList.toggle('on', i===idx));
 }
 
 function renderPortPane(cat, idx) {
@@ -1476,8 +1543,10 @@ function renderPortPane(cat, idx) {
 
   if (cat === '리깅') {
     const cards = items.map(item => {
-      const ytId  = getYtId(item.img);
-      const thumb = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
+      const ytId = getYtId(item.img);
+      const thumb = ytId
+        ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`
+        : '';
       return `
         <div class="port-card" onclick="omYt('${item.title.replace(/'/g,"\\'")}','${item.img}')">
           <div class="port-thumb">
@@ -1521,17 +1590,17 @@ function renderPortPane(cat, idx) {
 
   let pgHtml = '';
   if (totalPg > 1) {
-    const prevDis = curPage === 1 ? 'disabled' : '';
-    const nextDis = curPage === totalPg ? 'disabled' : '';
+    const prevDis = curPage===1 ? 'disabled' : '';
+    const nextDis = curPage===totalPg ? 'disabled' : '';
     let nums = '';
-    for (let p = 1; p <= totalPg; p++) {
-      nums += `<button class="pg-btn${p === curPage ? ' active' : ''}" onclick="goPortPage('${cat}',${idx},${p})">${p}</button>`;
+    for (let p=1; p<=totalPg; p++) {
+      nums += `<button class="pg-btn${p===curPage?' active':''}" onclick="goPortPage('${cat}',${idx},${p})">${p}</button>`;
     }
     pgHtml = `
       <div class="port-pagination">
-        <button class="pg-btn arrow" onclick="goPortPage('${cat}',${idx},${curPage - 1})" ${prevDis}>‹</button>
+        <button class="pg-btn arrow" onclick="goPortPage('${cat}',${idx},${curPage-1})" ${prevDis}>‹</button>
         ${nums}
-        <button class="pg-btn arrow" onclick="goPortPage('${cat}',${idx},${curPage + 1})" ${nextDis}>›</button>
+        <button class="pg-btn arrow" onclick="goPortPage('${cat}',${idx},${curPage+1})" ${nextDis}>›</button>
       </div>`;
   }
 
@@ -1539,20 +1608,13 @@ function renderPortPane(cat, idx) {
 }
 
 function goPortPage(cat, idx, page) {
-  const total = Math.max(1, Math.ceil((portData[cat] || []).length / PORT_PER_PAGE));
+  const total = Math.max(1, Math.ceil((portData[cat]||[]).length / PORT_PER_PAGE));
   portPages[cat] = Math.min(Math.max(1, page), total);
   renderPortPane(cat, idx);
-  // 페이지 변경 후 높이 재측정
-  requestAnimationFrame(function() {
-    document.documentElement.style.height = 'auto';
-    document.body.style.height = 'auto';
-    var h = document.body.scrollHeight;
-    window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
-  });
 }
 
 /* ── 말풍선 ── */
-function showBalloon(id, msg, ms = 2000) {
+function showBalloon(id, msg, ms=2000) {
   const el = document.getElementById(id);
   if (!el) return;
   el.textContent = msg;
@@ -1562,15 +1624,15 @@ function showBalloon(id, msg, ms = 2000) {
 
 /* ── 견적+문의 한꺼번에 복사 ── */
 function copyAll() {
-  const r  = n => document.querySelector(`input[name="${n}"]:checked`)?.value || '(미선택)';
-  const v  = id => document.getElementById(id)?.value || '없음';
+  const r  = n => document.querySelector(`input[name="${n}"]:checked`)?.value||'(미선택)';
+  const v  = id => document.getElementById(id)?.value||'없음';
   const ev = document.querySelector('input[name="fev"]:checked')?.value || '없음';
-  const etEl  = document.getElementById('et');
-  const euEl  = document.getElementById('eu');
-  const fcoEl = document.getElementById('fco');
-  const workTxt   = etEl?.selectedIndex  > 0 ? etEl.options[etEl.selectedIndex].text   : '미선택';
-  const usageTxt  = euEl?.selectedIndex >= 0 ? euEl.options[euEl.selectedIndex].text   : '미선택';
-  const collabTxt = fcoEl?.selectedIndex > 0 ? fcoEl.options[fcoEl.selectedIndex].text : '없음';
+  const etEl   = document.getElementById('et');
+  const euEl   = document.getElementById('eu');
+  const fcoEl  = document.getElementById('fco');
+  const workTxt  = etEl?.selectedIndex>0  ? etEl.options[etEl.selectedIndex].text   : '미선택';
+  const usageTxt = euEl?.selectedIndex>=0 ? euEl.options[euEl.selectedIndex].text   : '미선택';
+  const collabTxt= fcoEl?.selectedIndex>0 ? fcoEl.options[fcoEl.selectedIndex].text : '없음';
 
   const txt = `[오로지OROGY 문의 양식]
 
@@ -1606,7 +1668,7 @@ ${v('fetc')}
 13. 포트폴리오 공개 여부: ${r('fp')}
 
 ──────────────────
-예상 견적 (참고용): ${document.getElementById('etotal')?.textContent || '0원'}
+예상 견적 (참고용): ${document.getElementById('etotal')?.textContent||'0원'}
 예약금(10%): ${v('edep')}
 ※ 예상 견적은 참고용으로만 확인 부탁드립니다.`;
 
@@ -1629,7 +1691,7 @@ async function loadPriceData() {
     const res = await fetch(URL);
     const text = await res.text();
     priceRows = parseCSV(text).slice(1).filter(r => r[0]);
-  } catch (e) {
+  } catch(e) {
     console.warn('가격 시트 로드 실패:', e);
     priceRows = [];
   }
@@ -1646,8 +1708,8 @@ function parsePrice(str) {
 const CHECK_SVG = `<div class="inc-check"><svg viewBox="0 0 12 10" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,5 4,8 11,1"/></svg></div>`;
 
 function renderPriceSection() {
-  const tabRow = document.getElementById('pc-tabs');
-  const panes  = document.getElementById('pc-panes');
+  const tabRow  = document.getElementById('pc-tabs');
+  const panes   = document.getElementById('pc-panes');
 
   const cats = {};
   priceRows.forEach(r => {
@@ -1663,11 +1725,11 @@ function renderPriceSection() {
   }
 
   tabRow.innerHTML = catNames.map((cat, i) =>
-    `<button class="tb on-b${i === 0 ? ' on' : ''}" onclick="swPrice(${i})">${cat}</button>`
+    `<button class="tb on-b${i===0?' on':''}" onclick="swPrice(${i})">${cat}</button>`
   ).join('');
 
   panes.innerHTML = catNames.map((cat, i) => {
-    const rows      = cats[cat];
+    const rows = cats[cat];
     const includes  = rows.filter(r => r.title === '기본 제공 목록');
     const mainItems = rows.filter(r => r.title && r.title !== '기본 제공 목록' && r.price);
     const addOns    = rows.filter(r => !r.title && r.price);
@@ -1686,7 +1748,7 @@ function renderPriceSection() {
       html += `<div class="price-cards">
         ${mainItems.map(r => {
           const isSoft = softCats.some(s => r.title.includes(s));
-          return `<div class="pc${isSoft ? ' soft' : ''}">
+          return `<div class="pc${isSoft?' soft':''}">
             ${r.title ? `<div class="pc-type">${r.title}</div>` : ''}
             <div class="pc-name">${r.opt}</div>
             <div class="pc-amt">${r.price}</div>
@@ -1698,32 +1760,27 @@ function renderPriceSection() {
 
     if (addOns.length) {
       const hasDesc = addOns.some(r => r.desc);
-      html += `<table class="opt-tbl">
-        <thead><tr><th>추가 옵션</th><th>추가금</th>${hasDesc ? '<th>비고</th>' : ''}</tr></thead>
-        <tbody>
-          ${addOns.map(r =>
-            `<tr><td>${r.opt}</td><td class="op-amt">${r.price}</td>${hasDesc ? `<td class="op-note">${r.desc}</td>` : ''}</tr>`
-          ).join('')}
-        </tbody>
-      </table>`;
+      html += `<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px;">
+        <table class="opt-tbl" style="min-width:320px;">
+          <thead><tr><th>추가 옵션</th><th>추가금</th>${hasDesc?'<th>비고</th>':''}</tr></thead>
+          <tbody>
+            ${addOns.map(r =>
+              `<tr><td>${r.opt}</td><td class="op-amt">${r.price}</td>${hasDesc?`<td class="op-note">${r.desc}</td>`:''}</tr>`
+            ).join('')}
+          </tbody>
+        </table>
+      </div>`;
     }
 
-    return `<div class="pane${i === 0 ? ' on' : ''}">${html}</div>`;
+    return `<div class="pane${i===0?' on':''}">${html}</div>`;
   }).join('');
 }
 
 function swPrice(idx) {
   const tabs  = document.getElementById('pc-tabs').querySelectorAll('.tb');
   const panes = document.getElementById('pc-panes').children;
-  tabs.forEach((t, i)  => t.classList.toggle('on', i === idx));
-  [...panes].forEach((p, i) => p.classList.toggle('on', i === idx));
-  // 탭 전환 후 높이 재측정
-  requestAnimationFrame(function() {
-    document.documentElement.style.height = 'auto';
-    document.body.style.height = 'auto';
-    var h = document.body.scrollHeight;
-    window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
-  });
+  tabs.forEach((t,i)  => t.classList.toggle('on', i===idx));
+  [...panes].forEach((p,i) => p.classList.toggle('on', i===idx));
 }
 
 function buildEstSelect() {
@@ -1760,10 +1817,9 @@ function buildEstSelect() {
   });
 }
 
-/* ── 이벤트 로드 ── */
 async function loadEvents() {
   const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJXlBmNMpCB6yQH5mznODAXBhgywVD7JheDmNqejv0bizcyWAnvj4hCOfcAhWwSFL0n_TihrQ3JktC/pub?gid=734879133&single=true&output=csv';
-  const evList      = document.getElementById('ev-list');
+  const evList = document.getElementById('ev-list');
   const evCheckList = document.getElementById('ev-check-list');
   let events = [];
   try {
@@ -1786,9 +1842,12 @@ async function loadEvents() {
 
   if (evList) {
     evList.innerHTML = events.map(ev => {
-      const dlHtml    = ev.dl    ? `<div class="ev-dl">~ ${formatDate(ev.dl)}</div>` : '';
-      const priceHtml = ev.price ? `<div class="ev-price">${ev.price.toLocaleString()}원</div>` : '';
-      const bodyHtml  = ev.content ? `<div class="ev-body">${escHtml(ev.content)}</div>` : '';
+      const dlHtml = ev.dl
+        ? `<div class="ev-dl">~ ${formatDate(ev.dl)}</div>` : '';
+      const priceHtml = ev.price
+        ? `<div class="ev-price">${ev.price.toLocaleString()}원</div>` : '';
+      const bodyHtml = ev.content
+        ? `<div class="ev-body">${escHtml(ev.content)}</div>` : '';
       return `<div class="ev-card">
         <div class="ev-title">${escHtml(ev.title)}</div>
         ${dlHtml}
@@ -1838,7 +1897,7 @@ function resetAll() {
   showBalloon('reset-balloon', '↺ 초기화되었습니다!');
 }
 
-/* ── 초기 실행 ── */
+/* ── 초기화 ── */
 ce();
 loadIntro();
 loadSlot();
@@ -1846,64 +1905,32 @@ loadCollab();
 loadPortfolio();
 loadEvents();
 loadPriceData();
-</script>
 
-<!--
-  ════════════════════════════════════════════════
-  임베드 사용법 — 부모 페이지에 아래 코드를 붙여넣으세요
-  ════════════════════════════════════════════════
-
-  1) iframe 삽입
-  ────────────────────────────────────────────────
-  <iframe id="orogy-frame"
-    src="이_파일_URL"
-    style="width:100%;border:none;display:block;"
-    scrolling="no">
-  </iframe>
-
-  2) 자동 높이 + 네비게이션 스크롤 스크립트
-  ────────────────────────────────────────────────
-  <script>
-  var orogyFrame = document.getElementById('orogy-frame');
+/* ── 임베드 자동 높이 조절 ── */
+(function() {
+  function sendHeight() {
+    const h = document.documentElement.scrollHeight;
+    window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
+  }
+  sendHeight();
+  if (window.ResizeObserver) {
+    new ResizeObserver(sendHeight).observe(document.body);
+  }
+  let lastH = 0;
+  setInterval(() => {
+    const h = document.documentElement.scrollHeight;
+    if (h !== lastH) { lastH = h; sendHeight(); }
+  }, 300);
 
   window.addEventListener('message', function(e) {
-    if (!e.data) return;
-
-    // ① iframe 높이 자동 조절 (늘어남 + 줄어듦 모두 대응)
-    if (e.data.type === 'orogy-resize') {
-      orogyFrame.style.minHeight = '';          // 중요: min-height 해제
-      orogyFrame.style.height = e.data.height + 'px';
-    }
-
-    // ② iframe 내부 섹션 스크롤 수신
-    if (e.data.type === 'orogy-scrollpos') {
-      var frameTop = orogyFrame.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: frameTop + e.data.offsetTop, behavior: 'smooth' });
-    }
+    if (!e.data || e.data.type !== 'orogy-scroll') return;
+    const target = document.getElementById(e.data.id);
+    if (!target) return;
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const iframeTop = target.getBoundingClientRect().top + window.scrollY;
+    window.parent.postMessage({ type: 'orogy-scrollpos', offsetTop: iframeTop }, '*');
   });
-
-  // ③ 커스텀 메뉴 네비게이션 함수
-  function scrollToSection(sectionId) {
-    orogyFrame.contentWindow.postMessage(
-      { type: 'orogy-scroll', id: sectionId }, '*'
-    );
-  }
-  <\/script>
-
-  3) 커스텀 메뉴 항목별 id 목록
-  ────────────────────────────────────────────────
-  작가 소개       → scrollToSection('intro')
-  슬롯 현황       → scrollToSection('slot')
-  안내사항        → scrollToSection('notice')
-  작업 순서       → scrollToSection('process')
-  사용 범위       → scrollToSection('usage')
-  포트폴리오      → scrollToSection('portfolio')
-  가격 & 옵션    → scrollToSection('price')
-  환불 안내       → scrollToSection('refund')
-  이벤트          → scrollToSection('events')
-  견적 & 문의    → scrollToSection('inquiry')
-  협업 작가       → scrollToSection('collab')
-  ════════════════════════════════════════════════
--->
+})();
+</script>
 </body>
 </html>
