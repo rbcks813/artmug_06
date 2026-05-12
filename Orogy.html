@@ -126,7 +126,51 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 }
 .reset-btn:hover{border-color:var(--accent);color:var(--accent);}
 
-/* ── 모달: iframe 내부에선 사용 안 함. 부모 페이지에서 렌더링. ── */
+/* ══════════════════════════════════════
+   모달 — 배경 없이 fixed 따라오기 버전
+══════════════════════════════════════ */
+.mbg{
+  display:none;
+  position:fixed;
+  /* 배경 오버레이 제거 — 투명 */
+  inset:0;
+  background:transparent;
+  z-index:1000;
+  /* 포인터 이벤트: 박스 밖 클릭은 통과, 박스는 잡힘 */
+  pointer-events:none;
+  /* 모달 상자를 우측 하단에 고정 — 화면 안에서 항상 보임 */
+  display:none;
+  align-items:flex-end;
+  justify-content:flex-end;
+  padding:20px;
+}
+.mbg.open{
+  display:flex;
+  pointer-events:none;
+}
+.mbox{
+  background:var(--white);
+  border-radius:18px;
+  padding:22px;
+  max-width:480px;
+  width:calc(100% - 40px);
+  position:relative;
+  /* 박스만 클릭 가능 */
+  pointer-events:auto;
+  box-shadow:0 8px 40px rgba(0,0,0,.18), 0 2px 10px rgba(0,0,0,.10);
+  /* 살짝 위로 떠오르는 애니메이션 */
+  animation:modalSlideUp .22s cubic-bezier(.22,.68,0,1.2);
+}
+@keyframes modalSlideUp{
+  from{opacity:0;transform:translateY(18px) scale(.97);}
+  to  {opacity:1;transform:translateY(0)   scale(1);}
+}
+.mclose{position:absolute;top:12px;right:14px;background:none;border:none;font-size:19px;color:var(--gray);cursor:pointer;line-height:1;}
+.mbox h3{font-size:15px;font-weight:700;margin-bottom:3px;}
+.mbox .msub{font-size:12px;color:var(--gray);margin-bottom:14px;}
+.mimg-wrap{border-radius:12px;overflow:hidden;margin-bottom:12px;}
+.mimg-wrap img{width:100%;height:auto;display:block;}
+.mimg-wrap iframe{width:100%;aspect-ratio:16/9;border:none;border-radius:12px;display:block;}
 
 /* ── 유튜브 카드 재생 오버레이 ── */
 .yt-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.15);transition:background .2s;}
@@ -216,10 +260,9 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 
 
 /* ═════════════════════════════
-   4. 작업 순서 — PC: 가로 스텝 / 모바일: 세로 스텝
+   4. 작업 순서 — PC: 가로 스텝
 ═════════════════════════════ */
 .proc-wrap{position:relative;padding:30px 0 10px;}
-/* PC 연결선 */
 .proc-wrap::before{
   content:'';position:absolute;
   top:46px;left:calc(100% / 14);right:calc(100% / 14);
@@ -248,7 +291,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 
 
 /* ═════════════════════════════
-   5. 사용 범위 — 모바일 가로 스크롤
+   5. 사용 범위
 ═════════════════════════════ */
 .tbl-wrap{overflow:hidden;border-radius:13px;border:1.5px solid var(--border);}
 .tbl{width:100%;border-collapse:collapse;}
@@ -476,75 +519,102 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 @media(max-width:600px){
   /* 기본 여백 */
   .page{padding:0 14px;}
-  .sec{padding:40px 0;}
+  .sec{padding:36px 0;}
   .sh h2{font-size:15px;}
   .card{padding:16px;}
 
   /* ── 소개 ── */
-  #intro{padding-top:32px;}
-  .intro-wrap{flex-direction:row;gap:16px;align-items:flex-start;}
-  .intro-avatar{
-    width:88px;height:88px;border-radius:14px;flex-shrink:0;
-  }
-  .skel-avatar{width:88px;height:88px;}
+  #intro{padding-top:28px;}
+  .intro-wrap{flex-direction:row;gap:14px;align-items:flex-start;}
+  .intro-avatar{width:80px;height:80px;border-radius:12px;flex-shrink:0;}
+  .skel-avatar{width:80px;height:80px;}
   .intro-role{font-size:10px;}
-  .intro-name{font-size:20px;margin-bottom:10px;}
-  .intro-desc{font-size:12px;padding:8px 10px;margin-bottom:12px;}
-  .htag{font-size:12px;padding:3px 10px;}
+  .intro-name{font-size:19px;margin-bottom:8px;}
+  .intro-desc{font-size:12px;padding:8px 10px;margin-bottom:10px;}
+  .htag{font-size:11.5px;padding:3px 9px;}
+  .status-row{gap:5px;}
+  .sbadge{font-size:11.5px;padding:4px 11px;}
 
-  /* ── 슬롯 현황: 3열 → 2열, 카드 넉넉하게 ── */
+  /* ══════════════════════════════════════
+     슬롯 현황 — 모바일: 2열 고정, 카드 세로 여백 확보
+  ══════════════════════════════════════ */
   .slot-grid{
     grid-template-columns:repeat(2,1fr) !important;
     gap:8px;
   }
-  .slot-card{padding:14px 8px;}
-  .slot-mon{font-size:12px;margin-bottom:8px;}
-  .sd{width:14px;height:14px;}
-  .slot-dots{gap:4px;}
-  .slot-legend{font-size:11.5px;gap:10px;margin-top:10px;}
+  .slot-card{
+    padding:14px 10px 16px;
+    border-radius:12px;
+  }
+  .slot-mon{
+    font-size:13px;        /* 좀 더 크게 — 눈에 잘 띄게 */
+    font-weight:600;
+    color:#555;
+    margin-bottom:10px;
+  }
+  .sd{width:13px;height:13px;}
+  .slot-dots{gap:4px;flex-wrap:wrap;justify-content:center;}
+  .slot-legend{font-size:12px;gap:12px;margin-top:10px;}
 
   /* ── 안내사항 ── */
   .notice-list li{font-size:12.5px;padding:10px 12px;gap:9px;}
   .notice-list li .nn{width:18px;height:18px;font-size:9px;margin-top:2px;}
 
-  /* ── 작업 순서: 세로 타임라인으로 전환 ── */
-  .proc-wrap{padding:0;}
+  /* ══════════════════════════════════════
+     작업 순서 — 모바일: 세로 타임라인
+  ══════════════════════════════════════ */
+  #process .card{padding:16px 14px 14px;}
+  .proc-wrap{
+    padding:0 0 4px 0;
+  }
   .proc-wrap::before{display:none;}
-  /* 세로 연결선 */
+
   .proc-steps{
     flex-direction:column;
     gap:0;
     position:relative;
+    padding-left:0;
   }
-  /* 세로 점선 */
+  /* 세로 점선 — 아이콘 중앙에 딱 맞춤 (아이콘 width=44px → center=22px) */
   .proc-steps::before{
     content:'';
     position:absolute;
-    left:25px;
-    top:26px;
-    bottom:26px;
+    left:22px;              /* 아이콘 중심 */
+    top:44px;               /* 첫 아이콘 아래에서 시작 */
+    bottom:22px;
     width:2px;
     background:repeating-linear-gradient(
       180deg,
-      var(--main) 0,var(--main) 8px,
-      transparent 8px,transparent 16px
+      var(--main) 0,var(--main) 7px,
+      transparent 7px,transparent 14px
     );
     z-index:0;
+    transform:translateX(-50%);
   }
   .proc-step{
     flex-direction:row;
     align-items:center;
-    gap:16px;
+    gap:14px;
     text-align:left;
     flex:none;
-    padding:10px 0;
+    padding:9px 0;
     position:relative;
     z-index:1;
   }
   .proc-icon{
-    width:48px;height:48px;
+    width:44px;
+    height:44px;
     flex-shrink:0;
-    background:var(--white);
+    background:var(--white);  /* 점선이 뒤에서 보이지 않게 */
+  }
+  .proc-icon svg{
+    width:20px;
+    height:20px;
+  }
+  .proc-icon .pnum{
+    width:16px;height:16px;
+    font-size:8px;
+    top:-3px;right:-3px;
   }
   .proc-step-label{
     font-size:13px;
@@ -553,19 +623,30 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
     color:#444;
     font-weight:600;
   }
-  /* br 태그 숨기기 — 가로 배치에서 불필요 */
   .proc-step-label br{display:none;}
 
-  /* ── 사용 범위 표: 가로 스크롤 ── */
+  /* ══════════════════════════════════════
+     사용 범위 표 — 모바일: 가로 스크롤
+  ══════════════════════════════════════ */
   .tbl-wrap{
     overflow-x:auto;
     -webkit-overflow-scrolling:touch;
     border-radius:10px;
   }
-  .tbl{min-width:480px;font-size:12px;}
-  .tbl th{padding:8px 10px;font-size:11.5px;}
-  .tbl td{padding:7px 10px;}
-  .tbl-sub{font-size:10px;}
+  .tbl{
+    min-width:440px;   /* 너무 좁으면 글자 뭉개짐 방지 */
+    font-size:12px;
+  }
+  .tbl th{
+    padding:9px 10px;
+    font-size:11.5px;
+    white-space:nowrap;
+  }
+  .tbl td{
+    padding:8px 10px;
+    font-size:12px;
+  }
+  .tbl-sub{font-size:10.5px;}
 
   /* ── 포트폴리오 ── */
   .port-grid{grid-template-columns:1fr 1fr;gap:8px;}
@@ -614,6 +695,20 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   /* ── 탭 버튼 ── */
   .tab-row{gap:5px;}
   .tb{font-size:12px;padding:5px 13px;}
+
+  /* ── 모달 모바일: 하단 풀너비 ── */
+  .mbg{
+    align-items:flex-end;
+    justify-content:center;
+    padding:0;
+  }
+  .mbox{
+    max-width:100%;
+    width:100%;
+    border-radius:18px 18px 0 0;
+    padding:18px 16px 24px;
+    box-shadow:0 -4px 30px rgba(0,0,0,.14);
+  }
 }
 
 /* ══════════════════════════════════════
@@ -627,6 +722,18 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   .slot-grid{grid-template-columns:repeat(2,1fr) !important;}
   .port-grid{grid-template-columns:1fr;}
   .price-cards{grid-template-columns:1fr;}
+}
+
+/* 사용 범위 표 스크롤 힌트 — 모바일에서만 표시 */
+.tbl-scroll-hint{
+  display:none;
+  font-size:11.5px;
+  color:var(--gray);
+  text-align:center;
+  margin-top:8px;
+}
+@media(max-width:600px){
+  .tbl-scroll-hint{display:block;}
 }
 </style>
 </head>
@@ -871,7 +978,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
         </tbody>
       </table>
     </div>
-    <!-- 모바일 스크롤 안내 -->
     <p class="tbl-scroll-hint">← 좌우로 스크롤해서 전체 내용을 확인하세요</p>
   </div></div>
 </section>
@@ -1130,23 +1236,15 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   </div></div>
 </section>
 
-<!-- 모달은 부모 페이지에서 렌더링됨 (postMessage 방식) -->
-
-<style>
-/* 사용 범위 표 스크롤 힌트 — 모바일에서만 표시 */
-.tbl-scroll-hint{
-  display:none;
-  font-size:11.5px;
-  color:var(--gray);
-  text-align:center;
-  margin-top:8px;
-}
-@media(max-width:600px){
-  .tbl-scroll-hint{display:block;}
-  /* 작업 순서 카드 패딩 축소 */
-  #process .card{padding:16px 14px 14px;}
-}
-</style>
+<!-- ═══════════ 모달 — 배경 없이 fixed 우측하단 고정 ═══════════ -->
+<div class="mbg" id="mbg">
+  <div class="mbox" id="mbox">
+    <button class="mclose" onclick="cmc()">✕</button>
+    <div class="mimg-wrap" id="mimg-wrap"></div>
+    <h3 id="mtitle"></h3>
+    <p class="msub" id="msub"></p>
+  </div>
+</div>
 
 <script>
 /* ── 구글시트 CSV 파싱 유틸 (멀티라인 지원) ── */
@@ -1356,7 +1454,6 @@ async function loadSlot() {
     const validRows = rows.filter(r => parseInt(r[0]));
     const count = Math.min(validRows.length, 6);
 
-    // 모바일(≤600px)이면 2열, 아니면 count열
     const isMobile = window.innerWidth <= 600;
     if (!isMobile) {
       grid.style.gridTemplateColumns = `repeat(${count}, 1fr)`;
@@ -1395,61 +1492,38 @@ function getYtId(url) {
   return m ? m[1] : '';
 }
 
-/* ── 모달: 이미지 ── */
-/* ── 모달: 부모 페이지에 postMessage로 전달 ── */
+/* ══════════════════════════════════════
+   모달 열기/닫기
+   - 배경 오버레이 없음
+   - position:fixed 로 뷰포트에 항상 고정 (임베드 환경에서도 따라옴)
+   - 모바일: 하단 시트, 데스크톱: 우측 하단 고정
+══════════════════════════════════════ */
 function om(t, s, img) {
-  window.parent.postMessage({ type: 'orogy-modal', mode: 'image', title: t, sub: s || '', img: img }, '*');
+  document.getElementById('mtitle').textContent = t;
+  document.getElementById('msub').textContent   = s || '';
+  const wrap = document.getElementById('mimg-wrap');
+  wrap.innerHTML = `<img src="${img}" alt="${t}">`;
+  document.getElementById('mbg').classList.add('open');
 }
 
 function omYt(t, url) {
+  document.getElementById('mtitle').textContent = t;
+  document.getElementById('msub').textContent   = '';
   const ytId = getYtId(url);
-  window.parent.postMessage({ type: 'orogy-modal', mode: 'youtube', title: t, ytId: ytId, url: url }, '*');
+  const wrap = document.getElementById('mimg-wrap');
+  wrap.innerHTML = ytId
+    ? `<iframe src="https://www.youtube.com/embed/${ytId}" allow="encrypted-media" allowfullscreen></iframe>`
+    : `<p style="padding:20px;color:var(--gray);">영상을 불러올 수 없습니다.</p>`;
+  document.getElementById('mbg').classList.add('open');
 }
 
-/* 부모 페이지가 없을 때(직접 열기)를 위한 자체 폴백 모달 */
-(function() {
-  // 부모와 같은 origin이면 postMessage가 전달되지만,
-  // top === self(직접 열기)인 경우 자체 모달을 사용
-  if (window.top === window.self) {
-    // 자체 모달 HTML 주입
-    const mbg = document.createElement('div');
-    mbg.id = 'mbg-fallback';
-    mbg.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;padding:20px;';
-    mbg.innerHTML = `
-      <div style="background:#fff;border-radius:18px;padding:22px;max-width:540px;width:100%;position:relative;">
-        <button onclick="document.getElementById('mbg-fallback').style.display='none';var f=document.querySelector('#mbg-fallback iframe');if(f){var s=f.src;f.src='';f.src=s;}"
-          style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;color:#999;cursor:pointer;">✕</button>
-        <div id="mbg-fallback-wrap" style="border-radius:12px;overflow:hidden;margin-bottom:12px;"></div>
-        <h3 id="mbg-fallback-title" style="font-size:15px;font-weight:700;margin-bottom:3px;font-family:inherit;"></h3>
-        <p id="mbg-fallback-sub" style="font-size:12px;color:#999;font-family:inherit;"></p>
-      </div>`;
-    mbg.addEventListener('click', function(e) {
-      if (e.target === mbg) {
-        mbg.style.display = 'none';
-        const f = mbg.querySelector('iframe');
-        if (f) { const s = f.src; f.src = ''; f.src = s; }
-      }
-    });
-    document.body.appendChild(mbg);
-
-    // 자체 모달 열기 함수 덮어쓰기
-    window.om = function(t, s, img) {
-      document.getElementById('mbg-fallback-title').textContent = t;
-      document.getElementById('mbg-fallback-sub').textContent = s || '';
-      document.getElementById('mbg-fallback-wrap').innerHTML = `<img src="${img}" alt="${t}" style="width:100%;height:auto;display:block;">`;
-      mbg.style.display = 'flex';
-    };
-    window.omYt = function(t, url) {
-      const ytId = getYtId(url);
-      document.getElementById('mbg-fallback-title').textContent = t;
-      document.getElementById('mbg-fallback-sub').textContent = '';
-      document.getElementById('mbg-fallback-wrap').innerHTML = ytId
-        ? `<iframe src="https://www.youtube.com/embed/${ytId}" allow="encrypted-media" allowfullscreen style="width:100%;aspect-ratio:16/9;border:none;border-radius:12px;display:block;"></iframe>`
-        : `<p style="padding:20px;color:#999;">영상을 불러올 수 없습니다.</p>`;
-      mbg.style.display = 'flex';
-    };
-  }
-})();
+/* 모달 닫기 */
+function cmc(){
+  document.getElementById('mbg').classList.remove('open');
+  const wrap = document.getElementById('mimg-wrap');
+  const iframe = wrap ? wrap.querySelector('iframe') : null;
+  if (iframe) { const s = iframe.src; iframe.src = ''; iframe.src = s; }
+}
 
 /* ── 견적 계산 ── */
 function ce(){
@@ -1907,7 +1981,7 @@ function resetAll() {
   showBalloon('reset-balloon', '↺ 초기화되었습니다!');
 }
 
-/* ── 초기화 ── */
+/* ── 초기 실행 ── */
 ce();
 loadIntro();
 loadSlot();
@@ -1942,7 +2016,5 @@ loadPriceData();
   });
 })();
 </script>
-
-
 </body>
 </html>
