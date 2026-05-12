@@ -126,64 +126,10 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 }
 .reset-btn:hover{border-color:var(--accent);color:var(--accent);}
 
-/* ══════════════════════════════
-   라이트박스 — 이미지 크게보기
-   position:fixed + 클릭으로 닫기
-   (iframe 스크롤 문제 없음 — 뷰포트에 고정)
-══════════════════════════════ */
-#lightbox{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:9999;
-  background:rgba(0,0,0,.82);
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-  cursor:zoom-out;
-}
-#lightbox.on{display:flex;}
-#lightbox img{
-  max-width:100%;
-  max-height:90vh;
-  border-radius:12px;
-  object-fit:contain;
-  box-shadow:0 8px 40px rgba(0,0,0,.5);
-  cursor:default;
-}
-#lightbox-yt{
-  width:min(860px,100%);
-  aspect-ratio:16/9;
-  border:none;
-  border-radius:12px;
-}
-#lightbox-close{
-  position:fixed;
-  top:16px;right:16px;
-  width:38px;height:38px;
-  border-radius:50%;
-  background:rgba(255,255,255,.15);
-  border:none;color:#fff;
-  font-size:20px;line-height:1;
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-}
-#lightbox-close:hover{background:rgba(255,255,255,.28);}
-#lightbox-info{
-  position:fixed;
-  bottom:20px;left:50%;
-  transform:translateX(-50%);
-  background:rgba(0,0,0,.6);
-  color:#fff;
-  padding:8px 18px;
-  border-radius:999px;
-  font-size:13px;
-  max-width:90vw;
-  text-align:center;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
+/* ── 모달 ── */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.mbg.open{display:flex;}
+.mbox{background:var(--white);border-radius:18px;padding:22px;max-width:520px;width:100%;position:relative;}
 .mclose{position:absolute;top:12px;right:14px;background:none;border:none;font-size:19px;color:var(--gray);cursor:pointer;line-height:1;}
 .mbox h3{font-size:15px;font-weight:700;margin-bottom:3px;}
 .mbox .msub{font-size:12px;color:var(--gray);margin-bottom:14px;}
@@ -241,8 +187,16 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 
 /* ═════════════════════════════
    2. 슬롯 현황
+   ─ PC: 데이터 개수만큼 열
+   ─ 태블릿(≤960): 최대 3열
+   ─ 모바일(≤600): 2열 고정
 ═════════════════════════════ */
-.slot-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
+.slot-grid{
+  display:grid;
+  /* JS가 --slot-cols 변수를 설정; 기본값 6 */
+  grid-template-columns:repeat(var(--slot-cols, 6), 1fr);
+  gap:10px;
+}
 .slot-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center;}
 .slot-mon{font-size:11.5px;font-weight:500;color:var(--gray);margin-bottom:10px;}
 .slot-dots{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;}
@@ -279,7 +233,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 
 
 /* ═════════════════════════════
-   4. 작업 순서 — PC: 가로 스텝 / 모바일: 세로 스텝
+   4. 작업 순서 — PC: 가로 / 모바일: 세로 타임라인
 ═════════════════════════════ */
 .proc-wrap{position:relative;padding:30px 0 10px;}
 /* PC 연결선 */
@@ -313,14 +267,21 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 /* ═════════════════════════════
    5. 사용 범위
 ═════════════════════════════ */
-.tbl-wrap{overflow:hidden;border-radius:13px;border:1.5px solid var(--border);}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:13px;border:1.5px solid var(--border);}
 .tbl{width:100%;border-collapse:collapse;}
-.tbl th{background:var(--main);padding:10px 14px;text-align:left;font-size:12.5px;font-weight:600;color:#5a2e80;}
+.tbl th{background:var(--main);padding:10px 14px;text-align:left;font-size:12.5px;font-weight:600;color:#5a2e80;white-space:nowrap;}
 .tbl td{padding:9px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5;}
 .tbl tr:last-child td{border-bottom:none;}
 .tbl tr:nth-child(even) td{background:var(--soft);}
 .ok{color:#1a8f40;font-weight:500;}.no{color:var(--red);}
 .tbl-sub{font-size:11px;color:var(--gray);display:block;margin-top:1px;}
+/* 사용 범위 표 — 모바일에서 최소 너비 확보 */
+@media(max-width:600px){
+  .tbl{min-width:460px;}
+  .tbl th,.tbl td{padding:8px 10px;font-size:12px;}
+  .tbl th{font-size:11.5px;}
+  .tbl-sub{font-size:10px;}
+}
 
 
 /* ═════════════════════════════
@@ -522,7 +483,8 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   .page{padding:0 32px;}
   .intro-wrap{flex-direction:column;gap:22px;}
   .intro-avatar{width:140px;height:140px;}
-  .slot-grid{grid-template-columns:repeat(3,1fr);}
+  /* 슬롯: 태블릿에서는 최대 3열 */
+  .slot-grid{grid-template-columns:repeat(3,1fr) !important;}
   .price-cards{grid-template-columns:repeat(2,1fr);}
   .inc-grid{grid-template-columns:1fr;}
   .collab-grid{grid-template-columns:1fr 1fr;}
@@ -540,52 +502,66 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   /* 기본 여백 */
   .page{padding:0 14px;}
   .sec{padding:36px 0;}
+  .sh{margin-bottom:18px;}
   .sh h2{font-size:15px;}
-  .card{padding:14px;}
+  .card{padding:16px;}
 
-  /* ── 소개 ── */
+  /* ── 소개: 가로 배치 유지하되 overflow 방지 ── */
   #intro{padding-top:28px;}
-  .intro-wrap{flex-direction:row;gap:14px;align-items:flex-start;}
-  .intro-avatar{width:84px;height:84px;border-radius:12px;flex-shrink:0;}
-  .skel-avatar{width:84px;height:84px;}
-  .intro-role{font-size:10px;}
-  .intro-name{font-size:19px;margin-bottom:9px;}
-  .intro-desc{font-size:12px;padding:8px 10px;margin-bottom:10px;}
-  .htag{font-size:11.5px;padding:3px 10px;}
-  .status-row{gap:5px;}
+  .intro-wrap{
+    flex-direction:row;
+    gap:14px;
+    align-items:flex-start;
+  }
+  .intro-avatar{
+    width:80px;height:80px;
+    min-width:80px;   /* 축소 방지 */
+    border-radius:12px;
+    flex-shrink:0;
+  }
+  .skel-avatar{width:80px;height:80px;min-width:80px;}
+  .intro-body{
+    flex:1;
+    min-width:0;     /* 텍스트 overflow 방지 */
+    overflow:hidden;
+  }
+  .intro-role{font-size:10px;margin-bottom:3px;}
+  .intro-name{font-size:18px;margin-bottom:8px;word-break:keep-all;}
+  .intro-desc{font-size:12px;padding:8px 10px;margin-bottom:10px;line-height:1.7;}
+  .htag{font-size:11.5px;padding:3px 9px;}
+  .hashtag-row{gap:5px;}
 
-  /* ── 슬롯 현황: 항상 2열 ── */
+  /* ── 슬롯 현황: 2열 고정 ── */
   .slot-grid{
     grid-template-columns:repeat(2,1fr) !important;
     gap:8px;
   }
-  .slot-card{padding:12px 8px;}
-  .slot-mon{font-size:12.5px;font-weight:600;margin-bottom:8px;}
-  .sd{width:14px;height:14px;}
+  .slot-card{padding:13px 8px;}
+  .slot-mon{font-size:12px;margin-bottom:7px;}
+  .sd{width:13px;height:13px;}
   .slot-dots{gap:4px;}
   .slot-legend{font-size:11.5px;gap:10px;margin-top:10px;}
 
   /* ── 안내사항 ── */
-  .notice-list li{font-size:12.5px;padding:10px 11px;gap:8px;}
-  .notice-list li .nn{width:18px;height:18px;font-size:9px;margin-top:2px;flex-shrink:0;}
+  .notice-list li{font-size:12.5px;padding:10px 12px;gap:9px;}
+  .notice-list li .nn{width:18px;height:18px;font-size:9px;margin-top:2px;}
 
-  /* ── 작업 순서: 세로 타임라인으로 전환 ── */
+  /* ── 작업 순서: 세로 타임라인 ── */
   .proc-wrap{padding:0;}
   .proc-wrap::before{display:none;}
-  #process .card{padding:14px 12px 12px;}
 
   .proc-steps{
     flex-direction:column;
     gap:0;
     position:relative;
   }
-  /* 세로 점선 */
+  /* 세로 점선: 아이콘(48px) 중앙 = left:24px */
   .proc-steps::before{
     content:'';
     position:absolute;
-    left:23px;
-    top:24px;
-    bottom:24px;
+    left:24px;
+    top:48px;          /* 첫 아이콘 아래부터 */
+    bottom:24px;       /* 마지막 아이콘 중앙까지 */
     width:2px;
     background:repeating-linear-gradient(
       180deg,
@@ -600,34 +576,28 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
     gap:14px;
     text-align:left;
     flex:none;
-    padding:8px 0;
+    padding:10px 0;
     position:relative;
     z-index:1;
   }
   .proc-icon{
-    width:46px;height:46px;
+    width:48px;height:48px;
+    min-width:48px;    /* 아이콘 축소 방지 */
     flex-shrink:0;
     background:var(--white);
   }
   .proc-step-label{
     font-size:13px;
+    font-weight:600;
     text-align:left;
     line-height:1.5;
     color:#444;
-    font-weight:600;
+    flex:1;
+    min-width:0;
   }
   .proc-step-label br{display:none;}
-
-  /* ── 사용 범위 표: 가로 스크롤 ── */
-  .tbl-wrap{
-    overflow-x:auto;
-    -webkit-overflow-scrolling:touch;
-    border-radius:10px;
-  }
-  .tbl{min-width:460px;font-size:12px;}
-  .tbl th{padding:9px 10px;font-size:11px;}
-  .tbl td{padding:7px 10px;}
-  .tbl-sub{font-size:10px;}
+  /* 작업 순서 카드 패딩 줄이기 */
+  #process .card{padding:14px 12px 12px;}
 
   /* ── 포트폴리오 ── */
   .port-grid{grid-template-columns:1fr 1fr;gap:8px;}
@@ -637,16 +607,17 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   /* ── 가격 ── */
   .price-cards{grid-template-columns:1fr 1fr;gap:8px;}
   .pc{padding:11px;}
-  .pc .pc-amt{font-size:15px;}
+  .pc .pc-amt{font-size:16px;}
   .pc .pc-name{font-size:12px;}
+  .pc .pc-type{font-size:10.5px;}
   .inc-grid{grid-template-columns:1fr;gap:6px;}
   .inc-item{font-size:12px;}
-  .opt-tbl thead tr th,.opt-tbl tbody td{font-size:12px;padding:7px 10px;}
+  .opt-tbl thead tr th,.opt-tbl tbody td{font-size:12px;padding:7px 9px;}
 
   /* ── 환불 안내 ── */
-  .refund-notice{font-size:12px;padding:10px 12px;}
-  .refund-list li{font-size:12.5px;padding:8px 11px;gap:8px;}
-  .rp{font-size:12.5px;min-width:52px;}
+  .refund-notice{font-size:12px;}
+  .refund-list li{font-size:12.5px;padding:8px 12px;gap:8px;}
+  .rp{font-size:12.5px;min-width:54px;}
 
   /* ── 이벤트 ── */
   .ev-wrap{padding:14px;}
@@ -654,32 +625,46 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   .ev-title{font-size:13.5px;}
   .ev-body{font-size:12.5px;}
 
-  /* ── 견적 & 문의 양식 ── */
+  /* ── 견적 & 문의 ── */
   .fgrid{grid-template-columns:1fr;gap:12px;}
   .fg.full{grid-column:1;}
   .fg label{font-size:11.5px;}
   .fg input,.fg select,.fg textarea{font-size:13px;padding:9px 11px;}
   .rl,.cl{font-size:12px;padding:5px 10px;}
-  .est-result-strip{padding:12px 14px;}
-  .est-total{font-size:21px;}
+  .est-result-strip{
+    padding:12px 14px;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+  }
+  .est-total{font-size:22px;}
   .est-dep{font-size:12px;}
   .est-note-box{font-size:11.5px;padding:10px 12px;}
   .copy-btn-row{flex-direction:column;align-items:stretch;}
-  .cp-btn,.reset-btn{width:100%;text-align:center;justify-content:center;padding:12px;}
+  .cp-btn,.reset-btn{
+    width:100%;text-align:center;
+    justify-content:center;
+    padding:12px;
+    border-radius:10px;
+  }
 
   /* ── 협업 작가 ── */
   .collab-grid{grid-template-columns:1fr;}
-  .collab-card{padding:11px;}
+  .collab-card{padding:12px;}
   .collab-name{font-size:13px;}
   .collab-benefit{font-size:11px;}
 
-  /* ── 탭 버튼 ── */
-  .tab-row{gap:5px;}
-  .tb{font-size:12px;padding:5px 12px;}
-
-  /* ── 모달 모바일 ── */
-  .mbox{padding:16px;border-radius:14px;}
-  .mbox h3{font-size:14px;}
+  /* ── 탭 버튼 — 가로 스크롤 허용 ── */
+  .tab-row{
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:4px;
+    /* 스크롤바 숨기기 */
+    scrollbar-width:none;
+  }
+  .tab-row::-webkit-scrollbar{display:none;}
+  .tb{font-size:12px;padding:5px 13px;white-space:nowrap;flex-shrink:0;}
 }
 
 /* ══════════════════════════════════════
@@ -687,15 +672,16 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 ══════════════════════════════════════ */
 @media(max-width:375px){
   .page{padding:0 10px;}
-  .intro-wrap{flex-direction:column;gap:12px;}
-  .intro-avatar{width:72px;height:72px;}
-  .intro-name{font-size:18px;}
+  /* 소개: 초소형에서는 세로 배치 */
+  .intro-wrap{flex-direction:column;gap:10px;}
+  .intro-avatar{width:64px;height:64px;min-width:64px;}
+  .intro-name{font-size:17px;}
   .slot-grid{grid-template-columns:repeat(2,1fr) !important;}
-  .port-grid{grid-template-columns:1fr;}
+  .port-grid{grid-template-columns:1fr 1fr;}
   .price-cards{grid-template-columns:1fr;}
 }
 
-/* ── 사용 범위 표 스크롤 힌트 — 모바일에서만 표시 ── */
+/* 사용 범위 표 스크롤 힌트 */
 .tbl-scroll-hint{
   display:none;
   font-size:11.5px;
@@ -796,7 +782,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                   <span class="pnum">1</span>
                 </div>
-                <div class="proc-step-label">문의 &amp;<br>신청서 작성</div>
+                <div class="proc-step-label">문의 &amp; 신청서 작성</div>
               </div>
               <div class="proc-step">
                 <div class="proc-icon">
@@ -817,14 +803,14 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18.37 2.63 14 7l-1.59-1.59a2 2 0 0 0-2.82 0L8 7l9 9 1.59-1.59a2 2 0 0 0 0-2.82L17 10l4.37-4.37a2.12 2.12 0 1 0-3-3z"/><path d="M9 8c-2 3-4 3.5-7 4l8 10c2-1 6-5 6-7"/><path d="M14.5 17.5 4.5 15"/></svg>
                   <span class="pnum">4</span>
                 </div>
-                <div class="proc-step-label">선화 &amp;<br>밑색 진행</div>
+                <div class="proc-step-label">선화 &amp; 밑색 진행</div>
               </div>
               <div class="proc-step">
                 <div class="proc-icon">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                   <span class="pnum">5</span>
                 </div>
-                <div class="proc-step-label">완성본<br>컨펌 &amp; 전달</div>
+                <div class="proc-step-label">완성본 컨펌 &amp; 전달</div>
               </div>
             </div>
           </div>
@@ -840,7 +826,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                   <span class="pnum">1</span>
                 </div>
-                <div class="proc-step-label">문의 &amp;<br>신청서 작성</div>
+                <div class="proc-step-label">문의 &amp; 신청서 작성</div>
               </div>
               <div class="proc-step">
                 <div class="proc-icon">
@@ -854,21 +840,21 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                   <span class="pnum">3</span>
                 </div>
-                <div class="proc-step-label">러프 &amp;<br>밑색 시안</div>
+                <div class="proc-step-label">러프 &amp; 밑색 시안</div>
               </div>
               <div class="proc-step">
                 <div class="proc-icon">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
                   <span class="pnum">4</span>
                 </div>
-                <div class="proc-step-label">선화 &amp;<br>파츠분리</div>
+                <div class="proc-step-label">선화 &amp; 파츠분리</div>
               </div>
               <div class="proc-step">
                 <div class="proc-icon">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                   <span class="pnum">5</span>
                 </div>
-                <div class="proc-step-label">최종 컨펌<br>&amp; 전달</div>
+                <div class="proc-step-label">최종 컨펌 &amp; 전달</div>
               </div>
             </div>
           </div>
@@ -883,7 +869,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                   <span class="pnum">1</span>
                 </div>
-                <div class="proc-step-label">문의 &amp;<br>신청서 작성</div>
+                <div class="proc-step-label">문의 &amp; 신청서 작성</div>
               </div>
               <div class="proc-step">
                 <div class="proc-icon">
@@ -897,21 +883,21 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><circle cx="9" cy="7" r=".8" fill="currentColor" stroke="none"/><circle cx="15" cy="7" r=".8" fill="currentColor" stroke="none"/><path d="M9.5 10.5c.7.8 1.3 1 2.5 1s1.8-.2 2.5-1"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
                   <span class="pnum">3</span>
                 </div>
-                <div class="proc-step-label">1차 피드백<br>(얼굴)</div>
+                <div class="proc-step-label">1차 피드백 (얼굴)</div>
               </div>
               <div class="proc-step">
                 <div class="proc-icon">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2.5"/><path d="M12 9c-3 0-5 2-5 4v1h10v-1c0-2-2-4-5-4z"/><path d="M9 14l-1 7"/><path d="M15 14l1 7"/><path d="M9.5 14.5l2.5 3 2.5-3"/></svg>
                   <span class="pnum">4</span>
                 </div>
-                <div class="proc-step-label">2차 피드백<br>(전신)</div>
+                <div class="proc-step-label">2차 피드백 (전신)</div>
               </div>
               <div class="proc-step">
                 <div class="proc-icon">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
                   <span class="pnum">5</span>
                 </div>
-                <div class="proc-step-label">완성 파일<br>전달</div>
+                <div class="proc-step-label">완성 파일 전달</div>
               </div>
             </div>
           </div>
@@ -1207,51 +1193,24 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   </div></div>
 </section>
 
-<!-- 라이트박스 -->
-<div id="lightbox" onclick="lbClose()">
-  <button id="lightbox-close" onclick="lbClose()">✕</button>
-  <div id="lightbox-inner"></div>
-  <div id="lightbox-info"></div>
+<!-- 모달 -->
+<div class="mbg" id="mbg" onclick="cm(event)">
+  <div class="mbox">
+    <button class="mclose" onclick="cmc()">✕</button>
+    <div class="mimg-wrap" id="mimg-wrap"></div>
+    <h3 id="mtitle"></h3>
+    <p class="msub" id="msub"></p>
+  </div>
 </div>
 
 <script>
-/* ══════════════════════════════════════
-   참고 코드(아트머그) 방식 그대로
-   - sendHeight: container.offsetHeight 기준 (scrollHeight 아님)
-   - 모달 열릴 때 높이 포함해서 재계산
-   - parentScroll 메시지로 iframeCenterY 갱신 → marginTop 보정
-══════════════════════════════════════ */
-
-let parentViewHeight = window.innerHeight;
-let iframeCenterY = window.innerHeight / 2;
-
-/* ── 라이트박스 — 부모 페이지에 팝업 요청 ── */
-function om(t, s, img) {
-  window.parent.postMessage({ type: 'orogy-lightbox', mode: 'image', img: img, title: t, sub: s || '' }, '*');
-}
-function omYt(t, url) {
-  window.parent.postMessage({ type: 'orogy-lightbox', mode: 'youtube', url: url, title: t }, '*');
-}
-function lbClose() {
-  /* iframe 내부에서 닫기 요청 (ESC 등) */
-  window.parent.postMessage({ type: 'orogy-lightbox-close' }, '*');
-}
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') lbClose();
-});
-
-/* ── 임베드 높이 ── */
-function sendHeight() {
-  const h = document.body.offsetHeight + 80;
-  window.parent.postMessage({ height: h, type: 'orogy-resize' }, '*');
-}
-
 /* ── 구글시트 CSV 파싱 유틸 (멀티라인 지원) ── */
 function parseCSV(text) {
   const rows = [];
   let row = [];
   let i = 0;
   const len = text.length;
+
   while (i < len) {
     if (text[i] === '"') {
       i++;
@@ -1285,7 +1244,7 @@ function parseCSV(text) {
   return rows;
 }
 
-/* ── 1. 소개 데이터 로드 ── */
+/* ── 1. 소개 ── */
 async function loadIntro() {
   const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJXlBmNMpCB6yQH5mznODAXBhgywVD7JheDmNqejv0bizcyWAnvj4hCOfcAhWwSFL0n_TihrQ3JktC/pub?gid=0&single=true&output=csv';
   try {
@@ -1298,6 +1257,7 @@ async function loadIntro() {
       const val = (rows[i + 1][0] || '').trim();
       if (key) data[key] = val;
     }
+
     if (data['프로필']) {
       const img = document.getElementById('intro-img');
       img.onload = () => { document.getElementById('intro-img-skel').style.display = 'none'; img.style.display = 'block'; };
@@ -1313,8 +1273,9 @@ async function loadIntro() {
     if (data['이름']) {
       const parts = data['이름'].split(' ');
       const nameEl = document.getElementById('intro-name');
-      if (parts.length >= 2) nameEl.innerHTML = parts[0] + ' <em>' + parts.slice(1).join(' ') + '</em>';
-      else nameEl.textContent = data['이름'];
+      nameEl.innerHTML = parts.length >= 2
+        ? parts[0] + ' <em>' + parts.slice(1).join(' ') + '</em>'
+        : data['이름'];
       document.getElementById('intro-name-skel').style.display = 'none';
       nameEl.style.display = '';
     }
@@ -1324,10 +1285,12 @@ async function loadIntro() {
       document.getElementById('intro-desc-skel').style.display = 'none';
       el.style.display = '';
     }
+
     const isOpen = (data['접수 가능여부'] || '').toUpperCase() === 'TRUE';
     const statusTag = isOpen
       ? '<span class="htag" style="background:#e8f5e9;border:1px solid #a5d6a7;color:#2e7d32;">#접수가능</span>'
       : '<span class="htag" style="background:#fce4ec;border:1px solid #f48fb1;color:#b71c1c;">#접수불가능</span>';
+
     const tagsEl = document.getElementById('intro-tags');
     const colors = ['pk','bl','','pk','bl','','pk','bl'];
     let tagsHtml = statusTag;
@@ -1345,12 +1308,10 @@ async function loadIntro() {
   }
 }
 
-/* ── 협업작가 시트 로드 ── */
-const COLLAB_DISCOUNT = {
-  '고유 작가님': '-100000',
-  '무냥 작가님': 'mi',
-};
+/* ── 협업작가 ── */
+const COLLAB_DISCOUNT = { '고유 작가님': '-100000', '무냥 작가님': 'mi' };
 let collabData = [];
+
 async function loadCollab() {
   const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJXlBmNMpCB6yQH5mznODAXBhgywVD7JheDmNqejv0bizcyWAnvj4hCOfcAhWwSFL0n_TihrQ3JktC/pub?gid=582760368&single=true&output=csv';
   try {
@@ -1358,11 +1319,9 @@ async function loadCollab() {
     const text = await res.text();
     const rows = parseCSV(text).slice(1);
     collabData = rows.filter(r => r[0] && r[0].trim()).map(r => ({
-      name:    (r[0] || '').trim(),
-      role:    (r[1] || '').trim(),
-      benefit: (r[2] || '').trim().replace(/\n/g, '<br>'),
-      url:     (r[3] || '').trim(),
-      img:     (r[4] || '').trim(),
+      name: (r[0]||'').trim(), role: (r[1]||'').trim(),
+      benefit: (r[2]||'').trim().replace(/\n/g, '<br>'),
+      url: (r[3]||'').trim(), img: (r[4]||'').trim(),
     }));
   } catch (e) {
     console.warn('협업작가 시트 로드 실패:', e);
@@ -1374,6 +1333,7 @@ async function loadCollab() {
   renderCollab();
   buildCollabSelect();
 }
+
 function renderCollab() {
   const grid = document.getElementById('collab-grid');
   grid.innerHTML = collabData.map(a => {
@@ -1392,6 +1352,7 @@ function renderCollab() {
     </a>`;
   }).join('');
 }
+
 function buildCollabSelect() {
   const sel = document.getElementById('fco');
   sel.innerHTML = '<option value="">없음</option>';
@@ -1403,9 +1364,11 @@ function buildCollabSelect() {
     sel.appendChild(opt);
   });
 }
+
 function syncCollab() { ce(); }
 
-/* ── 2. 슬롯 데이터 로드 ── */
+/* ── 2. 슬롯 ─
+   JS로 --slot-cols CSS 변수만 설정; 실제 열 제한은 CSS가 담당 */
 async function loadSlot() {
   const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJXlBmNMpCB6yQH5mznODAXBhgywVD7JheDmNqejv0bizcyWAnvj4hCOfcAhWwSFL0n_TihrQ3JktC/pub?gid=653143832&single=true&output=csv';
   const grid = document.getElementById('slot-grid');
@@ -1414,11 +1377,11 @@ async function loadSlot() {
     const text = await res.text();
     const rows = parseCSV(text).slice(1);
     const validRows = rows.filter(r => parseInt(r[0]));
-    const count = Math.min(validRows.length, 6);
-    const isMobile = window.innerWidth <= 600;
-    if (!isMobile) {
-      grid.style.gridTemplateColumns = `repeat(${count}, 1fr)`;
-    }
+
+    /* CSS 변수로 PC 열 수 지정 — 미디어쿼리가 우선순위로 덮어씀 */
+    const cols = Math.min(validRows.length, 6);
+    grid.style.setProperty('--slot-cols', cols);
+
     grid.innerHTML = validRows.map(r => {
       const mon    = parseInt(r[0]);
       const filled = parseInt(r[1]) || 0;
@@ -1444,24 +1407,48 @@ function sw(tid,pid,i){
   [...document.getElementById(pid).children].forEach((p,j)=>p.classList.toggle('on',j===i));
 }
 
-/* ── 유튜브 ID 추출 ── */
+/* ── 유튜브 ID ── */
 function getYtId(url) {
   if (!url) return '';
   const m = url.match(/(?:youtu\.be\/|v=|embed\/)([A-Za-z0-9_-]{11})/);
   return m ? m[1] : '';
 }
 
+/* ── 모달 ── */
+function om(t, s, img) {
+  document.getElementById('mtitle').textContent = t;
+  document.getElementById('msub').textContent   = s || '';
+  document.getElementById('mimg-wrap').innerHTML = `<img src="${img}" alt="${t}">`;
+  document.getElementById('mbg').classList.add('open');
+}
+function omYt(t, url) {
+  document.getElementById('mtitle').textContent = t;
+  document.getElementById('msub').textContent   = '';
+  const ytId = getYtId(url);
+  document.getElementById('mimg-wrap').innerHTML = ytId
+    ? `<iframe src="https://www.youtube.com/embed/${ytId}" allow="encrypted-media" allowfullscreen></iframe>`
+    : `<p style="padding:20px;color:var(--gray);">영상을 불러올 수 없습니다.</p>`;
+  document.getElementById('mbg').classList.add('open');
+}
+function cm(e){if(e.target===document.getElementById('mbg'))cmc();}
+function cmc(){
+  document.getElementById('mbg').classList.remove('open');
+  const wrap = document.getElementById('mimg-wrap');
+  const iframe = wrap ? wrap.querySelector('iframe') : null;
+  if (iframe) { const s = iframe.src; iframe.src = ''; iframe.src = s; }
+}
+
 /* ── 견적 계산 ── */
 function ce(){
-  let b=parseInt(document.getElementById('et').value)||0;
-  const u=document.getElementById('eu').value;
-  const ev=document.getElementById('ee').value;
-  const co=document.getElementById('fco')?.value||'0';
-  const ex=parseInt(document.getElementById('ex').value)||0;
-  const priv=document.querySelector('input[name="fs"]:checked')?.value||'';
+  let b = parseInt(document.getElementById('et').value)||0;
+  const u  = document.getElementById('eu').value;
+  const ev = document.getElementById('ee').value;
+  const co = document.getElementById('fco')?.value||'0';
+  const ex = parseInt(document.getElementById('ex').value)||0;
+  const priv = document.querySelector('input[name="fs"]:checked')?.value||'';
   if(ev==='f700000'){b=700000;}
   else if(ev==='f2000000'){b=2000000;}
-  else{
+  else {
     if(u==='50000')b+=50000;
     else if(u==='x2')b*=2;
     if(ev==='d10')b=Math.round(b*.9);
@@ -1472,21 +1459,20 @@ function ce(){
   else if(co==='mi')b=Math.round(b*.9);
   else if(co==='mr')b=Math.round(b*.7);
   if(priv.includes('비공개'))b+=50000;
-  b+=ex;if(b<0)b=0;
-  document.getElementById('etotal').textContent=b.toLocaleString()+'원';
+  b+=ex; if(b<0)b=0;
+  document.getElementById('etotal').textContent = b.toLocaleString()+'원';
   const dep = Math.round(b*.1).toLocaleString()+'원';
   document.getElementById('edep').value = dep;
   const dd = document.getElementById('edep-display');
   if (dd) dd.textContent = dep;
 }
 
-/* ── 포트폴리오 시트 로드 ── */
+/* ── 포트폴리오 ── */
 const PORT_PER_PAGE = 9;
-const PORT_CATS = ['일반 일러스트','버츄얼 일러스트','판매중인 디자인 목록','삼면도','리깅','썸네일'];
+const PORT_CATS   = ['일반 일러스트','버츄얼 일러스트','판매중인 디자인 목록','삼면도','리깅','썸네일'];
 const PORT_LABELS = ['일반 일러스트','버츄얼 일러스트','판매중인 디자인','삼면도','리깅','썸네일'];
 let portData = {};
 let portPages = {};
-let portCatIdx = 0;
 
 async function loadPortfolio() {
   const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJXlBmNMpCB6yQH5mznODAXBhgywVD7JheDmNqejv0bizcyWAnvj4hCOfcAhWwSFL0n_TihrQ3JktC/pub?gid=944328220&single=true&output=csv';
@@ -1502,13 +1488,12 @@ async function loadPortfolio() {
       const desc = (r[2]||'').trim();
       const img  = (r[3]||'').trim();
       const sold = (r[4]||'').trim() === '판매';
-      if (portData[cat] !== undefined) portData[cat].push({title, desc, img, sold});
+      if (portData[cat] !== undefined) portData[cat].push({title,desc,img,sold});
     });
-  } catch(e) {
-    console.warn('포트폴리오 시트 로드 실패:', e);
-  }
+  } catch(e) { console.warn('포트폴리오 시트 로드 실패:', e); }
   renderPortTabs();
 }
+
 function renderPortTabs() {
   const tabRow  = document.getElementById('po-tabs');
   const panesEl = document.getElementById('po-panes');
@@ -1527,20 +1512,18 @@ function renderPortTabs() {
     renderPortPane(cat, i);
   });
 }
+
 function switchPortTab(idx) {
-  portCatIdx = idx;
   const tabs  = document.getElementById('po-tabs').querySelectorAll('.tb');
   const panes = document.getElementById('po-panes').children;
   tabs.forEach((t,i)  => t.classList.toggle('on', i===idx));
   [...panes].forEach((p,i) => p.classList.toggle('on', i===idx));
 }
+
 function renderPortPane(cat, idx) {
   const pane    = document.getElementById(`po-pane-${idx}`);
   const items   = portData[cat] || [];
   const curPage = portPages[cat] || 1;
-  const totalPg = Math.max(1, Math.ceil(items.length / PORT_PER_PAGE));
-  const start   = (curPage - 1) * PORT_PER_PAGE;
-  const slice   = items.slice(start, start + PORT_PER_PAGE);
 
   if (cat === '리깅') {
     const cards = items.map(item => {
@@ -1549,7 +1532,9 @@ function renderPortPane(cat, idx) {
       return `<div class="port-card" onclick="omYt('${item.title.replace(/'/g,"\\'")}','${item.img}')">
         <div class="port-thumb">
           <img src="${thumb}" alt="${item.title}" loading="lazy">
-          <div class="yt-play"><div class="yt-play-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+          <div class="yt-play"><div class="yt-play-icon">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+          </div></div>
         </div>
         <div class="port-info">
           <div class="port-doc-icon">▶</div>
@@ -1561,9 +1546,12 @@ function renderPortPane(cat, idx) {
     return;
   }
 
+  const totalPg = Math.max(1, Math.ceil(items.length / PORT_PER_PAGE));
+  const start   = (curPage - 1) * PORT_PER_PAGE;
+  const slice   = items.slice(start, start + PORT_PER_PAGE);
+
   const cards = slice.map(item => {
-    const soldBadge = item.sold
-      ? `<div class="sold-ov"><span class="sold-txt">SOLD OUT</span></div>` : '';
+    const soldBadge = item.sold ? `<div class="sold-ov"><span class="sold-txt">SOLD OUT</span></div>` : '';
     return `<div class="port-card" onclick="om('${item.title.replace(/'/g,"\\'")}','${item.desc.replace(/'/g,"\\'")}','${item.img}')">
       <div class="port-thumb">
         <img src="${item.img}" alt="${item.title}" loading="lazy">
@@ -1579,7 +1567,6 @@ function renderPortPane(cat, idx) {
     </div>`;
   }).join('');
 
-  const grid = `<div class="port-grid">${cards || '<p style="color:var(--gray);font-size:13px;grid-column:1/-1;">등록된 작업물이 없습니다.</p>'}</div>`;
   let pgHtml = '';
   if (totalPg > 1) {
     const prevDis = curPage===1 ? 'disabled' : '';
@@ -1594,8 +1581,9 @@ function renderPortPane(cat, idx) {
       <button class="pg-btn arrow" onclick="goPortPage('${cat}',${idx},${curPage+1})" ${nextDis}>›</button>
     </div>`;
   }
-  pane.innerHTML = grid + pgHtml;
+  pane.innerHTML = `<div class="port-grid">${cards || '<p style="color:var(--gray);font-size:13px;grid-column:1/-1;">등록된 작업물이 없습니다.</p>'}</div>${pgHtml}`;
 }
+
 function goPortPage(cat, idx, page) {
   const total = Math.max(1, Math.ceil((portData[cat]||[]).length / PORT_PER_PAGE));
   portPages[cat] = Math.min(Math.max(1, page), total);
@@ -1611,7 +1599,7 @@ function showBalloon(id, msg, ms=2000) {
   setTimeout(() => el.classList.remove('show'), ms);
 }
 
-/* ── 견적+문의 한꺼번에 복사 ── */
+/* ── 견적+문의 복사 ── */
 function copyAll() {
   const r  = n => document.querySelector(`input[name="${n}"]:checked`)?.value||'(미선택)';
   const v  = id => document.getElementById(id)?.value||'없음';
@@ -1671,49 +1659,55 @@ ${v('fetc')}
   });
 }
 
-/* ── 가격 데이터 로드 ── */
+/* ── 가격 ── */
 let priceRows = [];
+
 async function loadPriceData() {
   const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJXlBmNMpCB6yQH5mznODAXBhgywVD7JheDmNqejv0bizcyWAnvj4hCOfcAhWwSFL0n_TihrQ3JktC/pub?gid=1560320542&single=true&output=csv';
   try {
     const res = await fetch(URL);
     const text = await res.text();
     priceRows = parseCSV(text).slice(1).filter(r => r[0]);
-  } catch(e) {
-    console.warn('가격 시트 로드 실패:', e);
-    priceRows = [];
-  }
+  } catch(e) { console.warn('가격 시트 로드 실패:', e); priceRows = []; }
   renderPriceSection();
   buildEstSelect();
 }
+
 function parsePrice(str) {
   if (!str) return null;
   const n = parseInt(str.replace(/[^0-9]/g, ''));
   return isNaN(n) ? null : n;
 }
+
 const CHECK_SVG = `<div class="inc-check"><svg viewBox="0 0 12 10" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,5 4,8 11,1"/></svg></div>`;
+
 function renderPriceSection() {
-  const tabRow  = document.getElementById('pc-tabs');
-  const panes   = document.getElementById('pc-panes');
+  const tabRow = document.getElementById('pc-tabs');
+  const panes  = document.getElementById('pc-panes');
+
   const cats = {};
   priceRows.forEach(r => {
     const cat = r[0].trim();
     if (!cats[cat]) cats[cat] = [];
     cats[cat].push({ cat, title: r[1].trim(), opt: r[2].trim(), desc: r[3].trim(), price: r[4].trim() });
   });
+
   const catNames = Object.keys(cats);
   if (!catNames.length) {
     panes.innerHTML = '<p style="color:var(--gray);font-size:13px;">가격 정보를 불러오지 못했습니다.</p>';
     return;
   }
+
   tabRow.innerHTML = catNames.map((cat, i) =>
     `<button class="tb on-b${i===0?' on':''}" onclick="swPrice(${i})">${cat}</button>`
   ).join('');
+
   panes.innerHTML = catNames.map((cat, i) => {
     const rows = cats[cat];
     const includes  = rows.filter(r => r.title === '기본 제공 목록');
     const mainItems = rows.filter(r => r.title && r.title !== '기본 제공 목록' && r.price);
     const addOns    = rows.filter(r => !r.title && r.price);
+
     let html = '';
     if (includes.length) {
       html += `<p style="font-size:12px;font-weight:600;color:#555;margin-bottom:9px;">기본 제공 목록</p>
@@ -1738,7 +1732,7 @@ function renderPriceSection() {
     if (addOns.length) {
       const hasDesc = addOns.some(r => r.desc);
       html += `<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px;">
-        <table class="opt-tbl" style="min-width:320px;">
+        <table class="opt-tbl" style="min-width:300px;">
           <thead><tr><th>추가 옵션</th><th>추가금</th>${hasDesc?'<th>비고</th>':''}</tr></thead>
           <tbody>
             ${addOns.map(r =>
@@ -1751,12 +1745,14 @@ function renderPriceSection() {
     return `<div class="pane${i===0?' on':''}">${html}</div>`;
   }).join('');
 }
+
 function swPrice(idx) {
   const tabs  = document.getElementById('pc-tabs').querySelectorAll('.tb');
   const panes = document.getElementById('pc-panes').children;
   tabs.forEach((t,i)  => t.classList.toggle('on', i===idx));
   [...panes].forEach((p,i) => p.classList.toggle('on', i===idx));
 }
+
 function buildEstSelect() {
   const sel = document.getElementById('et');
   if (!sel) return;
@@ -1767,8 +1763,7 @@ function buildEstSelect() {
     const title = r[1].trim();
     const opt   = r[2].trim();
     const price = r[4].trim();
-    if (title === '기본 제공 목록') return;
-    if (!title) return;
+    if (title === '기본 제공 목록' || !title) return;
     const num = parsePrice(price);
     if (!num) return;
     const groupKey = `${cat} — ${title}`;
@@ -1788,6 +1783,7 @@ function buildEstSelect() {
   });
 }
 
+/* ── 이벤트 ── */
 async function loadEvents() {
   const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJXlBmNMpCB6yQH5mznODAXBhgywVD7JheDmNqejv0bizcyWAnvj4hCOfcAhWwSFL0n_TihrQ3JktC/pub?gid=734879133&single=true&output=csv';
   const evList = document.getElementById('ev-list');
@@ -1811,9 +1807,9 @@ async function loadEvents() {
   }
   if (evList) {
     evList.innerHTML = events.map(ev => {
-      const dlHtml = ev.dl ? `<div class="ev-dl">~ ${formatDate(ev.dl)}</div>` : '';
+      const dlHtml    = ev.dl    ? `<div class="ev-dl">~ ${formatDate(ev.dl)}</div>` : '';
       const priceHtml = ev.price ? `<div class="ev-price">${ev.price.toLocaleString()}원</div>` : '';
-      const bodyHtml = ev.content ? `<div class="ev-body">${escHtml(ev.content)}</div>` : '';
+      const bodyHtml  = ev.content ? `<div class="ev-body">${escHtml(ev.content)}</div>` : '';
       return `<div class="ev-card">
         <div class="ev-title">${escHtml(ev.title)}</div>
         ${dlHtml}${bodyHtml}${priceHtml}
@@ -1839,17 +1835,41 @@ function escHtml(s) {
 
 /* ── 초기화 ── */
 function resetAll() {
-  ['et','eu'].forEach(id => { const el = document.getElementById(id); if (el) el.selectedIndex = 0; });
-  ['ex','edep'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  ['et','eu'].forEach(id => { const el = document.getElementById(id); if(el) el.selectedIndex=0; });
+  ['ex','edep'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
   ['fn','fl','fref','fref2','fref3','fart','fpsd','fchar','fetc'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.value = '';
+    const el = document.getElementById(id); if(el) el.value='';
   });
   const fco = document.getElementById('fco');
   if (fco) fco.selectedIndex = 0;
-  document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(el => { el.checked = false; });
+  document.querySelectorAll('input[type="radio"], input[type="checkbox"]')
+    .forEach(el => { el.checked = false; });
   ce();
   showBalloon('reset-balloon', '↺ 초기화되었습니다!');
 }
+
+/* ── 임베드 자동 높이 ── */
+(function() {
+  function sendHeight() {
+    const h = document.documentElement.scrollHeight;
+    window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
+  }
+  sendHeight();
+  if (window.ResizeObserver) new ResizeObserver(sendHeight).observe(document.body);
+  let lastH = 0;
+  setInterval(() => {
+    const h = document.documentElement.scrollHeight;
+    if (h !== lastH) { lastH = h; sendHeight(); }
+  }, 300);
+  window.addEventListener('message', function(e) {
+    if (!e.data || e.data.type !== 'orogy-scroll') return;
+    const target = document.getElementById(e.data.id);
+    if (!target) return;
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const iframeTop = target.getBoundingClientRect().top + window.scrollY;
+    window.parent.postMessage({ type: 'orogy-scrollpos', offsetTop: iframeTop }, '*');
+  });
+})();
 
 /* ── 초기 실행 ── */
 ce();
@@ -1859,19 +1879,6 @@ loadCollab();
 loadPortfolio();
 loadEvents();
 loadPriceData();
-
-/* ── 임베드 자동 높이 조절 ── */
-window.addEventListener('load', sendHeight);
-window.addEventListener('resize', sendHeight);
-if (window.ResizeObserver) {
-  new ResizeObserver(sendHeight).observe(document.body);
-}
-let _lastH = 0;
-setInterval(() => {
-  const h = document.body.offsetHeight;
-  if (h !== _lastH) { _lastH = h; sendHeight(); }
-}, 300);
-sendHeight();
 </script>
 </body>
 </html>
