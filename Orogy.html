@@ -147,12 +147,10 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   width:100%;
   position:relative;
   box-shadow:
-    0 0 0 1px rgba(180,100,220,.13),
-    0 8px 32px rgba(120,60,180,.18),
-    0 24px 64px rgba(80,30,140,.14),
-    0 2px 8px rgba(0,0,0,.10);
-  outline: 2500px solid rgba(0,0,0,.45);
-  outline-offset: 0;
+    0 0 0 1px rgba(180,100,220,.15),
+    0 4px 16px rgba(0,0,0,.10),
+    0 12px 40px rgba(120,60,180,.16),
+    0 32px 80px rgba(80,30,140,.12);
 }
 .mclose{position:absolute;top:12px;right:14px;background:none;border:none;font-size:19px;color:var(--gray);cursor:pointer;line-height:1;}
 .mbox h3{font-size:15px;font-weight:700;margin-bottom:3px;}
@@ -1204,40 +1202,40 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 </div>
 
 <script>
-/* ── 구글시트 CSV 파싱 유틸 (멀티라인 지원) ── */
 function parseCSV(text) {
   const rows = [];
   let row = [];
   let i = 0;
   const len = text.length;
-
   while (i < len) {
     if (text[i] === '"') {
       i++;
       let val = '';
       while (i < len) {
         if (text[i] === '"') {
-          if (text[i + 1] === '"') { val += '"'; i += 2; }
+          if (text[i+1] === '"') { val += '"'; i += 2; }
           else { i++; break; }
-        } else { val += text[i]; i++; }
+        } else { val += text[i++]; }
       }
       row.push(val);
     } else {
       let val = '';
-      while (i < len && text[i] !== ',' && text[i] !== '\n' && text[i] !== '\r') {
-        val += text[i]; i++;
-      }
+      while (i < len && text[i] !== ',' && text[i] !== '\n' && text[i] !== '\r') val += text[i++];
       row.push(val);
     }
     if (i < len && text[i] === ',') {
       i++;
+      if (i >= len) {
+        if (row.some(v => v !== '')) rows.push(row);
+        break;
+      }
     } else if (i < len && (text[i] === '\n' || text[i] === '\r')) {
-      if (text[i] === '\r' && text[i + 1] === '\n') i++;
+      if (text[i] === '\r' && text[i+1] === '\n') i++;
       i++;
       rows.push(row);
       row = [];
     } else {
-      if (row.length > 0 && !(row.length === 1 && row[0] === '')) rows.push(row);
+      if (row.some(v => v !== '')) rows.push(row);
       break;
     }
   }
@@ -1405,15 +1403,12 @@ function sw(tid,pid,i){
   [...document.getElementById(pid).children].forEach((p,j)=>p.classList.toggle('on',j===i));
 }
 
-/* ── 유튜브 ID ── */
 function getYtId(url) {
   if (!url) return '';
   const m = url.match(/(?:youtu\.be\/|v=|embed\/)([A-Za-z0-9_-]{11})/);
   return m ? m[1] : '';
 }
 
-/* ── 모달 ── */
-// 부모로부터 받은 뷰포트 정보
 let _parentScrollY   = 0;
 let _iframeOffsetTop = 0;
 let _parentVH        = window.innerHeight;
@@ -1421,7 +1416,6 @@ let _parentVH        = window.innerHeight;
 function updateModalPos() {
   const mbg = document.getElementById('mbg');
   if (!mbg || !mbg.classList.contains('open')) return;
-  // iframe 내부에서 "부모 뷰포트 상단"에 해당하는 scrollY 위치
   const visibleTop = Math.max(0, _parentScrollY - _iframeOffsetTop);
   mbg.style.top    = visibleTop + 'px';
   mbg.style.height = _parentVH + 'px';
@@ -1864,32 +1858,19 @@ function resetAll() {
   showBalloon('reset-balloon', '↺ 초기화되었습니다!');
 }
 
-/* ══════════════════════════════════════
-   임베드 자동 높이 + 모달 뷰포트 동기화
-══════════════════════════════════════ */
 (function() {
-  /* 높이 전송 — body의 실제 콘텐츠 높이만 사용 (빈 공간 방지) */
   function sendHeight() {
-    // scrollHeight는 이전 높이를 기억해서 줄어들지 않는 문제가 있음
-    // body를 일시적으로 height:auto 로 측정해서 정확한 값 획득
     document.body.style.overflow = 'hidden';
     const h = document.body.offsetHeight;
     document.body.style.overflow = '';
     window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
   }
-
   sendHeight();
-  if (window.ResizeObserver) {
-    new ResizeObserver(sendHeight).observe(document.body);
-  }
-  // 폴링은 느리게 — ResizeObserver가 주로 담당
+  if (window.ResizeObserver) new ResizeObserver(sendHeight).observe(document.body);
   setInterval(sendHeight, 800);
 
-  /* 부모로부터 뷰포트 정보 수신 → 모달 위치 갱신 */
   window.addEventListener('message', function(e) {
     if (!e.data) return;
-
-    /* 기존: 섹션 스크롤 이동 */
     if (e.data.type === 'orogy-scroll') {
       const target = document.getElementById(e.data.id);
       if (!target) return;
@@ -1897,8 +1878,6 @@ function resetAll() {
       const iframeTop = target.getBoundingClientRect().top + window.scrollY;
       window.parent.postMessage({ type: 'orogy-scrollpos', offsetTop: iframeTop }, '*');
     }
-
-    /* 신규: 부모 뷰포트 정보 수신 */
     if (e.data.type === 'orogy-viewport') {
       _parentScrollY   = e.data.scrollY   || 0;
       _iframeOffsetTop = e.data.iframeTop || 0;
@@ -1907,7 +1886,6 @@ function resetAll() {
     }
   });
 
-  /* 부모에게 뷰포트 정보 요청 */
   function askViewport() {
     window.parent.postMessage({ type: 'orogy-needViewport' }, '*');
   }
@@ -1915,7 +1893,6 @@ function resetAll() {
   setInterval(askViewport, 200);
 })();
 
-/* ── 초기 실행 ── */
 ce();
 loadIntro();
 loadSlot();
@@ -1924,42 +1901,5 @@ loadPortfolio();
 loadEvents();
 loadPriceData();
 </script>
-
-<!-- ══════════════════════════════════════
-     ★ 부모 페이지에 아래 스크립트를 추가하세요 ★
-
-<script>
-(function() {
-  // iframe 요소를 실제 id/class로 바꿔주세요
-  const iframe = document.querySelector('iframe');
-
-  // 높이 수신 — 줄어드는 것도 반영하려면 min-height 제거 필수
-  window.addEventListener('message', function(e) {
-    if (!e.data || e.data.type !== 'orogy-resize') return;
-    iframe.style.height = e.data.height + 'px';
-    // iframe에 min-height가 있다면 반드시 제거: iframe.style.minHeight = '0';
-  });
-
-  function sendViewport() {
-    if (!iframe || !iframe.contentWindow) return;
-    const rect = iframe.getBoundingClientRect();
-    iframe.contentWindow.postMessage({
-      type:      'orogy-viewport',
-      scrollY:   window.scrollY,
-      iframeTop: rect.top + window.scrollY,
-      vh:        window.innerHeight
-    }, '*');
-  }
-
-  window.addEventListener('scroll', sendViewport, { passive: true });
-  window.addEventListener('resize', sendViewport, { passive: true });
-  window.addEventListener('message', function(e) {
-    if (e.data && e.data.type === 'orogy-needViewport') sendViewport();
-  });
-
-  sendViewport();
-})();
-</script>
-══════════════════════════════════════ -->
 </body>
 </html>
