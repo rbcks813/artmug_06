@@ -126,30 +126,63 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 }
 .reset-btn:hover{border-color:var(--accent);color:var(--accent);}
 
-/* ══════════════════════════════════════
-   모달 — position:absolute + parentScroll postMessage
-══════════════════════════════════════ */
-.mbg{
+/* ══════════════════════════════
+   라이트박스 — 이미지 크게보기
+   position:fixed + 클릭으로 닫기
+   (iframe 스크롤 문제 없음 — 뷰포트에 고정)
+══════════════════════════════ */
+#lightbox{
   display:none;
-  position:absolute;
-  left:0;
-  top:0;
-  width:100%;
-  z-index:1000;
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:rgba(0,0,0,.82);
+  align-items:center;
   justify-content:center;
-  align-items:flex-start;
-  padding:0 20px;
+  padding:16px;
+  cursor:zoom-out;
 }
-.mbox{
-  background:var(--white);
-  border-radius:18px;
-  padding:22px;
-  max-width:520px;
-  width:100%;
-  position:relative;
-  box-shadow:0 8px 40px rgba(180,100,220,.22);
-  transition:margin-top 0.1s ease-out;
-  margin-bottom:40px;
+#lightbox.on{display:flex;}
+#lightbox img{
+  max-width:100%;
+  max-height:90vh;
+  border-radius:12px;
+  object-fit:contain;
+  box-shadow:0 8px 40px rgba(0,0,0,.5);
+  cursor:default;
+}
+#lightbox-yt{
+  width:min(860px,100%);
+  aspect-ratio:16/9;
+  border:none;
+  border-radius:12px;
+}
+#lightbox-close{
+  position:fixed;
+  top:16px;right:16px;
+  width:38px;height:38px;
+  border-radius:50%;
+  background:rgba(255,255,255,.15);
+  border:none;color:#fff;
+  font-size:20px;line-height:1;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+#lightbox-close:hover{background:rgba(255,255,255,.28);}
+#lightbox-info{
+  position:fixed;
+  bottom:20px;left:50%;
+  transform:translateX(-50%);
+  background:rgba(0,0,0,.6);
+  color:#fff;
+  padding:8px 18px;
+  border-radius:999px;
+  font-size:13px;
+  max-width:90vw;
+  text-align:center;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 .mclose{position:absolute;top:12px;right:14px;background:none;border:none;font-size:19px;color:var(--gray);cursor:pointer;line-height:1;}
 .mbox h3{font-size:15px;font-weight:700;margin-bottom:3px;}
@@ -1174,17 +1207,11 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   </div></div>
 </section>
 
-<!-- ══════════════════════════════════════
-  모달 — 배경 오버레이 없음, 카드만 표시
-  position:absolute + sticky로 스크롤 따라오기
-══════════════════════════════════════ -->
-<div class="mbg" id="mbg">
-  <div class="mbox" id="mbox">
-    <button class="mclose" onclick="cmc()">✕</button>
-    <div class="mimg-wrap" id="mimg-wrap"></div>
-    <h3 id="mtitle"></h3>
-    <p class="msub" id="msub"></p>
-  </div>
+<!-- 라이트박스 -->
+<div id="lightbox" onclick="lbClose()">
+  <button id="lightbox-close" onclick="lbClose()">✕</button>
+  <div id="lightbox-inner"></div>
+  <div id="lightbox-info"></div>
 </div>
 
 <script>
@@ -1198,83 +1225,26 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 let parentViewHeight = window.innerHeight;
 let iframeCenterY = window.innerHeight / 2;
 
-function sendHeight() {
-  let h = document.body.offsetHeight + 80;
-
-  const modal = document.getElementById('mbg');
-  if (modal && modal.style.display === 'flex') {
-    const mbox = document.getElementById('mbox');
-    if (mbox) {
-      const mt = parseFloat(mbox.style.marginTop) || 0;
-      const modalBottom = mt + mbox.offsetHeight + 40;
-      if (modalBottom > h) h = modalBottom;
-    }
-  }
-  /* 참고 임베드 코드: e.data.height 숫자만 받음 → 두 형식 모두 지원 */
-  window.parent.postMessage({ height: h, type: 'orogy-resize' }, '*');
-}
-
-window.addEventListener('message', function(e) {
-  if (!e.data) return;
-
-  if (e.data.type === 'parentScroll') {
-    const rectTop = e.data.rectTop;
-    parentViewHeight = e.data.viewHeight;
-    iframeCenterY = (parentViewHeight / 2) - rectTop;
-    if (iframeCenterY < 0) iframeCenterY = 0;
-
-    const modal = document.getElementById('mbg');
-    if (modal && modal.style.display === 'flex') {
-      const mbox = document.getElementById('mbox');
-      if (mbox) {
-        mbox.style.marginTop = Math.max(20, iframeCenterY - (mbox.offsetHeight / 2)) + 'px';
-        mbox.style.maxHeight = (parentViewHeight * 0.85) + 'px';
-        setTimeout(sendHeight, 150);
-      }
-    }
-  }
-});
-
+/* ── 라이트박스 — 부모 페이지에 팝업 요청 ── */
 function om(t, s, img) {
-  document.getElementById('mtitle').textContent = t;
-  document.getElementById('msub').textContent   = s || '';
-  const wrap = document.getElementById('mimg-wrap');
-  wrap.innerHTML = `<img src="${img}" alt="${t}">`;
-  openModal();
+  window.parent.postMessage({ type: 'orogy-lightbox', mode: 'image', img: img, title: t, sub: s || '' }, '*');
 }
 function omYt(t, url) {
-  document.getElementById('mtitle').textContent = t;
-  document.getElementById('msub').textContent   = '';
-  const ytId = getYtId(url);
-  const wrap = document.getElementById('mimg-wrap');
-  wrap.innerHTML = ytId
-    ? `<iframe src="https://www.youtube.com/embed/${ytId}" allow="encrypted-media" allowfullscreen></iframe>`
-    : `<p style="padding:20px;color:var(--gray);">영상을 불러올 수 없습니다.</p>`;
-  openModal();
+  window.parent.postMessage({ type: 'orogy-lightbox', mode: 'youtube', url: url, title: t }, '*');
 }
-
-function openModal() {
-  const modal = document.getElementById('mbg');
-  const mbox  = document.getElementById('mbox');
-  mbox.style.maxHeight = (parentViewHeight * 0.85) + 'px';
-  modal.style.display = 'flex';
-  mbox.style.marginTop = Math.max(20, iframeCenterY - (mbox.offsetHeight / 2)) + 'px';
-  setTimeout(sendHeight, 150);
+function lbClose() {
+  /* iframe 내부에서 닫기 요청 (ESC 등) */
+  window.parent.postMessage({ type: 'orogy-lightbox-close' }, '*');
 }
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') lbClose();
+});
 
-function cmc() {
-  document.getElementById('mbg').style.display = 'none';
-  const wrap = document.getElementById('mimg-wrap');
-  const iframe = wrap ? wrap.querySelector('iframe') : null;
-  if (iframe) { const s = iframe.src; iframe.src = ''; iframe.src = s; }
-  setTimeout(sendHeight, 150);
+/* ── 임베드 높이 ── */
+function sendHeight() {
+  const h = document.body.offsetHeight + 80;
+  window.parent.postMessage({ height: h, type: 'orogy-resize' }, '*');
 }
-
-window.onclick = function(e) {
-  const modal = document.getElementById('mbg');
-  const mbox  = document.getElementById('mbox');
-  if (modal.style.display === 'flex' && !mbox.contains(e.target)) cmc();
-};
 
 /* ── 구글시트 CSV 파싱 유틸 (멀티라인 지원) ── */
 function parseCSV(text) {
