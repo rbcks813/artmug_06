@@ -139,9 +139,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   justify-content:center;
   align-items:flex-start;
   padding:0 20px;
-  pointer-events:none;
 }
-.mbg.open{display:flex;pointer-events:auto;}
 .mbox{
   background:var(--white);
   border-radius:18px;
@@ -150,7 +148,6 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   width:100%;
   position:relative;
   box-shadow:0 8px 40px rgba(180,100,220,.22);
-  pointer-events:auto;
   transition:margin-top 0.1s ease-out;
   margin-bottom:40px;
 }
@@ -1202,8 +1199,7 @@ let parentViewHeight = window.innerHeight;
 let iframeCenterY = window.innerHeight / 2;
 
 function sendHeight() {
-  const container = document.querySelector('body');
-  let h = container ? container.offsetHeight + 80 : document.documentElement.scrollHeight;
+  let h = document.body.offsetHeight + 80;
 
   const modal = document.getElementById('mbg');
   if (modal && modal.style.display === 'flex') {
@@ -1214,7 +1210,8 @@ function sendHeight() {
       if (modalBottom > h) h = modalBottom;
     }
   }
-  window.parent.postMessage({ type: 'orogy-resize', height: h }, '*');
+  /* 참고 임베드 코드: e.data.height 숫자만 받음 → 두 형식 모두 지원 */
+  window.parent.postMessage({ height: h, type: 'orogy-resize' }, '*');
 }
 
 window.addEventListener('message', function(e) {
