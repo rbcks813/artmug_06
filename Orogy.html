@@ -126,16 +126,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 }
 .reset-btn:hover{border-color:var(--accent);color:var(--accent);}
 
-/* ── 모달 ── */
-.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;}
-.mbg.open{display:flex;}
-.mbox{background:var(--white);border-radius:18px;padding:22px;max-width:520px;width:100%;position:relative;}
-.mclose{position:absolute;top:12px;right:14px;background:none;border:none;font-size:19px;color:var(--gray);cursor:pointer;line-height:1;}
-.mbox h3{font-size:15px;font-weight:700;margin-bottom:3px;}
-.mbox .msub{font-size:12px;color:var(--gray);margin-bottom:14px;}
-.mimg-wrap{border-radius:12px;overflow:hidden;margin-bottom:12px;}
-.mimg-wrap img{width:100%;height:auto;display:block;}
-.mimg-wrap iframe{width:100%;aspect-ratio:16/9;border:none;border-radius:12px;display:block;}
+/* ── 모달: iframe 내부에선 사용 안 함. 부모 페이지에서 렌더링. ── */
 
 /* ── 유튜브 카드 재생 오버레이 ── */
 .yt-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.15);transition:background .2s;}
@@ -1139,15 +1130,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   </div></div>
 </section>
 
-<!-- 모달 -->
-<div class="mbg" id="mbg" onclick="cm(event)">
-  <div class="mbox">
-    <button class="mclose" onclick="cmc()">✕</button>
-    <div class="mimg-wrap" id="mimg-wrap"></div>
-    <h3 id="mtitle"></h3>
-    <p class="msub" id="msub"></p>
-  </div>
-</div>
+<!-- 모달은 부모 페이지에서 렌더링됨 (postMessage 방식) -->
 
 <style>
 /* 사용 범위 표 스크롤 힌트 — 모바일에서만 표시 */
@@ -1413,33 +1396,60 @@ function getYtId(url) {
 }
 
 /* ── 모달: 이미지 ── */
+/* ── 모달: 부모 페이지에 postMessage로 전달 ── */
 function om(t, s, img) {
-  document.getElementById('mtitle').textContent = t;
-  document.getElementById('msub').textContent   = s || '';
-  const wrap = document.getElementById('mimg-wrap');
-  wrap.innerHTML = `<img src="${img}" alt="${t}">`;
-  document.getElementById('mbg').classList.add('open');
+  window.parent.postMessage({ type: 'orogy-modal', mode: 'image', title: t, sub: s || '', img: img }, '*');
 }
 
-/* ── 모달: 유튜브 ── */
 function omYt(t, url) {
-  document.getElementById('mtitle').textContent = t;
-  document.getElementById('msub').textContent   = '';
   const ytId = getYtId(url);
-  const wrap = document.getElementById('mimg-wrap');
-  wrap.innerHTML = ytId
-    ? `<iframe src="https://www.youtube.com/embed/${ytId}" allow="encrypted-media" allowfullscreen></iframe>`
-    : `<p style="padding:20px;color:var(--gray);">영상을 불러올 수 없습니다.</p>`;
-  document.getElementById('mbg').classList.add('open');
+  window.parent.postMessage({ type: 'orogy-modal', mode: 'youtube', title: t, ytId: ytId, url: url }, '*');
 }
 
-function cm(e){if(e.target===document.getElementById('mbg'))cmc();}
-function cmc(){
-  document.getElementById('mbg').classList.remove('open');
-  const wrap = document.getElementById('mimg-wrap');
-  const iframe = wrap ? wrap.querySelector('iframe') : null;
-  if (iframe) { const s = iframe.src; iframe.src = ''; iframe.src = s; }
-}
+/* 부모 페이지가 없을 때(직접 열기)를 위한 자체 폴백 모달 */
+(function() {
+  // 부모와 같은 origin이면 postMessage가 전달되지만,
+  // top === self(직접 열기)인 경우 자체 모달을 사용
+  if (window.top === window.self) {
+    // 자체 모달 HTML 주입
+    const mbg = document.createElement('div');
+    mbg.id = 'mbg-fallback';
+    mbg.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;padding:20px;';
+    mbg.innerHTML = `
+      <div style="background:#fff;border-radius:18px;padding:22px;max-width:540px;width:100%;position:relative;">
+        <button onclick="document.getElementById('mbg-fallback').style.display='none';var f=document.querySelector('#mbg-fallback iframe');if(f){var s=f.src;f.src='';f.src=s;}"
+          style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;color:#999;cursor:pointer;">✕</button>
+        <div id="mbg-fallback-wrap" style="border-radius:12px;overflow:hidden;margin-bottom:12px;"></div>
+        <h3 id="mbg-fallback-title" style="font-size:15px;font-weight:700;margin-bottom:3px;font-family:inherit;"></h3>
+        <p id="mbg-fallback-sub" style="font-size:12px;color:#999;font-family:inherit;"></p>
+      </div>`;
+    mbg.addEventListener('click', function(e) {
+      if (e.target === mbg) {
+        mbg.style.display = 'none';
+        const f = mbg.querySelector('iframe');
+        if (f) { const s = f.src; f.src = ''; f.src = s; }
+      }
+    });
+    document.body.appendChild(mbg);
+
+    // 자체 모달 열기 함수 덮어쓰기
+    window.om = function(t, s, img) {
+      document.getElementById('mbg-fallback-title').textContent = t;
+      document.getElementById('mbg-fallback-sub').textContent = s || '';
+      document.getElementById('mbg-fallback-wrap').innerHTML = `<img src="${img}" alt="${t}" style="width:100%;height:auto;display:block;">`;
+      mbg.style.display = 'flex';
+    };
+    window.omYt = function(t, url) {
+      const ytId = getYtId(url);
+      document.getElementById('mbg-fallback-title').textContent = t;
+      document.getElementById('mbg-fallback-sub').textContent = '';
+      document.getElementById('mbg-fallback-wrap').innerHTML = ytId
+        ? `<iframe src="https://www.youtube.com/embed/${ytId}" allow="encrypted-media" allowfullscreen style="width:100%;aspect-ratio:16/9;border:none;border-radius:12px;display:block;"></iframe>`
+        : `<p style="padding:20px;color:#999;">영상을 불러올 수 없습니다.</p>`;
+      mbg.style.display = 'flex';
+    };
+  }
+})();
 
 /* ── 견적 계산 ── */
 function ce(){
@@ -1932,5 +1942,143 @@ loadPriceData();
   });
 })();
 </script>
+
+<!--
+  ════════════════════════════════════════════════
+  임베드 사용법 — 부모 페이지에 아래 코드를 붙여넣으세요
+  ════════════════════════════════════════════════
+
+  1) iframe 삽입
+  ────────────────────────────────────────────────
+  <iframe id="orogy-frame"
+    src="이_파일_URL"
+    style="width:100%;border:none;display:block;"
+    scrolling="no">
+  </iframe>
+
+
+  2) 모달 + 자동높이 + 섹션스크롤 통합 스크립트
+     ※ 포트폴리오 클릭 모달이 iframe 밖 전체화면으로 뜨려면
+        반드시 아래 전체 코드를 부모 페이지 </body> 직전에 추가하세요.
+  ────────────────────────────────────────────────
+
+  <style>
+  #orogy-modal-bg{
+    display:none;position:fixed;inset:0;
+    background:rgba(0,0,0,.55);
+    z-index:99999;
+    align-items:center;justify-content:center;
+    padding:20px;box-sizing:border-box;
+  }
+  #orogy-modal-bg.open{display:flex;}
+  #orogy-modal-box{
+    background:#fff;border-radius:18px;
+    padding:22px;max-width:600px;width:100%;
+    position:relative;
+    font-family:'Paperlogy','Noto Sans KR',sans-serif;
+  }
+  #orogy-modal-close{
+    position:absolute;top:12px;right:14px;
+    background:none;border:none;
+    font-size:22px;color:#999;cursor:pointer;line-height:1;
+  }
+  #orogy-modal-wrap{border-radius:12px;overflow:hidden;margin-bottom:12px;}
+  #orogy-modal-wrap img{width:100%;height:auto;display:block;}
+  #orogy-modal-wrap iframe{
+    width:100%;aspect-ratio:16/9;
+    border:none;border-radius:12px;display:block;
+  }
+  #orogy-modal-title{font-size:15px;font-weight:700;margin-bottom:3px;color:#2b2b2b;}
+  #orogy-modal-sub{font-size:12px;color:#999;}
+  </style>
+
+  <div id="orogy-modal-bg">
+    <div id="orogy-modal-box">
+      <button id="orogy-modal-close">&#x2715;</button>
+      <div id="orogy-modal-wrap"></div>
+      <p id="orogy-modal-title"></p>
+      <p id="orogy-modal-sub"></p>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var orogyFrame = document.getElementById('orogy-frame');
+    var bg       = document.getElementById('orogy-modal-bg');
+    var wrap     = document.getElementById('orogy-modal-wrap');
+    var titleEl  = document.getElementById('orogy-modal-title');
+    var subEl    = document.getElementById('orogy-modal-sub');
+    var closeBtn = document.getElementById('orogy-modal-close');
+
+    function openModal(){ bg.classList.add('open'); document.body.style.overflow='hidden'; }
+    function closeModal(){
+      bg.classList.remove('open');
+      document.body.style.overflow='';
+      var f = wrap.querySelector('iframe');
+      if(f){ var s=f.src; f.src=''; f.src=s; }
+      wrap.innerHTML='';
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    bg.addEventListener('click', function(e){ if(e.target===bg) closeModal(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+
+    window.addEventListener('message', function(e){
+      if(!e.data) return;
+
+      // ① 포트폴리오 모달 (이미지 or 유튜브)
+      if(e.data.type === 'orogy-modal'){
+        titleEl.textContent = e.data.title || '';
+        subEl.textContent   = e.data.sub   || '';
+        if(e.data.mode === 'image'){
+          wrap.innerHTML = '<img src="'+e.data.img+'" alt="'+e.data.title+'">';
+        } else if(e.data.mode === 'youtube'){
+          wrap.innerHTML = e.data.ytId
+            ? '<iframe src="https://www.youtube.com/embed/'+e.data.ytId+'" allow="encrypted-media" allowfullscreen></iframe>'
+            : '<p style="padding:20px;color:#999;">영상을 불러올 수 없습니다.</p>';
+        }
+        openModal();
+        return;
+      }
+
+      // ② iframe 높이 자동 조절
+      if(e.data.type === 'orogy-resize'){
+        if(orogyFrame) orogyFrame.style.height = e.data.height + 'px';
+      }
+
+      // ③ 섹션 스크롤 위치 수신
+      if(e.data.type === 'orogy-scrollpos'){
+        var frameTop = orogyFrame.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: frameTop + e.data.offsetTop, behavior: 'smooth' });
+      }
+    });
+
+    // 커스텀 메뉴 네비게이션 함수
+    window.scrollToSection = function(sectionId){
+      if(orogyFrame) orogyFrame.contentWindow.postMessage({ type: 'orogy-scroll', id: sectionId }, '*');
+    };
+  })();
+  </script>
+
+
+  3) 커스텀 메뉴 항목별 id 목록
+  ────────────────────────────────────────────────
+  작가 소개       → scrollToSection('intro')
+  슬롯 현황       → scrollToSection('slot')
+  안내사항        → scrollToSection('notice')
+  작업 순서       → scrollToSection('process')
+  사용 범위       → scrollToSection('usage')
+  포트폴리오      → scrollToSection('portfolio')
+  가격 & 옵션    → scrollToSection('price')
+  환불 안내       → scrollToSection('refund')
+  이벤트          → scrollToSection('events')
+  견적 & 문의    → scrollToSection('inquiry')
+  협업 작가       → scrollToSection('collab')
+
+  예시 (커스텀 메뉴 HTML):
+  <a href="javascript:void(0)" onclick="scrollToSection('intro')">작가 소개</a>
+  <a href="javascript:void(0)" onclick="scrollToSection('portfolio')">포트폴리오</a>
+  ════════════════════════════════════════════════
+-->
 </body>
 </html>
