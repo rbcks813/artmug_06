@@ -127,26 +127,22 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 .reset-btn:hover{border-color:var(--accent);color:var(--accent);}
 
 /* ══════════════════════════════════════
-   모달 — 배경 없이 absolute + parentScroll 따라오기
+   모달 — 임베드 스크롤 따라오기
+   position:fixed 대신 position:absolute + JS로 직접 top 계산
 ══════════════════════════════════════ */
 .mbg{
   display:none;
-  position:absolute;
-  left:0; top:0;
+  position:absolute; /* fixed → absolute: iframe 내부 좌표 기준 */
+  left:0;
   width:100%;
-  height:0;
-  overflow:visible;
-  background:transparent;
+  min-height:100%;
   z-index:1000;
-  justify-content:center;
   align-items:flex-start;
-  padding:0 20px;
-  pointer-events:none;
+  justify-content:center;
+  padding:20px;
+  /* 반투명 오버레이 제거 — 배경색 없음 */
 }
-.mbg.open{
-  display:flex;
-  pointer-events:none;
-}
+.mbg.open{display:flex;}
 .mbox{
   background:var(--white);
   border-radius:18px;
@@ -154,15 +150,11 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   max-width:520px;
   width:100%;
   position:relative;
-  pointer-events:auto;
-  box-shadow:0 15px 40px rgba(0,0,0,.15), 0 2px 10px rgba(0,0,0,.08);
-  border:1px solid var(--border);
-  transition:margin-top .1s ease-out;
-  animation:modalSlideUp .22s cubic-bezier(.22,.68,0,1.2);
-}
-@keyframes modalSlideUp{
-  from{opacity:0;transform:translateY(14px) scale(.98);}
-  to  {opacity:1;transform:translateY(0)    scale(1);}
+  box-shadow:0 8px 40px rgba(180,100,220,.18);
+  /* 뷰포트 안에서 스티키하게 보이도록 sticky top 활용 */
+  align-self:flex-start;
+  position:sticky;
+  top:16px;
 }
 .mclose{position:absolute;top:12px;right:14px;background:none;border:none;font-size:19px;color:var(--gray);cursor:pointer;line-height:1;}
 .mbox h3{font-size:15px;font-weight:700;margin-bottom:3px;}
@@ -259,9 +251,10 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 
 
 /* ═════════════════════════════
-   4. 작업 순서 — PC: 가로 스텝
+   4. 작업 순서 — PC: 가로 스텝 / 모바일: 세로 스텝
 ═════════════════════════════ */
 .proc-wrap{position:relative;padding:30px 0 10px;}
+/* PC 연결선 */
 .proc-wrap::before{
   content:'';position:absolute;
   top:46px;left:calc(100% / 14);right:calc(100% / 14);
@@ -520,75 +513,58 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   .page{padding:0 14px;}
   .sec{padding:36px 0;}
   .sh h2{font-size:15px;}
-  .card{padding:16px;}
+  .card{padding:14px;}
 
   /* ── 소개 ── */
   #intro{padding-top:28px;}
   .intro-wrap{flex-direction:row;gap:14px;align-items:flex-start;}
-  .intro-avatar{width:80px;height:80px;border-radius:12px;flex-shrink:0;}
-  .skel-avatar{width:80px;height:80px;}
+  .intro-avatar{width:84px;height:84px;border-radius:12px;flex-shrink:0;}
+  .skel-avatar{width:84px;height:84px;}
   .intro-role{font-size:10px;}
-  .intro-name{font-size:19px;margin-bottom:8px;}
+  .intro-name{font-size:19px;margin-bottom:9px;}
   .intro-desc{font-size:12px;padding:8px 10px;margin-bottom:10px;}
-  .htag{font-size:11.5px;padding:3px 9px;}
+  .htag{font-size:11.5px;padding:3px 10px;}
   .status-row{gap:5px;}
-  .sbadge{font-size:11.5px;padding:4px 11px;}
 
-  /* ══════════════════════════════════════
-     슬롯 현황 — 모바일: 2열 고정, 카드 세로 여백 확보
-  ══════════════════════════════════════ */
+  /* ── 슬롯 현황: 항상 2열 ── */
   .slot-grid{
     grid-template-columns:repeat(2,1fr) !important;
     gap:8px;
   }
-  .slot-card{
-    padding:14px 10px 16px;
-    border-radius:12px;
-  }
-  .slot-mon{
-    font-size:13px;        /* 좀 더 크게 — 눈에 잘 띄게 */
-    font-weight:600;
-    color:#555;
-    margin-bottom:10px;
-  }
-  .sd{width:13px;height:13px;}
-  .slot-dots{gap:4px;flex-wrap:wrap;justify-content:center;}
-  .slot-legend{font-size:12px;gap:12px;margin-top:10px;}
+  .slot-card{padding:12px 8px;}
+  .slot-mon{font-size:12.5px;font-weight:600;margin-bottom:8px;}
+  .sd{width:14px;height:14px;}
+  .slot-dots{gap:4px;}
+  .slot-legend{font-size:11.5px;gap:10px;margin-top:10px;}
 
   /* ── 안내사항 ── */
-  .notice-list li{font-size:12.5px;padding:10px 12px;gap:9px;}
-  .notice-list li .nn{width:18px;height:18px;font-size:9px;margin-top:2px;}
+  .notice-list li{font-size:12.5px;padding:10px 11px;gap:8px;}
+  .notice-list li .nn{width:18px;height:18px;font-size:9px;margin-top:2px;flex-shrink:0;}
 
-  /* ══════════════════════════════════════
-     작업 순서 — 모바일: 세로 타임라인
-  ══════════════════════════════════════ */
-  #process .card{padding:16px 14px 14px;}
-  .proc-wrap{
-    padding:0 0 4px 0;
-  }
+  /* ── 작업 순서: 세로 타임라인으로 전환 ── */
+  .proc-wrap{padding:0;}
   .proc-wrap::before{display:none;}
+  #process .card{padding:14px 12px 12px;}
 
   .proc-steps{
     flex-direction:column;
     gap:0;
     position:relative;
-    padding-left:0;
   }
-  /* 세로 점선 — 아이콘 중앙에 딱 맞춤 (아이콘 width=44px → center=22px) */
+  /* 세로 점선 */
   .proc-steps::before{
     content:'';
     position:absolute;
-    left:22px;              /* 아이콘 중심 */
-    top:44px;               /* 첫 아이콘 아래에서 시작 */
-    bottom:22px;
+    left:23px;
+    top:24px;
+    bottom:24px;
     width:2px;
     background:repeating-linear-gradient(
       180deg,
-      var(--main) 0,var(--main) 7px,
-      transparent 7px,transparent 14px
+      var(--main) 0,var(--main) 8px,
+      transparent 8px,transparent 16px
     );
     z-index:0;
-    transform:translateX(-50%);
   }
   .proc-step{
     flex-direction:row;
@@ -596,24 +572,14 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
     gap:14px;
     text-align:left;
     flex:none;
-    padding:9px 0;
+    padding:8px 0;
     position:relative;
     z-index:1;
   }
   .proc-icon{
-    width:44px;
-    height:44px;
+    width:46px;height:46px;
     flex-shrink:0;
-    background:var(--white);  /* 점선이 뒤에서 보이지 않게 */
-  }
-  .proc-icon svg{
-    width:20px;
-    height:20px;
-  }
-  .proc-icon .pnum{
-    width:16px;height:16px;
-    font-size:8px;
-    top:-3px;right:-3px;
+    background:var(--white);
   }
   .proc-step-label{
     font-size:13px;
@@ -624,28 +590,16 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   }
   .proc-step-label br{display:none;}
 
-  /* ══════════════════════════════════════
-     사용 범위 표 — 모바일: 가로 스크롤
-  ══════════════════════════════════════ */
+  /* ── 사용 범위 표: 가로 스크롤 ── */
   .tbl-wrap{
     overflow-x:auto;
     -webkit-overflow-scrolling:touch;
     border-radius:10px;
   }
-  .tbl{
-    min-width:440px;   /* 너무 좁으면 글자 뭉개짐 방지 */
-    font-size:12px;
-  }
-  .tbl th{
-    padding:9px 10px;
-    font-size:11.5px;
-    white-space:nowrap;
-  }
-  .tbl td{
-    padding:8px 10px;
-    font-size:12px;
-  }
-  .tbl-sub{font-size:10.5px;}
+  .tbl{min-width:460px;font-size:12px;}
+  .tbl th{padding:9px 10px;font-size:11px;}
+  .tbl td{padding:7px 10px;}
+  .tbl-sub{font-size:10px;}
 
   /* ── 포트폴리오 ── */
   .port-grid{grid-template-columns:1fr 1fr;gap:8px;}
@@ -654,21 +608,21 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 
   /* ── 가격 ── */
   .price-cards{grid-template-columns:1fr 1fr;gap:8px;}
-  .pc{padding:12px;}
-  .pc .pc-amt{font-size:16px;}
+  .pc{padding:11px;}
+  .pc .pc-amt{font-size:15px;}
   .pc .pc-name{font-size:12px;}
   .inc-grid{grid-template-columns:1fr;gap:6px;}
   .inc-item{font-size:12px;}
   .opt-tbl thead tr th,.opt-tbl tbody td{font-size:12px;padding:7px 10px;}
 
   /* ── 환불 안내 ── */
-  .refund-notice{font-size:12px;}
-  .refund-list li{font-size:12.5px;padding:8px 12px;gap:8px;}
-  .rp{font-size:12.5px;min-width:54px;}
+  .refund-notice{font-size:12px;padding:10px 12px;}
+  .refund-list li{font-size:12.5px;padding:8px 11px;gap:8px;}
+  .rp{font-size:12.5px;min-width:52px;}
 
   /* ── 이벤트 ── */
-  .ev-wrap{padding:16px;}
-  .ev-card{padding:14px;}
+  .ev-wrap{padding:14px;}
+  .ev-card{padding:13px;}
   .ev-title{font-size:13.5px;}
   .ev-body{font-size:12.5px;}
 
@@ -679,7 +633,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   .fg input,.fg select,.fg textarea{font-size:13px;padding:9px 11px;}
   .rl,.cl{font-size:12px;padding:5px 10px;}
   .est-result-strip{padding:12px 14px;}
-  .est-total{font-size:22px;}
+  .est-total{font-size:21px;}
   .est-dep{font-size:12px;}
   .est-note-box{font-size:11.5px;padding:10px 12px;}
   .copy-btn-row{flex-direction:column;align-items:stretch;}
@@ -687,21 +641,17 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 
   /* ── 협업 작가 ── */
   .collab-grid{grid-template-columns:1fr;}
-  .collab-card{padding:12px;}
+  .collab-card{padding:11px;}
   .collab-name{font-size:13px;}
   .collab-benefit{font-size:11px;}
 
   /* ── 탭 버튼 ── */
   .tab-row{gap:5px;}
-  .tb{font-size:12px;padding:5px 13px;}
+  .tb{font-size:12px;padding:5px 12px;}
 
-  /* ── 모달 모바일: 상단 여백만 조정, 풀너비 ── */
-  .mbox{
-    max-width:100%;
-    width:100%;
-    border-radius:14px;
-    padding:16px 14px 20px;
-  }
+  /* ── 모달 모바일 ── */
+  .mbox{padding:16px;border-radius:14px;}
+  .mbox h3{font-size:14px;}
 }
 
 /* ══════════════════════════════════════
@@ -717,7 +667,7 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   .price-cards{grid-template-columns:1fr;}
 }
 
-/* 사용 범위 표 스크롤 힌트 — 모바일에서만 표시 */
+/* ── 사용 범위 표 스크롤 힌트 — 모바일에서만 표시 ── */
 .tbl-scroll-hint{
   display:none;
   font-size:11.5px;
@@ -1229,7 +1179,10 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
   </div></div>
 </section>
 
-<!-- ═══════════ 모달 — 배경 없이 fixed 우측하단 고정 ═══════════ -->
+<!-- ══════════════════════════════════════
+  모달 — 배경 오버레이 없음, 카드만 표시
+  position:absolute + sticky로 스크롤 따라오기
+══════════════════════════════════════ -->
 <div class="mbg" id="mbg">
   <div class="mbox" id="mbox">
     <button class="mclose" onclick="cmc()">✕</button>
@@ -1240,41 +1193,92 @@ button,select,input,textarea{font-family:'Paperozi',sans-serif;}
 </div>
 
 <script>
+/* ══════════════════════════════════════
+   모달 스크롤 따라오기
+   - .mbg: position:absolute, width:100%, top은 JS로 현재 scrollY에 맞게 설정
+   - .mbox: position:sticky; top:16px  → 스크롤해도 뷰포트 안에 붙어있음
+   - 배경 dimming 없음 (투명)
+══════════════════════════════════════ */
+function om(t, s, img) {
+  document.getElementById('mtitle').textContent = t;
+  document.getElementById('msub').textContent   = s || '';
+  const wrap = document.getElementById('mimg-wrap');
+  wrap.innerHTML = `<img src="${img}" alt="${t}">`;
+  openModal();
+}
+function omYt(t, url) {
+  document.getElementById('mtitle').textContent = t;
+  document.getElementById('msub').textContent   = '';
+  const ytId = getYtId(url);
+  const wrap = document.getElementById('mimg-wrap');
+  wrap.innerHTML = ytId
+    ? `<iframe src="https://www.youtube.com/embed/${ytId}" allow="encrypted-media" allowfullscreen></iframe>`
+    : `<p style="padding:20px;color:var(--gray);">영상을 불러올 수 없습니다.</p>`;
+  openModal();
+}
+
+function openModal() {
+  const mbg = document.getElementById('mbg');
+  /* 현재 스크롤 위치에 모달 배치 — 뷰포트 전체를 덮도록 top/height 설정 */
+  mbg.style.top    = window.scrollY + 'px';
+  mbg.style.height = window.innerHeight + 'px';
+  mbg.classList.add('open');
+
+  /* 스크롤 시 mbg.top 업데이트해서 항상 화면 안에 위치 */
+  window._modalScrollHandler = function() {
+    mbg.style.top    = window.scrollY + 'px';
+    mbg.style.height = window.innerHeight + 'px';
+  };
+  window.addEventListener('scroll', window._modalScrollHandler, { passive: true });
+
+  /* 모달 바깥 클릭 시 닫기 */
+  mbg._clickHandler = function(e) {
+    if (e.target === mbg) cmc();
+  };
+  mbg.addEventListener('click', mbg._clickHandler);
+}
+
+function cmc() {
+  const mbg = document.getElementById('mbg');
+  mbg.classList.remove('open');
+  if (window._modalScrollHandler) {
+    window.removeEventListener('scroll', window._modalScrollHandler);
+    window._modalScrollHandler = null;
+  }
+  if (mbg._clickHandler) {
+    mbg.removeEventListener('click', mbg._clickHandler);
+    mbg._clickHandler = null;
+  }
+  /* 유튜브 iframe 재생 중지 */
+  const wrap = document.getElementById('mimg-wrap');
+  const iframe = wrap ? wrap.querySelector('iframe') : null;
+  if (iframe) { const s = iframe.src; iframe.src = ''; iframe.src = s; }
+}
+
 /* ── 구글시트 CSV 파싱 유틸 (멀티라인 지원) ── */
 function parseCSV(text) {
   const rows = [];
   let row = [];
   let i = 0;
   const len = text.length;
-
   while (i < len) {
     if (text[i] === '"') {
       i++;
       let val = '';
       while (i < len) {
         if (text[i] === '"') {
-          if (text[i + 1] === '"') {
-            val += '"';
-            i += 2;
-          } else {
-            i++;
-            break;
-          }
-        } else {
-          val += text[i];
-          i++;
-        }
+          if (text[i + 1] === '"') { val += '"'; i += 2; }
+          else { i++; break; }
+        } else { val += text[i]; i++; }
       }
       row.push(val);
     } else {
       let val = '';
       while (i < len && text[i] !== ',' && text[i] !== '\n' && text[i] !== '\r') {
-        val += text[i];
-        i++;
+        val += text[i]; i++;
       }
       row.push(val);
     }
-
     if (i < len && text[i] === ',') {
       i++;
     } else if (i < len && (text[i] === '\n' || text[i] === '\r')) {
@@ -1303,48 +1307,36 @@ async function loadIntro() {
       const val = (rows[i + 1][0] || '').trim();
       if (key) data[key] = val;
     }
-
     if (data['프로필']) {
       const img = document.getElementById('intro-img');
-      img.onload = () => {
-        document.getElementById('intro-img-skel').style.display = 'none';
-        img.style.display = 'block';
-      };
+      img.onload = () => { document.getElementById('intro-img-skel').style.display = 'none'; img.style.display = 'block'; };
       img.onerror = () => { document.getElementById('intro-img-skel').style.display = 'none'; img.style.display = 'block'; };
       img.src = data['프로필'];
     }
-
     if (data['역할']) {
       const el = document.getElementById('intro-role');
       el.textContent = data['역할'];
       document.getElementById('intro-role-skel').style.display = 'none';
       el.style.display = '';
     }
-
     if (data['이름']) {
       const parts = data['이름'].split(' ');
       const nameEl = document.getElementById('intro-name');
-      if (parts.length >= 2) {
-        nameEl.innerHTML = parts[0] + ' <em>' + parts.slice(1).join(' ') + '</em>';
-      } else {
-        nameEl.textContent = data['이름'];
-      }
+      if (parts.length >= 2) nameEl.innerHTML = parts[0] + ' <em>' + parts.slice(1).join(' ') + '</em>';
+      else nameEl.textContent = data['이름'];
       document.getElementById('intro-name-skel').style.display = 'none';
       nameEl.style.display = '';
     }
-
     if (data['소개']) {
       const el = document.getElementById('intro-desc');
       el.innerHTML = data['소개'].replace(/\n/g, '<br>');
       document.getElementById('intro-desc-skel').style.display = 'none';
       el.style.display = '';
     }
-
     const isOpen = (data['접수 가능여부'] || '').toUpperCase() === 'TRUE';
     const statusTag = isOpen
       ? '<span class="htag" style="background:#e8f5e9;border:1px solid #a5d6a7;color:#2e7d32;">#접수가능</span>'
       : '<span class="htag" style="background:#fce4ec;border:1px solid #f48fb1;color:#b71c1c;">#접수불가능</span>';
-
     const tagsEl = document.getElementById('intro-tags');
     const colors = ['pk','bl','','pk','bl','','pk','bl'];
     let tagsHtml = statusTag;
@@ -1357,15 +1349,8 @@ async function loadIntro() {
     tagsEl.innerHTML = tagsHtml;
     document.getElementById('intro-tags-skel').style.display = 'none';
     tagsEl.style.display = '';
-
   } catch (e) {
     console.warn('소개 시트 로드 실패:', e);
-    ['intro-img-skel','intro-role-skel','intro-name-skel','intro-desc-skel','intro-tags-skel'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) { el.className = ''; el.style.cssText = 'color:var(--gray);font-size:13px;'; el.textContent = ''; }
-    });
-    const descSkel = document.getElementById('intro-desc-skel');
-    if (descSkel) descSkel.textContent = '소개 정보를 불러오지 못했습니다.';
   }
 }
 
@@ -1374,9 +1359,7 @@ const COLLAB_DISCOUNT = {
   '고유 작가님': '-100000',
   '무냥 작가님': 'mi',
 };
-
 let collabData = [];
-
 async function loadCollab() {
   const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJXlBmNMpCB6yQH5mznODAXBhgywVD7JheDmNqejv0bizcyWAnvj4hCOfcAhWwSFL0n_TihrQ3JktC/pub?gid=582760368&single=true&output=csv';
   try {
@@ -1400,7 +1383,6 @@ async function loadCollab() {
   renderCollab();
   buildCollabSelect();
 }
-
 function renderCollab() {
   const grid = document.getElementById('collab-grid');
   grid.innerHTML = collabData.map(a => {
@@ -1408,19 +1390,17 @@ function renderCollab() {
     const avatarInner = a.img
       ? `<img src="${a.img}" alt="${a.name}" onerror="this.style.display='none';this.parentElement.textContent='${initial}';">`
       : initial;
-    return `
-      <a class="collab-card" href="${a.url}" target="_blank">
-        <div class="collab-avatar">${avatarInner}</div>
-        <div class="collab-info">
-          <div class="collab-name">${a.name}</div>
-          <div class="collab-type">${a.role}</div>
-          <div class="collab-benefit">${a.benefit}</div>
-        </div>
-        <div class="collab-arrow">›</div>
-      </a>`;
+    return `<a class="collab-card" href="${a.url}" target="_blank">
+      <div class="collab-avatar">${avatarInner}</div>
+      <div class="collab-info">
+        <div class="collab-name">${a.name}</div>
+        <div class="collab-type">${a.role}</div>
+        <div class="collab-benefit">${a.benefit}</div>
+      </div>
+      <div class="collab-arrow">›</div>
+    </a>`;
   }).join('');
 }
-
 function buildCollabSelect() {
   const sel = document.getElementById('fco');
   sel.innerHTML = '<option value="">없음</option>';
@@ -1432,7 +1412,6 @@ function buildCollabSelect() {
     sel.appendChild(opt);
   });
 }
-
 function syncCollab() { ce(); }
 
 /* ── 2. 슬롯 데이터 로드 ── */
@@ -1443,15 +1422,12 @@ async function loadSlot() {
     const res = await fetch(URL);
     const text = await res.text();
     const rows = parseCSV(text).slice(1);
-
     const validRows = rows.filter(r => parseInt(r[0]));
     const count = Math.min(validRows.length, 6);
-
     const isMobile = window.innerWidth <= 600;
     if (!isMobile) {
       grid.style.gridTemplateColumns = `repeat(${count}, 1fr)`;
     }
-
     grid.innerHTML = validRows.map(r => {
       const mon    = parseInt(r[0]);
       const filled = parseInt(r[1]) || 0;
@@ -1465,7 +1441,6 @@ async function loadSlot() {
         <div class="slot-dots">${dots}</div>
       </div>`;
     }).join('');
-
   } catch (e) {
     console.warn('슬롯 시트 로드 실패:', e);
     grid.innerHTML = `<p style="color:var(--gray);font-size:13px;grid-column:1/-1;">슬롯 정보를 불러오지 못했습니다.</p>`;
@@ -1483,51 +1458,6 @@ function getYtId(url) {
   if (!url) return '';
   const m = url.match(/(?:youtu\.be\/|v=|embed\/)([A-Za-z0-9_-]{11})/);
   return m ? m[1] : '';
-}
-
-/* ══════════════════════════════════════
-   모달 — 임베드 parentScroll 따라오기
-══════════════════════════════════════ */
-let _parentViewH   = window.innerHeight;
-let _iframeCenterY = window.innerHeight / 2;
-
-function _positionModal() {
-  const mbox = document.getElementById('mbox');
-  if (!mbox) return;
-  // 뷰 중앙에 모달 세로 정렬, 최소 20px 여백
-  const mt = Math.max(20, _iframeCenterY - mbox.offsetHeight / 2);
-  mbox.style.marginTop = mt + 'px';
-}
-
-function om(t, s, img) {
-  document.getElementById('mtitle').textContent = t;
-  document.getElementById('msub').textContent   = s || '';
-  document.getElementById('mimg-wrap').innerHTML = `<img src="${img}" alt="${t}">`;
-  document.getElementById('mbg').classList.add('open');
-  // 부모에게 즉시 scroll 정보 요청 → 위치 계산용
-  window.parent.postMessage({ type: 'orogy-requestScroll' }, '*');
-  // 이미지 로드 후 재계산
-  setTimeout(_positionModal, 80);
-  setTimeout(_positionModal, 400);
-}
-
-function omYt(t, url) {
-  document.getElementById('mtitle').textContent = t;
-  document.getElementById('msub').textContent   = '';
-  const ytId = getYtId(url);
-  document.getElementById('mimg-wrap').innerHTML = ytId
-    ? `<iframe src="https://www.youtube.com/embed/${ytId}" allow="encrypted-media" allowfullscreen></iframe>`
-    : `<p style="padding:20px;color:var(--gray);">영상을 불러올 수 없습니다.</p>`;
-  document.getElementById('mbg').classList.add('open');
-  window.parent.postMessage({ type: 'orogy-requestScroll' }, '*');
-  setTimeout(_positionModal, 80);
-}
-
-/* 모달 닫기 */
-function cmc(){
-  document.getElementById('mbg').classList.remove('open');
-  const iframe = document.querySelector('#mimg-wrap iframe');
-  if (iframe) { const s = iframe.src; iframe.src = ''; iframe.src = s; }
 }
 
 /* ── 견적 계산 ── */
@@ -1567,8 +1497,6 @@ let portData = {};
 let portPages = {};
 let portCatIdx = 0;
 
-function isYoutube(url){ return url && (url.includes('youtu.be') || url.includes('youtube.com')); }
-
 async function loadPortfolio() {
   const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJXlBmNMpCB6yQH5mznODAXBhgywVD7JheDmNqejv0bizcyWAnvj4hCOfcAhWwSFL0n_TihrQ3JktC/pub?gid=944328220&single=true&output=csv';
   try {
@@ -1583,29 +1511,24 @@ async function loadPortfolio() {
       const desc = (r[2]||'').trim();
       const img  = (r[3]||'').trim();
       const sold = (r[4]||'').trim() === '판매';
-      if (portData[cat] !== undefined) {
-        portData[cat].push({title, desc, img, sold});
-      }
+      if (portData[cat] !== undefined) portData[cat].push({title, desc, img, sold});
     });
   } catch(e) {
     console.warn('포트폴리오 시트 로드 실패:', e);
   }
   renderPortTabs();
 }
-
 function renderPortTabs() {
   const tabRow  = document.getElementById('po-tabs');
   const panesEl = document.getElementById('po-panes');
   tabRow.innerHTML  = '';
   panesEl.innerHTML = '';
-
   PORT_CATS.forEach((cat, i) => {
     const btn = document.createElement('button');
     btn.className = 'tb on-p' + (i===0?' on':'');
     btn.textContent = PORT_LABELS[i];
     btn.onclick = () => switchPortTab(i);
     tabRow.appendChild(btn);
-
     const pane = document.createElement('div');
     pane.className = 'pane' + (i===0?' on':'');
     pane.id = `po-pane-${i}`;
@@ -1613,7 +1536,6 @@ function renderPortTabs() {
     renderPortPane(cat, i);
   });
 }
-
 function switchPortTab(idx) {
   portCatIdx = idx;
   const tabs  = document.getElementById('po-tabs').querySelectorAll('.tb');
@@ -1621,7 +1543,6 @@ function switchPortTab(idx) {
   tabs.forEach((t,i)  => t.classList.toggle('on', i===idx));
   [...panes].forEach((p,i) => p.classList.toggle('on', i===idx));
 }
-
 function renderPortPane(cat, idx) {
   const pane    = document.getElementById(`po-pane-${idx}`);
   const items   = portData[cat] || [];
@@ -1633,24 +1554,17 @@ function renderPortPane(cat, idx) {
   if (cat === '리깅') {
     const cards = items.map(item => {
       const ytId = getYtId(item.img);
-      const thumb = ytId
-        ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`
-        : '';
-      return `
-        <div class="port-card" onclick="omYt('${item.title.replace(/'/g,"\\'")}','${item.img}')">
-          <div class="port-thumb">
-            <img src="${thumb}" alt="${item.title}" loading="lazy">
-            <div class="yt-play">
-              <div class="yt-play-icon">
-                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-              </div>
-            </div>
-          </div>
-          <div class="port-info">
-            <div class="port-doc-icon">▶</div>
-            <div><div class="port-name">${item.title || '리깅 포트폴리오'}</div></div>
-          </div>
-        </div>`;
+      const thumb = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
+      return `<div class="port-card" onclick="omYt('${item.title.replace(/'/g,"\\'")}','${item.img}')">
+        <div class="port-thumb">
+          <img src="${thumb}" alt="${item.title}" loading="lazy">
+          <div class="yt-play"><div class="yt-play-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+        </div>
+        <div class="port-info">
+          <div class="port-doc-icon">▶</div>
+          <div><div class="port-name">${item.title || '리깅 포트폴리오'}</div></div>
+        </div>
+      </div>`;
     }).join('');
     pane.innerHTML = `<div class="port-grid">${cards || '<p style="color:var(--gray);font-size:13px;grid-column:1/-1;">등록된 작업물이 없습니다.</p>'}</div>`;
     return;
@@ -1659,24 +1573,22 @@ function renderPortPane(cat, idx) {
   const cards = slice.map(item => {
     const soldBadge = item.sold
       ? `<div class="sold-ov"><span class="sold-txt">SOLD OUT</span></div>` : '';
-    return `
-      <div class="port-card" onclick="om('${item.title.replace(/'/g,"\\'")}','${item.desc.replace(/'/g,"\\'")}','${item.img}')">
-        <div class="port-thumb">
-          <img src="${item.img}" alt="${item.title}" loading="lazy">
-          ${soldBadge}
+    return `<div class="port-card" onclick="om('${item.title.replace(/'/g,"\\'")}','${item.desc.replace(/'/g,"\\'")}','${item.img}')">
+      <div class="port-thumb">
+        <img src="${item.img}" alt="${item.title}" loading="lazy">
+        ${soldBadge}
+      </div>
+      <div class="port-info">
+        <div class="port-doc-icon">📄</div>
+        <div>
+          <div class="port-name">${item.title}</div>
+          ${item.desc ? `<div class="port-meta">${item.desc}</div>` : ''}
         </div>
-        <div class="port-info">
-          <div class="port-doc-icon">📄</div>
-          <div>
-            <div class="port-name">${item.title}</div>
-            ${item.desc ? `<div class="port-meta">${item.desc}</div>` : ''}
-          </div>
-        </div>
-      </div>`;
+      </div>
+    </div>`;
   }).join('');
 
   const grid = `<div class="port-grid">${cards || '<p style="color:var(--gray);font-size:13px;grid-column:1/-1;">등록된 작업물이 없습니다.</p>'}</div>`;
-
   let pgHtml = '';
   if (totalPg > 1) {
     const prevDis = curPage===1 ? 'disabled' : '';
@@ -1685,17 +1597,14 @@ function renderPortPane(cat, idx) {
     for (let p=1; p<=totalPg; p++) {
       nums += `<button class="pg-btn${p===curPage?' active':''}" onclick="goPortPage('${cat}',${idx},${p})">${p}</button>`;
     }
-    pgHtml = `
-      <div class="port-pagination">
-        <button class="pg-btn arrow" onclick="goPortPage('${cat}',${idx},${curPage-1})" ${prevDis}>‹</button>
-        ${nums}
-        <button class="pg-btn arrow" onclick="goPortPage('${cat}',${idx},${curPage+1})" ${nextDis}>›</button>
-      </div>`;
+    pgHtml = `<div class="port-pagination">
+      <button class="pg-btn arrow" onclick="goPortPage('${cat}',${idx},${curPage-1})" ${prevDis}>‹</button>
+      ${nums}
+      <button class="pg-btn arrow" onclick="goPortPage('${cat}',${idx},${curPage+1})" ${nextDis}>›</button>
+    </div>`;
   }
-
   pane.innerHTML = grid + pgHtml;
 }
-
 function goPortPage(cat, idx, page) {
   const total = Math.max(1, Math.ceil((portData[cat]||[]).length / PORT_PER_PAGE));
   portPages[cat] = Math.min(Math.max(1, page), total);
@@ -1773,7 +1682,6 @@ ${v('fetc')}
 
 /* ── 가격 데이터 로드 ── */
 let priceRows = [];
-
 async function loadPriceData() {
   const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJXlBmNMpCB6yQH5mznODAXBhgywVD7JheDmNqejv0bizcyWAnvj4hCOfcAhWwSFL0n_TihrQ3JktC/pub?gid=1560320542&single=true&output=csv';
   try {
@@ -1787,51 +1695,41 @@ async function loadPriceData() {
   renderPriceSection();
   buildEstSelect();
 }
-
 function parsePrice(str) {
   if (!str) return null;
   const n = parseInt(str.replace(/[^0-9]/g, ''));
   return isNaN(n) ? null : n;
 }
-
 const CHECK_SVG = `<div class="inc-check"><svg viewBox="0 0 12 10" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,5 4,8 11,1"/></svg></div>`;
-
 function renderPriceSection() {
   const tabRow  = document.getElementById('pc-tabs');
   const panes   = document.getElementById('pc-panes');
-
   const cats = {};
   priceRows.forEach(r => {
     const cat = r[0].trim();
     if (!cats[cat]) cats[cat] = [];
     cats[cat].push({ cat, title: r[1].trim(), opt: r[2].trim(), desc: r[3].trim(), price: r[4].trim() });
   });
-
   const catNames = Object.keys(cats);
   if (!catNames.length) {
     panes.innerHTML = '<p style="color:var(--gray);font-size:13px;">가격 정보를 불러오지 못했습니다.</p>';
     return;
   }
-
   tabRow.innerHTML = catNames.map((cat, i) =>
     `<button class="tb on-b${i===0?' on':''}" onclick="swPrice(${i})">${cat}</button>`
   ).join('');
-
   panes.innerHTML = catNames.map((cat, i) => {
     const rows = cats[cat];
     const includes  = rows.filter(r => r.title === '기본 제공 목록');
     const mainItems = rows.filter(r => r.title && r.title !== '기본 제공 목록' && r.price);
     const addOns    = rows.filter(r => !r.title && r.price);
-
     let html = '';
-
     if (includes.length) {
       html += `<p style="font-size:12px;font-weight:600;color:#555;margin-bottom:9px;">기본 제공 목록</p>
         <div class="inc-grid" style="margin-bottom:20px;">
           ${includes.map(r => `<div class="inc-item">${CHECK_SVG}<span>${r.opt}</span></div>`).join('')}
         </div>`;
     }
-
     if (mainItems.length) {
       const softCats = ['셀식 LD','셀식 SSD'];
       html += `<div class="price-cards">
@@ -1846,7 +1744,6 @@ function renderPriceSection() {
         }).join('')}
       </div>`;
     }
-
     if (addOns.length) {
       const hasDesc = addOns.some(r => r.desc);
       html += `<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px;">
@@ -1860,23 +1757,19 @@ function renderPriceSection() {
         </table>
       </div>`;
     }
-
     return `<div class="pane${i===0?' on':''}">${html}</div>`;
   }).join('');
 }
-
 function swPrice(idx) {
   const tabs  = document.getElementById('pc-tabs').querySelectorAll('.tb');
   const panes = document.getElementById('pc-panes').children;
   tabs.forEach((t,i)  => t.classList.toggle('on', i===idx));
   [...panes].forEach((p,i) => p.classList.toggle('on', i===idx));
 }
-
 function buildEstSelect() {
   const sel = document.getElementById('et');
   if (!sel) return;
   sel.innerHTML = '<option value="">선택하세요</option>';
-
   const cats = {};
   priceRows.forEach(r => {
     const cat   = r[0].trim();
@@ -1887,12 +1780,10 @@ function buildEstSelect() {
     if (!title) return;
     const num = parsePrice(price);
     if (!num) return;
-
     const groupKey = `${cat} — ${title}`;
     if (!cats[groupKey]) cats[groupKey] = [];
     cats[groupKey].push({ opt, price, num });
   });
-
   Object.entries(cats).forEach(([group, items]) => {
     const og = document.createElement('optgroup');
     og.label = group;
@@ -1923,29 +1814,21 @@ async function loadEvents() {
     }));
   } catch (e) {
     console.warn('이벤트 시트 로드 실패:', e);
-    events = [];
     if (evList) evList.innerHTML = `<p style="color:var(--gray);font-size:13px;">이벤트 정보를 불러오지 못했습니다.</p>`;
     if (evCheckList) evCheckList.innerHTML = '';
     return;
   }
-
   if (evList) {
     evList.innerHTML = events.map(ev => {
-      const dlHtml = ev.dl
-        ? `<div class="ev-dl">~ ${formatDate(ev.dl)}</div>` : '';
-      const priceHtml = ev.price
-        ? `<div class="ev-price">${ev.price.toLocaleString()}원</div>` : '';
-      const bodyHtml = ev.content
-        ? `<div class="ev-body">${escHtml(ev.content)}</div>` : '';
+      const dlHtml = ev.dl ? `<div class="ev-dl">~ ${formatDate(ev.dl)}</div>` : '';
+      const priceHtml = ev.price ? `<div class="ev-price">${ev.price.toLocaleString()}원</div>` : '';
+      const bodyHtml = ev.content ? `<div class="ev-body">${escHtml(ev.content)}</div>` : '';
       return `<div class="ev-card">
         <div class="ev-title">${escHtml(ev.title)}</div>
-        ${dlHtml}
-        ${bodyHtml}
-        ${priceHtml}
+        ${dlHtml}${bodyHtml}${priceHtml}
       </div>`;
     }).join('');
   }
-
   if (evCheckList) {
     evCheckList.innerHTML =
       `<label class="rl"><input type="radio" name="fev" value=""> 없음</label>` +
@@ -1959,29 +1842,20 @@ function formatDate(str) {
   const m = str.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
   return m ? `${m[1]}년 ${m[2]}월 ${m[3]}일` : str;
 }
-
 function escHtml(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 /* ── 초기화 ── */
 function resetAll() {
-  ['et','eu'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.selectedIndex = 0;
-  });
-  ['ex','edep'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
+  ['et','eu'].forEach(id => { const el = document.getElementById(id); if (el) el.selectedIndex = 0; });
+  ['ex','edep'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   ['fn','fl','fref','fref2','fref3','fart','fpsd','fchar','fetc'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
+    const el = document.getElementById(id); if (el) el.value = '';
   });
   const fco = document.getElementById('fco');
   if (fco) fco.selectedIndex = 0;
-  document.querySelectorAll('input[type="radio"], input[type="checkbox"]')
-    .forEach(el => { el.checked = false; });
+  document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(el => { el.checked = false; });
   ce();
   showBalloon('reset-balloon', '↺ 초기화되었습니다!');
 }
@@ -2012,26 +1886,12 @@ loadPriceData();
   }, 300);
 
   window.addEventListener('message', function(e) {
-    if (!e.data) return;
-
-    // 부모가 보내는 현재 스크롤/뷰포트 정보 → 모달 위치 재계산
-    if (e.data.type === 'parentScroll') {
-      _parentViewH   = e.data.viewHeight;
-      _iframeCenterY = (_parentViewH / 2) - e.data.rectTop;
-      if (_iframeCenterY < 0) _iframeCenterY = 0;
-      const mbg = document.getElementById('mbg');
-      if (mbg && mbg.classList.contains('open')) _positionModal();
-      return;
-    }
-
-    // 섹션 스크롤 네비게이션
-    if (e.data.type === 'orogy-scroll') {
-      const target = document.getElementById(e.data.id);
-      if (!target) return;
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      const iframeTop = target.getBoundingClientRect().top + window.scrollY;
-      window.parent.postMessage({ type: 'orogy-scrollpos', offsetTop: iframeTop }, '*');
-    }
+    if (!e.data || e.data.type !== 'orogy-scroll') return;
+    const target = document.getElementById(e.data.id);
+    if (!target) return;
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const iframeTop = target.getBoundingClientRect().top + window.scrollY;
+    window.parent.postMessage({ type: 'orogy-scrollpos', offsetTop: iframeTop }, '*');
   });
 })();
 </script>
