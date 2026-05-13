@@ -27,7 +27,7 @@
         h2::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 60px; height: 2px; background: #0056b3; }
         p { margin-bottom: 10px; font-weight: 400; color: #555; }
         ul { list-style: none; }
-        
+
         /* 토스트 알림 스타일 */
         .toast-bubble { position: absolute; background: #333; color: #fff; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: bold; z-index: 10000; opacity: 0; pointer-events: none; white-space: nowrap; transform: translateX(-50%) translateY(10px); transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .toast-bubble::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; border-color: #333 transparent transparent transparent; }
@@ -40,8 +40,8 @@
         .guide-card h3 { font-size: 22px; color: #0056b3; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         .pro-con { margin-top: 15px; }
         .pro-con strong { display: inline-block; margin-top: 15px; margin-bottom: 5px; font-size: 14px; padding: 4px 12px; border-radius: 20px; font-weight: 700; }
-        .pro-con strong:nth-of-type(1) { background: #e6fcf5; color: #0ca678; } 
-        .pro-con strong:nth-of-type(2) { background: #fff5f5; color: #e03131; } 
+        .pro-con strong:nth-of-type(1) { background: #e6fcf5; color: #0ca678; }
+        .pro-con strong:nth-of-type(2) { background: #fff5f5; color: #e03131; }
         .pro-con li { position: relative; padding-left: 15px; font-size: 15px; color: #555; margin-bottom: 6px; word-break: keep-all;}
         .pro-con li::before { content: '·'; position: absolute; left: 0; font-weight: bold; color: #888; }
 
@@ -54,47 +54,46 @@
 
         /* ================= 3. 안내 멘트 & 4. 작업 순서 ================= */
         .notice-box { background: linear-gradient(135deg, #e7f5ff 0%, #f1f8ff 100%); border-left: 4px solid #339af0; padding: 25px; border-radius: 12px; font-weight: 500; color: #1864ab; box-shadow: 0 4px 15px rgba(51, 154, 240, 0.1); margin-top: 25px; font-size: 15px; line-height: 1.7; word-break: keep-all;}
-        
-        .process-flow { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 30px; background: #f8f9fa; padding: 25px 20px; border-radius: 16px; border: 1px solid #eee; }
-        .process-step { background: #fff; color: #495057; padding: 12px 20px; border-radius: 30px; border: 1px solid #dee2e6; font-weight: 700; font-size: 14px; text-align: center; flex: 1; min-width: 110px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-        .step-arrow { color: #adb5bd; font-size: 14px; }
+
+        .process-flow { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 30px; background: #f8f9fa; padding: 20px 16px; border-radius: 16px; border: 1px solid #eee; }
+        .process-step { background: #fff; color: #495057; padding: 10px 14px; border-radius: 30px; border: 1px solid #dee2e6; font-weight: 700; font-size: 13px; text-align: center; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .step-arrow { color: #adb5bd; font-size: 12px; flex-shrink: 0; }
         .process-step:last-child { background: #0056b3; color: #fff; border-color: #0056b3; box-shadow: 0 4px 15px rgba(0,86,179,0.3); }
 
         /* ================= 7. 기능 체험존 (8개 박스) ================= */
-        .demo-zone-container { margin-top: 25px; background: #fcfcfc; padding: 40px; border-radius: 20px; border: 1px solid #eee; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02); }
+        .demo-zone-container { margin-top: 25px; background: #fcfcfc; padding: 30px; border-radius: 20px; border: 1px solid #eee; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02); }
         .demo-zone-desc { color: #888; font-size: 15px; margin-bottom: 25px; text-align: center; }
-        .demo-zone-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-        
-        .demo-box { background: #fff; border: 1px solid #eaeaea; border-radius: 16px; padding: 30px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 160px; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.03); transition: 0.3s; overflow: visible; }
-        .demo-box:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.08); transform: translateY(-3px); }
-        .demo-box-title { position: absolute; top: 12px; left: 15px; font-size: 12px; font-weight: 800; color: #adb5bd; letter-spacing: 0.5px; }
+        .demo-zone-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 
-        .typing-effect { font-size: 16px; font-weight: bold; color: #0056b3; min-height: 24px; }
+        .demo-box { background: #fff; border: 1px solid #eaeaea; border-radius: 16px; padding: 30px 16px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 150px; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.03); transition: 0.3s; overflow: visible; }
+        .demo-box:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.08); transform: translateY(-3px); }
+        .demo-box-title { position: absolute; top: 10px; left: 12px; font-size: 11px; font-weight: 800; color: #adb5bd; letter-spacing: 0.5px; }
+
+        .typing-effect { font-size: 15px; font-weight: bold; color: #0056b3; min-height: 24px; word-break: keep-all; text-align: center; }
         .typing-effect::after { content: '|'; animation: blink 1s step-end infinite; }
         @keyframes blink { 50% { opacity: 0; } }
-        
-        .btn-neon { background: transparent; color: #e83e8c; border: 2px solid #e83e8c; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
+
+        .btn-neon { background: transparent; color: #e83e8c; border: 2px solid #e83e8c; padding: 10px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; font-size: 14px; }
         .btn-neon:hover { background: #e83e8c; color: #fff; box-shadow: 0 0 15px #e83e8c; }
-        
-        .counter-num { font-size: 32px; font-weight: 900; color: #20c997; font-family: 'Courier New', Courier, monospace; overflow: hidden; height: 44px; line-height: 44px; position: relative; display: inline-block; min-width: 80px; text-align: center; }
+
+        .counter-num { font-size: 30px; font-weight: 900; color: #20c997; font-family: 'Courier New', Courier, monospace; overflow: hidden; height: 44px; line-height: 44px; position: relative; display: inline-block; min-width: 80px; text-align: center; }
         .counter-digit-track { display: inline-flex; flex-direction: column; transition: transform 0.18s cubic-bezier(0.25, 0.1, 0.25, 1); }
         .counter-digit { display: block; height: 44px; line-height: 44px; }
-        
+
         .toggle-switch { position: relative; display: inline-block; width: 60px; height: 34px; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
         .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
         .toggle-slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .toggle-slider { background-color: #0056b3; }
         input:checked + .toggle-slider:before { transform: translateX(26px); }
-        
+
         .demo-accordion { width: 100%; text-align: left; background: #f8f9fa; border-radius: 8px; padding: 10px 15px; border: 1px solid #eee; cursor: pointer; }
-        .demo-accordion summary { font-weight: 700; font-size: 14px; outline: none; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .demo-accordion summary { font-weight: 700; font-size: 13px; outline: none; list-style: none; display: flex; justify-content: space-between; align-items: center; }
         .demo-accordion summary::-webkit-details-marker { display: none; }
         .demo-accordion summary::after { content: '+'; color: #0056b3; font-size: 18px; transition: 0.3s; }
         .demo-accordion[open] summary::after { transform: rotate(45deg); }
-        .demo-accordion p { margin-top: 10px; font-size: 13px; color: #666; border-top: 1px dashed #ddd; padding-top: 10px; }
-        
-        /* 아코디언 오픈/클로즈 애니메이션 */
+        .demo-accordion p { margin-top: 10px; font-size: 12px; color: #666; border-top: 1px dashed #ddd; padding-top: 10px; }
+
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -107,35 +106,35 @@
         .accordion-body-inner.opening { animation: fadeInDown 0.3s ease-out forwards; }
         .accordion-body-inner.closing { animation: fadeOutUp 0.25s ease-in forwards; }
 
-        .demo-btn { padding: 10px 18px; background: #343a40; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .demo-btn { padding: 9px 14px; background: #343a40; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 13px; }
         .demo-btn:hover { background: #495057; }
-        
+
         .tooltip-wrap { position: relative; display: inline-block; cursor: help; }
         .tooltip-text { visibility: hidden; width: 150px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 10px; position: absolute; z-index: 100; bottom: 130%; left: 50%; margin-left: -75px; opacity: 0; transition: all 0.3s; font-size: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         .tooltip-text::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #333 transparent transparent transparent; }
         .tooltip-wrap:hover .tooltip-text { visibility: visible; opacity: 1; bottom: 140%; }
 
-        .skeleton-box { width: 100%; height: 40px; border-radius: 8px; background: linear-gradient(90deg, #e9ecef 25%, #f8f9fa 50%, #e9ecef 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
+        .skeleton-box { width: 100%; height: 36px; border-radius: 8px; background: linear-gradient(90deg, #e9ecef 25%, #f8f9fa 50%, #e9ecef 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
         @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
         /* ================= 5. 포트폴리오 ================= */
         .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 25px; }
         .portfolio-item { background: #fff; border: 1px solid #eee; border-radius: 16px; overflow: hidden; cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 5px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column;}
         .portfolio-item:hover { box-shadow: 0 15px 30px rgba(0,0,0,0.1); transform: translateY(-8px); border-color: #ddd; }
-        .portfolio-img-wrapper { width: 100%; height: 220px; overflow: hidden; background: #f8f9fa; display: flex; align-items: center; justify-content: center; position: relative; }
-        .portfolio-img-wrapper::after { content: '\f00e  크게 보기'; font-family: "Font Awesome 6 Free", 'Paperozi', sans-serif; font-weight: 900; position: absolute; inset: 0; background: rgba(0,86,179,0.7); color: white; display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; font-size: 16px; }
+        .portfolio-img-wrapper { width: 100%; height: 200px; overflow: hidden; background: #f8f9fa; display: flex; align-items: center; justify-content: center; position: relative; }
+        .portfolio-img-wrapper::after { content: '\f00e  크게 보기'; font-family: "Font Awesome 6 Free", 'Paperozi', sans-serif; font-weight: 900; position: absolute; inset: 0; background: rgba(0,86,179,0.7); color: white; display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; font-size: 15px; }
         .portfolio-item:hover .portfolio-img-wrapper::after { opacity: 1; }
         .portfolio-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
         .portfolio-item:hover .portfolio-img-wrapper img { transform: scale(1.05); }
-        .portfolio-info { padding: 20px; flex: 1; display: flex; flex-direction: column;}
-        .portfolio-info h4 { font-size: 17px; margin-bottom: 8px; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .portfolio-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
-        .portfolio-tags span { font-size: 11px; background: #f1f3f5; color: #495057; padding: 3px 8px; border-radius: 4px; font-weight: 600; }
-        .portfolio-info p { font-size: 13px; color: #777; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 12px; }
-        .portfolio-price { margin-top: auto; font-size: 14px; font-weight: 800; color: #0056b3; background: #e7f5ff; display: inline-block; padding: 6px 12px; border-radius: 8px; align-self: flex-start;}
-        
-        .pagination { display: flex; justify-content: center; align-items: center; margin-top: 40px; gap: 10px; }
-        .page-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid #ddd; background: #fff; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; transition: 0.2s; color: #555; }
+        .portfolio-info { padding: 16px; flex: 1; display: flex; flex-direction: column;}
+        .portfolio-info h4 { font-size: 16px; margin-bottom: 6px; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .portfolio-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+        .portfolio-tags span { font-size: 11px; background: #f1f3f5; color: #495057; padding: 2px 7px; border-radius: 4px; font-weight: 600; }
+        .portfolio-info p { font-size: 13px; color: #777; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 10px; }
+        .portfolio-price { margin-top: auto; font-size: 13px; font-weight: 800; color: #0056b3; background: #e7f5ff; display: inline-block; padding: 5px 10px; border-radius: 8px; align-self: flex-start;}
+
+        .pagination { display: flex; justify-content: center; align-items: center; margin-top: 35px; gap: 8px; flex-wrap: wrap; }
+        .page-btn { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border: 1px solid #ddd; background: #fff; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.2s; color: #555; }
         .page-btn:hover, .page-btn.active { background: #0056b3; color: #fff; border-color: #0056b3; box-shadow: 0 4px 10px rgba(0,86,179,0.2); }
 
         .modal { display: none; position: absolute; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background-color: transparent; backdrop-filter: none; justify-content: center; align-items: flex-start; padding: 0 20px; pointer-events: none; }
@@ -145,46 +144,45 @@
         .modal-img-container { width: 100%; text-align: center; margin-bottom: 25px; background: #f8f9fa; border-radius: 12px; padding: 10px; border: 1px solid #eee; }
         .modal-img-container img { max-width: 100%; height: auto; border-radius: 8px; object-fit: contain; display: block; margin-bottom: 15px; }
         .modal-img-container img:last-child { margin-bottom: 0; }
-        .modal-details h3 { font-size: 26px; margin-bottom: 15px; color: #111; }
+        .modal-details h3 { font-size: 24px; margin-bottom: 15px; color: #111; }
         .modal-details .meta { display: flex; gap: 10px; font-size: 14px; color: #444; margin-bottom: 20px; flex-wrap: wrap; }
         .modal-details .meta span { background: #f1f3f5; border: 1px solid #e9ecef; padding: 6px 12px; border-radius: 6px; font-weight: 600; }
         .modal-details .meta-tags { margin-top: -10px; margin-bottom: 20px; }
         .modal-details .meta-tags span { background: #e7f5ff; color: #0056b3; border: none; }
 
         /* ================= 6 & 8. 견적 계산기 및 가격표 ================= */
-        .calc-container { display: flex; flex-direction: column; gap: 40px; margin-top: 25px; } 
-        
+        .calc-container { display: flex; flex-direction: column; gap: 40px; margin-top: 25px; }
+
         .calc-category { margin-bottom: 25px; background: #fff; border: 1px solid #eee; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
-        .calc-category h4 { font-size: 19px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; color: #222; }
-        
+        .calc-category h4 { font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; color: #222; }
+
         .calc-item-wrapper { margin-bottom: 10px; }
-        .calc-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f8f9fa; border-radius: 10px; border: 1px solid #eee; transition: 0.2s; }
+        .calc-item { display: flex; justify-content: space-between; align-items: center; padding: 14px; background: #f8f9fa; border-radius: 10px; border: 1px solid #eee; transition: 0.2s; gap: 10px; }
         .calc-item.has-qty { border-radius: 10px 10px 0 0; border-bottom: none; background: #f1f3f5; }
         .calc-item:hover { background: #f1f3f5; border-color: #dee2e6; }
-        .calc-item label { flex: 1; cursor: pointer; font-weight: 500; font-size: 15px; display: flex; align-items: center; gap: 12px; color: #333; }
+        .calc-item label { flex: 1; cursor: pointer; font-weight: 500; font-size: 14px; display: flex; align-items: center; gap: 10px; color: #333; min-width: 0; }
         .calc-item input[type="checkbox"] { transform: scale(1.3); cursor: pointer; accent-color: #0056b3; flex-shrink: 0; }
-        .item-price { font-weight: 800; color: #0056b3; font-size: 15px; white-space: nowrap; }
+        .item-price { font-weight: 800; color: #0056b3; font-size: 14px; white-space: nowrap; flex-shrink: 0; }
 
-        /* ★ 옵션 마우스 추적 툴팁 */
         .calc-item-label-wrap { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; }
-        .calc-item-name { flex: 1; }
+        .calc-item-name { flex: 1; word-break: keep-all; }
         .calc-item[data-desc] { cursor: default; }
         #calcTooltip { position: fixed; z-index: 9999; background: #1a1e23; color: #e9ecef; font-size: 13px; font-weight: 400; line-height: 1.7; padding: 10px 14px; border-radius: 10px; white-space: pre-wrap; word-break: keep-all; max-width: 280px; pointer-events: none; opacity: 0; transition: opacity 0.15s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.3); font-family: 'Paperozi', sans-serif; }
 
-        .qty-dropdown { display: none; padding: 15px; background: #fff; border: 1px solid #dee2e6; border-top: 1px dashed #ccc; border-radius: 0 0 10px 10px; text-align: right; box-shadow: inset 0 2px 5px rgba(0,0,0,0.02); }
-        .qty-dropdown.show { display: flex; justify-content: space-between; align-items: center; animation: slideDown 0.3s ease; }
+        .qty-dropdown { display: none; padding: 14px; background: #fff; border: 1px solid #dee2e6; border-top: 1px dashed #ccc; border-radius: 0 0 10px 10px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.02); }
+        .qty-dropdown.show { display: flex; justify-content: space-between; align-items: center; animation: slideDown 0.3s ease; flex-wrap: wrap; gap: 10px; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-        .qty-dropdown input[type="number"] { width: 80px; padding: 8px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-weight: bold; outline: none; transition: 0.2s; font-size: 15px; }
+        .qty-dropdown input[type="number"] { width: 72px; padding: 8px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-weight: bold; outline: none; transition: 0.2s; font-size: 15px; }
         .qty-dropdown input[type="number"]:focus { border-color: #0056b3; box-shadow: 0 0 0 3px rgba(0,86,179,0.1); }
 
-        .calc-summary { background: #1a1e23; color: #fff; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); border: 1px solid #2c3238; }
-        .calc-summary-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid #3c424a; padding-bottom: 15px; margin-bottom: 20px; flex-wrap: wrap; gap:10px; }
-        .calc-summary-header h3 { color: white; margin: 0; border: none; font-size: 22px; }
+        .calc-summary { background: #1a1e23; color: #fff; padding: 30px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); border: 1px solid #2c3238; }
+        .calc-summary-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid #3c424a; padding-bottom: 15px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        .calc-summary-header h3 { color: white; margin: 0; border: none; font-size: 20px; }
         .total-price-wrap { text-align: right; }
-        .total-price-wrap span { font-size: 14px; color: #8ba1b7; display: block; margin-bottom: 5px; }
-        .total-price { font-size: 32px; font-weight: 900; color: #ffd43b; margin: 0; line-height: 1; }
-        
-        .terms-overlay { position: relative; background: rgba(255,255,255,0.05); padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #3c424a; text-align: center; }
+        .total-price-wrap span { font-size: 13px; color: #8ba1b7; display: block; margin-bottom: 5px; }
+        .total-price { font-size: 28px; font-weight: 900; color: #ffd43b; margin: 0; line-height: 1; }
+
+        .terms-overlay { position: relative; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #3c424a; text-align: center; }
         .terms-overlay.locked .lock-msg { display: block; color: #ffc107; font-size: 14px; font-weight: bold; margin-bottom: 15px; animation: pulse 2s infinite; }
         .lock-msg { display: none; }
         @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
@@ -192,19 +190,19 @@
         .terms-check { font-size: 15px; position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 15px; }
         .terms-link-btn { display: inline-block; background: #339af0; color: white !important; padding: 12px 25px; border-radius: 30px; font-weight: 800; text-decoration: none !important; box-shadow: 0 4px 15px rgba(51, 154, 240, 0.4); transition: 0.3s; font-size: 16px; z-index: 10; position: relative; }
         .terms-link-btn:hover { background: #228be6; transform: translateY(-2px); }
-        
-        .terms-checkbox-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer; color: #e9ecef; font-weight: bold; background: rgba(0,0,0,0.2); padding: 15px 25px; border-radius: 10px; width: 100%; border: 1px dashed #555; transition: 0.3s; }
-        .terms-overlay.locked .terms-checkbox-wrap { opacity: 0.3; cursor: not-allowed; }
-        .terms-check input[type="checkbox"] { transform: scale(1.5); accent-color: #339af0; }
 
-        .selected-list-container { background: #23282e; border-radius: 12px; padding: 20px; margin-bottom: 25px; border: 1px solid #333940; }
-        .selected-list-container h5 { font-size: 14px; color: #8ba1b7; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed #3c424a; }
-        .selected-list { font-size: 14px; color: #ced4da; min-height: 20px; }
-        .selected-list li { display: flex; justify-content: space-between; margin-bottom: 10px; color: #f8f9fa; font-weight: 500; word-break: keep-all; gap: 10px; }
+        .terms-checkbox-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer; color: #e9ecef; font-weight: bold; background: rgba(0,0,0,0.2); padding: 14px 20px; border-radius: 10px; width: 100%; border: 1px dashed #555; transition: 0.3s; font-size: 14px; word-break: keep-all; }
+        .terms-overlay.locked .terms-checkbox-wrap { opacity: 0.3; cursor: not-allowed; }
+        .terms-check input[type="checkbox"] { transform: scale(1.5); accent-color: #339af0; flex-shrink: 0; }
+
+        .selected-list-container { background: #23282e; border-radius: 12px; padding: 18px; margin-bottom: 20px; border: 1px solid #333940; }
+        .selected-list-container h5 { font-size: 13px; color: #8ba1b7; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed #3c424a; }
+        .selected-list { font-size: 13px; color: #ced4da; min-height: 20px; }
+        .selected-list li { display: flex; justify-content: space-between; margin-bottom: 10px; color: #f8f9fa; font-weight: 500; word-break: keep-all; gap: 8px; }
         .selected-list li span:last-child { color: #ffd43b; font-weight: 700; white-space: nowrap; }
-        
-        .calc-btns { display: flex; gap: 15px; }
-        .calc-btns button { flex: 1; padding: 18px; border: none; border-radius: 12px; font-weight: 800; font-size: 16px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+        .calc-btns { display: flex; gap: 12px; }
+        .calc-btns button { flex: 1; padding: 16px 12px; border: none; border-radius: 12px; font-weight: 800; font-size: 15px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-copy { background: #0056b3; color: white; opacity: 0.4; cursor: not-allowed; }
         .btn-copy.active { opacity: 1; cursor: pointer; box-shadow: 0 8px 20px rgba(0,86,179,0.4); }
         .btn-copy.active:hover { background: #004494; transform: translateY(-3px); }
@@ -212,27 +210,27 @@
         .btn-reset:hover { background: #4d555e; }
 
         /* 문의양식 공통 디자인 */
-        .inquiry-form-container { background: #fff; border: 1px solid #eee; border-radius: 16px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
-        .inquiry-form-container h4 { font-size: 18px; margin-bottom: 20px; color: #222; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
+        .inquiry-form-container { background: #fff; border: 1px solid #eee; border-radius: 16px; padding: 22px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .inquiry-form-container h4 { font-size: 17px; margin-bottom: 18px; color: #222; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
         .form-group { margin-bottom: 15px; }
         .form-group:last-child { margin-bottom: 0; }
         .form-group label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px; color: #333; }
-        .form-control { width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-family: 'Paperozi', sans-serif; resize: none; overflow-y: auto; }
+        .form-control { width: 100%; box-sizing: border-box; padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-family: 'Paperozi', sans-serif; resize: none; overflow-y: auto; font-size: 14px; }
         .form-control:focus { outline: none; border-color: #0056b3; box-shadow: 0 0 0 3px rgba(0,86,179,0.1); }
-        .color-picker-wrap { display: flex; align-items: center; gap: 5px; margin-bottom: 5px; }
+        .color-picker-wrap { display: flex; align-items: center; gap: 5px; margin-bottom: 5px; flex-wrap: wrap; }
 
         .inquiryColor::-webkit-color-swatch-wrapper { padding: 0; }
         .inquiryColor::-webkit-color-swatch { border: none; border-radius: 6px; }
         .inquiryColor::-moz-color-swatch { border: none; border-radius: 6px; }
 
         /* ★ 이미지 첨부 영역 */
-        .ref-image-upload-area { border: 2px dashed #dee2e6; border-radius: 10px; padding: 18px; cursor: pointer; text-align: center; transition: border-color 0.2s, background 0.2s; background: #f8f9fa; margin-top: 8px; }
+        .ref-image-upload-area { border: 2px dashed #dee2e6; border-radius: 10px; padding: 16px; cursor: pointer; text-align: center; transition: border-color 0.2s, background 0.2s; background: #f8f9fa; margin-top: 8px; }
         .ref-image-upload-area:hover { border-color: #0056b3; background: #e7f5ff; }
         .ref-image-upload-area.dragover { border-color: #0056b3; background: #dbeafe; }
         .ref-image-upload-area p { color: #868e96; font-size: 13px; margin: 0; pointer-events: none; }
-        .ref-image-upload-area i { font-size: 22px; color: #adb5bd; margin-bottom: 6px; display: block; pointer-events: none; }
+        .ref-image-upload-area i { font-size: 20px; color: #adb5bd; margin-bottom: 6px; display: block; pointer-events: none; }
         .ref-image-preview-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-        .ref-image-thumb { position: relative; width: 80px; height: 80px; border-radius: 8px; overflow: hidden; border: 1px solid #dee2e6; background: #f1f3f5; flex-shrink: 0; }
+        .ref-image-thumb { position: relative; width: 72px; height: 72px; border-radius: 8px; overflow: hidden; border: 1px solid #dee2e6; background: #f1f3f5; flex-shrink: 0; }
         .ref-image-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .ref-image-thumb .del-img { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.55); color: #fff; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
         .ref-image-thumb .del-img:hover { background: #e03131; }
@@ -240,105 +238,59 @@
         /* ================= ★ 이벤트 선택 UI ================= */
         .event-select-container { margin-top: 8px; }
         .event-loading { color: #aaa; font-size: 13px; padding: 10px 0; }
-
-        /* 이벤트 없음 안내 */
         .event-none-msg { font-size: 13px; color: #aaa; padding: 10px 12px; background: #f8f9fa; border-radius: 8px; border: 1px dashed #ddd; }
 
-        /* 이벤트 카드 */
         .event-card { position: relative; border: 2px solid #e9ecef; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; cursor: pointer; transition: border-color 0.2s, background 0.2s, box-shadow 0.2s; background: #fff; display: flex; align-items: flex-start; gap: 12px; }
         .event-card:hover { border-color: #339af0; background: #f0f8ff; }
         .event-card.selected { border-color: #0056b3; background: #e7f5ff; box-shadow: 0 0 0 3px rgba(0,86,179,0.12); }
         .event-card.unavailable { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
 
-        /* ★ 최대 할인 이벤트 강조 스타일 */
-        .event-card.best-deal {
-            border-color: #f59f00;
-            background: #fff9db;
-            box-shadow: 0 0 0 2px rgba(245,159,0,0.25);
-            animation: bestDealPulse 2.5s ease-in-out infinite;
-        }
+        .event-card.best-deal { border-color: #f59f00; background: #fff9db; box-shadow: 0 0 0 2px rgba(245,159,0,0.25); animation: bestDealPulse 2.5s ease-in-out infinite; }
         .event-card.best-deal:hover { border-color: #e67700; background: #fff3bf; }
         .event-card.best-deal.selected { border-color: #f59f00; background: #fff3bf; box-shadow: 0 0 0 3px rgba(245,159,0,0.35); animation: none; }
-        @keyframes bestDealPulse {
-            0%, 100% { box-shadow: 0 0 0 2px rgba(245,159,0,0.2); }
-            50% { box-shadow: 0 0 0 4px rgba(245,159,0,0.45); }
-        }
-        .best-deal-badge {
-            position: absolute;
-            top: -1px;
-            right: 12px;
-            background: linear-gradient(135deg, #f59f00, #e67700);
-            color: #fff;
-            font-size: 11px;
-            font-weight: 900;
-            padding: 3px 10px;
-            border-radius: 0 0 8px 8px;
-            letter-spacing: 0.3px;
-            box-shadow: 0 2px 6px rgba(245,159,0,0.4);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
+        @keyframes bestDealPulse { 0%, 100% { box-shadow: 0 0 0 2px rgba(245,159,0,0.2); } 50% { box-shadow: 0 0 0 4px rgba(245,159,0,0.45); } }
+        .best-deal-badge { position: absolute; top: -1px; right: 12px; background: linear-gradient(135deg, #f59f00, #e67700); color: #fff; font-size: 11px; font-weight: 900; padding: 3px 10px; border-radius: 0 0 8px 8px; letter-spacing: 0.3px; box-shadow: 0 2px 6px rgba(245,159,0,0.4); display: flex; align-items: center; gap: 4px; }
 
         .event-card input[type="radio"] { margin-top: 3px; accent-color: #0056b3; transform: scale(1.2); flex-shrink: 0; cursor: pointer; }
         .event-card-body { flex: 1; min-width: 0; }
-        .event-card-title { font-size: 15px; font-weight: 800; color: #111; margin-bottom: 4px; }
+        .event-card-title { font-size: 14px; font-weight: 800; color: #111; margin-bottom: 4px; }
         .event-card-desc { font-size: 13px; color: #555; line-height: 1.5; }
         .event-card-desc .event-badge { display: inline-block; background: #ffe066; color: #7c5a00; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 800; margin-right: 4px; }
         .event-card-desc .event-cond { color: #888; font-size: 12px; margin-top: 3px; }
         .event-card-deadline { position: absolute; top: 12px; right: 14px; font-size: 11px; font-weight: 700; color: #868e96; background: #f1f3f5; padding: 2px 8px; border-radius: 20px; }
-
-        /* best-deal일 때 마감일 배지 위치 조정 (배지가 위에 생겼으므로) */
         .event-card.best-deal .event-card-deadline { top: 30px; }
-
-        /* 이벤트 없음 라디오 카드 */
         .event-card.event-none-card { border-style: dashed; }
 
-        /* 견적 요약 이벤트 할인 표시 */
         .discount-row { display: flex; justify-content: space-between; margin-bottom: 10px; color: #f8f9fa; font-weight: 500; gap: 10px; }
         .discount-row span:last-child { color: #63e6be; font-weight: 700; white-space: nowrap; }
         .discount-divider { border: none; border-top: 1px dashed #3c424a; margin: 8px 0 12px; }
 
         /* ================= ★ 오마카세 안내 멘트 ================= */
-        .omakase-notice {
-            display: none;
-            background: linear-gradient(135deg, #fff9db 0%, #fffbe8 100%);
-            border-left: 4px solid #f59f00;
-            border-radius: 12px;
-            padding: 16px 20px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #7c5a00;
-            line-height: 1.7;
-            word-break: keep-all;
-            box-shadow: 0 4px 15px rgba(245,159,0,0.12);
-            animation: fadeInDown 0.3s ease-out;
-        }
+        .omakase-notice { display: none; background: linear-gradient(135deg, #fff9db 0%, #fffbe8 100%); border-left: 4px solid #f59f00; border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; font-size: 14px; font-weight: 500; color: #7c5a00; line-height: 1.7; word-break: keep-all; box-shadow: 0 4px 15px rgba(245,159,0,0.12); animation: fadeInDown 0.3s ease-out; }
         .omakase-notice.show { display: block; }
         .omakase-notice strong { font-weight: 800; }
 
         /* ================= ★ 일정 캘린더 ================= */
-        .calendar-section { margin-top: 25px; background: #fcfcfc; border: 1px solid #eee; border-radius: 20px; padding: 30px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02); }
-        .calendar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; gap: 16px; flex-wrap: wrap; }
-        .calendar-nav { display: flex; align-items: center; gap: 12px; }
-        .calendar-nav button { background: #fff; border: 1px solid #dee2e6; border-radius: 8px; width: 36px; height: 36px; font-size: 18px; font-weight: 700; cursor: pointer; color: #495057; transition: 0.2s; font-family: 'Paperozi', sans-serif; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
-        .calendar-nav button:hover { background: #0056b3; color: #fff; border-color: #0056b3; box-shadow: 0 4px 12px rgba(0,86,179,0.2); }
-        .calendar-nav-title { font-size: 20px; font-weight: 800; color: #111; min-width: 140px; text-align: center; letter-spacing: -0.5px; }
-        .calendar-legend { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-        .calendar-legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #666; font-weight: 700; background: #fff; border: 1px solid #eee; padding: 4px 10px; border-radius: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.03); }
+        .calendar-section { margin-top: 25px; background: #fcfcfc; border: 1px solid #eee; border-radius: 20px; padding: 24px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02); }
+        .calendar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; gap: 12px; flex-wrap: wrap; }
+        .calendar-nav { display: flex; align-items: center; gap: 10px; }
+        .calendar-nav button { background: #fff; border: 1px solid #dee2e6; border-radius: 8px; width: 34px; height: 34px; font-size: 17px; font-weight: 700; cursor: pointer; color: #495057; transition: 0.2s; font-family: 'Paperozi', sans-serif; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+        .calendar-nav button:hover { background: #0056b3; color: #fff; border-color: #0056b3; }
+        .calendar-nav-title { font-size: 18px; font-weight: 800; color: #111; min-width: 120px; text-align: center; letter-spacing: -0.5px; }
+        .calendar-legend { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+        .calendar-legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #666; font-weight: 700; background: #fff; border: 1px solid #eee; padding: 3px 9px; border-radius: 20px; }
         .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
         .legend-dot.available { background: #0056b3; }
         .legend-dot.closed { background: #e03131; }
         .legend-dot.holiday { background: #ced4da; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
-        .calendar-dow { text-align: center; font-size: 11px; font-weight: 800; color: #adb5bd; padding: 6px 0 10px; letter-spacing: 0.3px; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .calendar-dow { text-align: center; font-size: 11px; font-weight: 800; color: #adb5bd; padding: 5px 0 8px; letter-spacing: 0.3px; }
         .calendar-dow.sun { color: #e03131; }
         .calendar-dow.sat { color: #339af0; }
-        .calendar-day { min-height: 68px; border-radius: 12px; padding: 8px 9px 7px; display: flex; flex-direction: column; gap: 5px; border: 1.5px solid transparent; background: #fff; transition: 0.15s; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+        .calendar-day { min-height: 62px; border-radius: 10px; padding: 7px 8px 6px; display: flex; flex-direction: column; gap: 4px; border: 1.5px solid transparent; background: #fff; transition: 0.15s; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
         .calendar-day.empty { background: transparent; border-color: transparent; box-shadow: none; }
-        .calendar-day.today { border-color: #0056b3 !important; box-shadow: 0 0 0 2px rgba(0,86,179,0.12), 0 2px 8px rgba(0,86,179,0.08); }
-        .calendar-day .day-num { font-size: 13px; font-weight: 800; color: #333; line-height: 1; }
+        .calendar-day.today { border-color: #0056b3 !important; box-shadow: 0 0 0 2px rgba(0,86,179,0.12); }
+        .calendar-day .day-num { font-size: 12px; font-weight: 800; color: #333; line-height: 1; }
         .calendar-day.sun .day-num { color: #e03131; }
         .calendar-day.sat .day-num { color: #339af0; }
         .calendar-day.holiday-day { background: #f8f9fa; box-shadow: none; }
@@ -346,50 +298,185 @@
         .calendar-day.closed-day { background: #fff5f5; border-color: #ffd8d8; }
         .calendar-day.closed-day .day-num { color: #c92a2a; }
         .calendar-day.available-day { background: #fff; border-color: #e7f0ff; }
-        .cal-badge { font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 5px; line-height: 1.4; word-break: keep-all; display: inline-block; width: fit-content; }
+        .cal-badge { font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 4px; line-height: 1.4; word-break: keep-all; display: inline-block; width: fit-content; }
         .cal-badge.available-badge { background: #e7f5ff; color: #0056b3; }
         .cal-badge.closed-badge { background: #ffe3e3; color: #c92a2a; }
         .cal-badge.holiday-badge { background: #f1f3f5; color: #adb5bd; }
-        .calendar-loading { text-align: center; padding: 40px; color: #aaa; font-size: 15px; }
+        .calendar-loading { text-align: center; padding: 40px; color: #aaa; font-size: 14px; }
 
         /* ================= 7. 안내사항 ================= */
         .terms-accordion { width: 100%; background: #fcfcfc; border: 1px solid #eee; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); overflow: hidden; }
-        .terms-accordion summary { font-weight: 700; font-size: 15px; color: #222; outline: none; list-style: none; display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; cursor: pointer; gap: 10px; }
+        .terms-accordion summary { font-weight: 700; font-size: 14px; color: #222; outline: none; list-style: none; display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; cursor: pointer; gap: 10px; }
         .terms-accordion summary::-webkit-details-marker { display: none; }
-        .terms-accordion summary i { color: #0056b3; width: 18px; text-align: center; }
+        .terms-accordion summary i { color: #0056b3; width: 18px; text-align: center; flex-shrink: 0; }
         .terms-accordion summary::after { content: '+'; color: #0056b3; font-size: 20px; font-weight: 300; transition: 0.3s; margin-left: auto; flex-shrink: 0; }
         .terms-accordion[open] summary::after { transform: rotate(45deg); }
         .terms-accordion[open] summary { border-bottom: 1px solid #eee; background: #f8f9fa; }
-        .terms-accordion-body { padding: 20px 22px; }
+        .terms-accordion-body { padding: 18px 20px; }
         .terms-accordion-body p { font-size: 14px; color: #555; margin-bottom: 8px; word-break: keep-all; line-height: 1.7; }
         .terms-accordion-body p:last-child { margin-bottom: 0; }
         .terms-list { list-style: none; padding: 0; }
         .terms-list li { position: relative; padding-left: 16px; font-size: 14px; color: #555; margin-bottom: 8px; word-break: keep-all; line-height: 1.7; }
         .terms-list li::before { content: '·'; position: absolute; left: 0; font-weight: bold; color: #0056b3; }
 
+        /* ==================== 반응형 (태블릿 ~ 모바일) ==================== */
+
+        /* 태블릿 */
         @media (max-width: 1024px) {
+            .container { padding: 36px 28px; }
             .demo-zone-grid { grid-template-columns: repeat(2, 1fr); }
             .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
         }
+
+        /* 모바일 공통 */
         @media (max-width: 768px) {
-            .guide-grid, .feature-grid { grid-template-columns: 1fr; }
-            .feature-grid > div { margin-top: 0; }
-            .feature-grid > div + div { margin-top: 30px; }
-            .calc-summary { padding: 20px; }
-            .calc-btns { flex-direction: column; }
-            .process-step { min-width: 45%; }
+            body { padding: 16px 10px; }
+            .container { padding: 24px 16px; border-radius: 16px; border-top-width: 4px; }
+
+            h2 { font-size: 21px; margin-top: 44px; padding-bottom: 12px; margin-bottom: 16px; }
+
+            /* 가이드 */
+            .guide-grid { grid-template-columns: 1fr; gap: 16px; }
+            .guide-card { padding: 20px; }
+            .guide-card h3 { font-size: 18px; }
+            .pro-con li { font-size: 14px; }
+
+            /* 특장점 */
+            .feature-grid { grid-template-columns: 1fr; gap: 12px; }
+            .feature-box { padding: 16px 18px; }
+            .feature-box h4 { font-size: 15px; }
+            .feature-box p { font-size: 13px; }
+
+            /* 안내 */
+            .notice-box { padding: 18px; font-size: 14px; }
+
+            /* 작업 순서 */
+            .process-flow { gap: 6px; padding: 16px 12px; }
+            .process-step { font-size: 12px; padding: 8px 12px; flex: 1; min-width: calc(33% - 6px); }
             .step-arrow { display: none; }
-        }
-        @media (max-width: 480px) {
-            body { padding: 20px 10px; }
-            .container { padding: 30px 20px; border-radius: 16px; }
-            .demo-zone-grid { grid-template-columns: 1fr; }
-            .portfolio-grid { grid-template-columns: 1fr; }
-            .total-price { font-size: 26px; }
-            .process-step { min-width: 100%; }
-            .calc-item { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .item-price { align-self: flex-end; }
+
+            /* 데모존 */
+            .demo-zone-container { padding: 20px 16px; }
+            .demo-zone-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .demo-box { min-height: 130px; padding: 36px 12px 16px; }
+            .demo-box-title { font-size: 10px; top: 8px; left: 10px; }
+            .typing-effect { font-size: 13px; }
+            .btn-neon { font-size: 12px; padding: 8px 14px; }
+
+            /* 포트폴리오 */
+            .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+            .portfolio-img-wrapper { height: 150px; }
+            .portfolio-info { padding: 12px; }
+            .portfolio-info h4 { font-size: 14px; }
+            .portfolio-info p { font-size: 12px; }
+            .portfolio-price { font-size: 12px; padding: 4px 8px; }
+
+            /* 모달 */
+            .modal { padding: 0 10px; }
+            .modal-content { padding: 20px 16px; border-radius: 14px; }
+            .modal-details h3 { font-size: 20px; }
+            .close-modal { font-size: 28px; top: 14px; right: 16px; }
+
+            /* 캘린더 */
+            .calendar-section { padding: 18px 14px; border-radius: 14px; }
+            .calendar-header { gap: 10px; }
+            .calendar-nav-title { font-size: 16px; min-width: 100px; }
+            .calendar-legend { gap: 6px; }
+            .calendar-legend-item { font-size: 11px; padding: 2px 7px; }
+            .calendar-grid { gap: 3px; }
+            .calendar-day { min-height: 52px; padding: 5px 6px 4px; border-radius: 8px; }
+            .calendar-day .day-num { font-size: 11px; }
+            .cal-badge { font-size: 8px; padding: 1px 4px; }
+            .calendar-dow { font-size: 10px; padding: 4px 0 6px; }
+
+            /* 계산기 */
+            .calc-category { padding: 16px; border-radius: 12px; }
+            .calc-category h4 { font-size: 16px; }
+            .calc-item { padding: 12px; flex-wrap: nowrap; align-items: center; }
+            .calc-item label { font-size: 13px; gap: 8px; }
+            .item-price { font-size: 13px; }
+            .qty-dropdown { padding: 12px; }
+            .qty-dropdown input[type="number"] { width: 64px; }
+
+            /* 견적 요약 */
+            .calc-summary { padding: 20px 18px; border-radius: 16px; }
+            .calc-summary-header h3 { font-size: 17px; }
+            .total-price { font-size: 24px; }
+            .terms-checkbox-wrap { font-size: 13px; padding: 12px 16px; gap: 10px; }
+            .selected-list-container { padding: 15px; }
+            .selected-list li { font-size: 12px; }
+
+            /* 계산기 버튼 */
+            .calc-btns { flex-direction: row; gap: 10px; }
+            .calc-btns button { font-size: 14px; padding: 14px 10px; border-radius: 10px; gap: 6px; }
+
+            /* 문의 양식 */
+            .inquiry-form-container { padding: 18px 16px; }
+            .inquiry-form-container h4 { font-size: 16px; }
+            .form-group label { font-size: 13px; }
+            .form-control { font-size: 14px; padding: 9px; }
+
+            /* 이벤트 카드 */
+            .event-card { padding: 12px 14px; gap: 10px; }
+            .event-card-title { font-size: 13px; }
+            .event-card-desc { font-size: 12px; }
+            .event-card-deadline { font-size: 10px; top: 10px; right: 12px; }
+            .event-card.best-deal .event-card-deadline { top: 28px; }
+
+            /* 오마카세 안내 */
+            .omakase-notice { font-size: 13px; padding: 14px 16px; }
+
+            /* 안내사항 */
+            .terms-accordion summary { font-size: 13px; padding: 14px 16px; }
+            .terms-accordion-body { padding: 14px 16px; }
+            .terms-accordion-body p { font-size: 13px; }
+            .terms-list li { font-size: 13px; }
+
+            /* 컬러 선택 */
             .color-picker-wrap { flex-wrap: wrap; }
+        }
+
+        /* 작은 모바일 */
+        @media (max-width: 480px) {
+            body { padding: 10px 6px; }
+            .container { padding: 18px 12px; border-radius: 12px; }
+            h2 { font-size: 19px; margin-top: 36px; }
+
+            /* 한 열로 */
+            .portfolio-grid { grid-template-columns: 1fr; }
+            .portfolio-img-wrapper { height: 200px; }
+            .portfolio-info { padding: 14px; }
+            .portfolio-info h4 { font-size: 15px; }
+
+            .demo-zone-grid { grid-template-columns: 1fr; }
+            .demo-box { min-height: 120px; }
+
+            /* 작업 순서 - 한 열 */
+            .process-flow { flex-direction: column; align-items: stretch; gap: 6px; }
+            .process-step { min-width: 100%; text-align: center; }
+
+            /* 캘린더 더 작게 */
+            .calendar-day { min-height: 46px; }
+            .cal-badge { display: none; }
+            .calendar-day .day-num { font-size: 12px; }
+            /* 날짜만 보이되 상태는 배경으로만 표시 */
+
+            /* 견적 버튼 세로 배치 */
+            .calc-btns { flex-direction: column; }
+
+            /* 모달 */
+            .modal { padding: 0 6px; }
+            .modal-content { padding: 16px 12px; }
+
+            .total-price { font-size: 22px; }
+            .guide-card h3 { font-size: 17px; }
+
+            /* 입력 컨트롤 터치 친화 */
+            .form-control { padding: 11px 10px; font-size: 16px; } /* 16px 이상 → iOS 자동확대 방지 */
+            select.form-control { font-size: 16px; }
+            input[type="url"].form-control { font-size: 16px; }
+            input[type="text"].form-control { font-size: 16px; }
+            input[type="date"].form-control { font-size: 16px; }
         }
     </style>
 </head>
@@ -438,8 +525,8 @@
     <h2 id="feature-sec">2. 서비스 특장점 상세</h2>
     <div class="feature-grid">
         <div>
-            <h3 style="font-size: 20px; color: #333; margin-bottom: 15px;">A. 핵심 차별점</h3>
-            <div style="display:flex; flex-direction:column; gap:12px; height: 100%;">
+            <h3 style="font-size: 19px; color: #333; margin-bottom: 14px;">A. 핵심 차별점</h3>
+            <div style="display:flex; flex-direction:column; gap:10px;">
                 <div class="feature-box">
                     <h4>✅ PC · 모바일 완전 대응 UI 설계</h4>
                     <p>화면 크기에 상관없이 정렬과 가독성 유지</p>
@@ -459,8 +546,8 @@
             </div>
         </div>
         <div>
-            <h3 style="font-size: 20px; color: #333; margin-bottom: 15px;">B. 제작 능력 강조</h3>
-            <div style="display:flex; flex-direction:column; gap:12px; height: 100%;">
+            <h3 style="font-size: 19px; color: #333; margin-bottom: 14px;">B. 제작 능력 강조</h3>
+            <div style="display:flex; flex-direction:column; gap:10px;">
                 <div class="feature-box" style="border-left-color:#ffc107;">
                     <h4>✨ 레퍼런스 기반 1:1 커스텀 제작</h4>
                     <p>참고하고 싶은 디자인 그대로 구현 가능</p>
@@ -486,7 +573,7 @@
         <i class="fa-solid fa-circle-info" style="font-size: 18px; margin-right: 5px;"></i> 작업은 예정된 날짜에 시작되어 <b>최대 7일 이내</b> 완료되나, <b>일반적으로 4일 이내</b>에 빠르게 완성됩니다.<br>
         무상 유지보수(A/S)는 <b>평생</b> 지원됩니다.
     </div>
-    
+
     <div class="process-flow">
         <div class="process-step">문의 및 상담</div>
         <i class="fa-solid fa-chevron-right step-arrow"></i>
@@ -509,17 +596,17 @@
                 <div class="demo-box-title">1. 타이핑 효과</div>
                 <div id="typingText" class="typing-effect"></div>
             </div>
-            
+
             <div class="demo-box">
                 <div class="demo-box-title">2. 버튼 애니메이션</div>
                 <button class="btn-neon">Neon Hover</button>
             </div>
-            
+
             <div class="demo-box">
                 <div class="demo-box-title">3. 숫자 카운터</div>
                 <div class="counter-num" id="loopCounter"></div>
             </div>
-            
+
             <div class="demo-box">
                 <div class="demo-box-title">4. 스위치 토글</div>
                 <label class="toggle-switch">
@@ -527,8 +614,8 @@
                     <span class="toggle-slider"></span>
                 </label>
             </div>
-            
-            <div class="demo-box" style="justify-content: flex-start; padding-top: 45px;">
+
+            <div class="demo-box" style="justify-content: flex-start; padding-top: 42px;">
                 <div class="demo-box-title">5. FAQ 아코디언</div>
                 <details class="demo-accordion" ontoggle="sendHeight()">
                     <summary>질문을 클릭해보세요</summary>
@@ -537,7 +624,7 @@
                     </div>
                 </details>
             </div>
-            
+
             <div class="demo-box">
                 <div class="demo-box-title">6. 정보 툴팁</div>
                 <div class="tooltip-wrap">
@@ -545,13 +632,13 @@
                     <span class="tooltip-text">특정 단어나 이미지에 마우스를 올리면 부가 설명이 팝업됩니다!</span>
                 </div>
             </div>
-            
+
             <div class="demo-box">
                 <div class="demo-box-title">7. 로딩 스켈레톤</div>
                 <div class="skeleton-box"></div>
-                <div class="skeleton-box" style="height:15px; width:70%; margin-top:10px;"></div>
+                <div class="skeleton-box" style="height:13px; width:70%; margin-top:10px;"></div>
             </div>
-            
+
             <div class="demo-box" id="themePreview" style="transition: background 0.5s, color 0.5s;">
                 <div class="demo-box-title" id="themeTitle">8. 컬러 테마 (Light)</div>
                 <button class="demo-btn" onclick="toggleTheme()">다크 모드 전환</button>
@@ -576,7 +663,7 @@
             </div>
             <div class="calendar-legend">
                 <div class="calendar-legend-item"><span class="legend-dot available"></span> 작업 가능</div>
-                <div class="calendar-legend-item"><span class="legend-dot closed"></span> 마감 (작업 불가)</div>
+                <div class="calendar-legend-item"><span class="legend-dot closed"></span> 마감</div>
                 <div class="calendar-legend-item"><span class="legend-dot holiday"></span> 휴일</div>
             </div>
         </div>
@@ -587,11 +674,11 @@
 
     <h2 id="calc-sec" style="margin-top: 70px;">7. 실시간 견적 계산기</h2>
     <div class="calc-container">
-        
+
         <div class="calc-options" id="calcOptions">
             <div style="padding: 30px; text-align: center; color: #888; background: #f8f9fa; border-radius: 12px;">가격표 데이터를 불러오는 중입니다...</div>
         </div>
-        
+
         <div class="inquiry-form-container">
             <h4><i class="fa-solid fa-pen-to-square"></i> 문의 양식 작성</h4>
 
@@ -599,9 +686,9 @@
             <div class="omakase-notice" id="omakaseNotice">
                 <i class="fa-solid fa-circle-info" style="margin-right: 6px;"></i>
                 <strong>오마카세 선택 시 안내</strong><br>
-                오마카세는 <strong>페이지 링크</strong>와 <strong>상세페이지 구성</strong> 이외의 내용은 별도로 입력하지 않으셔도 됩니다. 나머지는 작업자가 직접 기획하여 제안드립니다
+                오마카세는 <strong>페이지 링크</strong>와 <strong>상세페이지 구성</strong>, 그리고 <strong>작업 예약일</strong> 이외의 내용은 별도로 입력하지 않으셔도 됩니다. 나머지는 작업자가 직접 기획하여 제안드립니다.
             </div>
-            
+
             <div class="form-group">
                 <label>1. 제작 방식 선택</label>
                 <select id="inquiryMethod" class="form-control">
@@ -611,13 +698,19 @@
                 </select>
             </div>
 
+            <!-- ★ 예약일 추가 (2번) -->
             <div class="form-group">
-                <label>2. 페이지 링크</label>
+                <label>2. 작업 예약일 <span style="font-size:12px; color:#868e96; font-weight:400;">(작업 시작을 원하는 날짜를 선택해주세요)</span></label>
+                <input type="date" id="inquiryDate" class="form-control" min="">
+            </div>
+
+            <div class="form-group">
+                <label>3. 페이지 링크</label>
                 <input type="url" id="inquiryPageLink" class="form-control" placeholder="작업할 페이지의 링크를 입력해주세요. (예: https://artmug.kr/...)">
             </div>
 
             <div class="form-group">
-                <label>3. 디자인 레퍼런스</label>
+                <label>4. 디자인 레퍼런스</label>
                 <textarea id="inquiryReference" class="form-control" rows="2" placeholder="참고할 만한 디자인 링크나 설명을 적어주세요."></textarea>
                 <div class="ref-image-upload-area" id="refImageDropArea" onclick="document.getElementById('refImageInput').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
                     <i class="fa-solid fa-image"></i>
@@ -628,24 +721,24 @@
             </div>
 
             <div class="form-group">
-                <label>4. 메인 색상 선택</label>
+                <label>5. 메인 색상 선택</label>
                 <div id="colorContainer" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
                     <div class="color-picker-wrap">
                         <input type="color" class="inquiryColor" value="#0056b3" style="width:40px; height:40px; border:none; cursor:pointer; background:none;" oninput="syncColorInput(this, true)">
                         <input type="text" class="inquiryColorHex form-control" value="#0056B3" maxlength="7" style="width:90px; text-transform:uppercase;" oninput="syncColorInput(this, false)">
                     </div>
-                    <button type="button" id="btnAddColor" onclick="addColor()" style="background:#f1f3f5; border:1px solid #ddd; border-radius:6px; padding:8px 12px; cursor:pointer; font-weight:bold; color:#555;">+ 색상 추가</button>
+                    <button type="button" id="btnAddColor" onclick="addColor()" style="background:#f1f3f5; border:1px solid #ddd; border-radius:6px; padding:8px 12px; cursor:pointer; font-weight:bold; color:#555; font-size:13px;">+ 색상 추가</button>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>5. 상세페이지 구성</label>
+                <label>6. 상세페이지 구성</label>
                 <textarea id="inquiryStructure" class="form-control" rows="2" placeholder="예: 소개 - 작업 순서 - 포트폴리오"></textarea>
             </div>
 
             <!-- ★ 이벤트 선택 -->
             <div class="form-group" id="eventFormGroup">
-                <label>6. 이벤트 선택 <span style="font-size:12px; color:#868e96; font-weight:400;">(해당 이벤트가 있을 경우 선택해주세요)</span></label>
+                <label>7. 이벤트 선택 <span style="font-size:12px; color:#868e96; font-weight:400;">(해당 이벤트가 있을 경우 선택해주세요)</span></label>
                 <div class="event-select-container" id="eventSelectContainer">
                     <div class="event-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> 이벤트 정보를 불러오는 중...</div>
                 </div>
@@ -653,16 +746,16 @@
 
             <!-- ★ 맞춤 오마카세 선택 시 표시 -->
             <div class="form-group" id="budgetGroup" style="display:none; overflow:hidden; transition: all 0.3s;">
-                <label>7. 예산 <span style="font-size:12px; color:#868e96; font-weight:400;">(맞춤 오마카세 선택 시)</span></label>
+                <label>8. 예산 <span style="font-size:12px; color:#868e96; font-weight:400;">(맞춤 오마카세 선택 시)</span></label>
                 <input type="text" id="inquiryBudget" class="form-control" placeholder="예: 5만원 이하 / 10만원 내외 / 자유롭게 적어주세요">
             </div>
 
             <div class="form-group" id="etcGroup">
-                <label id="etcLabel">7. 기타 요청사항</label>
+                <label id="etcLabel">8. 기타 요청사항</label>
                 <textarea id="inquiryEtc" class="form-control" rows="3" placeholder="자유롭게 기재해주세요."></textarea>
             </div>
         </div>
-        
+
         <div class="calc-summary">
             <div class="calc-summary-header">
                 <h3><i class="fa-solid fa-calculator" style="color: #ffd43b; margin-right: 8px;"></i> 견적 요약</h3>
@@ -687,7 +780,7 @@
                     <li style="color:#6c757d; justify-content:center; padding: 10px 0;">선택된 항목이 없습니다.</li>
                 </ul>
             </div>
-            
+
             <div class="calc-btns">
                 <button class="btn-reset" onclick="resetCalc(this)"><i class="fa-solid fa-rotate-right"></i> 초기화</button>
                 <button class="btn-copy" id="btnCopy" onclick="copyEstimate(this)"><i class="fa-solid fa-copy"></i> 문의 내용 복사</button>
@@ -732,6 +825,8 @@
         <div class="terms-accordion-body"><div class="accordion-body-inner">
             <p>제작된 작업물 및 작업 진행 가격은 <b>"대충닉넴임"</b>의 포트폴리오, 홍보, SNS 및 기타 채널에 활용될 수 있습니다.</p>
             <p>단, 상세한 세부 가격 내역은 공개하지 않습니다.</p>
+            <p style="margin-top:10px;">구매자가 작업 과정에서 제공한 이미지, 유튜브 영상 썸네일 등의 소재는 포트폴리오 업로드 시 상세페이지 화면 이미지 내에 자연스럽게 포함될 수 있습니다.</p>
+            <p style="color:#e03131; font-weight:700; margin-top:6px;">⚠️ 단, 구매자가 제공한 이미지·영상 등의 소재는 포트폴리오 외 목적으로 절대 개별적·개인적으로 사용하지 않으며, 상세페이지 화면 외 별도 용도로 활용하는 일은 일절 없습니다.</p>
         </div></div>
     </details>
 
@@ -826,7 +921,7 @@ let iframeCenterY = window.innerHeight / 2;
 function sendHeight() {
     const container = document.querySelector('.container');
     let height = container ? container.offsetHeight + 80 : document.documentElement.offsetHeight;
-    
+
     const modal = document.getElementById('portfolioModal');
     if (modal && modal.style.display === 'flex') {
         const modalContent = modal.querySelector('.modal-content');
@@ -858,11 +953,11 @@ window.addEventListener('message', function(e) {
             if (modalContent) {
                 modalContent.style.marginTop = Math.max(20, iframeCenterY - (modalContent.offsetHeight / 2)) + 'px';
                 modalContent.style.maxHeight = (parentViewHeight * 0.85) + 'px';
-                setTimeout(sendHeight, 150); 
+                setTimeout(sendHeight, 150);
             }
         }
     }
-    
+
     if (e.data && e.data.type === 'requestOffset') {
         const targetElement = document.getElementById(e.data.id);
         if (targetElement) {
@@ -872,6 +967,17 @@ window.addEventListener('message', function(e) {
     }
 });
 
+// =================== 예약일 최솟값 설정 (오늘 이후만) ===================
+(function() {
+    const dateInput = document.getElementById('inquiryDate');
+    if (dateInput) {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        dateInput.min = `${yyyy}-${mm}-${dd}`;
+    }
+})();
 
 // =================== 아코디언 닫힘 애니메이션 처리 ===================
 function initAccordions() {
@@ -993,7 +1099,7 @@ function syncColorInput(el, isPicker) {
     const wrap = el.parentElement;
     const picker = wrap.querySelector('.inquiryColor');
     const hex = wrap.querySelector('.inquiryColorHex');
-    
+
     if(isPicker) {
         hex.value = picker.value.toUpperCase();
     } else {
@@ -1091,7 +1197,7 @@ function typeWriter() {
     if (!el) return;
     const current = typingText.substring(0, typeIndex);
     el.innerHTML = current;
-    
+
     if (!isDeleting && typeIndex < typingText.length) {
         typeIndex++; setTimeout(typeWriter, 100);
     } else if (isDeleting && typeIndex > 0) {
@@ -1108,7 +1214,6 @@ function startLoopingCounter() {
     const TARGET = 200;
     const CELL_H = 44;
     const DIGITS_COUNT = TARGET.toString().length;
-    const cumIdx = new Array(DIGITS_COUNT).fill(0);
 
     function buildSlotDOM() {
         el.innerHTML = '';
@@ -1255,9 +1360,9 @@ let activeEvents = [];
 let selectedEvent = null;
 
 // =================== ★ 캘린더 데이터 ===================
-let calendarData = []; // { type: 'closed'|'holiday', dates: [Date,...], label: string }
+let calendarData = [];
 let calYear = new Date().getFullYear();
-let calMonth = new Date().getMonth(); // 0-based
+let calMonth = new Date().getMonth();
 
 // =================== 초기화 ===================
 document.addEventListener("DOMContentLoaded", () => {
@@ -1279,7 +1384,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let modal = document.getElementById('portfolioModal');
         let modalContent = modal.querySelector('.modal-content');
         if (modal.style.display === 'flex' && !modalContent.contains(event.target)) closeModal();
-    }
+    };
 });
 
 // =================== ★ 이벤트 데이터 로드 ===================
@@ -1294,7 +1399,6 @@ function loadEventData() {
             activeEvents = results.data
                 .filter(row => row['제목'] && row['제목'].trim() !== '')
                 .filter(row => {
-                    // 마감일 필터: 마감일이 있으면 오늘 이하면 제외
                     const dl = (row['마감일'] || '').trim();
                     if (dl) {
                         const d = new Date(dl);
@@ -1303,7 +1407,6 @@ function loadEventData() {
                             if (d < today) return false;
                         }
                     }
-                    // 시작일 필터: 시작일이 있으면 오늘보다 미래면 아직 표시 안함
                     const sl = (row['시작일'] || '').trim();
                     if (sl) {
                         const s = new Date(sl);
@@ -1339,18 +1442,9 @@ function loadEventData() {
 
                     const productRaw = (row['상품명'] || '').trim();
                     const products = productRaw === '' ? [] : productRaw.split(',').map(s => s.trim());
-
                     const deadlineStr = (row['마감일'] || '').trim();
 
-                    return {
-                        title: row['제목'].trim(),
-                        products,
-                        discountType,
-                        discountValue,
-                        minPrice,
-                        maxDiscount,
-                        deadlineStr,
-                    };
+                    return { title: row['제목'].trim(), products, discountType, discountValue, minPrice, maxDiscount, deadlineStr };
                 });
 
             renderEventSelect();
@@ -1403,12 +1497,10 @@ function renderEventSelect() {
     const container = document.getElementById('eventSelectContainer');
     container.innerHTML = '';
 
-    // 현재 선택 항목 기준으로 각 이벤트의 할인액 계산
     const baseTotal = Array.from(selectedItems.values())
         .filter(d => !d.isConsult)
         .reduce((s, d) => s + d.price * d.qty, 0);
 
-    // 최대 할인 이벤트 찾기 (선택된 항목이 있을 때만)
     let bestEventIdx = -1;
     let bestDiscount = 0;
     if (selectedItems.size > 0 && baseTotal > 0) {
@@ -1421,7 +1513,6 @@ function renderEventSelect() {
         });
     }
 
-    // 이벤트 없음 카드
     const noneCard = document.createElement('label');
     noneCard.className = 'event-card event-none-card' + (selectedEvent === null ? ' selected' : '');
     noneCard.innerHTML = `
@@ -1432,18 +1523,11 @@ function renderEventSelect() {
         </div>
     `;
     noneCard.querySelector('input').addEventListener('change', function() {
-        if (this.checked) {
-            selectedEvent = null;
-            updateCardSelected();
-            updateSummary();
-        }
+        if (this.checked) { selectedEvent = null; updateCardSelected(); updateSummary(); }
     });
     container.appendChild(noneCard);
 
-    if (activeEvents.length === 0) {
-        setTimeout(sendHeight, 200);
-        return;
-    }
+    if (activeEvents.length === 0) { setTimeout(sendHeight, 200); return; }
 
     activeEvents.forEach((ev, idx) => {
         const isBestDeal = (idx === bestEventIdx && bestDiscount > 0);
@@ -1451,24 +1535,17 @@ function renderEventSelect() {
         card.className = 'event-card' + (isBestDeal ? ' best-deal' : '');
         card.dataset.idx = idx;
 
-        // 선택 상태 유지
         const isChecked = selectedEvent && selectedEvent.title === ev.title;
         if (isChecked) card.classList.add('selected');
 
-        // 할인 배지
         let discDesc = '';
-        if (ev.discountType === 'percent') {
-            discDesc = `<span class="event-badge">-${ev.discountValue}%</span>`;
-        } else if (ev.discountType === 'amount') {
-            discDesc = `<span class="event-badge">-${formatPriceStr(ev.discountValue)}원</span>`;
-        }
+        if (ev.discountType === 'percent') discDesc = `<span class="event-badge">-${ev.discountValue}%</span>`;
+        else if (ev.discountType === 'amount') discDesc = `<span class="event-badge">-${formatPriceStr(ev.discountValue)}원</span>`;
 
-        // 조건 텍스트
         let condParts = [];
         if (ev.minPrice > 0) condParts.push(`${formatPriceStr(ev.minPrice)}원 이상 선택 시`);
         if (ev.maxDiscount !== Infinity) condParts.push(`최대 ${formatPriceStr(ev.maxDiscount)}원 할인`);
 
-        // 현재 선택 항목에서 실제 할인 예상액 표시
         let actualDiscountText = '';
         if (isBestDeal && bestDiscount > 0) {
             actualDiscountText = `<div class="event-cond" style="color:#e67700; font-weight:700; margin-top:4px;">→ 현재 선택 기준 <strong>${formatPriceStr(bestDiscount)}원</strong> 할인 예상</div>`;
@@ -1479,8 +1556,7 @@ function renderEventSelect() {
             }
         }
 
-        const condText = condParts.length > 0
-            ? `<div class="event-cond">· ${condParts.join(' / ')}</div>` : '';
+        const condText = condParts.length > 0 ? `<div class="event-cond">· ${condParts.join(' / ')}</div>` : '';
 
         let productText = '';
         if (ev.products.length > 0) {
@@ -1488,12 +1564,8 @@ function renderEventSelect() {
             productText = `<div class="event-cond">· 적용 상품: ${isAll ? '전체' : ev.products.join(', ')}</div>`;
         }
 
-        // best-deal 배지 (마감일 배지와 겹치지 않도록 순서 주의)
-        const bestDealBadge = isBestDeal
-            ? `<div class="best-deal-badge"><i class="fa-solid fa-bolt"></i> 지금 가장 유리!</div>` : '';
-
-        const deadlineBadge = ev.deadlineStr
-            ? `<span class="event-card-deadline"><i class="fa-regular fa-clock"></i> ~${ev.deadlineStr}</span>` : '';
+        const bestDealBadge = isBestDeal ? `<div class="best-deal-badge"><i class="fa-solid fa-bolt"></i> 지금 가장 유리!</div>` : '';
+        const deadlineBadge = ev.deadlineStr ? `<span class="event-card-deadline"><i class="fa-regular fa-clock"></i> ~${ev.deadlineStr}</span>` : '';
 
         card.innerHTML = `
             ${bestDealBadge}
@@ -1506,11 +1578,7 @@ function renderEventSelect() {
         `;
 
         card.querySelector('input').addEventListener('change', function() {
-            if (this.checked) {
-                selectedEvent = activeEvents[idx];
-                updateCardSelected();
-                updateSummary();
-            }
+            if (this.checked) { selectedEvent = activeEvents[idx]; updateCardSelected(); updateSummary(); }
         });
 
         container.appendChild(card);
@@ -1522,11 +1590,8 @@ function renderEventSelect() {
 function updateCardSelected() {
     document.querySelectorAll('.event-card').forEach(card => {
         const radio = card.querySelector('input[type="radio"]');
-        if (radio && radio.checked) {
-            card.classList.add('selected');
-        } else {
-            card.classList.remove('selected');
-        }
+        if (radio && radio.checked) card.classList.add('selected');
+        else card.classList.remove('selected');
     });
 }
 
@@ -1535,13 +1600,8 @@ function calcEventDiscount(baseTotal) {
     if (!selectedEvent) return { discountAmount: 0, discountLabel: '', applicable: false };
 
     const ev = selectedEvent;
-
     if (ev.minPrice > 0 && baseTotal < ev.minPrice) {
-        return {
-            discountAmount: 0,
-            discountLabel: `(${formatPriceStr(ev.minPrice)}원 이상 선택 시 적용)`,
-            applicable: false
-        };
+        return { discountAmount: 0, discountLabel: `(${formatPriceStr(ev.minPrice)}원 이상 선택 시 적용)`, applicable: false };
     }
 
     let applicableTotal = 0;
@@ -1550,31 +1610,21 @@ function calcEventDiscount(baseTotal) {
     selectedItems.forEach((data, name) => {
         if (data.isConsult) return;
         const itemTotal = data.price * data.qty;
-
-        if (isAll) {
-            applicableTotal += itemTotal;
-        } else {
+        if (isAll) { applicableTotal += itemTotal; }
+        else {
             const pureName = name.replace(/^\[.*?\]\s*/, '');
             const matched = ev.products.some(p => pureName.includes(p) || p.includes(pureName));
             if (matched) applicableTotal += itemTotal;
         }
     });
 
-    if (applicableTotal === 0) {
-        return { discountAmount: 0, discountLabel: '', applicable: false };
-    }
+    if (applicableTotal === 0) return { discountAmount: 0, discountLabel: '', applicable: false };
 
     let rawDiscount = 0;
-    if (ev.discountType === 'percent') {
-        rawDiscount = Math.floor(applicableTotal * ev.discountValue / 100);
-    } else if (ev.discountType === 'amount') {
-        rawDiscount = ev.discountValue;
-    }
+    if (ev.discountType === 'percent') rawDiscount = Math.floor(applicableTotal * ev.discountValue / 100);
+    else if (ev.discountType === 'amount') rawDiscount = ev.discountValue;
 
-    if (ev.maxDiscount !== Infinity) {
-        rawDiscount = Math.min(rawDiscount, ev.maxDiscount);
-    }
-
+    if (ev.maxDiscount !== Infinity) rawDiscount = Math.min(rawDiscount, ev.maxDiscount);
     rawDiscount = Math.min(rawDiscount, applicableTotal);
 
     let discLabel = ev.title;
@@ -1608,10 +1658,10 @@ function renderPortfolio() {
         const div = document.createElement('div');
         div.className = 'portfolio-item';
         div.onclick = function(e) { e.stopPropagation(); openModal(startIndex + index); };
-        
+
         let imgUrls = item['이미지 링크'] ? item['이미지 링크'].split(/\r?\n/) : [];
         let thumbUrl = imgUrls.length > 0 ? imgUrls[0].trim().replace('dl=1', 'raw=1') : 'https://via.placeholder.com/400x300';
-        
+
         let rawPrice = item['가격'] || '별도 문의';
         let displayPrice = rawPrice.includes('비공개') ? '비공개' : formatPriceStr(rawPrice) + '원';
         const tagsHtml = item['태그'] ? `<div class="portfolio-tags">` + item['태그'].split(',').map(t => `<span>#${t.trim()}</span>`).join('') + `</div>` : '';
@@ -1649,15 +1699,13 @@ function openModal(index) {
     const item = portfolios[index];
     const modal = document.getElementById('portfolioModal');
     const modalContent = modal.querySelector('.modal-content');
-    
+
     let imgUrls = item['이미지 링크'] ? item['이미지 링크'].split(/\r?\n/) : [];
     let imgsHtml = '';
-    imgUrls.forEach(url => {
-        if(url.trim()) imgsHtml += `<img src="${url.trim().replace('dl=1', 'raw=1')}" alt="포트폴리오 이미지">`;
-    });
-    
+    imgUrls.forEach(url => { if(url.trim()) imgsHtml += `<img src="${url.trim().replace('dl=1', 'raw=1')}" alt="포트폴리오 이미지">`; });
+
     document.getElementById('modalImageContainer').innerHTML = imgsHtml;
-    
+
     const desc = item['설명'] ? item['설명'].replace(/\n/g, '<br>') : '';
     const tags = item['태그'] ? item['태그'].split(',').map(t => `<span>#${t.trim()}</span>`).join('') : '';
     const inc = item['포함된 상품'] ? item['포함된 상품'].replace(/\n/g, '<br> - ') : '';
@@ -1667,22 +1715,22 @@ function openModal(index) {
     document.getElementById('modalDetails').innerHTML = `
         <h3>${item['제목']}</h3><div class="meta meta-tags">${tags}</div>
         <div class="meta"><span><i class="fa-regular fa-calendar"></i> 작업일: ${item['작업일']}</span><span style="color:#0056b3;"><i class="fa-solid fa-coins"></i> 가격: ${price}</span></div>
-        <div style="background:#f8f9fa; padding:20px; border-radius:12px; margin-bottom:15px; border:1px solid #eee;">
-            <strong style="color:#111; font-size:16px;">상세 설명</strong><br><p style="margin-top:8px; color:#555;">${desc}</p>
+        <div style="background:#f8f9fa; padding:18px; border-radius:12px; margin-bottom:14px; border:1px solid #eee;">
+            <strong style="color:#111; font-size:15px;">상세 설명</strong><br><p style="margin-top:8px; color:#555;">${desc}</p>
         </div>
-        <div style="background:#e7f5ff; padding:20px; border-radius:12px; border:1px solid #d0ebff;">
-            <strong style="color:#0056b3; font-size:16px;">포함된 옵션</strong><br><p style="margin-top:8px; color:#333; font-weight:500;"> - ${inc}</p>
+        <div style="background:#e7f5ff; padding:18px; border-radius:12px; border:1px solid #d0ebff;">
+            <strong style="color:#0056b3; font-size:15px;">포함된 옵션</strong><br><p style="margin-top:8px; color:#333; font-weight:500;"> - ${inc}</p>
         </div>
     `;
-    
+
     modalContent.style.maxHeight = (parentViewHeight * 0.85) + 'px';
     modal.style.display = 'flex';
     modalContent.style.marginTop = Math.max(20, iframeCenterY - (modalContent.offsetHeight / 2)) + 'px';
     setTimeout(sendHeight, 150);
 }
 
-function closeModal() { 
-    document.getElementById('portfolioModal').style.display = 'none'; 
+function closeModal() {
+    document.getElementById('portfolioModal').style.display = 'none';
     setTimeout(sendHeight, 150);
 }
 
@@ -1746,7 +1794,7 @@ function renderCalc() {
                 dropDiv.className = 'qty-dropdown';
                 dropDiv.id = `qtywrap_${id}`;
                 dropDiv.innerHTML = `
-                    <span style="color:#555; font-size:14px; font-weight:bold;">수량을 입력해주세요 <i class="fa-solid fa-arrow-right"></i></span>
+                    <span style="color:#555; font-size:13px; font-weight:bold;">수량을 입력해주세요 <i class="fa-solid fa-arrow-right"></i></span>
                     <div><input type="number" id="qty_${id}" min="1" value="1" data-name="${fullName}" data-price="${priceNum}" onchange="updateCalcQty(this)"><span style="font-weight:bold; color:#333; margin-left:5px;">개</span></div>
                 `;
                 wrapDiv.appendChild(dropDiv);
@@ -1755,7 +1803,7 @@ function renderCalc() {
                 dropDiv.className = 'qty-dropdown';
                 dropDiv.id = `qtywrap_${id}`;
                 dropDiv.innerHTML = `
-                    <span style="color:#555; font-size:14px; font-weight:bold;">개월 수를 선택해주세요 <i class="fa-solid fa-arrow-right"></i></span>
+                    <span style="color:#555; font-size:13px; font-weight:bold;">개월 수를 선택해주세요 <i class="fa-solid fa-arrow-right"></i></span>
                     <div><input type="number" id="qty_${id}" min="1" value="1" data-name="${fullName}" data-price="${priceNum}" onchange="updateCalcQty(this)"><span style="font-weight:bold; color:#333; margin-left:5px;">개월</span></div>
                 `;
                 wrapDiv.appendChild(dropDiv);
@@ -1790,8 +1838,8 @@ function updateCalcCheckbox(cb) {
     }
     updateSummary();
     toggleBudgetField();
-    toggleOmakaseNotice(); // ★ 오마카세 안내 업데이트
-    renderEventSelect();   // ★ 이벤트 best-deal 재계산
+    toggleOmakaseNotice();
+    renderEventSelect();
     setTimeout(sendHeight, 150);
 }
 
@@ -1799,11 +1847,8 @@ function updateCalcCheckbox(cb) {
 function toggleOmakaseNotice() {
     const hasOmakase = Array.from(selectedItems.keys()).some(k => k.includes('오마카세'));
     const notice = document.getElementById('omakaseNotice');
-    if (hasOmakase) {
-        notice.classList.add('show');
-    } else {
-        notice.classList.remove('show');
-    }
+    if (hasOmakase) notice.classList.add('show');
+    else notice.classList.remove('show');
     setTimeout(sendHeight, 150);
 }
 
@@ -1814,10 +1859,10 @@ function toggleBudgetField() {
 
     if (hasOmakase) {
         budgetGroup.style.display = 'block';
-        etcLabel.textContent = '8. 기타 요청사항';
+        etcLabel.textContent = '9. 기타 요청사항';
     } else {
         budgetGroup.style.display = 'none';
-        etcLabel.textContent = '7. 기타 요청사항';
+        etcLabel.textContent = '8. 기타 요청사항';
     }
 }
 
@@ -1829,7 +1874,7 @@ function updateCalcQty(input) {
     if(selectedItems.has(name)) {
         selectedItems.set(name, { price: price, qty: qty, isConsult: price === -1 });
         updateSummary();
-        renderEventSelect(); // ★ 수량 변경 시도 best-deal 재계산
+        renderEventSelect();
     }
 }
 
@@ -1896,7 +1941,7 @@ function updateSummary() {
         totalDisplay.innerText = formatPriceStr(finalTotal) + '원';
     }
 
-    setTimeout(sendHeight, 150); 
+    setTimeout(sendHeight, 150);
 }
 
 function resetCalc(btnElement) {
@@ -1904,8 +1949,9 @@ function resetCalc(btnElement) {
     document.querySelectorAll('.calc-options input[type="number"]').forEach(num => num.value = 1);
     document.querySelectorAll('.qty-dropdown').forEach(d => d.classList.remove('show'));
     document.querySelectorAll('.calc-item').forEach(b => b.classList.remove('has-qty'));
-    
+
     document.getElementById('inquiryMethod').value = '';
+    document.getElementById('inquiryDate').value = '';
     document.getElementById('inquiryPageLink').value = '';
     document.getElementById('inquiryReference').value = '';
     document.getElementById('inquiryBudget').value = '';
@@ -1914,15 +1960,13 @@ function resetCalc(btnElement) {
 
     refImages = [];
     renderRefImagePreview();
-    
+
     const colorWraps = document.querySelectorAll('.color-picker-wrap');
     colorWraps.forEach((wrap, index) => {
         if(index === 0) {
             wrap.querySelector('.inquiryColor').value = '#0056b3';
             wrap.querySelector('.inquiryColorHex').value = '#0056B3';
-        } else {
-            wrap.remove();
-        }
+        } else { wrap.remove(); }
     });
 
     selectedEvent = null;
@@ -1932,22 +1976,20 @@ function resetCalc(btnElement) {
     selectedItems.clear();
     updateSummary();
     toggleBudgetField();
-    toggleOmakaseNotice(); // ★ 초기화 시 오마카세 안내도 숨김
-    renderEventSelect();   // ★ 초기화 시 best-deal 뱃지도 리셋
+    toggleOmakaseNotice();
+    renderEventSelect();
 
     document.getElementById('termsCheckbox').checked = false;
     document.getElementById('btnCopy').classList.remove('active');
-    
+
     showToast("모든 폼과 선택 내역이 초기화되었습니다.", btnElement);
     setTimeout(sendHeight, 150);
 }
 
 // =================== ★ 캘린더 데이터 로드 ===================
 function parseFlexibleDate(str) {
-    // "2026-4-28", "2026/4/28", "2026.4.28" 등 유연하게 파싱
     if (!str || !str.trim()) return null;
     const s = str.trim().replace(/[\/\.]/g, '-');
-    // YYYY-M-D 형태 허용
     const m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
     if (!m) return null;
     const d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]));
@@ -1955,7 +1997,6 @@ function parseFlexibleDate(str) {
 }
 
 function expandDateRange(str) {
-    // "2026-4-28~2026-5-14" 또는 단일 날짜 "2026-8-13"
     const parts = str.split('~').map(s => s.trim());
     if (parts.length === 2) {
         const start = parseFlexibleDate(parts[0]);
@@ -1963,10 +2004,7 @@ function expandDateRange(str) {
         if (!start || !end) return [];
         const dates = [];
         const cur = new Date(start);
-        while (cur <= end) {
-            dates.push(new Date(cur));
-            cur.setDate(cur.getDate() + 1);
-        }
+        while (cur <= end) { dates.push(new Date(cur)); cur.setDate(cur.getDate() + 1); }
         return dates;
     } else {
         const d = parseFlexibleDate(parts[0]);
@@ -1976,8 +2014,7 @@ function expandDateRange(str) {
 
 function loadCalendarData() {
     Papa.parse(calendarUrl, {
-        download: true,
-        header: true,
+        download: true, header: true,
         complete: function(results) {
             calendarData = [];
             results.data.forEach(row => {
@@ -1986,9 +2023,7 @@ function loadCalendarData() {
                 if (!dateStr || !status) return;
                 const dates = expandDateRange(dateStr);
                 if (dates.length === 0) return;
-                let type = 'closed';
-                if (status === '휴일') type = 'holiday';
-                else if (status === '마감') type = 'closed';
+                let type = status === '휴일' ? 'holiday' : 'closed';
                 calendarData.push({ type, dates, label: status });
             });
             renderCalendar();
@@ -2014,14 +2049,10 @@ function calNextMonth() {
 }
 
 function getDayStatus(date) {
-    // 토, 일은 무조건 휴일
     const dow = date.getDay();
     if (dow === 0 || dow === 6) return 'holiday';
-
     const dateKey = date.toDateString();
-    let closedFound = false;
-    let holidayFound = false;
-
+    let closedFound = false, holidayFound = false;
     for (const entry of calendarData) {
         for (const d of entry.dates) {
             if (d.toDateString() === dateKey) {
@@ -2038,9 +2069,7 @@ function getDayStatus(date) {
 function renderCalendar() {
     const container = document.getElementById('calendarContainer');
     const titleEl = document.getElementById('calTitle');
-
-    const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월',
-                        '7월', '8월', '9월', '10월', '11월', '12월'];
+    const monthNames = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
     titleEl.textContent = `${calYear}년 ${monthNames[calMonth]}`;
 
     const today = new Date();
@@ -2048,8 +2077,7 @@ function renderCalendar() {
 
     const firstDay = new Date(calYear, calMonth, 1).getDay();
     const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
-
-    const dowLabels = ['일', '월', '화', '수', '목', '금', '토'];
+    const dowLabels = ['일','월','화','수','목','금','토'];
 
     let html = '<div class="calendar-grid">';
     dowLabels.forEach((d, i) => {
@@ -2057,9 +2085,7 @@ function renderCalendar() {
         html += `<div class="calendar-dow ${cls}">${d}</div>`;
     });
 
-    for (let i = 0; i < firstDay; i++) {
-        html += '<div class="calendar-day empty"></div>';
-    }
+    for (let i = 0; i < firstDay; i++) html += '<div class="calendar-day empty"></div>';
 
     for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(calYear, calMonth, day);
@@ -2095,22 +2121,20 @@ function renderCalendar() {
 // =================== ★ 문의 복사 ===================
 function copyEstimate(btnElement) {
     const termsCb = document.getElementById('termsCheckbox');
-    if (!termsCb.checked) {
-        showToast("안내사항을 확인하시고 체크박스에 동의해주셔야 합니다.", btnElement); return;
-    }
+    if (!termsCb.checked) { showToast("안내사항을 확인하시고 체크박스에 동의해주셔야 합니다.", btnElement); return; }
     if(selectedItems.size === 0) { showToast("선택된 견적 옵션이 없습니다.", btnElement); return; }
-    
+
     const method = document.getElementById('inquiryMethod').value || '미선택';
+    const dateVal = document.getElementById('inquiryDate').value || '미선택';
     const pageLink = document.getElementById('inquiryPageLink').value.trim() || '없음';
     const ref = document.getElementById('inquiryReference').value || '없음';
     const budget = document.getElementById('budgetGroup').style.display !== 'none'
-        ? (document.getElementById('inquiryBudget').value.trim() || '미기재')
-        : null;
-    
+        ? (document.getElementById('inquiryBudget').value.trim() || '미기재') : null;
+
     let colors = [];
     document.querySelectorAll('.inquiryColorHex').forEach(el => colors.push(el.value));
     const colorStr = colors.join(', ');
-    
+
     const structure = document.getElementById('inquiryStructure').value || '미기재';
     const etc = document.getElementById('inquiryEtc').value || '없음';
 
@@ -2119,18 +2143,15 @@ function copyEstimate(btnElement) {
         const { discountAmount, applicable } = calcEventDiscount(
             Array.from(selectedItems.values()).filter(d => !d.isConsult).reduce((s, d) => s + d.price * d.qty, 0)
         );
-        if (applicable && discountAmount > 0) {
-            eventText = `${selectedEvent.title} (할인 적용: -${formatPriceStr(discountAmount)}원)`;
-        } else if (selectedEvent.minPrice > 0) {
-            eventText = `${selectedEvent.title} (조건 미충족 — 미적용)`;
-        } else {
-            eventText = selectedEvent.title;
-        }
+        if (applicable && discountAmount > 0) eventText = `${selectedEvent.title} (할인 적용: -${formatPriceStr(discountAmount)}원)`;
+        else if (selectedEvent.minPrice > 0) eventText = `${selectedEvent.title} (조건 미충족 — 미적용)`;
+        else eventText = selectedEvent.title;
     }
 
     let labelNum = 1;
     let textPart = "[ 문의 양식 ]\n";
     textPart += `${labelNum++}. 제작 방식: ${method}\n`;
+    textPart += `${labelNum++}. 작업 예약일: ${dateVal}\n`;
     textPart += `${labelNum++}. 페이지 링크: ${pageLink}\n`;
     textPart += `${labelNum++}. 디자인 레퍼런스: ${ref}\n`;
     textPart += `${labelNum++}. 메인 색상: ${colorStr}\n`;
@@ -2165,13 +2186,9 @@ function copyEstimate(btnElement) {
         textPart += `이벤트 할인 (${discountLabel}): -${formatPriceStr(discountAmount)}원\n`;
     }
 
-    if (hasConsult && finalTotal === 0 && baseTotal === 0) {
-        textPart += `예상 총액 : 상담 후 결정\n`;
-    } else if (hasConsult) {
-        textPart += `예상 총액 : ${formatPriceStr(finalTotal)}원 + 상담 후 결정\n`;
-    } else {
-        textPart += `예상 총액 : ${formatPriceStr(finalTotal)}원\n`;
-    }
+    if (hasConsult && finalTotal === 0 && baseTotal === 0) textPart += `예상 총액 : 상담 후 결정\n`;
+    else if (hasConsult) textPart += `예상 총액 : ${formatPriceStr(finalTotal)}원 + 상담 후 결정\n`;
+    else textPart += `예상 총액 : ${formatPriceStr(finalTotal)}원\n`;
     textPart += "안내사항(규정)을 모두 읽고 동의하였습니다.\n";
 
     if (refImages.length === 0) {
@@ -2184,7 +2201,6 @@ function copyEstimate(btnElement) {
     let imgTagsHtml = refImages.map(img =>
         `<img src="${img.dataUrl}" alt="${img.name}" style="max-width:400px; display:block; margin:4px 0;">`
     ).join('');
-
     const htmlContent = `<pre style="font-family:sans-serif; white-space:pre-wrap;">${textPart}</pre>${imgTagsHtml}`;
 
     try {
