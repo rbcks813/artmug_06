@@ -375,15 +375,20 @@
 <script>
     /* ── 높이 전달 ── */
     function sendHeightToParent() {
-        // RAF로 렌더링 완료 후 높이 측정
         requestAnimationFrame(() => {
+            // 고정 높이 제거 → 줄어든 실제 높이 측정 가능
+            document.body.style.minHeight = '0';
+            document.body.style.height = 'auto';
+            document.documentElement.style.height = 'auto';
             const height = document.documentElement.scrollHeight;
             window.parent.postMessage({ type: 'resize', height: height }, '*');
         });
     }
     window.addEventListener('load', sendHeightToParent);
     if (window.ResizeObserver) {
-        new ResizeObserver(sendHeightToParent).observe(document.body);
+        // ResizeObserver 루프 방지: DOM 변화는 MutationObserver로만 감지
+        new MutationObserver(() => sendHeightToParent())
+            .observe(document.body, { attributes: true, childList: true, subtree: true });
     } else {
         window.addEventListener('resize', sendHeightToParent);
         new MutationObserver(sendHeightToParent).observe(document.body, { attributes: true, childList: true, subtree: true });
