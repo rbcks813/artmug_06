@@ -802,10 +802,13 @@
         </div>
       </div>
       <!-- 실제 콘텐츠 (JS로 채워짐) -->
-      <div id="intro-content" style="display:none;width:100%;display:none;flex-direction:column;align-items:center;gap:12px;">
-        <div class="profile-img-wrap" id="profile-img-wrap">🖊️</div>
-        <div class="intro-name" id="intro-name"></div>
-        <div class="intro-desc" id="intro-desc"></div>
+      <div id="intro-content" style="display:none; width:100%; flex-direction:column; align-items:center; gap:12px;">
+        <div class="profile-img-wrap" id="profile-img-wrap">
+          <!-- 프로필 이미지 스켈레톤 -->
+          <div class="skel-bar" style="width:100%;height:100%;border-radius:18px;"></div>
+        </div>
+        <div id="intro-name"></div>
+        <div id="intro-desc"></div>
         <div class="intro-status-row" id="intro-status-row"></div>
       </div>
     </div>
@@ -1042,12 +1045,22 @@ function parseCSV(text){
   });
 }
 
-function fetchCSV(url){
-  return fetch(url)
-    .then(r=>{ if(!r.ok)throw new Error('direct failed'); return r.text(); })
-    .catch(()=>fetch('https://corsproxy.io/?'+encodeURIComponent(url)).then(r=>r.text())
-      .catch(()=>fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(url)).then(r=>r.text()))
-    );
+async function fetchCSV(url){
+  const proxies = [
+    url,
+    'https://corsproxy.io/?' + encodeURIComponent(url),
+    'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
+    'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url)
+  ];
+  for(const u of proxies){
+    try {
+      const r = await fetch(u);
+      if(!r.ok) continue;
+      const t = await r.text();
+      if(t && t.length > 10) return t;
+    } catch(e){ /* 다음 프록시 시도 */ }
+  }
+  throw new Error('모든 프록시 실패');
 }
 
 /* ════════════════════════════════════════
@@ -1083,42 +1096,57 @@ fetchCSV(PROFILE_CSV).then(text=>{
 
   const data = parseKV(text);
 
+  /* 스켈레톤 → 실제 콘텐츠 전환 */
+  document.getElementById('intro-skeleton').style.display = 'none';
+  const content = document.getElementById('intro-content');
+  content.style.display = 'flex';
+
+  /* 프로필 이미지 */
   const imgWrap = document.getElementById('profile-img-wrap');
-  const imgUrl = data['프로필'] || '';
+  const imgUrl = (data['프로필'] || '').trim();
   if(imgUrl && imgUrl.startsWith('http')){
+    /* 로딩 중엔 스켈레톤 shimmer 유지 */
+    imgWrap.innerHTML = '<div class="skel-bar" style="width:100%;height:100%;border-radius:18px;"></div>';
     const img = document.createElement('img');
     img.alt = '프로필';
     img.onload = ()=>{ imgWrap.innerHTML=''; imgWrap.appendChild(img); };
-    img.onerror = ()=>{ imgWrap.textContent='🖊️'; };
+    img.onerror = ()=>{ imgWrap.innerHTML='🖊️'; };
     img.src = imgUrl;
+  } else {
+    imgWrap.innerHTML = '🖊️';
   }
 
-  document.getElementById('intro-name').textContent = (data['닉네임'] || '').trim();
+  /* 닉네임 */
+  const nameEl = document.getElementById('intro-name');
+  nameEl.className = 'intro-name';
+  nameEl.textContent = (data['닉네임'] || '').trim();
 
+  /* 소개 */
+  const descEl = document.getElementById('intro-desc');
+  descEl.className = 'intro-desc';
   const descRaw = data['소개'] || '';
-  const descHtml = descRaw.replace(/\r\n|\r|\n/g, '<br>');
-  document.getElementById('intro-desc').innerHTML = descHtml;
+  descEl.innerHTML = descRaw.replace(/\r\n|\r|\n/g, '<br>');
 
+  /* 활성 상태 */
   const isNonComm = (data['활성상태 여부 (비상업용)']||'').trim().toUpperCase() === 'TRUE';
   const isComm    = (data['활성상태 여부 (상업용)']||'').trim().toUpperCase() === 'TRUE';
 
   function statusTag(label, active){
-    const cls   = active ? 'open' : 'rest';
-    const text  = active ? `${label} - 문의 가능` : `${label} - 휴식 중`;
+    const cls  = active ? 'open' : 'rest';
+    const text = active ? `${label} - 문의 가능` : `${label} - 휴식 중`;
     return `<span class="status-tag ${cls}"><span class="status-dot"></span>${text}</span>`;
   }
+  document.getElementById('intro-status-row').innerHTML =
+    statusTag('비상업용', isNonComm) + statusTag('방송/상업용', isComm);
 
-  const statusRow = document.getElementById('intro-status-row');
-  statusRow.innerHTML = statusTag('비상업용', isNonComm) + statusTag('방송/상업용', isComm);
-
-  document.getElementById('intro-skeleton').style.display = 'none';
-  const content = document.getElementById('intro-content');
-  content.style.display = 'flex';
 }).catch(()=>{
+  /* 실패 시에도 스켈레톤 → 에러 메시지로 전환 */
   document.getElementById('intro-skeleton').style.display = 'none';
   const content = document.getElementById('intro-content');
   content.style.display = 'flex';
-  document.getElementById('intro-name').textContent = '불러오기 실패';
+  const nameEl = document.getElementById('intro-name');
+  nameEl.className = 'intro-name';
+  nameEl.textContent = '불러오기 실패';
 });
 
 /* ════════════════════════════════════════
@@ -1139,7 +1167,7 @@ fetchCSV(PORTFOLIO_CSV).then(text=>{
   }
 
   const ITEM_HEIGHT = 300;
-  let loaded = 0;
+  let firstRevealed = false;
 
   urls.forEach(url=>{
     const item = document.createElement('div');
@@ -1147,12 +1175,11 @@ fetchCSV(PORTFOLIO_CSV).then(text=>{
 
     const img = document.createElement('img');
     img.alt = '포트폴리오';
-    img.loading = 'lazy';
+    img.decoding = 'async';   /* lazy 제거 → eager(기본값)로 즉시 로드 */
 
     const reveal = ()=>{
-      loaded++;
-      if(loaded === 1){
-        /* 첫 이미지 로드되면 스켈레톤 숨기고 실제 스크롤 표시 */
+      if(!firstRevealed){
+        firstRevealed = true;
         if(skelEl) skelEl.style.display='none';
         scroll.style.display='flex';
       }
