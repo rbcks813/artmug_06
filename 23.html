@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사인 제작 커미션</title>
+
+<style>
+  @font-face { font-family:'Paperozi'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight:100; font-display:swap; }
+  @font-face { font-family:'Paperozi'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2'); font-weight:200; font-display:swap; }
+  @font-face { font-family:'Paperozi'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2'); font-weight:300; font-display:swap; }
+  @font-face { font-family:'Paperozi'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2'); font-weight:400; font-display:swap; }
+  @font-face { font-family:'Paperozi'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2'); font-weight:500; font-display:swap; }
+  @font-face { font-family:'Paperozi'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2'); font-weight:600; font-display:swap; }
+  @font-face { font-family:'Paperozi'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2'); font-weight:700; font-display:swap; }
+  @font-face { font-family:'Paperozi'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2'); font-weight:800; font-display:swap; }
+  @font-face { font-family:'Paperozi'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2'); font-weight:900; font-display:swap; }
+
+  :root {
+    /* ── 팔레트: 화이트 50% · 노랑 30% · 블루 20% ── */
+    --bg:           #F8FAFC;
+    --surface:      #FFFFFF;
+    --surface-soft: #FDFCF0;
+
+    --yellow:       #D6E8F8;
+    --yellow-deep:  #78A2D2;
+    --yellow-dark:  #3A6A9E;
+    --yellow-border:#F2F0A2;
+
+    --blue:         #FAF8A0;
+    --blue-dark:    #3A6A9E;
+    --blue-light:   #FEFDD0;
+    --blue-soft:    #FEFCF0;
+
+    --text-main:    #1A2A3A;
+    --text-sub:     #3A5070;
+    --text-muted:   #7A9AB8;
+    --border:       #F2F0A2;
+
+    --red-1:        #B83228;
+    --red-2:        #D95040;
+    --red-light:    #FDF0EE;
+
+    --radius:       18px;
+    --radius-sm:    12px;
+    --shadow:       0 2px 16px rgba(120,110,10,0.08);
+    --shadow-hover: 0 6px 28px rgba(120,110,10,0.16);
+  }
+
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+
+  body {
+    font-family: 'Paperozi', sans-serif;
+    background: var(--bg);
+    color: var(--text-main);
+    font-weight: 400;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 28px 16px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* ── 카드 공통 ── */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 30px 26px;
+    /* 1. 소개를 제외한 모든 카드 테두리: 블루(--yellow: #D6E8F8) */
+    border: 1.5px solid var(--yellow);
+    box-shadow: var(--shadow);
+    transition: box-shadow .3s ease;
+    opacity: 0;
+    transform: translateY(14px);
+    animation: cardUp .55s ease forwards;
+  }
+  .card:hover { box-shadow: var(--shadow-hover); }
+
+  @keyframes cardUp { to { opacity:1; transform:translateY(0); } }
+  .card:nth-child(1){animation-delay:.04s}
+  .card:nth-child(2){animation-delay:.10s}
+  .card:nth-child(3){animation-delay:.16s}
+  .card:nth-child(4){animation-delay:.22s}
+  .card:nth-child(5){animation-delay:.28s}
+  .card:nth-child(6){animation-delay:.34s}
+
+  /* ── 섹션 타이틀 ── */
+  .sec-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--blue-dark);
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  .sec-sub {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    font-weight: 300;
+    text-align: center;
+    margin-top: -12px;
+    margin-bottom: 18px;
+  }
+  .common-note {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: var(--blue-soft);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-sub);
+    line-height: 1.65;
+  }
+
+  /* ══ 소개 카드 ══ */
+  .intro-card {
+    background: linear-gradient(160deg, #FFFFFF 0%, #FEFDCF 100%);
+    /* 1. 소개 카드는 기존 테두리 유지 */
+    border: 1.5px solid var(--border) !important;
+    padding: 36px 28px 30px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .intro-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(150,140,20,.10) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .intro-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  /* 프로필 이미지 */
+  .profile-img-wrap {
+    width: 88px; height: 88px;
+    border-radius: 20px;
+    border: 2px solid var(--blue);
+    box-shadow: 0 4px 16px rgba(120,110,10,.13);
+    overflow: hidden;
+    background: var(--blue-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px;
+    flex-shrink: 0;
+  }
+  .profile-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+  .intro-name {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--text-main);
+    line-height: 1.2;
+    letter-spacing: -.01em;
+    margin-top: 2px;
+  }
+  .intro-desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-sub);
+    line-height: 1.95;
+    max-width: 400px;
+  }
+  /* 소개 카드 내 활성 상태 */
+  .intro-status-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  /* 스켈레톤 공용 */
+  .skel-bar {
+    border-radius: 8px;
+    background: linear-gradient(90deg, #FEFDD0 25%, #FEFCF0 50%, #FEFDD0 75%);
+    background-size: 200% 100%;
+    animation: skelShimmer 1.4s infinite;
+  }
+  .status-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 18px;
+    border-radius: 100px;
+    font-size: 12.5px;
+    font-weight: 700;
+    font-family: 'Paperozi', sans-serif;
+    letter-spacing: .02em;
+  }
+  .status-tag.open   { background: #D8F0D8; color: #1A5C1A; }
+  .status-tag.rest   { background: #FFF0CC; color: #8A6000; }
+  .status-tag.closed { background: #F5D2D0; color: #7A1A18; }
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .status-tag.open .status-dot { animation: blink 1.4s ease-in-out infinite; }
+  .status-tag.rest .status-dot { animation: blink 2.2s ease-in-out infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+  /* ══ 작업 순서 ══ */
+  .flow-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .flow-step { display:flex; flex-direction:column; align-items:center; gap:6px; flex:1; }
+  .flow-box {
+    width: 100%;
+    padding: 14px 6px;
+    background: var(--yellow);
+    border: none;
+    border-radius: var(--radius-sm);
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.5;
+    transition: background .2s, transform .2s;
+  }
+  .flow-box:hover { background: var(--yellow-deep); transform: translateY(-2px); }
+  .flow-arrow { color: #6493c8; font-size: 20px; flex-shrink:0; padding:0 4px; margin-bottom:22px; font-weight:900; }
+
+  /* ══ 가격 안내 ══ */
+  .price-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .price-card {
+    background: var(--surface);
+    /* 2. 상업용·비상업용 박스 테두리 블루(--yellow: #D6E8F8) */
+    border: 1.5px solid var(--yellow);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    transition: box-shadow .25s, transform .25s;
+  }
+  .price-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+  .price-card-head {
+    background: var(--yellow);
+    padding: 15px 16px 11px;
+    text-align: center;
+  }
+  /* 2. 상업용 박스: 그라데이션 제거하고 노랑(--blue: #FAF8A0)으로만 */
+  .price-card.commercial .price-card-head {
+    background: #fffebd;
+  }
+  .price-card-head h3 {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 2px;
+  }
+  .type-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: .10em;
+  }
+  .price-card.commercial .type-label { color: var(--text-muted); }
+  .price-card-body { padding: 15px 16px; }
+  .price-main {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--blue-dark);
+    margin-bottom: 5px;
+  }
+  .price-desc {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin-bottom: 10px;
+  }
+  /* 2. 수정 횟수 박스 테두리 블루(--yellow: #D6E8F8) */
+  .revision-badge {
+    display: inline-block;
+    background: var(--yellow);
+    border: 1px solid var(--yellow);
+    border-radius: 100px;
+    padding: 3px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--blue-dark);
+  }
+
+  .add-title { font-size:13px; font-weight:800; color:var(--text-main); margin-bottom:10px; }
+  .add-list { display:flex; flex-direction:column; gap:7px; }
+  .add-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 14px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--blue);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    transition: background .15s;
+  }
+  /* 호버: 같은 노랑 계열에서 살짝 진하게 */
+  .add-item:hover { background: #F5F2B0; }
+  .add-item-name { font-weight:500; color:var(--text-sub); }
+  .add-item-price { font-weight:800; color:var(--red-1); white-space:nowrap; margin-left:10px; }
+  .add-item-price.free { color: #2A6E2A; }
+
+  /* 2. 후기 이벤트 배너 테두리 블루(--yellow: #D6E8F8) */
+  .event-banner {
+    margin-top: 16px;
+    background: linear-gradient(120deg, var(--yellow), #D6E8F8);
+    border: 1.5px dashed var(--yellow);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .event-icon { font-size:26px; flex-shrink:0; margin-top:1px; }
+  .event-title { font-size:13px; font-weight:800; color:var(--text-main); margin-bottom:4px; }
+  .event-desc { font-size:12px; color:var(--text-sub); line-height:1.7; }
+
+  .notice-list { display:flex; flex-direction:column; gap:7px; }
+  .notice-item {
+    display: flex;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-sub);
+    line-height: 1.7;
+    padding: 11px 14px;
+    background: #F4F8FF;
+    border-radius: var(--radius-sm);
+    border: 1px solid #D8E8F4;
+    border-left: 3px solid #78A2D2;
+    transition: background .15s;
+  }
+  /* 호버: 같은 계열에서 살짝 진하게 */
+  .notice-item:hover { background: #E2EEF9; }
+  .notice-item.warn {
+    border-left-color: var(--red-2);
+    background: var(--red-light);
+  }
+  .notice-item.warn:hover { background: #FDEAE8; }
+  /* 6번 - 추가금 항목과 동일한 노랑 계열 */
+  .notice-item.yellow {
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--blue);
+  }
+  .notice-item.yellow:hover { background: #F5F2B0; }
+  .notice-item.yellow .notice-n { color: var(--blue-dark); }
+  .notice-n {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--blue-dark);
+    flex-shrink: 0;
+    margin-top: 3px;
+    letter-spacing: .05em;
+    min-width: 22px;
+  }
+  .notice-item.warn .notice-n { color: var(--red-1); }
+  .hl { color: var(--red-1); font-weight: 800; }
+  .hl-br { color: var(--text-main); font-weight: 700; }
+
+  /* ══ 포트폴리오 ══ */
+  .pf-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 4px 0 10px;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    /* 4. 스크롤바 노란색(--blue: #FAF8A0) */
+    scrollbar-color: #d6e8f8 transparent;
+    align-items: stretch;
+  }
+  .pf-scroll::-webkit-scrollbar { height: 4px; }
+  /* 4. 스크롤바 thumb 노란색 */
+  .pf-scroll::-webkit-scrollbar-thumb { background: #d6e8f8; border-radius: 4px; }
+
+  /* 기본: 세로 300px 고정, 가로 비율 유지 */
+  .pf-item {
+    flex-shrink: 0;
+    height: 300px;
+    width: auto;
+    background: var(--yellow);
+    /* 4. 포트폴리오 이미지 테두리 블루(--yellow: #D6E8F8) */
+    border: 1.5px solid var(--yellow);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 44px;
+    overflow: hidden;
+    transition: transform .2s, box-shadow .2s;
+    position: relative;
+  }
+  .pf-item:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(120,110,10,.14); }
+  .pf-item > img { height:100%; width:auto; object-fit:cover; display:block; position:relative; z-index:1; }
+
+  /* 가로 초과 이미지: 고정 너비 박스 + 블러 배경 */
+  .pf-item.pf-wide {
+    width: calc(100vw - 96px);
+    max-width: 580px;
+    height: 300px;
+  }
+  .pf-item.pf-wide .pf-blur-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: blur(20px) brightness(.8) saturate(1.3);
+    transform: scale(1.1);
+    z-index: 0;
+  }
+  .pf-item.pf-wide > img {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+  }
+
+  /* ══ 신청 양식 ══ */
+  .form-wrap { display:flex; flex-direction:column; gap:22px; }
+  .form-group { display:flex; flex-direction:column; gap:8px; }
+
+  .f-label {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+  .f-label span {
+    font-weight: 400;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-left: 5px;
+  }
+
+  /* 5. 신청양식 input/textarea — 테두리·배경 블루 계열 */
+  .f-input, .f-textarea {
+    width: 100%;
+    padding: 11px 14px;
+    /* 배경: 연한 블루 */
+    background: #EEF5FC;
+    border: 1.5px solid var(--yellow);   /* --yellow = #D6E8F8 블루 */
+    border-radius: var(--radius-sm);
+    font-family: 'Paperozi', sans-serif;
+    font-size: 13px;
+    color: var(--text-main);
+    outline: none;
+    transition: border-color .2s, background .2s;
+  }
+  .f-input:focus, .f-textarea:focus {
+    border-color: var(--yellow-deep);    /* #78A2D2 진한 블루 */
+    background: #FFFFFF;
+  }
+  .f-textarea { min-height: 80px; resize: none; overflow-y: auto; }
+
+  /* ── 버튼 선택 공통 ── */
+  .btn-group { display:flex; flex-wrap:wrap; gap:8px; }
+
+  /* 5. 기본 sel-btn → 블루 계열 배경+테두리 */
+  .sel-btn {
+    padding: 8px 18px;
+    border: 1.5px solid var(--yellow);   /* #D6E8F8 */
+    background: #EEF5FC;                 /* 연한 블루 배경 */
+    border-radius: 100px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-sub);
+    cursor: pointer;
+    transition: all .18s;
+    font-family: 'Paperozi', sans-serif;
+    outline: none;
+  }
+  .sel-btn:hover {
+    border-color: var(--yellow-deep);    /* #78A2D2 */
+    color: var(--text-main);
+    background: var(--yellow);           /* #D6E8F8 */
+  }
+  .sel-btn.active {
+    background: var(--yellow-deep);      /* #78A2D2 */
+    border-color: var(--yellow-deep);
+    color: #fff;
+    font-weight: 800;
+    box-shadow: 0 3px 10px rgba(120,162,210,.30);
+  }
+
+  /* 5. 사인 꾸밈정도 / 추가금 버튼 → 노랑 계열로 override */
+  #grp-deco .sel-btn,
+  #grp-extra .sel-btn {
+    border-color: var(--border);
+    background: var(--surface-soft);
+    color: var(--text-sub);
+  }
+  #grp-deco .sel-btn:hover,
+  #grp-extra .sel-btn:hover {
+    border-color: var(--yellow-border);
+    background: var(--blue);
+    color: var(--text-main);
+  }
+  #grp-deco .sel-btn.active,
+  #grp-extra .sel-btn.active {
+    background: var(--yellow-deep);
+    border-color: var(--yellow-border);
+    color: var(--text-main);
+    font-weight: 800;
+    box-shadow: 0 3px 10px rgba(150,140,20,.18);
+  }
+
+  /* 색상 피커 */
+  .color-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .color-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #EEF5FC;                 /* 연한 블루 배경 */
+    border: 1.5px solid var(--yellow);   /* #D6E8F8 블루 테두리 */
+    border-radius: var(--radius-sm);
+    padding: 7px 12px;
+  }
+  .color-box {
+    width:30px; height:30px;
+    border-radius:7px;
+    border:1px solid rgba(0,0,0,.1);
+    overflow:hidden;
+    flex-shrink:0;
+    cursor:pointer;
+  }
+  .color-box input[type="color"] {
+    width:150%; height:150%;
+    margin:-25%;
+    border:none;
+    cursor:pointer;
+  }
+  .hex-input {
+    width:76px;
+    border:none;
+    background:transparent;
+    font-family:'Paperozi', sans-serif;
+    font-size:13px;
+    color:var(--text-main);
+    outline:none;
+    text-transform:uppercase;
+    text-align:center;
+  }
+  .color-remove {
+    background:none; border:none;
+    color:var(--text-muted);
+    cursor:pointer; font-size:13px; line-height:1; padding:0 2px;
+  }
+  .color-remove:hover { color:var(--red-2); }
+
+  /* 5. + 색상추가 버튼 → 노랑 계열 */
+  .btn-add-color {
+    padding: 8px 14px;
+    background: transparent;
+    border: 1.5px dashed var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Paperozi', sans-serif;
+    font-size: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all .18s;
+    white-space: nowrap;
+  }
+  .btn-add-color:hover {
+    border-color: var(--yellow-border);
+    color: var(--text-main);
+    background: var(--blue);
+  }
+
+  /* ── 말풍선 툴팁 ── */
+  .tooltip-wrap {
+    position: relative;
+    display: inline-block;
+  }
+  .tooltip-wrap .tooltip-bubble {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: var(--blue-dark);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .18s, transform .18s;
+    z-index: 100;
+    font-family: 'Paperozi', sans-serif;
+  }
+  .tooltip-wrap .tooltip-bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%; left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--blue-dark);
+  }
+  .tooltip-wrap.show-tip .tooltip-bubble {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* 분위기 이미지 첨부 */
+  .mood-img-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: #EEF5FC;                 /* 연한 블루 배경 */
+    border: 1.5px dashed var(--yellow);  /* 블루 점선 테두리 */
+    border-radius: var(--radius-sm);
+    font-family: 'Paperozi', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all .18s;
+  }
+  .mood-img-label:hover {
+    border-color: var(--yellow-deep);
+    color: var(--blue-dark);
+    background: var(--yellow);
+  }
+  .mood-previews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .mood-preview-wrap {
+    position: relative;
+    width: 72px; height: 72px;
+    border-radius: var(--radius-sm);
+    overflow: visible;
+  }
+  .mood-preview-wrap img {
+    width: 72px; height: 72px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    display: block;
+  }
+  .mood-del-btn {
+    position: absolute;
+    top: -7px; right: -7px;
+    width: 20px; height: 20px;
+    background: var(--red-2);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,.2);
+    z-index: 1;
+    line-height: 1;
+  }
+
+  /* 버튼 */
+  .bottom-actions { display:flex; gap:10px; }
+  .btn-copy {
+    flex: 1;
+    padding: 16px;
+    background: var(--blue-dark);
+    color: #fff;
+    font-family: 'Paperozi', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all .2s;
+    letter-spacing: .02em;
+  }
+  .btn-copy:hover { background: var(--blue-dark); transform:translateY(-1px); box-shadow:0 5px 18px rgba(80,70,5,.22); }
+  .btn-reset {
+    padding: 16px 20px;
+    background: #EEF5FC;
+    color: var(--text-sub);
+    font-family: 'Paperozi', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    border: 1.5px solid var(--yellow);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .btn-reset:hover { border-color:var(--yellow-deep); color:var(--blue-dark); background:var(--yellow); }
+
+  @keyframes skelShimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* ══ 모바일 최적화 ══ */
+  @media (max-width:600px){
+    .wrap { padding: 16px 10px 60px; gap: 10px; }
+
+    /* 카드 */
+    .card { padding: 20px 14px; border-radius: 14px; }
+    .intro-card { padding: 24px 14px 20px; }
+    .sec-title { font-size: 18px; margin-bottom: 14px; }
+    .sec-sub { font-size: 11.5px; }
+
+    /* 작업 순서 */
+    .flow-steps { gap: 0; }
+    .flow-box { font-size: 11px; padding: 10px 4px; border-radius: 8px; }
+    .flow-arrow { font-size: 16px; padding: 0 2px; margin-bottom: 18px; }
+
+    /* 가격 */
+    .price-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .price-card-head { padding: 12px 10px 8px; }
+    .price-card-head h3 { font-size: 12px; }
+    .type-label { font-size: 9px; }
+    .price-card-body { padding: 10px 10px; }
+    .price-main { font-size: 18px; }
+    .price-desc { font-size: 10.5px; }
+    .revision-badge { font-size: 10px; padding: 2px 10px; }
+    .add-item { padding: 9px 11px; font-size: 12px; }
+    .event-banner { padding: 12px 13px; gap: 9px; }
+    .event-icon { font-size: 22px; }
+    .event-title { font-size: 12px; }
+    .event-desc { font-size: 11px; }
+
+    /* 안내사항 */
+    .notice-item { font-size: 12px; padding: 9px 11px; gap: 8px; }
+    .notice-n { font-size: 9px; min-width: 18px; }
+
+    /* 포트폴리오 */
+    .pf-item { height: 200px; }
+    .pf-item.pf-wide { height: 200px; width: calc(100vw - 52px); max-width: 100%; }
+
+    /* 신청 양식 */
+    .form-wrap { gap: 16px; }
+    .f-label { font-size: 12.5px; }
+    .f-label span { font-size: 10.5px; }
+    .f-input, .f-textarea { font-size: 12px; padding: 10px 12px; }
+    .sel-btn { padding: 7px 13px; font-size: 11.5px; }
+    .btn-group { gap: 6px; }
+    .color-item { padding: 6px 10px; }
+    .hex-input { width: 68px; font-size: 12px; }
+
+    /* 하단 버튼 */
+    .bottom-actions { flex-direction: column; gap: 8px; }
+    .btn-copy { font-size: 13px; padding: 14px; }
+    .btn-reset { width: 100%; font-size: 12px; padding: 14px; }
+
+    /* 프로필 */
+    .profile-img-wrap { width: 72px; height: 72px; font-size: 30px; border-radius: 16px; }
+    .intro-name { font-size: 20px; }
+    .intro-desc { font-size: 12px; }
+    .status-tag { font-size: 11.5px; padding: 6px 14px; }
+
+    /* 툴팁 */
+    .tooltip-wrap .tooltip-bubble { font-size: 11px; white-space: normal; max-width: 180px; text-align: center; }
+
+    /* common-note */
+    .common-note { font-size: 11px; padding: 9px 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ① 소개 + 활성 상태 (구글시트 연동) -->
+  <div class="card intro-card">
+    <div class="intro-inner" id="intro-inner">
+      <!-- 로딩 중 스켈레톤 -->
+      <div id="intro-skeleton" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <div class="skel-bar" style="width:88px;height:88px;border-radius:20px;"></div>
+        <div class="skel-bar" style="width:120px;height:20px;"></div>
+        <div class="skel-bar" style="width:90%;height:13px;"></div>
+        <div class="skel-bar" style="width:75%;height:13px;"></div>
+        <div class="skel-bar" style="width:60%;height:13px;"></div>
+        <div style="display:flex;gap:8px;justify-content:center;">
+          <div class="skel-bar" style="width:110px;height:32px;border-radius:100px;"></div>
+          <div class="skel-bar" style="width:130px;height:32px;border-radius:100px;animation-delay:.15s;"></div>
+        </div>
+      </div>
+      <!-- 실제 콘텐츠 (JS로 채워짐) -->
+      <div id="intro-content" style="display:none;width:100%;display:none;flex-direction:column;align-items:center;gap:12px;">
+        <div class="profile-img-wrap" id="profile-img-wrap">🖊️</div>
+        <div class="intro-name" id="intro-name"></div>
+        <div class="intro-desc" id="intro-desc"></div>
+        <div class="intro-status-row" id="intro-status-row"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ 작업 순서 -->
+  <div class="card">
+    <div class="sec-title">작업 순서</div>
+    <div class="flow-steps">
+      <div class="flow-step"><div class="flow-box">💬<br>문의</div></div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step"><div class="flow-box">🎨<br>시안 전달</div></div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step"><div class="flow-box">✏️<br>수정 및 확정</div></div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step"><div class="flow-box">📦<br>완성본 전달</div></div>
+    </div>
+    <div class="common-note">
+      ※ 주문 전, <strong>신청 양식을 작성하신 후</strong> 문의 부탁드립니다.<br>
+      ※ 완성본 전달 시 <strong>투명화 파일 포함</strong>하여 전달드립니다.<br>
+      ※ 작업 기간은 최대 <strong>7일</strong>입니다. (일정에 따라 변동될 수 있습니다.)
+    </div>
+  </div>
+
+  <!-- ④ 가격 안내 -->
+  <div class="card">
+    <div class="sec-title">가격 안내</div>
+    <div class="price-grid">
+      <div class="price-card">
+        <div class="price-card-head">
+          <h3>비상업용</h3>
+          <div class="type-label">NON-COMMERCIAL</div>
+        </div>
+        <div class="price-card-body">
+          <div class="price-main">28,000원~</div>
+          <div class="price-desc">~10자 기준<br>이후 5자씩 <strong>+3,000원</strong></div>
+          <div class="revision-badge">수정 3회</div>
+        </div>
+      </div>
+      <div class="price-card commercial">
+        <div class="price-card-head">
+          <h3>방송 / 상업용</h3>
+          <div class="type-label">COMMERCIAL</div>
+        </div>
+        <div class="price-card-body">
+          <div class="price-main">100,000원</div>
+          <div class="revision-badge">수정 10회</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="add-title">✦ 추가금 안내</div>
+    <div class="add-list">
+      <div class="add-item">
+        <span class="add-item-name">🖼 그림 추가</span>
+        <span class="add-item-price">+4,000원</span>
+      </div>
+      <div class="add-item">
+        <span class="add-item-name">🎬 사인 연습용 영상</span>
+        <span class="add-item-price">+3,000원</span>
+      </div>
+      <div class="add-item">
+        <span class="add-item-name">📬 빠른 마감 <small style="font-weight:400;color:var(--text-muted)">(문의 필수)</small></span>
+        <span class="add-item-price">+30,000원</span>
+      </div>
+      <div class="add-item">
+        <span class="add-item-name">🪄 네온사인 효과 <small style="font-weight:400;color:var(--text-muted)">(후기 작성 약속 시)</small></span>
+        <span class="add-item-price free">무료</span>
+      </div>
+    </div>
+
+    <div class="event-banner">
+      <div class="event-icon">🎁</div>
+      <div>
+        <div class="event-title">후기 이벤트</div>
+        <div class="event-desc">후기 작성을 약속해주시는 분들께 <strong>네온사인 효과</strong>를 무료로 입혀드립니다!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑤ 안내사항 -->
+  <div class="card">
+    <div class="sec-title">안내사항</div>
+    <div class="notice-list">
+      <div class="notice-item">
+        <span class="notice-n">01</span>
+        <span>작업물은 안내 후 <span class="hl">7일 이내</span>에 전달해 드립니다. (작업 기간은 일정에 따라 변동될 수 있습니다.)</span>
+      </div>
+      <div class="notice-item">
+        <span class="notice-n">02</span>
+        <!-- 3. "1회 출처 표기"까지만 강조 -->
+        <span>타 사이트에 업로드 시 <span class="hl">1회 출처 표기</span>(@isam2eo) 부탁드립니다.</span>
+      </div>
+      <div class="notice-item">
+        <span class="notice-n">03</span>
+        <span>색상 변경 등 간단한 수정 외에는 <span class="hl-br">2차 가공이 불가합니다.</span></span>
+      </div>
+      <div class="notice-item">
+        <span class="notice-n">04</span>
+        <span>입금 후 작업 진행하며, <span class="hl-br">분할 결제는 어렵습니다.</span></span>
+      </div>
+      <div class="notice-item">
+        <span class="notice-n">05</span>
+        <span>포트폴리오 중 원하는 샘플이 있다면 <span class="hl-br">캡처하여 첨부</span>해 주시길 바랍니다.</span>
+      </div>
+      <div class="notice-item yellow">
+        <span class="notice-n">06</span>
+        <span>상의 없이 <span class="hl">제3자에게 판매 및 제공</span>하는 모든 행위를 금합니다.</span>
+      </div>
+      <div class="notice-item warn">
+        <span class="notice-n">07</span>
+        <span>모든 작업물은 <span class="hl">샘플 및 포트폴리오 용도</span>로 사용될 수 있습니다.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑥ 포트폴리오 (구글시트 연동) -->
+  <div class="card">
+    <div class="sec-title">포트폴리오</div>
+    <div class="sec-sub">- 옆으로 넘겨 포트폴리오를 확인해 보세요!</div>
+    <div id="pf-skeleton" class="pf-scroll" style="pointer-events:none;">
+      <div style="flex-shrink:0;width:480px;height:300px;border-radius:12px;background:linear-gradient(90deg,#D6E8F8 25%,#EEF5FC 50%,#D6E8F8 75%);background-size:200% 100%;animation:skelShimmer 1.4s infinite;"></div>
+      <div style="flex-shrink:0;width:480px;height:300px;border-radius:12px;background:linear-gradient(90deg,#D6E8F8 25%,#EEF5FC 50%,#D6E8F8 75%);background-size:200% 100%;animation:skelShimmer 1.4s infinite 0.2s;"></div>
+    </div>
+    <div class="pf-scroll" id="pf-scroll" style="display:none;"></div>
+  </div>
+
+  <!-- ⑦ 신청 양식 -->
+  <div class="card">
+    <div class="sec-title">신청 양식</div>
+
+    <div class="form-wrap" id="form-wrap">
+
+      <div class="form-group">
+        <label class="f-label">01. 신청하시는 이름 <span>한 이름만 작성해 주세요.</span></label>
+        <input class="f-input" type="text" id="f-name" placeholder="이름 입력">
+      </div>
+
+      <div class="form-group">
+        <label class="f-label">02. 사용 목적</label>
+        <div class="btn-group" id="grp-purpose">
+          <button class="sel-btn" onclick="selectOne(this,'grp-purpose')">비상업용</button>
+          <button class="sel-btn" onclick="selectOne(this,'grp-purpose')">방송/상업용</button>
+        </div>
+      </div>
+
+      <!-- 5. 사인 꾸밈정도 → 노랑 계열 (grp-deco) -->
+      <div class="form-group">
+        <label class="f-label">03. 사인 꾸밈 정도 <span>그림 추가 미선택 시 간단한 심볼만 가능</span></label>
+        <div class="btn-group" id="grp-deco">
+          <button class="sel-btn" data-val="0" onclick="toggleMulti(this)">0 - 꾸밈 없음</button>
+          <button class="sel-btn" data-val="1" onclick="toggleMulti(this)">1 - 심플</button>
+          <button class="sel-btn" data-val="2" onclick="toggleMulti(this)">2 - 보통</button>
+          <button class="sel-btn" data-val="3" onclick="toggleMulti(this)">3 - 화려하게</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="f-label">04. 분위기 <span>선호하는 분위기나 특징을 작성해 주세요.</span></label>
+        <textarea class="f-textarea" id="f-mood" placeholder="캐릭터 프로필이나 참고 이미지가 있다면 함께 첨부 부탁드립니다."></textarea>
+        <div style="margin-top:8px">
+          <label class="mood-img-label" for="mood-file">📎 이미지 첨부</label>
+          <input type="file" id="mood-file" accept="image/*" multiple style="display:none" onchange="addMoodImages(this)">
+        </div>
+        <div class="mood-previews" id="mood-previews"></div>
+      </div>
+
+      <!-- 5. 추가금 버튼 → 노랑 계열 (grp-extra) -->
+      <div class="form-group">
+        <label class="f-label">05. 추가금 <span>해당하는 것을 모두 선택해 주세요.</span></label>
+        <div class="btn-group" id="grp-extra">
+          <button class="sel-btn" data-val="그림 추가 (+4,000원)" onclick="toggleMulti(this)">🖼 그림 추가 (+4,000원)</button>
+          <button class="sel-btn" data-val="사인 연습용 영상 (+3,000원)" onclick="toggleMulti(this)">🎬 사인 연습용 영상 (+3,000원)</button>
+          <button class="sel-btn" data-val="빠른 마감 (+30,000원, 문의 필수)" onclick="toggleMulti(this)">📬 빠른 마감 (+30,000원)</button>
+          <button class="sel-btn" data-val="네온사인 효과 (후기 작성 약속, 무료)" onclick="toggleMulti(this)">🪄 네온사인 효과 (후기 약속)</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="f-label">06. 색상 선택 <span>최대 2개 · 단색 또는 그라데이션</span></label>
+        <div class="btn-group" id="grp-colortype" style="margin-bottom:8px;">
+          <button class="sel-btn" onclick="selectOne(this,'grp-colortype')">단색</button>
+          <button class="sel-btn" onclick="selectOne(this,'grp-colortype')">그라데이션</button>
+        </div>
+        <div class="color-row" id="color-row"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="f-label">07. 요청 사항</label>
+        <textarea class="f-textarea" id="f-req" placeholder="기타 요청 사항을 자유롭게 작성해 주세요."></textarea>
+      </div>
+
+      <div class="bottom-actions">
+        <div class="tooltip-wrap" id="reset-tip-wrap">
+          <span class="tooltip-bubble" id="reset-tip"></span>
+          <button class="btn-reset" onclick="resetForm()">초기화</button>
+        </div>
+        <div class="tooltip-wrap" style="flex:1;" id="copy-tip-wrap">
+          <span class="tooltip-bubble" id="copy-tip"></span>
+          <button class="btn-copy" id="btn-copy" onclick="copyForm()" style="width:100%">✦ 양식 복사하기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ════════════════════════════════════════
+   CSV 파서 (셀 내 줄바꿈 보존)
+════════════════════════════════════════ */
+function parseCSV(text){
+  const rows=[];
+  let col='', inQ=false, record=[];
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(c==='"'){ if(inQ&&text[i+1]==='"'){col+='"';i++;}else inQ=!inQ; }
+    else if(c===','&&!inQ){ record.push(col);col=''; }
+    else if((c==='\n'||(c==='\r'&&text[i+1]==='\n'))&&!inQ){
+      if(c==='\r')i++;
+      record.push(col);col='';
+      if(record.some(v=>v.trim()))rows.push(record);
+      record=[];
+    } else { col+=c; }
+  }
+  record.push(col);
+  if(record.some(v=>v.trim()))rows.push(record);
+  if(rows.length<2)return[];
+  const headers=rows[0].map(h=>h.trim());
+  return rows.slice(1).map(vals=>{
+    const obj={};
+    headers.forEach((h,idx)=>{ obj[h]=(vals[idx]||'').trim(); });
+    return obj;
+  });
+}
+
+function fetchCSV(url){
+  return fetch(url)
+    .then(r=>{ if(!r.ok)throw new Error('direct failed'); return r.text(); })
+    .catch(()=>fetch('https://corsproxy.io/?'+encodeURIComponent(url)).then(r=>r.text())
+      .catch(()=>fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(url)).then(r=>r.text()))
+    );
+}
+
+/* ════════════════════════════════════════
+   프로필 로드
+════════════════════════════════════════ */
+const PROFILE_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSC6mRy4FbmPwn32easEQIlJaLACoBpxJ80LwQzor5RJuzzyAt52ZgkVg09bYb1jZFEP1FeWRwg_8xr/pub?gid=0&single=true&output=csv';
+const PORTFOLIO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSC6mRy4FbmPwn32easEQIlJaLACoBpxJ80LwQzor5RJuzzyAt52ZgkVg09bYb1jZFEP1FeWRwg_8xr/pub?gid=1455732887&single=true&output=csv';
+
+fetchCSV(PROFILE_CSV).then(text=>{
+  function parseKV(raw){
+    const cells = [];
+    let cur = '', inQ = false;
+    for(let i = 0; i < raw.length; i++){
+      const c = raw[i];
+      if(c === '"'){
+        if(inQ && raw[i+1] === '"'){ cur += '"'; i++; }
+        else inQ = !inQ;
+      } else if(!inQ && (c === '\r' || c === '\n')){
+        if(c === '\r' && raw[i+1] === '\n') i++;
+        if(cur.trim() !== '' || cells.length % 2 === 1) cells.push(cur);
+        cur = '';
+      } else {
+        cur += c;
+      }
+    }
+    if(cur.trim() !== '') cells.push(cur);
+    const obj = {};
+    for(let i = 0; i < cells.length - 1; i += 2){
+      obj[cells[i].trim()] = cells[i+1];
+    }
+    return obj;
+  }
+
+  const data = parseKV(text);
+
+  const imgWrap = document.getElementById('profile-img-wrap');
+  const imgUrl = data['프로필'] || '';
+  if(imgUrl && imgUrl.startsWith('http')){
+    const img = document.createElement('img');
+    img.alt = '프로필';
+    img.onload = ()=>{ imgWrap.innerHTML=''; imgWrap.appendChild(img); };
+    img.onerror = ()=>{ imgWrap.textContent='🖊️'; };
+    img.src = imgUrl;
+  }
+
+  document.getElementById('intro-name').textContent = (data['닉네임'] || '').trim();
+
+  const descRaw = data['소개'] || '';
+  const descHtml = descRaw.replace(/\r\n|\r|\n/g, '<br>');
+  document.getElementById('intro-desc').innerHTML = descHtml;
+
+  const isNonComm = (data['활성상태 여부 (비상업용)']||'').trim().toUpperCase() === 'TRUE';
+  const isComm    = (data['활성상태 여부 (상업용)']||'').trim().toUpperCase() === 'TRUE';
+
+  function statusTag(label, active){
+    const cls   = active ? 'open' : 'rest';
+    const text  = active ? `${label} - 문의 가능` : `${label} - 휴식 중`;
+    return `<span class="status-tag ${cls}"><span class="status-dot"></span>${text}</span>`;
+  }
+
+  const statusRow = document.getElementById('intro-status-row');
+  statusRow.innerHTML = statusTag('비상업용', isNonComm) + statusTag('방송/상업용', isComm);
+
+  document.getElementById('intro-skeleton').style.display = 'none';
+  const content = document.getElementById('intro-content');
+  content.style.display = 'flex';
+}).catch(()=>{
+  document.getElementById('intro-skeleton').style.display = 'none';
+  const content = document.getElementById('intro-content');
+  content.style.display = 'flex';
+  document.getElementById('intro-name').textContent = '불러오기 실패';
+});
+
+/* ════════════════════════════════════════
+   포트폴리오 로드
+════════════════════════════════════════ */
+fetchCSV(PORTFOLIO_CSV).then(text=>{
+  const rows = parseCSV(text);
+  const scroll = document.getElementById('pf-scroll');
+  const skelEl = document.getElementById('pf-skeleton');
+  const urlKey = rows[0] ? (Object.keys(rows[0]).find(k=>k.includes('이미지'))||Object.keys(rows[0])[0]) : '이미지';
+  const urls = rows.map(r=>(r[urlKey]||'').trim()).filter(u=>u.startsWith('http'));
+
+  if(urls.length===0){
+    if(skelEl) skelEl.style.display='none';
+    scroll.style.display='flex';
+    scroll.innerHTML='<div style="color:var(--text-muted);font-size:13px;padding:20px;">포트폴리오가 없습니다.</div>';
+    return;
+  }
+
+  const ITEM_HEIGHT = 300;
+  let loaded = 0;
+
+  urls.forEach(url=>{
+    const item = document.createElement('div');
+    item.className = 'pf-item';
+
+    const img = document.createElement('img');
+    img.alt = '포트폴리오';
+    img.loading = 'lazy';
+
+    const reveal = ()=>{
+      loaded++;
+      if(loaded === 1){
+        /* 첫 이미지 로드되면 스켈레톤 숨기고 실제 스크롤 표시 */
+        if(skelEl) skelEl.style.display='none';
+        scroll.style.display='flex';
+      }
+    };
+
+    img.onload = ()=>{
+      const nw = img.naturalWidth;
+      const nh = img.naturalHeight;
+      const ratio = nw / nh;
+      const renderedW = ITEM_HEIGHT * ratio;
+      const scrollW = scroll.parentElement ? scroll.parentElement.offsetWidth - 32 : 580;
+
+      if(renderedW > scrollW){
+        item.classList.add('pf-wide');
+        const blurBg = document.createElement('div');
+        blurBg.className = 'pf-blur-bg';
+        blurBg.style.backgroundImage = `url('${url}')`;
+        item.insertBefore(blurBg, img);
+      }
+      reveal();
+    };
+    img.onerror = ()=>{ item.textContent='🖼️'; reveal(); };
+    img.src = url;
+
+    item.appendChild(img);
+    scroll.appendChild(item);
+  });
+}).catch(()=>{
+  const skelEl = document.getElementById('pf-skeleton');
+  if(skelEl) skelEl.style.display='none';
+  const scroll = document.getElementById('pf-scroll');
+  scroll.style.display='flex';
+  scroll.innerHTML='<div style="color:var(--text-muted);font-size:13px;padding:20px;">불러오기 실패</div>';
+});
+
+/* ════════════════════════════════════════
+   말풍선 툴팁
+════════════════════════════════════════ */
+function showTip(tipId, msg, duration=2200){
+  const el = document.getElementById(tipId);
+  if(!el) return;
+  el.textContent = msg;
+  const wrap = el.closest('.tooltip-wrap');
+  if(wrap){ wrap.classList.add('show-tip'); setTimeout(()=>wrap.classList.remove('show-tip'), duration); }
+}
+
+/* ════════════════════════════════════════
+   단일 / 다중 선택
+════════════════════════════════════════ */
+function selectOne(btn, id){
+  document.querySelectorAll('#'+id+' .sel-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function toggleMulti(btn){ btn.classList.toggle('active'); }
+
+/* ════════════════════════════════════════
+   분위기 이미지 첨부
+════════════════════════════════════════ */
+let moodImages=[];
+
+function addMoodImages(input){
+  Array.from(input.files).forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=e=>{ moodImages.push({name:file.name,b64:e.target.result}); renderMoodPreviews(); };
+    reader.readAsDataURL(file);
+  });
+  input.value='';
+}
+
+function renderMoodPreviews(){
+  const wrap=document.getElementById('mood-previews');
+  wrap.innerHTML='';
+  moodImages.forEach((img,i)=>{
+    const w=document.createElement('div');
+    w.className='mood-preview-wrap';
+    w.innerHTML=`<img src="${img.b64}" alt="${img.name}"><button class="mood-del-btn" onclick="removeMoodImg(${i})">✕</button>`;
+    wrap.appendChild(w);
+  });
+}
+
+function removeMoodImg(i){ moodImages.splice(i,1); renderMoodPreviews(); }
+
+/* ════════════════════════════════════════
+   색상 피커
+════════════════════════════════════════ */
+let colors=['#000000'];
+
+function renderColors(){
+  const row=document.getElementById('color-row');
+  row.innerHTML='';
+  colors.forEach((c,i)=>{
+    const item=document.createElement('div');
+    item.className='color-item';
+    const removeBtn = i>0
+      ? `<button class="color-remove" onclick="removeColor(${i})" title="삭제">✕</button>`
+      : '';
+    item.innerHTML=`
+      <div class="color-box"><input type="color" value="${c}" oninput="syncPicker(${i},this.value)"></div>
+      <input class="hex-input" id="hex-${i}" value="${c.toUpperCase()}" maxlength="7"
+        onkeydown="guardHash(event,${i})"
+        oninput="syncHex(${i},this.value)"
+        onblur="forceHex(${i},this.value)">
+      ${removeBtn}`;
+    row.appendChild(item);
+  });
+  if(colors.length<2){
+    const addBtn=document.createElement('button');
+    addBtn.className='btn-add-color';
+    addBtn.textContent='+ 색상 추가';
+    addBtn.onclick=addColor;
+    row.appendChild(addBtn);
+  }
+}
+
+function guardHash(e, i){
+  const inp = e.target;
+  if((e.key==='Backspace'||e.key==='Delete') && inp.selectionStart<=1 && inp.value.startsWith('#')){
+    if(inp.selectionStart===0||(inp.selectionStart===1&&inp.selectionEnd===1)){
+      e.preventDefault();
+    }
+  }
+}
+
+function syncPicker(i,v){
+  colors[i]=v;
+  const h=document.getElementById('hex-'+i);
+  if(h) h.value=v.toUpperCase();
+}
+
+function syncHex(i,v){
+  let val=v;
+  if(!val.startsWith('#')) val='#'+val;
+  if(/^#[0-9A-Fa-f]{6}$/.test(val)){
+    colors[i]=val;
+    const picker=document.querySelectorAll('.color-box input[type="color"]')[i];
+    if(picker) picker.value=val;
+  }
+}
+
+function forceHex(i,v){
+  let val=v;
+  if(!val.startsWith('#')) val='#'+val;
+  if(!/^#[0-9A-Fa-f]{6}$/.test(val)){
+    const h=document.getElementById('hex-'+i);
+    if(h) h.value=colors[i].toUpperCase();
+  }
+}
+
+function addColor(){ if(colors.length>=2)return; colors.push('#000000'); renderColors(); }
+function removeColor(i){ colors.splice(i,1); renderColors(); }
+
+/* ════════════════════════════════════════
+   양식 복사
+════════════════════════════════════════ */
+function copyForm(){
+  const name=document.getElementById('f-name').value.trim();
+  if(!name){ showTip('copy-tip','이름을 입력해 주세요'); return; }
+
+  const purpose=[...document.querySelectorAll('#grp-purpose .active')].map(b=>b.textContent.trim()).join('')||'미선택';
+  const deco=[...document.querySelectorAll('#grp-deco .active')].map(b=>b.dataset.val).join(', ')||'미선택';
+  const mood=document.getElementById('f-mood').value.trim()||'미기재';
+  const extras=[...document.querySelectorAll('#grp-extra .active')].map(b=>b.dataset.val).join(', ')||'없음';
+  const colortype=[...document.querySelectorAll('#grp-colortype .active')].map(b=>b.textContent.trim()).join('')||'미선택';
+  const clrs=colors.map(c=>c.toUpperCase()).join(', ');
+  const req=document.getElementById('f-req').value.trim()||'없음';
+
+  const imgHtml=moodImages.length
+    ?moodImages.map(img=>`<img src="${img.b64}" style="max-width:240px;display:block;margin:4px 0;border-radius:6px;">`).join('')
+    :'';
+
+  const html=`<b>[사인 제작 커미션 신청 양식]</b><br>
+<b>01. 이름:</b> ${name}<br>
+<b>02. 사용 목적:</b> ${purpose}<br>
+<b>03. 사인 꾸밈 정도:</b> ${deco}<br>
+<b>04. 분위기:</b> ${mood}${imgHtml?'<br>'+imgHtml:''}<br>
+<b>05. 추가금:</b> ${extras}<br>
+<b>06. 색상 종류:</b> ${colortype}<br>
+<b>06. 색상:</b> ${clrs}<br>
+<b>07. 요청 사항:</b> ${req}`;
+
+  const plain=`[사인 제작 커미션 신청 양식]\n01. 이름: ${name}\n02. 사용 목적: ${purpose}\n03. 사인 꾸밈 정도: ${deco}\n04. 분위기: ${mood}\n05. 추가금: ${extras}\n06. 색상 종류: ${colortype}\n06. 색상: ${clrs}\n07. 요청 사항: ${req}`;
+
+  const done=()=>{
+    showTip('copy-tip','복사 완료! 문의창에 붙여넣기 해주세요',2800);
+    ['f-name','f-mood','f-req'].forEach(id=>document.getElementById(id).value='');
+    document.querySelectorAll('.sel-btn').forEach(b=>b.classList.remove('active'));
+    moodImages=[]; renderMoodPreviews();
+    colors=['#000000']; renderColors();
+  };
+
+  navigator.clipboard.write([
+    new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([plain],{type:'text/plain'})})
+  ]).then(done).catch(()=>{
+    navigator.clipboard.writeText(plain).then(done)
+      .catch(()=>showTip('copy-tip','복사에 실패했습니다'));
+  });
+}
+
+function resetForm(){
+  ['f-name','f-mood','f-req'].forEach(id=>document.getElementById(id).value='');
+  document.querySelectorAll('.sel-btn').forEach(b=>b.classList.remove('active'));
+  moodImages=[]; renderMoodPreviews();
+  colors=['#000000']; renderColors();
+  showTip('reset-tip','초기화되었습니다',1600);
+}
+
+/* 초기화 */
+renderColors();
+
+/* ════════════════════════════════════════
+   임베드 높이 자동조절 (실시간 양방향)
+   - ResizeObserver로 콘텐츠 크기 변화 감지
+   - 부모 iframe에 postMessage로 실제 높이 전송
+════════════════════════════════════════ */
+(function(){
+  let lastH = 0;
+
+  function sendHeight(){
+    const h = Math.ceil(document.querySelector('.wrap').getBoundingClientRect().height
+              + 28 + 80); /* wrap padding-top + padding-bottom */
+    if(h !== lastH){
+      lastH = h;
+      try { window.parent.postMessage({ type: 'resize', height: h }, '*'); } catch(e){}
+    }
+  }
+
+  const ro = new ResizeObserver(sendHeight);
+  const wrap = document.querySelector('.wrap');
+  if(wrap) ro.observe(wrap);
+
+  window.addEventListener('load', sendHeight);
+  if(document.fonts) document.fonts.ready.then(sendHeight);
+  sendHeight();
+  setTimeout(sendHeight, 1000);
+})();
+</script>
+</body>
+</html>
