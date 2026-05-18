@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>도트 아이콘 커미션</title>
 <style>
   @font-face { font-family:'Paperozi'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight:100; font-display:swap; }
   @font-face { font-family:'Paperozi'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2'); font-weight:200; font-display:swap; }
@@ -394,9 +393,58 @@
     .pf-tabs { gap:6px; }
     .pf-tab { padding:5px 13px; font-size:11.5px; }
 
-    .pf-item { height: 160px; }
-    .pf-item.pf-wide { height: 180px; }
+    /* ① 작업 순서 — 모든 박스 동일 높이 */
+    .flow-steps { align-items: stretch; }
+    .flow-step { flex: 1; }
+    .flow-box {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 4px;
+      font-size: 12px;
+    }
+    .flow-arrow { align-self: center; margin-bottom: 0; }
+
+    /* ② 포트폴리오 이미지 — 정사각형 고정 */
+    .pf-item {
+      height: auto;
+      aspect-ratio: 1 / 1;
+    }
+    .pf-item.pf-wide {
+      height: auto;
+      aspect-ratio: 2 / 1;
+    }
+    .pf-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
     .skel-box { height: 160px; }
+
+    /* ③ 페이지 넘기기 버튼 — 더 크게 */
+    .pf-nav {
+      gap: 6px;
+      margin-top: 16px;
+    }
+    .pf-arrow {
+      width: 44px;
+      height: 44px;
+      font-size: 20px;
+      border-radius: 12px;
+    }
+    /* 점 개수가 많아도 넘치지 않도록 dots 영역 축소 */
+    .pf-dots {
+      gap: 4px;
+      max-width: 120px;
+      overflow: hidden;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .pf-dot { width: 6px; height: 6px; }
+    .pf-dot.active { width: 14px; }
+    .pf-page-info { font-size: 13px; font-weight: 600; }
   }
 </style>
 </head>
@@ -545,13 +593,12 @@ const PRICE_CSV     = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR6K5rMDU
 
 /* ── CSV 파싱 — 셀 내 줄바꿈(\n) 보존 버전 ── */
 function parseCSV(text){
-  // 전체 텍스트를 문자 단위로 파싱 → 따옴표 안 \n은 행 구분으로 처리 안 함
   const rows = [];
   let col = '', inQ = false, record = [];
   for(let i = 0; i < text.length; i++){
     const c = text[i];
     if(c === '"'){
-      if(inQ && text[i+1] === '"'){ col += '"'; i++; } // "" → "
+      if(inQ && text[i+1] === '"'){ col += '"'; i++; }
       else inQ = !inQ;
     } else if(c === ',' && !inQ){
       record.push(col); col = '';
@@ -576,7 +623,6 @@ function parseCSV(text){
   });
 }
 
-/* ── fetch fallback ── */
 function fetchCSV(url){
   return fetch(url)
     .then(r => { if(!r.ok) throw new Error('direct failed'); return r.text(); })
@@ -592,9 +638,6 @@ function escapeHtml(str){
   return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-/* ══════════════════════════════
-   프로필 로드
-══════════════════════════════ */
 fetchCSV(PROFILE_CSV).then(text => {
   const cells = [];
   let cur = '', inQ = false;
@@ -629,7 +672,6 @@ fetchCSV(PROFILE_CSV).then(text => {
     img.onload = () => { if(placeholder) placeholder.remove(); wrap.appendChild(img); };
     img.src = imgUrl;
   }
-  // 스켈레톤 → 실제 콘텐츠 전환
   const skelName = document.getElementById('skel-name');
   const skelTag  = document.getElementById('skel-tag');
   const skelDesc = document.getElementById('skel-desc');
@@ -662,9 +704,6 @@ fetchCSV(PROFILE_CSV).then(text => {
   if(statPeriod && data['작업 기간']) statPeriod.innerHTML = data['작업 기간'] + '<span style="font-size:13px;">일</span>';
 }).catch(() => {});
 
-/* ══════════════════════════════
-   픽셀스타일 & 애니메이션 이미지 로드
-══════════════════════════════ */
 fetchCSV(IMAGES_CSV).then(text => {
   const rows = parseCSV(text);
   const hasDiv = rows.some(r => r['구분'] || r['분류'] || r['type']);
@@ -740,11 +779,6 @@ fetchCSV(IMAGES_CSV).then(text => {
   }
 }).catch(() => {});
 
-/* ══════════════════════════════
-   안내사항 로드 (구글시트 연동)
-   - 셀 내 \n 줄바꿈 → <br> 처리
-   - [작업범위] 태그 행은 scope-content에 렌더, notice-list에서 제외
-══════════════════════════════ */
 fetchCSV(NOTICE_CSV).then(text => {
   const rows = parseCSV(text);
   const noticeList  = document.getElementById('notice-list');
@@ -770,11 +804,6 @@ fetchCSV(NOTICE_CSV).then(text => {
   });
 }).catch(() => {});
 
-/* ══════════════════════════════
-   포트폴리오 로드 + 카테고리 필터 + 슬라이더
-   - 2열 그리드 기준 7줄(=아이템 14개) 이하 → 단순 그리드
-   - 초과 시 → 페이지 슬라이더 (페이지당 7줄)
-══════════════════════════════ */
 let pfAllData    = [];
 let pfCurrentCat = '전체';
 
@@ -790,8 +819,6 @@ fetchCSV(PORTFOLIO_CSV).then(text => {
   if(container) container.innerHTML = '<div class="pf-placeholder"><span>포트폴리오를 불러오지 못했습니다.</span></div>';
 });
 
-/* 아이템 배열로 DOM .pf-item 만들기 (공통)
-   wide 클래스는 호출하는 쪽(wideSet)에서 부여 — 여기서는 붙이지 않음 */
 function makePfItem(r, i){
   const imgUrl   = (r['이미지 링크'] || r['이미지링크'] || r['url'] || r['URL'] || '').trim();
   const category = (r['카테고리'] || r['category'] || '').trim();
@@ -808,10 +835,8 @@ function makePfItem(r, i){
   return item;
 }
 
-const ROWS_PER_PAGE = 3; // 페이지당 최대 줄 수
+const ROWS_PER_PAGE = 3;
 
-/* wide 여부를 반영해 줄 수 기준으로 페이지 분할
-   splitByRows는 { r, origIdx }[] 배열의 배열을 반환 */
 function splitByRows(items, wideSet, rowsPerPage){
   const pages = [];
   let page = [], rowCount = 0, col = 0;
@@ -846,7 +871,6 @@ function renderPortfolio(cat){
     return;
   }
 
-  /* 이미지를 미리 로드해 wide 여부 파악 후 렌더 */
   container.innerHTML = '<div class="pf-placeholder" style="min-height:80px;"><span>불러오는 중…</span></div>';
   const wideSet = new Set();
   let loaded = 0;
@@ -862,7 +886,6 @@ function renderPortfolio(cat){
   });
 
   function onAllLoaded(){
-    /* 실제 줄 수 계산 */
     let rows = 0, col = 0;
     filtered.forEach((_, i) => {
       if(wideSet.has(i)){ if(col > 0){ rows++; col = 0; } rows++; }
@@ -873,7 +896,6 @@ function renderPortfolio(cat){
     container.innerHTML = '';
 
     if(rows <= ROWS_PER_PAGE){
-      /* 5줄 이하 → 단순 그리드 */
       const list = document.createElement('div');
       list.className = 'pf-list'; list.id = 'pf-list';
       filtered.forEach((r, i) => {
@@ -885,7 +907,6 @@ function renderPortfolio(cat){
       return;
     }
 
-    /* 5줄 초과 → 슬라이더 */
     const pages = splitByRows(filtered, wideSet, ROWS_PER_PAGE);
     const totalPages = pages.length;
     let curPage = 0;
@@ -895,7 +916,6 @@ function renderPortfolio(cat){
     const wrap = document.createElement('div');
     wrap.className = 'pf-slider-wrap';
 
-    // 페이지 div 생성 (show/hide 방식 — flex 트랙 없음)
     const pageDivs = pages.map((pageItems, pi) => {
       const pg = document.createElement('div');
       pg.className = 'pf-page' + (pi === 0 ? '' : ' hidden');
@@ -940,14 +960,12 @@ function renderPortfolio(cat){
     container.appendChild(outer);
     if(totalPages <= 1) nav.style.display = 'none';
 
-    // wrap에 초기 높이 설정 (transition 전 기준점)
     wrap.style.height = pageDivs[0].offsetHeight + 'px';
 
     function goTo(idx){
       pageDivs[curPage].classList.add('hidden');
       curPage = idx;
       pageDivs[curPage].classList.remove('hidden');
-      // 새 페이지 높이로 wrap 업데이트 → CSS transition으로 부드럽게
       wrap.style.height = pageDivs[curPage].offsetHeight + 'px';
       dots.forEach((d, i) => d.classList.toggle('active', i === curPage));
       pageInfo.textContent = `${curPage + 1} / ${totalPages}`;
@@ -959,7 +977,6 @@ function renderPortfolio(cat){
   }
 }
 
-/* 탭 클릭 */
 document.getElementById('pf-tabs').addEventListener('click', e => {
   const btn = e.target.closest('.pf-tab');
   if(!btn) return;
@@ -969,9 +986,6 @@ document.getElementById('pf-tabs').addEventListener('click', e => {
   renderPortfolio(pfCurrentCat);
 });
 
-/* ══════════════════════════════
-   픽셀 그리드 생성
-══════════════════════════════ */
 const palettes = [
   ['#EDE8F9','#C4AEED','#9B7DD4','#7C5CBF','#F4F2F8','#B49EDE'],
   ['#F0EDF8','#D4C5EC','#A889D0','#6B4AAA','#EDE8F9','#C2AEDE'],
@@ -996,7 +1010,6 @@ function initPxGrid(el){
 }
 document.querySelectorAll('.px-grid').forEach(initPxGrid);
 
-/* 포트폴리오 이미지 저장 방지 — 우클릭·길게누르기 차단 */
 document.addEventListener('contextmenu', e => {
   if(e.target.closest('#pf-container')) e.preventDefault();
 });
@@ -1004,12 +1017,6 @@ document.addEventListener('touchstart', e => {
   if(e.target.closest('#pf-container img')) e.preventDefault();
 }, { passive:false });
 
-/* ══════════════════════════════
-   임베드 높이 자동조절
-   - ResizeObserver로 실제 콘텐츠 높이 실시간 감시
-   - 늘어남/줄어듦 모두 감지해서 부모 페이지에 postMessage 전달
-   - 부모 iframe에서: window.addEventListener('message', e => { if(e.data.type==='resize') iframe.style.height = e.data.height+'px'; })
-══════════════════════════════ */
 (function(){
   const wrap = document.querySelector('.wrap');
   if(!wrap) return;
@@ -1017,26 +1024,20 @@ document.addEventListener('touchstart', e => {
   let lastH = 0;
 
   function sendHeight(){
-    // scrollHeight 대신 getBoundingClientRect으로 실제 렌더 높이 측정
-    // body padding/margin 포함한 전체 문서 높이
     const h = Math.ceil(document.documentElement.getBoundingClientRect().height);
     if(h !== lastH){
       lastH = h;
-      // 같은 도메인 / cross-origin 모두 대응
       try { window.parent.postMessage({ type:'resize', height:h }, '*'); } catch(e){}
     }
   }
 
-  // ResizeObserver: wrap 크기 변화 감지 (콘텐츠 추가/제거 모두)
   if(window.ResizeObserver){
     new ResizeObserver(sendHeight).observe(wrap);
   }
 
-  // 추가 보험: 이미지 로드·폰트 로드 완료 후 재측정
   window.addEventListener('load', sendHeight);
   document.fonts && document.fonts.ready.then(sendHeight);
 
-  // 초기값 전송
   sendHeight();
 })();
 </script>
