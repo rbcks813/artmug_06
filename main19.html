@@ -15,27 +15,22 @@
 @font-face { font-family:'Paperozi'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2'); font-weight:900; font-display:swap; }
 
 :root {
-  /* 메인 블루 팔레트 */
   --b100: #EFF6FF;
   --b200: #DBEDFF;
-  --b300: #BAD7F8;        /* 연한 하늘색 테두리/구분선 */
-  --b400: #90C4F4;        /* 하늘색 — 버튼 hover, 탭 등 */
-  --b500: #6AAEE8;        /* 메인 포인트 — 이전 #3B82F6 대체 */
-  --b600: #4D91D4;        /* 약간 진한 포인트 — 이전 #2563EB 대체 */
-  /* 시나모롤/토끼 포인트 — 아주 은은하게 */
+  --b300: #BAD7F8;
+  --b400: #90C4F4;
+  --b500: #6AAEE8;
+  --b600: #4D91D4;
   --cream: #FFF8F0;
   --cream-border: rgba(255,220,190,0.4);
   --paw: #f5e6e0;
   --ear: rgba(220,180,200,0.18);
-  /* 텍스트 */
   --text:      #1e3a5f;
   --text-mid:  #4a6e95;
   --text-soft: #94adc8;
-  /* 유리 카드 */
   --glass:   rgba(255,255,255,0.68);
   --glass-s: rgba(255,255,255,0.94);
   --border:  rgba(147,197,253,0.32);
-  /* 그림자 */
   --sh-sm: 0 4px 14px rgba(106,174,232,0.08);
   --sh-md: 0 10px 30px rgba(106,174,232,0.12);
   --sh-lg: 0 20px 50px rgba(106,174,232,0.16);
@@ -56,7 +51,6 @@ body {
   min-height: 0;
 }
 
-/* ── 배경 장식 (시나모롤 느낌 — 아주 은은한 원형 그라디언트) ── */
 body::before {
   content: '';
   position: fixed;
@@ -76,9 +70,6 @@ body::after {
 
 .page-wrap { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   공통 섹션 카드
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .section {
   background: var(--glass);
   backdrop-filter: blur(16px);
@@ -101,14 +92,10 @@ body::after {
 }
 .sec-title { font-size: 1.15rem; font-weight: 700; color: var(--text); }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   HERO (작가 프로필) — 구글 시트 연동
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .hero-section {
   background: var(--glass);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  /* 시나모롤: 귀 느낌의 은은한 이중 테두리 */
   border: 1.5px solid var(--border);
   outline: 4px solid var(--ear);
   outline-offset: 3px;
@@ -121,7 +108,6 @@ body::after {
   overflow: visible;
 }
 
-
 .profile-wrap {
   position: relative;
   width: 110px; height: 110px;
@@ -129,8 +115,8 @@ body::after {
 }
 .profile-img {
   width: 110px; height: 110px;
-  border-radius: 28px;            /* 둥근 사각형 */
-  background: #ffffff;            /* 기본 배경 흰색 */
+  border-radius: 28px;
+  background: #ffffff;
   border: 3px solid white;
   box-shadow: 0 6px 20px rgba(106,174,232,0.16);
   overflow: hidden;
@@ -138,7 +124,6 @@ body::after {
   font-size: 2.8rem;
 }
 .profile-img img { width:100%; height:100%; object-fit:cover; display:block; }
-/* 프로필 스켈레톤 */
 .profile-skel {
   position: absolute; inset: 0; border-radius: 28px;
   background: linear-gradient(90deg,#dde8f8 25%,#c8d8f0 50%,#dde8f8 75%);
@@ -162,7 +147,7 @@ body::after {
   font-size: 0.92rem; font-weight: 300;
   color: var(--text-mid); line-height: 1.8;
   margin-bottom: 20px; min-height: 1.2rem;
-  white-space: pre-line;          /* ← 줄바꿈 반영 */
+  white-space: pre-line;
 }
 .badge-row {
   display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
@@ -175,9 +160,6 @@ body::after {
   box-shadow: var(--sh-sm);
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   개인작 안내 — 가로 스크롤 + 아코디언 안내
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .h-scroll {
   display: flex; gap: 12px;
   overflow-x: auto; padding-bottom: 8px;
@@ -216,9 +198,6 @@ body::after {
   padding: 1px 8px; border-radius: 99px; margin-left: 5px; vertical-align: middle;
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   아코디언 (필독 / NOTICE 하위항목 공용)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .na-list { display: flex; flex-direction: column; gap: 8px; }
 .na-item {
   border-radius: 16px;
@@ -258,7 +237,6 @@ body::after {
 }
 .na-item.open .na-body { max-height: 600px; padding: 0 18px 14px 62px; opacity: 1; }
 
-/* NOTICE 상단 안내 문구 */
 .notice-top {
   background: rgba(219,237,255,0.35);
   border: 1px dashed rgba(147,197,253,0.5);
@@ -270,9 +248,6 @@ body::after {
 }
 .notice-top strong { color: var(--text); font-weight: 700; }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   작업 과정 Pill Flow
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .pill-flow {
   display: flex; flex-direction: column;
   align-items: center;
@@ -301,9 +276,6 @@ body::after {
 .pill-note-row { font-size: 0.8rem; color: var(--text-soft); text-align: center; }
 .pill-note-row.warn { color: var(--b500); font-weight: 700; }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   포트폴리오 탭
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .tab-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
 .tab-btn {
   background: var(--glass-s); border: 1.5px solid var(--border);
@@ -331,7 +303,6 @@ body::after {
 .img-scroll::-webkit-scrollbar { height: 5px; }
 .img-scroll::-webkit-scrollbar-thumb { background: var(--b300); border-radius: 10px; }
 
-/* ━━━ 슬라이더 (포트폴리오용) ━━━ */
 .slider-wrap {
   position: relative;
   overflow: hidden;
@@ -349,13 +320,12 @@ body::after {
 .slide-item {
   flex-shrink: 0;
   width: 100%;
-  aspect-ratio: 16 / 9;   /* 16:9 고정 비율 */
+  aspect-ratio: 16 / 9;
   position: relative;
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
   background: var(--b100);
 }
-/* 블러 배경 — 빈 공간 채우기 */
 .slide-item::before {
   content: '';
   position: absolute; inset: 0;
@@ -377,7 +347,6 @@ body::after {
   transition: opacity .3s;
   position: relative; z-index: 1;
 }
-/* 유튜브 iframe — 슬라이드 전체 채우기 */
 .slide-item iframe {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
@@ -394,7 +363,6 @@ body::after {
 }
 .slide-skel.hide { opacity: 0; pointer-events: none; }
 
-/* 슬라이더 화살표 버튼 */
 .sl-prev, .sl-next {
   position: absolute; top: 50%; transform: translateY(-50%);
   width: 34px; height: 34px; border-radius: 50%;
@@ -414,7 +382,6 @@ body::after {
 .sl-prev { left: 10px; }
 .sl-next { right: 10px; }
 
-/* 슬라이더 도트 */
 .sl-dots {
   display: flex; justify-content: center; gap: 6px;
   padding: 10px 0 2px;
@@ -458,7 +425,6 @@ body::after {
   backdrop-filter: blur(4px);
 }
 
-/* ━━━ 포트폴리오 스켈레톤 ━━━ */
 .port-skel {
   flex-shrink: 0; width: 240px; height: 300px;
   border-radius: 18px;
@@ -467,7 +433,6 @@ body::after {
   animation: shimmer 1.3s infinite linear;
 }
 
-/* 1:1 비율 이미지 카드 (보유 아바타용) */
 .img-card-sq {
   flex-shrink: 0;
   width: 200px; height: 200px;
@@ -479,9 +444,6 @@ body::after {
 }
 .img-card-sq img { width:100%; height:100%; object-fit:cover; display:block; }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   데뷔 패키지 안내
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .pkg-highlight {
   background: linear-gradient(135deg, rgba(219,237,255,0.5), rgba(239,246,255,0.7));
   border: 1.5px solid var(--b300);
@@ -514,9 +476,6 @@ body::after {
 }
 .pkg-note::before { content: '·'; color: var(--b400); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   보유 아바타
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .ow-card {
   flex-shrink: 0; min-width: 88px; max-width: 100px;
   border-radius: 12px; border: 1.5px solid var(--border);
@@ -537,9 +496,6 @@ body::after {
 .ow-sub  { font-size: 0.68rem; font-weight: 300; color: var(--text-soft); }
 .ow-note { font-size: 0.8rem; font-weight: 600; color: var(--text-soft); text-align: center; margin-top: 12px; }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   신청양식 & 견적 계산기
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .order-card {
   border: 1.5px solid var(--border);
   border-radius: 22px; overflow: hidden;
@@ -557,7 +513,6 @@ body::after {
 .osh-sub  { font-size:0.74rem; color:var(--text-soft); margin-left:2px; }
 .order-body { padding: 20px 22px; }
 
-/* 견적 계산 테이블 */
 .est-table { width:100%; border-collapse:separate; border-spacing:0 4px; }
 .est-table .est-sec-row td { padding:14px 4px 4px; font-size:0.78rem; font-weight:700; color:var(--text); cursor:default; }
 .est-table .est-sec-row:first-child td { padding-top:0; }
@@ -592,7 +547,6 @@ body::after {
 .er-label { font-size:0.8rem; color:var(--text-soft); font-weight:700; }
 .er-total  { font-size:1.2rem; font-weight:700; color:var(--b500); }
 
-/* 신청 폼 */
 .form-grid { display:flex; flex-direction:column; gap:16px; }
 .input-group label { display:flex; align-items:baseline; gap:4px; font-size:0.84rem; font-weight:700; color:var(--text); margin-bottom:7px; }
 .input-group label .req { color:var(--b500); font-size:0.72rem; }
@@ -612,7 +566,6 @@ body::after {
 .agree-check.checked { background:var(--b500); border-color:var(--b500); color:white; }
 .agree-check.checked::after { content:'✓'; }
 
-/* 버블 & 제출 */
 .btn-wrap { position:relative; }
 .bubble-tip { position:absolute; bottom:calc(100% + 10px); left:50%; transform:translateX(-50%) translateY(6px); background:#2d2d2d; color:white; padding:9px 16px; border-radius:10px; font-size:0.82rem; font-weight:700; white-space:nowrap; pointer-events:none; opacity:0; transition:opacity .25s,transform .25s; z-index:100; font-family:'Paperozi',sans-serif; }
 .bubble-tip::after { content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:6px solid transparent; border-top-color:#2d2d2d; }
@@ -624,7 +577,6 @@ body::after {
 .submit-btn.disabled { background:linear-gradient(120deg,#ddd,#ccc); cursor:not-allowed; box-shadow:none; }
 .submit-btn.disabled:hover { filter:none; }
 
-/* ━━━ FAQ ━━━ */
 .faq-list { display:flex; flex-direction:column; gap:10px; }
 .faq-item { background:var(--glass-s); border:1.5px solid var(--border); border-radius:18px; overflow:hidden; }
 .faq-q { padding:15px 20px; cursor:pointer; display:flex; align-items:flex-start; gap:10px; font-size:0.91rem; font-weight:700; color:var(--text); user-select:none; }
@@ -635,7 +587,6 @@ body::after {
 .faq-a { max-height:0; overflow:hidden; transition:max-height .38s cubic-bezier(.4,0,.2,1),padding .32s,opacity .28s; padding:0 20px 0 54px; font-size:0.86rem; line-height:1.8; color:var(--text-mid); opacity:0; }
 .faq-item.open .faq-a { max-height:400px; padding:0 20px 16px 54px; opacity:1; }
 
-/* ━━━ 위자드 스텝 인디케이터 ━━━ */
 .step-indicator {
   display: flex;
   align-items: center;
@@ -669,7 +620,6 @@ body::after {
 }
 .step-ind-line.done { background: var(--b300); }
 
-/* ━━━ 위자드 패널 공통 ━━━ */
 .wiz-panel { display: none; }
 .wiz-panel.active { display: block; animation: fadeInUp .22s ease; }
 @keyframes fadeInUp {
@@ -686,13 +636,11 @@ body::after {
 .wiz-title { font-size: 0.9rem; font-weight: 700; color: var(--text); }
 .wiz-sub   { font-size: 0.74rem; color: var(--text-soft); margin-left: 4px; }
 
-/* 신청폼 내부 */
 .wiz-form-grid { display: flex; flex-direction: column; gap: 14px; }
 .wiz-label { display: block; font-size: 0.83rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
 .wiz-label .req { color: var(--b500); margin-left: 2px; font-size: 0.72rem; }
 .wiz-label .hint { font-size: 0.73rem; color: var(--text-soft); font-weight: 400; margin-left: 4px; }
 
-/* 견적 카테고리 옵션 리스트 */
 .est-opt-list { display: flex; flex-direction: column; gap: 6px; }
 .est-opt-item {
   display: flex; align-items: center; gap: 12px;
@@ -717,7 +665,6 @@ body::after {
 .est-opt-price { font-size: 0.86rem; font-weight: 700; color: var(--b500); white-space: nowrap; flex-shrink: 0; }
 .est-opt-price.na { color: var(--text-soft); }
 
-/* 개당 수량 행 */
 .est-qty-inline {
   display: none;
   align-items: center; gap: 8px;
@@ -732,7 +679,6 @@ body::after {
   display: flex; align-items: center; justify-content: center; line-height: 1;
 }
 
-/* 최종 요약 */
 .summary-table {
   width: 100%; border-collapse: collapse;
   font-size: 0.84rem; margin-bottom: 14px;
@@ -749,7 +695,6 @@ body::after {
 .summary-total-row .er-label { font-size: 0.8rem; color: var(--text-soft); font-weight: 700; }
 .summary-total-row .er-total { font-size: 1.2rem; font-weight: 700; color: var(--b500); }
 
-/* 네비 버튼 행 */
 .wiz-nav {
   display: flex; gap: 10px;
   padding: 14px 22px 18px;
@@ -774,19 +719,6 @@ body::after {
 }
 .wiz-btn-primary:hover { filter: brightness(1.07); }
 
-/* 버블 */
-.btn-wrap { position: relative; }
-.bubble-tip { position:absolute; bottom:calc(100% + 10px); left:50%; transform:translateX(-50%) translateY(6px); background:#2d2d2d; color:white; padding:9px 16px; border-radius:10px; font-size:0.82rem; font-weight:700; white-space:nowrap; pointer-events:none; opacity:0; transition:opacity .25s,transform .25s; z-index:100; font-family:'Paperozi',sans-serif; }
-.bubble-tip::after { content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:6px solid transparent; border-top-color:#2d2d2d; }
-.bubble-tip.show { opacity:1; transform:translateX(-50%) translateY(0); }
-.bubble-tip.warn { background:var(--b500); }
-.bubble-tip.warn::after { border-top-color:var(--b500); }
-.submit-btn { width:100%; padding:17px; background:linear-gradient(120deg,var(--b400),var(--b500)); color:white; border:none; font-family:'Paperozi',sans-serif; font-size:0.95rem; font-weight:700; cursor:pointer; transition:filter .2s,transform .15s; letter-spacing:.02em; }
-.submit-btn:hover { filter:brightness(1.07); }
-.submit-btn.disabled { background:linear-gradient(120deg,#ddd,#ccc); cursor:not-allowed; box-shadow:none; }
-.submit-btn.disabled:hover { filter:none; }
-
-/* ━━━ 반응형 ━━━ */
 @media (max-width:640px) {
   body { padding:20px 10px 60px; }
   .section { padding:24px 16px; border-radius:26px; }
@@ -848,6 +780,7 @@ body::after {
         · 개인작 구매 시, 사용된 파츠의 <strong>구매 인증</strong>을 받고 있습니다.<br>
         · 의상 추가, 헤어 추가 가능합니다.<br>
         · 메인색 변경, 텍스쳐 변경 가능합니다.<br>
+        · <strong>개인작은 페이셜 수정이 불가능하며 수정을 원하시는 경우 추가금이 있습니다.</strong><br>
         · <strong>결제하시기 전에 문의 먼저 주셔야합니다!</strong>
       </div>
     </div>
@@ -986,8 +919,7 @@ body::after {
 
 <div class="section" id="sec-portfolio">
   <div class="sec-header"><div class="sec-bar"></div><div class="sec-title">포트폴리오</div></div>
-  <div class="tab-bar" id="portTabs">
-    </div>
+  <div class="tab-bar" id="portTabs"></div>
   <div id="portPanels">
     <div class="img-scroll"><div class="port-skel"></div><div class="port-skel"></div><div class="port-skel"></div></div>
   </div>
@@ -999,8 +931,7 @@ body::after {
     조합한 파츠는 <strong style="color:var(--text-mid);font-weight:700;">재판매를 절대 하지 않으며</strong> 뚜따 작업으로 들어갑니다.<br>
     조합된 파츠 모두 <strong style="color:var(--text-mid);font-weight:700;">구매인증</strong>합니다.
   </div>
-  <div class="tab-bar" id="etcTabs">
-    </div>
+  <div class="tab-bar" id="etcTabs"></div>
   <div id="etcPanels">
     <div class="img-scroll"><div class="port-skel"></div><div class="port-skel"></div><div class="port-skel"></div></div>
   </div>
@@ -1037,18 +968,12 @@ body::after {
   <div class="sec-header"><div class="sec-bar"></div><div class="sec-title">신청양식 & 견적 계산기</div></div>
 
   <div class="order-card">
-
     <div class="step-indicator" id="stepIndicator"></div>
-
     <div id="wizardPanels"></div>
-
   </div>
 </div>
 
 </div><script>
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   CSV URLs
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const INTRO_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTM-EVGlzDUOaTqbWup73uU6cOk6y5acm14bzbmFHSFs0RJPZtpZEYRjh5fFCSWivQJgSBxglulnRgS/pub?gid=0&single=true&output=csv';
 const SALE_CSV  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTM-EVGlzDUOaTqbWup73uU6cOk6y5acm14bzbmFHSFs0RJPZtpZEYRjh5fFCSWivQJgSBxglulnRgS/pub?gid=1155222942&single=true&output=csv';
 const PORT_CSV  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTM-EVGlzDUOaTqbWup73uU6cOk6y5acm14bzbmFHSFs0RJPZtpZEYRjh5fFCSWivQJgSBxglulnRgS/pub?gid=310192317&single=true&output=csv';
@@ -1057,9 +982,6 @@ const PRICE_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTM-EVGlzDUOa
 const OWNED_CSV   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTM-EVGlzDUOaTqbWup73uU6cOk6y5acm14bzbmFHSFs0RJPZtpZEYRjh5fFCSWivQJgSBxglulnRgS/pub?gid=834022671&single=true&output=csv';
 const PACKAGE_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTM-EVGlzDUOaTqbWup73uU6cOk6y5acm14bzbmFHSFs0RJPZtpZEYRjh5fFCSWivQJgSBxglulnRgS/pub?gid=547268845&single=true&output=csv';
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   유틸
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function parseCSV(text) {
   const rows=[]; let row=[],cell='',inQ=false;
   for(let i=0;i<text.length;i++){
@@ -1085,7 +1007,6 @@ function normalizeImgUrl(url){
   const m2=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);if(m2)return`https://lh3.googleusercontent.com/d/${m2[1]}=w800`;
   return url;
 }
-/* 유튜브 URL 판별 & ID 추출 */
 function getYoutubeId(url){
   if(!url)return null;
   const m=url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
@@ -1093,22 +1014,17 @@ function getYoutubeId(url){
 }
 function isYoutube(url){ return !!getYoutubeId(url); }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   이미지 카드 생성
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function makeSlideItem(url){
   const item=document.createElement('div'); item.className='slide-item';
   const ytId=getYoutubeId(url);
   if(ytId){
-    /* 유튜브: iframe 삽입, 스켈레톤 불필요 */
     const iframe=document.createElement('iframe');
     iframe.src=`https://www.youtube.com/embed/${ytId}`;
     iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
     iframe.allowFullscreen=true;
-    iframe.loading = 'lazy';
+    iframe.loading='lazy';
     item.appendChild(iframe);
   } else {
-    /* 일반 이미지 */
     const skel=document.createElement('div'); skel.className='slide-skel'; item.appendChild(skel);
     const img=document.createElement('img'); img.alt='';
     const normalized=normalizeImgUrl(url);
@@ -1154,7 +1070,7 @@ function makeImgCard(url){
     iframe.src=`https://www.youtube.com/embed/${ytId}`;
     iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
     iframe.allowFullscreen=true;
-    iframe.loading = 'lazy';
+    iframe.loading='lazy';
     iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:none;';
     card.appendChild(iframe);
   } else {
@@ -1175,7 +1091,7 @@ function makeImgCardSq(url){
     iframe.src=`https://www.youtube.com/embed/${ytId}`;
     iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
     iframe.allowFullscreen=true;
-    iframe.loading = 'lazy';
+    iframe.loading='lazy';
     iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:none;';
     card.appendChild(iframe);
   } else {
@@ -1188,9 +1104,6 @@ function makeImgCardSq(url){
   return card;
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   소개 로드
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 async function loadIntro(){
   try{
     const rows=parseCSV(await fetchCSV(INTRO_CSV)); let label='';
@@ -1219,30 +1132,21 @@ async function loadIntro(){
   }
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   개인작 로드 — 슬라이더 방식
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 async function loadSale(){
   const wrap=document.getElementById('saleSliderWrap');
   try{
     const rows=parseCSV(await fetchCSV(SALE_CSV));
     const start=rows[0]?.[0]?.trim()==='이미지'?1:0;
     const urls=rows.slice(start).map(r=>(r[0]||'').trim()).filter(u=>u.startsWith('http'));
-
     if(!urls.length){
       wrap.innerHTML='<div style="padding:20px;color:var(--text-soft);font-size:.85rem;">등록된 개인작이 없습니다.</div>';
       return;
     }
-
-    // makeSlider로 슬라이더 생성 후 wrap에 교체
     const slider=makeSlider(urls);
     if(slider){ wrap.innerHTML=''; wrap.appendChild(slider); }
   }catch(e){console.error('개인작 로드 실패:',e);}
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   탭+슬라이더 렌더러
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function renderTabScroll(tabBarId,panelsId,idPrefix,data){
   const tabBar=document.getElementById(tabBarId),panels=document.getElementById(panelsId);
   tabBar.innerHTML='';panels.innerHTML='';
@@ -1268,7 +1172,6 @@ async function loadOwned(){
   const cont=document.getElementById('ownerScroll');
   try{
     const rows=parseCSV(await fetchCSV(OWNED_CSV)); cont.innerHTML='';
-    /* 첫 행이 헤더("이미지")면 스킵 */
     const start=rows[0]?.[0]?.trim()==='이미지'?1:0;
     rows.slice(start).forEach(row=>{
       const url=(row[0]||'').trim();
@@ -1280,16 +1183,10 @@ async function loadOwned(){
   }catch(e){console.error('보유 아바타 로드 실패:',e);}
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   데뷔 패키지 로드
-   CSV 구조: 제목, 가격, 포함된 상품 (헤더 1행)
-   포함된 상품 셀은 개행 포함 가능 → white-space:pre-line 으로 표시
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 async function loadPackage(){
   const cont=document.getElementById('pkgContainer');
   try{
     const rows=parseCSV(await fetchCSV(PACKAGE_CSV));
-    // 헤더 행 스킵 (제목,가격,포함된 상품)
     const data=rows.slice(1).filter(r=>r[0]?.trim());
     if(!data.length){ cont.innerHTML=''; return; }
     cont.innerHTML='';
@@ -1297,13 +1194,9 @@ async function loadPackage(){
       const title   =(r[0]||'').trim();
       const priceRaw=(r[1]||'').trim();
       const items   =(r[2]||'').trim();
-
-      // 가격 + 괄호 안 할인문구 분리 — "370,000원 (오픈이벤트 할인가)" 형태
       const priceMatch=priceRaw.match(/^([^(]+?)(?:\s*\(([^)]+)\))?$/);
       const priceMain =priceMatch?priceMatch[1].trim():priceRaw;
       const priceSub  =priceMatch&&priceMatch[2]?priceMatch[2].trim():'';
-
-      // 포함된 상품 줄바꿈: \n(실제 개행) 그대로 white-space:pre-line 으로 표시
       const card=document.createElement('div');
       card.className='pkg-highlight';
       card.innerHTML=`
@@ -1326,9 +1219,6 @@ function initDrag(el){
 }
 document.querySelectorAll('.h-scroll,.img-scroll').forEach(initDrag);
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   아코디언
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function toggleNa(prefix,i){
   const id=prefix+i,el=document.getElementById(id);if(!el)return;
   const isOpen=el.classList.contains('open');
@@ -1336,21 +1226,14 @@ function toggleNa(prefix,i){
   if(!isOpen)el.classList.add('open');
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   위자드 (신청양식 + 견적계산기)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-let wizSteps = [];      // [{label, panelEl}]
+let wizSteps = [];
 let wizCur   = 0;
-let priceData= {};      // { 카테고리: [{name, price, isPer, priceStr}] }
-let priceOrder = [];    // 카테고리 순서
+let priceData= {};
+let priceOrder = [];
 
-/* 선택 상태 저장 */
-// formState: {name, vibe, link, task}
 const formState = {};
-// selections: { 카테고리: { optIdx: qty } }
 const selections = {};
 
-/* ── 가격 CSV 로드 ── */
 async function loadPrice(){
   try{
     const rows=parseCSV(await fetchCSV(PRICE_CSV));
@@ -1360,7 +1243,7 @@ async function loadPrice(){
       if(!cat||!name)return;
       const isPer=raw.includes('/개당');
       const numStr=raw.replace(/[^0-9]/g,'');
-      const price=numStr?parseInt(numStr):null; // null = 미정/준비중
+      const price=numStr?parseInt(numStr):null;
       const priceStr=raw==='미정'||raw==='준비중'?raw:(isPer?(price?`+₩${price.toLocaleString()}/개당`:'미정'):(price?`+₩${price.toLocaleString()}`:'미정'));
       if(!priceData[cat]){priceData[cat]=[];priceOrder.push(cat);}
       priceData[cat].push({name,price,isPer,priceStr,raw});
@@ -1369,7 +1252,6 @@ async function loadPrice(){
   }catch(e){console.error('가격 로드 실패:',e);buildWizard();}
 }
 
-/* ── 위자드 빌드 ── 고정 5스텝: 신청양식 → 패키지 선택 → 뚜따 선택 → 기타 옵션 → 총 예상합계 ── */
 function buildWizard(){
   const indicator=document.getElementById('stepIndicator');
   const container=document.getElementById('wizardPanels');
@@ -1382,19 +1264,10 @@ function buildWizard(){
 
   priceOrder.forEach(cat=>{ selections[cat]=selections[cat]||{}; });
 
-  /* 스텝 0: 신청양식 */
   wizSteps.push({label:'신청양식',    el: buildFormPanel()});
-
-  /* 스텝 1: 패키지 선택 */
   wizSteps.push({label:'패키지 선택', el: buildMultiCatPanel('패키지 선택', PKG_CATS.length?PKG_CATS:priceOrder.slice(0,2), 1)});
-
-  /* 스텝 2: 뚜따 선택 */
   wizSteps.push({label:'뚜따 선택',   el: buildMultiCatPanel('뚜따 선택',   DDUTA_CATS.length?DDUTA_CATS:[], 2)});
-
-  /* 스텝 3: 기타 옵션 */
   wizSteps.push({label:'기타 옵션',   el: buildMultiCatPanel('기타 옵션',   OTHER_CATS.length?OTHER_CATS:[], 3)});
-
-  /* 스텝 4: 총 예상합계 */
   wizSteps.push({label:'총 예상합계', el: buildFinalPanel()});
 
   const LABELS=['신청양식','패키지 선택','뚜따 선택','기타 옵션','예상합계'];
@@ -1413,7 +1286,6 @@ function buildWizard(){
   });
 }
 
-/* ─ 여러 카테고리를 하나의 패널에 묶어서 표시 ─ */
 function buildMultiCatPanel(title, cats, stepIdx){
   const panel=document.createElement('div');
   const subLabel=stepIdx===0?'원하시는 패키지를 선택해주세요':'추가 옵션을 선택해주세요 (해당 없으면 건너뛰기)';
@@ -1422,7 +1294,6 @@ function buildMultiCatPanel(title, cats, stepIdx){
 
   cats.forEach(cat=>{
     if(!priceData[cat]||!priceData[cat].length)return;
-    // 카테고리 소제목
     const catTitle=document.createElement('div');
     catTitle.style.cssText='font-size:0.8rem;font-weight:700;color:var(--b600);margin:14px 0 8px 2px;';
     catTitle.textContent=cat;
@@ -1435,7 +1306,6 @@ function buildMultiCatPanel(title, cats, stepIdx){
       const item=document.createElement('div'); item.className='est-opt-item'; item.dataset.oi=oi;
       const isNA=!opt.price&&opt.raw!=='0'&&opt.raw!=='';
       item.innerHTML=`<div class="est-opt-cb"></div><div class="est-opt-name">${opt.name}</div><div class="est-opt-price${isNA?' na':''}">${opt.priceStr}</div>`;
-      // 현재 선택 상태 복원
       if(selections[cat]&&selections[cat][oi]!==undefined) item.classList.add('selected');
 
       if(!isNA){
@@ -1464,7 +1334,6 @@ function buildMultiCatPanel(title, cats, stepIdx){
     body.appendChild(listEl);
   });
 
-  const isFirst=stepIdx===1;  // 패키지가 첫 번째 선택 스텝
   const nav=makeNav(true, true, '다음 →',
     ()=>goStep(stepIdx+1),
     ()=>goStep(stepIdx-1)
@@ -1473,7 +1342,6 @@ function buildMultiCatPanel(title, cats, stepIdx){
   return panel;
 }
 
-/* ─ 신청 폼 패널 (스텝 0 — 첫 화면) ─ */
 function buildFormPanel(){
   const panel=document.createElement('div');
   panel.innerHTML=`
@@ -1517,14 +1385,13 @@ function buildFormPanel(){
       formState.vibe=document.getElementById('f_vibe').value;
       formState.link=document.getElementById('f_link').value;
       formState.task=document.getElementById('f_task').value;
-      goStep(1);   // 패키지 선택(스텝 1)으로
+      goStep(1);
     },
     null
   );
   panel.appendChild(nav); return panel;
 }
 
-/* ─ 최종 확인 패널 (스텝 3) ─ */
 function buildFinalPanel(){
   const panel=document.createElement('div');
   panel.innerHTML=`
@@ -1542,12 +1409,11 @@ function buildFinalPanel(){
         <button class="submit-btn disabled" id="submitBtn" onclick="copyForm()">📋 신청 내용 복사하기</button>
       </div>
     </div>`;
-  const nav=makeNav(true, false, '', null, ()=>goStep(3));  // 이전 → 기타 옵션(스텝 3)
+  const nav=makeNav(true, false, '', null, ()=>goStep(3));
   panel.insertBefore(nav, panel.firstChild);
   return panel;
 }
 
-/* ─ 네비 버튼 생성 ─ */
 function makeNav(showPrev,showNext,nextLabel,nextCb,prevCb){
   const nav=document.createElement('div'); nav.className='wiz-nav';
   if(showPrev){
@@ -1561,29 +1427,23 @@ function makeNav(showPrev,showNext,nextLabel,nextCb,prevCb){
   return nav;
 }
 
-/* ─ 스텝 이동 ─ */
 function goStep(n){
   const total=wizSteps.length;
   n=Math.max(0,Math.min(total-1,n));
   wizSteps[wizCur].el.classList.remove('active');
   document.getElementById('wizItem'+wizCur)?.classList.remove('active');
   if(wizCur<n)document.getElementById('wizItem'+wizCur)?.classList.add('done');
-  // 라인 업데이트
   for(let i=1;i<total;i++){const l=document.getElementById('wizLine'+i);if(l)l.classList.toggle('done',i<=n);}
   wizCur=n;
   wizSteps[wizCur].el.classList.add('active');
   const item=document.getElementById('wizItem'+wizCur);
   if(item){item.classList.remove('done');item.classList.add('active');}
-  // 최종 패널이면 요약 업데이트
   if(wizCur===wizSteps.length-1)renderSummary();
-  // 스크롤
   document.querySelector('.order-card')?.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
-/* ─ 실시간 합계 (하단 표시용 — 현재 패널에서는 미사용, 최종에서만) ─ */
-function updateRunningTotal(){ /* 필요시 확장 */ }
+function updateRunningTotal(){ }
 
-/* ─ 요약 테이블 렌더 ─ */
 function renderSummary(){
   const tbody=document.querySelector('#summaryTable tbody');
   tbody.innerHTML=''; let total=0; let hasMijeong=false;
@@ -1608,7 +1468,6 @@ function renderSummary(){
   res.textContent=total>0?'₩'+total.toLocaleString()+(hasMijeong?' + 미정':''):(hasMijeong?'미정':'—');
 }
 
-/* ─ 필독 동의 ─ */
 function toggleAgree(){
   const check=document.getElementById('agreeCheck'),btn=document.getElementById('submitBtn');
   check.classList.toggle('checked');
@@ -1617,7 +1476,6 @@ function toggleAgree(){
   btn.classList.toggle('disabled',!on);
 }
 
-/* ─ 버블 ─ */
 function showBubble(msg,isWarn){
   const el=document.getElementById('submitBubble');
   if(!el)return;
@@ -1631,7 +1489,6 @@ function showBubbleAt(inputId,msg,isWarn){
   showBubble(msg,isWarn);
 }
 
-/* ─ 복사 ─ */
 function copyForm(){
   const agreed=document.getElementById('agreeCheck')?.classList.contains('checked');
   if(!agreed){showBubble('필독사항 동의 후 복사할 수 있습니다',true);return;}
@@ -1678,83 +1535,45 @@ ${sel.length?sel.join('\n'):'  (선택 없음)'}
     .catch(()=>showBubble('복사에 실패했습니다. 다시 시도해주세요',true));
 }
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   초기화
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 loadIntro();
 loadSale();
 loadPortfolio();
 loadCombo();
 loadOwned();
 loadPackage();
-loadPrice();   // 위자드 빌드 포함
+loadPrice();
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   임베드 높이 자동조절
-   부모 페이지에 postMessage로 높이 전달
-   부모가 처리 못할 경우 iframe 직접 접근도 시도
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function sendHeight() {
-  // iframe 자체 height를 auto로 리셋한 뒤 콘텐츠 실제 높이 측정
-  // (scrollHeight는 한번 커지면 안 줄어드는 문제 방지)
   const wrap = document.querySelector('.page-wrap');
   const h = wrap ? Math.ceil(wrap.getBoundingClientRect().height) + 80 : document.documentElement.scrollHeight;
-  // postMessage 방식
   try { window.parent.postMessage({ type: 'iframeHeight', height: h }, '*'); } catch(e) {}
-  // 직접 접근 방식 (동일 origin일 때)
   try {
     const frames = window.parent.document.querySelectorAll('iframe');
     frames.forEach(f => { if (f.contentWindow === window) f.style.height = h + 'px'; });
   } catch(e) {}
 }
 
-// 초기 로드 후
 window.addEventListener('load', () => { setTimeout(sendHeight, 300); });
 
-// DOM 변화 감지 (아코디언 열기/닫기, 이미지 로드, 위자드 스텝 전환 등)
 const _ro = new ResizeObserver(() => sendHeight());
 _ro.observe(document.body);
 
 const _mo = new MutationObserver(() => sendHeight());
 _mo.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style','class'] });
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   네비게이션 postMessage 수신
-   부모(커스텀 메뉴)에서 아래 형식으로 호출:
-   iframe.contentWindow.postMessage({ type: 'scrollTo', id: 'sec-intro' }, '*')
-
-   섹션 id 목록:
-     sec-intro    작가 소개
-     sec-sale     개인작
-     sec-notice   NOTICE
-     sec-process  작업 과정 안내
-     sec-portfolio 포트폴리오
-     sec-combo    조합 시리즈 포트폴리오
-     sec-package  데뷔 패키지
-     sec-avatar   보유 아바타
-     sec-form     신청양식
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 window.addEventListener('message', (e) => {
   if (!e.data) return;
-
-  // 높이 요청
   if (e.data.type === 'getHeight') { sendHeight(); return; }
-
-  // 섹션으로 스크롤 요청
   if (e.data.type === 'scrollTo' && e.data.id) {
     const el = document.getElementById(e.data.id);
     if (!el) return;
-    // 요소의 문서 내 절대 위치 계산
     let offsetTop = 0;
     let node = el;
     while (node) { offsetTop += node.offsetTop || 0; node = node.offsetParent; }
-    // 부모에게 오프셋 전달 → 부모가 (iframe.offsetTop + offsetTop) 위치로 스크롤
     try {
       window.parent.postMessage({ type: 'scrollToOffset', id: e.data.id, offsetTop }, '*');
     } catch(e) {}
   }
-
-  // 섹션 목록 요청 (커스텀 메뉴 자동 구성용)
   if (e.data.type === 'getSections') {
     try {
       window.parent.postMessage({
@@ -1775,7 +1594,6 @@ window.addEventListener('message', (e) => {
   }
 });
 
-// 로드 완료 후 섹션 목록 자동 전송
 window.addEventListener('load', () => {
   setTimeout(() => {
     try {
