@@ -386,11 +386,11 @@ fetchCSV(PORTFOLIO_CSV).then(text=>{
     return url&&url.startsWith('http');
   }).reverse();
 
-  // CSV에서 카테고리 목록 추출 (순서 유지, 중복 제거)
+  // CSV에서 카테고리 목록 추출 (시트 위쪽 기준 순서 유지, 중복 제거)
   const catKey=Object.keys(pfAllData[0]||{}).find(k=>['카테고리','category','분류'].includes(k))||'카테고리';
   const seen=new Set();
   const categories=['전체'];
-  pfAllData.forEach(r=>{
+  [...pfAllData].reverse().forEach(r=>{
     const cats=(r[catKey]||'').split(',').map(s=>s.trim()).filter(Boolean);
     cats.forEach(c=>{if(!seen.has(c)){seen.add(c);categories.push(c);}});
   });
