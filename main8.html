@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goyu Live2D 상세페이지</title>
     <style>
         @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2'); font-weight: 100; font-display: swap; }
         @font-face { font-family: 'Paperozi'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2'); font-weight: 200; font-display: swap; }
@@ -65,21 +64,6 @@
             position: relative;
             overflow: hidden;
         }
-        .hero-card::after {
-            content: '';
-            position: absolute;
-            bottom: -85%;
-            right: -18%;
-            width: 62%;
-            aspect-ratio: 1 / 1;
-            background-image: url('https://www.dropbox.com/scl/fi/hx1nrfhslz65fixwua2w9/.png?rlkey=wv1v6i1y4wwksti1trq6i5m7x&st=6i7ygvrm&dl=1');
-            background-size: cover;
-            background-position: center center;
-            opacity: 0.2;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .hero-card > * { position: relative; z-index: 1; }
 
         .badge {
             display: inline-block;
@@ -623,7 +607,6 @@
             .title-main { font-size: 24px; letter-spacing: -1px; }
             .hero-desc { font-size: 14px; }
 
-            /* 가격표 헤더 */
             .price-hero {
                 flex-direction: column;
                 align-items: flex-start;
@@ -632,22 +615,17 @@
             }
             .price-hero-amount { font-size: 20px; }
 
-            /* 기본 포함 항목: 모바일 1열 */
             .include-grid { grid-template-columns: 1fr; }
 
-            /* 옵션 체크박스: 모바일 1열 */
             .options-grid { grid-template-columns: 1fr; }
             .opt-item.full { grid-column: span 1; }
 
-            /* 결과 금액 */
             .result-price { font-size: 28px; }
 
-            /* 버튼 그룹: 작은 화면에서 텍스트 줄임 방지 */
             .btn-reset { font-size: 13px; }
             .btn-inquiry { font-size: 13px; }
             .btn-copy { font-size: 13px; }
 
-            /* 협업 작가 배너: 모바일에서 겹침 간격 축소 */
             .collab-container { margin-top: -30px; }
             .collab-link {
                 width: 94%;
@@ -656,15 +634,12 @@
             }
             .collab-link:first-child { margin-top: 0; }
 
-            /* 포트폴리오 그리드: 모바일 1열 */
             .pf-grid { grid-template-columns: 1fr; }
 
-            /* summary 탭 힌트 숨김 (공간 절약) */
             .summary-tap-hint { display: none; }
             .summary-inner { padding: 14px 16px; }
             .summary-text { font-size: 14px; }
 
-            /* 공지 글씨 */
             .notice-list li { font-size: 13px; }
             .notice-header { font-size: 16px; }
         }
@@ -1128,7 +1103,6 @@
         updatePrice();
     }
 
-    /* ── 말풍선 토스트 표시 ── */
     let toastTimer = null;
     function showCopyToast() {
         const toast = document.getElementById('copy-toast');
@@ -1139,7 +1113,6 @@
         }, 2200);
     }
 
-    /* ── 복사 (모바일 포함 안정적 클립보드) ── */
     function copyForm() {
         if (!document.getElementById('agree-check').checked) return;
         const total = document.getElementById('total-price').innerText;
@@ -1155,7 +1128,6 @@
         const optText = opts.length ? opts.join(', ') : '없음';
         const text = `[Goyu Live2D 상담 신청]\n- 추가 표정: ${exp}개\n- 추가 옵션: ${optText}\n- 예상 견적: ${total}원\n\n견적 확인 후 상담 요청드립니다!`;
 
-        /* 모바일 포함 범용 복사 */
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text)
                 .then(() => showCopyToast())
@@ -1172,7 +1144,6 @@
         document.body.appendChild(ta);
         ta.focus();
         ta.select();
-        /* iOS: setSelectionRange */
         ta.setSelectionRange(0, 99999);
         try {
             document.execCommand('copy');
@@ -1188,15 +1159,9 @@
         return false;
     }
 
-    /* ══════════════════════════════════════════════
-       네비게이션 지원: 부모(외부 사이트)에서 오는
-       scrollTo 메시지를 수신하여 해당 섹션으로 스크롤
-       커스텀 메뉴에서 postMessage({ type:'scrollTo', id:'section-notice' }) 형태로 호출
-    ══════════════════════════════════════════════ */
     window.addEventListener('message', function(e) {
         if (!e.data || typeof e.data !== 'object') return;
 
-        /* 1) 부모가 특정 섹션 id로 스크롤 요청 */
         if (e.data.type === 'scrollTo' && e.data.id) {
             const target = document.getElementById(e.data.id);
             if (target) {
@@ -1204,7 +1169,6 @@
             }
         }
 
-        /* 2) 부모가 섹션 목록을 요청 → 섹션 id 배열을 반환 */
         if (e.data.type === 'getSections') {
             const sections = [
                 { id: 'section-notice',    label: '안내사항' },
@@ -1217,8 +1181,6 @@
         }
     });
 
-    /* 섹션 id → 부모 뷰포트 내 절대 Y 오프셋 계산 후 전달
-       (iframe 방식일 때 부모가 직접 스크롤하려면 이 값이 필요)  */
     function notifySectionOffsets() {
         const ids = ['section-notice','section-price','section-collab','section-estimate','section-portfolio'];
         const offsets = {};
@@ -1229,7 +1191,6 @@
         window.parent.postMessage({ type: 'sectionOffsets', offsets: offsets }, '*');
     }
 
-    /* ── 자동 높이 조절 ── */
     function sendHeight() {
         document.body.style.height = 'auto';
         document.documentElement.style.height = 'auto';
