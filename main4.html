@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* ==========================================
-           공통 및 통합 폰트/변수 설정
-        ========================================== */
         @font-face {
             font-family: 'DnfBitbeatV2';
             src: url('//cdn.df.nexon.com/img/common/font/DNFBitBitv2.otf') format('opentype');
@@ -37,11 +34,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 50px; 
+            gap: 30px; 
             min-height: auto;
             overflow-x: hidden;
             width: 100%;
-            padding: 50px 0;
+            padding: 30px 0;
         }
 
         /* ==========================================
@@ -57,14 +54,17 @@
             margin: 0 auto;
         }
 
+        /* [수정 1] 타이틀 */
         .container .header {
             color: var(--white);
-            font-size: 50px; 
+            font-size: 30px; 
             margin-bottom: 15px;
-            margin-left: 75px; 
+            margin-left: 0;
+            padding-left: 75px;
             letter-spacing: 1px;
             user-select: none;
             line-height: 1.2;
+            
         }
 
         .main-wrapper {
@@ -153,7 +153,7 @@
 
         .image-desc {
             margin-top: 12px;
-            color: var(--desc-color);
+            color: #9B7F87;
             font-size: 18px;
             text-align: left;
             min-height: 1.2em;
@@ -189,7 +189,6 @@
             padding: 30px 60px 60px 60px; 
             box-sizing: border-box;
             overflow: hidden; 
-            /* Firefox border-radius clipping fix */
             transform: translateZ(0);
         }
 
@@ -199,15 +198,17 @@
             padding-left: 10px;
         }
 
+        /* [수정 1] 콜라보 타이틀 크기 통일: 34px */
         .collab-wrapper .header h1 {
-            font-size: 50px; 
+            font-size: 30px; 
             color: var(--title-white);
             margin: 0;
             letter-spacing: 2px;
+            
         }
 
         .collab-wrapper .header h1 .heart-icon {
-            font-size: 0.7em; 
+            font-size: 0.85em; 
             display: inline-block; 
             transform: scaleY(0.85); 
             vertical-align: middle; 
@@ -215,9 +216,9 @@
         }
 
         .collab-wrapper .header p {
-            font-size: 26px;
+            font-size: 20px;
             color: var(--title-white);
-            margin-top: 10px;
+            margin-top: 8px;
             opacity: 0.9;
         }
 
@@ -234,7 +235,6 @@
             display: flex;
             flex-direction: column;
             box-shadow: 0 10px 20px rgba(0,0,0,0.03);
-            /* Firefox border-radius clipping fix */
             transform: translateZ(0);
         }
 
@@ -255,34 +255,35 @@
             object-fit: cover;
         }
 
+        /* [수정 4] 카드 info-area 패딩 및 gap 줄이기 */
         .info-area {
-            padding: 25px;
+            padding: 15px 20px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
         }
 
         .author-name {
             margin: 0;
-            font-size: 28px; 
-            color: #756271;
+            font-size: 22px; 
+            color: #9B7F87;
         }
 
         .description {
-            font-size: 15px;
-            color: var(--text-dark);
-            line-height: 1.6;
+            font-size: 14px;
+            color: #BDA2AA;
+            line-height: 1.5;
             word-break: keep-all;
-            min-height: 48px;
+            min-height: auto;
         }
 
         .link-btn {
             background-color: #FEEEEE;
-            color: #756271;
+            color: #9B7F87;
             text-decoration: none;
-            font-size: 14px;
-            padding: 12px;
-            border-radius: 12px;
+            font-size: 13px;
+            padding: 9px 12px;
+            border-radius: 10px;
             text-align: center;
             transition: all 0.2s;
             border: none; 
@@ -298,30 +299,34 @@
             align-items: flex-start;
             justify-content: center;
             font-size: 14px; 
-            color: #756271;
+            color: #AC9199;
             line-height: 1.8;
             text-align: left;
             padding: 30px 20px 20px 20px; 
             white-space: nowrap; 
         }
 
-        /* 기타 협업용 추가 스타일 */
-        .section-divider {
-            border: none;
-            border-top: 5px dashed var(--white);
-            margin: 50px 0 40px 0;
-            width: 100%;
+        /* 기타 콜라보 별도 박스 스타일 */
+        .other-collab-wrapper {
+            background-color: var(--main-pink);
+            width: 1180px;
+            max-width: 95%;
+            margin: 0 auto;
+            border-radius: 50px;
+            padding: 30px 60px 60px 60px;
+            box-sizing: border-box;
+            overflow: hidden;
+            transform: translateZ(0);
         }
 
-        .other-header {
-            margin-bottom: 25px;
-            padding-left: 10px;
-        }
-
-        .other-header p {
-            font-size: 26px;
+        .other-benefit-title {
+            font-size: 30px;
             color: var(--title-white);
-            opacity: 0.9;
+            letter-spacing: 2px;
+            padding-left: 10px;
+            margin-bottom: 20px;
+            min-height: 1em;
+            
         }
 
         /* ==========================================
@@ -329,12 +334,13 @@
         ========================================== */
         @media (max-width: 1200px) {
             .collab-wrapper { width: 95%; padding: 30px 40px 40px 40px; }
+            .other-collab-wrapper { width: 95%; padding: 30px 40px 40px 40px; }
         }
 
         @media (max-width: 768px) {
             body { padding: 20px 0; gap: 30px; }
             .container { width: 100%; padding: 20px 10px 30px 10px; border-radius: 30px; margin: 0 auto; }
-            .container .header { font-size: 34px; margin-left: 0; margin-bottom: 10px; text-align: center; }
+            .container .header { font-size: 24px; margin-left: 0; padding-left: 0; margin-bottom: 10px; text-align: center; }
             .main-wrapper { margin: 0 0 20px 0; }
             .thumb-section { margin: 0 10px; } 
             .nav-btn { width: 32px; height: 32px; font-size: 14px; }
@@ -354,15 +360,15 @@
 
             .collab-wrapper { width: 100%; max-width: 100%; padding: 15px 10px 30px 10px; border-radius: 30px; }
             .collab-wrapper .header { margin-bottom: 15px; padding-left: 0; text-align: center; } 
-            .collab-wrapper .header h1 { font-size: 32px; } 
+            .collab-wrapper .header h1 { font-size: 24px; } 
             .collab-wrapper .header h1 .heart-icon { font-size: 0.7em; } 
-            .collab-wrapper .header p { font-size: 16px; } 
+            .collab-wrapper .header p { font-size: 14px; } 
             .collab-grid { grid-template-columns: 1fr; gap: 20px; }
-            .info-area { padding: 20px; }
-            .footer-text { padding: 15px 0 0 0; font-size: 11px; letter-spacing: -0.5px; } 
+            .info-area { padding: 12px 15px; gap: 6px; }
+            .footer-text { padding: 15px 0 0 0; font-size: 11px; letter-spacing: -0.5px; }
 
-            .section-divider { margin: 40px 0 30px 0; border-top-width: 3px; }
-            .other-header p { font-size: 16px; text-align: center; }
+            .other-collab-wrapper { width: 100%; max-width: 100%; padding: 15px 10px 30px 10px; border-radius: 30px; }
+            .other-benefit-title { font-size: 24px; padding-left: 0; text-align: center; }
         }
     </style>
 </head>
@@ -370,7 +376,7 @@
 
 <div class="container" id="galleryContainer">
     <div class="header">
-        <span style="font-size: 0.7em; display: inline-block; transform: scaleY(0.85); vertical-align: middle; margin-right: 2px;">♥</span> ILLUST
+        <span style="font-size: 0.85em; display: inline-block; transform: scaleY(0.85); vertical-align: middle; margin-right: 2px;">♥</span> ILLUST
     </div>
 
     <div class="main-wrapper">
@@ -392,7 +398,7 @@
 
 <div class="container" id="extraGalleryContainer">
     <div class="header">
-        <span style="font-size: 0.7em; display: inline-block; transform: scaleY(0.85); vertical-align: middle; margin-right: 2px;">♥</span> EXTRA
+        <span style="font-size: 0.85em; display: inline-block; transform: scaleY(0.85); vertical-align: middle; margin-right: 2px;">♥</span> EXTRA
     </div>
 
     <div class="main-wrapper">
@@ -413,28 +419,26 @@
     </div>
 </div>
 
+<!-- [수정 2] 콜라보 메인 박스 -->
 <div class="collab-wrapper">
     <div class="header">
-        <h1><span class="heart-icon">♥</span> COLLAB</h1>
-        <p>일러스트 5만원 할인 + 표정 3종</p>
+        <h1><span class="heart-icon">♥</span> 리깅 협업 혜택 : 일러스트 5만원 할인 + 표정 3종</h1>
     </div>
 
     <div class="collab-grid" id="collab-grid">
+        <!-- [수정 3] 컨펌 → 피드백 -->
         <div class="footer-text" id="static-footer">
             리깅 작가님과 협력하여,<br>
             캐릭터의 매력이 돋보이는 모델이 나올 수 있도록<br>
-            컨펌에 함께 참여하고 있습니다 ♥
+            피드백에 함께 참여하고 있습니다 ♥
         </div>
     </div>
+</div>
 
-    <hr class="section-divider">
-
-    <div class="other-header">
-        <p id="other-benefit-title">기타 콜라보 혜택 : 로딩 중...</p>
-    </div>
-
-    <div class="collab-grid" id="other-collab-grid">
-        </div>
+<!-- 기타 콜라보 별도 박스 -->
+<div class="other-collab-wrapper">
+    <div class="other-benefit-title" id="other-benefit-title"></div>
+    <div class="collab-grid" id="other-collab-grid"></div>
 </div>
 
 <script>
@@ -593,7 +597,6 @@
     // 3번 영역 (COLLAB)
     const sheetUrl3 = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBQtd81Ch1XD9iTV6me_YRFPxEBOJpHnG27HYi5aS0OTCFYJ9NRTUWs_gtpwyq79svXPc_x4GITWlH/pub?gid=866561416&single=true&output=csv';
     const sheetUrlOtherCollab = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBQtd81Ch1XD9iTV6me_YRFPxEBOJpHnG27HYi5aS0OTCFYJ9NRTUWs_gtpwyq79svXPc_x4GITWlH/pub?gid=2089154413&single=true&output=csv';
-    const sheetUrlOtherBenefits = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBQtd81Ch1XD9iTV6me_YRFPxEBOJpHnG27HYi5aS0OTCFYJ9NRTUWs_gtpwyq79svXPc_x4GITWlH/pub?gid=1196586077&single=true&output=csv';
 
     function getYoutubeId(url) {
         if (!url) return null;
@@ -648,7 +651,7 @@
         } catch (error) { console.error('Collab Error:', error); }
     }
 
-    // 기타 협업 데이터 불러오기
+    // 기타 협업 데이터 불러오기 (별도 박스)
     async function fetchOtherCollabData() {
         const grid = document.getElementById('other-collab-grid');
         try {
@@ -689,6 +692,8 @@
         } catch (error) { console.error('Other Collab Error:', error); }
     }
 
+    const sheetUrlOtherBenefits = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBQtd81Ch1XD9iTV6me_YRFPxEBOJpHnG27HYi5aS0OTCFYJ9NRTUWs_gtpwyq79svXPc_x4GITWlH/pub?gid=1196586077&single=true&output=csv';
+
     // 기타 콜라보 혜택 텍스트 불러오기
     async function fetchOtherBenefits() {
         try {
@@ -696,7 +701,7 @@
             const rawData = await response.text();
             const rows = parseCSV(rawData);
             if (rows.length > 1 && rows[1][0]) {
-                document.getElementById('other-benefit-title').innerText = `기타 콜라보 혜택 : ${rows[1][0].trim()}`;
+                document.getElementById('other-benefit-title').innerHTML = `<span style="font-size:0.85em; display:inline-block; transform:scaleY(0.85); vertical-align:middle; margin-right:2px;">♥</span> 기타 협업 혜택 : ${rows[1][0].trim()}`;
             }
         } catch (error) { console.error('Benefits Error:', error); }
     }
