@@ -73,6 +73,7 @@
             transition: transform 0.25s, box-shadow 0.25s;
         }
         .port-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(155,111,217,0.22); }
+        .port-card.wide { grid-column: span 2; }
         .portfolio-item {
             width: 100%;
             aspect-ratio: 1/1;
@@ -80,6 +81,9 @@
             object-fit: cover;
             background: var(--bg);
             display: block;
+        }
+        .portfolio-item.wide {
+            aspect-ratio: 2/1;
         }
         .port-item-desc {
             font-size: 0.82em;
@@ -528,9 +532,10 @@ function renderPortfolioGallery() {
 
     pageItems.forEach(({img,desc})=>{
         const card=document.createElement('div');
-        card.className='port-card';
+        const isWide=currentPortCat==='뽀잉눈 샘플';
+        card.className='port-card'+(isWide?' wide':'');
         const el=document.createElement('img');
-        el.src=img; el.className='portfolio-item'; el.loading='lazy';
+        el.src=img; el.className='portfolio-item'+(isWide?' wide':''); el.loading='lazy';
         card.appendChild(el);
         if(desc){
             const d=document.createElement('div');
