@@ -535,7 +535,7 @@ function renderPortfolioGallery() {
 
     pageItems.forEach(({img,desc})=>{
         const card=document.createElement('div');
-        const isWide=currentPortCat==='뽀잉눈 샘플';
+        const isWide = currentPortCat === '뽀잉눈 샘플' || currentPortCat === '성형 샘플';
         card.className='port-card'+(isWide?' wide':'');
         const el=document.createElement('img');
         el.src=img; el.className='portfolio-item'+(isWide?' wide':''); el.loading='lazy';
