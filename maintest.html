@@ -278,30 +278,24 @@ html,body{height:auto!important;min-height:0!important}body{font-family:'Paperoz
    JS로 현재 스크롤 오프셋을 계산해서 top 동적 설정
 ════════════════════════════════════════ */
 .orig-modal-overlay{
-  /* fixed → absolute: iframe 자체 문서 좌표 기준 */
+  display:none;
   position:absolute;
+  z-index:999990;
   left:0;
   top:0;
   width:100%;
   height:100%;
-  min-height:100vh;
   background:rgba(0,0,0,.82);
-  display:flex;
-  align-items:flex-start; /* JS로 top 설정하므로 flex 정렬은 start */
   justify-content:center;
-  z-index:999990;
-  padding:20px;
-  opacity:0;
+  align-items:flex-start;
+  padding:0 20px;
   pointer-events:none;
-  transition:opacity .25s;
-  /* 클릭 이벤트용 */
   box-sizing:border-box;
 }
 .orig-modal-overlay.open{
-  opacity:1;
+  display:flex;
   pointer-events:all;
 }
-/* 모달 박스: 오버레이 안에서 세로 중앙 정렬은 JS padding-top으로 처리 */
 .orig-modal-box{
   background:#fff;
   border-radius:24px;
@@ -311,15 +305,10 @@ html,body{height:auto!important;min-height:0!important}body{font-family:'Paperoz
   overflow-y:auto;
   cursor:default;
   box-shadow:0 24px 60px rgba(0,0,0,.45);
-  transform:translateY(16px) scale(.97);
-  transition:transform .28s cubic-bezier(.34,1.3,.64,1);
-  /* 자기 자신 기준 margin auto로 가로 중앙 */
-  margin:0 auto;
   position:relative;
-  flex-shrink:0;
-}
-.orig-modal-overlay.open .orig-modal-box{
-  transform:translateY(0) scale(1);
+  pointer-events:auto;
+  transition:margin-top 0.1s ease-out;
+  margin-bottom:40px;
 }
 .orig-modal-box::-webkit-scrollbar{width:4px}
 .orig-modal-box::-webkit-scrollbar-thumb{background:var(--c3);border-radius:10px}
@@ -784,7 +773,7 @@ html,body{height:auto!important;min-height:0!important}body{font-family:'Paperoz
      개인작 모달: body 직접 자식으로 배치
      position:absolute + JS 스크롤 오프셋 계산
 ════════════════════════════════════════ -->
-<div class="orig-modal-overlay" id="orig-modal-overlay">
+<div class="orig-modal-overlay" id="orig-modal-overlay" style="display:none;">
   <div class="orig-modal-box" id="orig-modal-box">
     <button class="orig-modal-close" onclick="closeOrigModal()">✕</button>
     <div class="orig-modal-char" id="orig-modal-char"></div>
@@ -861,30 +850,32 @@ function maskNickname(text) {
 }
 
 /* ══════════════════════════════════════
-   개인작 모달 — 임베드 스크롤 오프셋 처리
-   부모 페이지에서 스크롤 위치를 받아
-   모달 오버레이의 top과 height를 동적으로 세팅
+   개인작 모달 — 참고 코드(parentScroll) 방식
+   부모가 parentScroll 메시지로 rectTop·viewHeight를 보내주면
+   iframeCenterY를 계산해서 marginTop으로 모달을 중앙 배치
 ══════════════════════════════════════ */
-let _parentScrollY = 0;   // 부모로부터 받은 최신 scrollY
-let _iframeOffsetTop = 0; // 부모 내 iframe의 offsetTop
-let _pendingModalOpen = false;
+let _parentViewHeight = window.innerHeight;
+let _iframeCenterY    = window.innerHeight / 2;
 
-/* 부모에게 현재 스크롤 정보 요청 */
-function requestParentScroll() {
-  window.parent.postMessage({ type: 'requestScrollInfo' }, '*');
-}
-
-/* postMessage로 부모 스크롤 정보 수신 */
+/* postMessage 수신: parentScroll & 기타 */
 window.addEventListener('message', function(e) {
   if (!e.data || typeof e.data !== 'object') return;
 
-  /* 부모가 scrollInfo를 응답한 경우 */
-  if (e.data.type === 'scrollInfo') {
-    _parentScrollY    = e.data.scrollY    || 0;
-    _iframeOffsetTop  = e.data.iframeTop  || 0;
-    if (_pendingModalOpen) {
-      _pendingModalOpen = false;
-      _doOpenModal();
+  /* 부모가 parentScroll을 보낸 경우 — 모달 위치 재계산 */
+  if (e.data.type === 'parentScroll') {
+    const rectTop = e.data.rectTop;
+    _parentViewHeight = e.data.viewHeight;
+    _iframeCenterY = (_parentViewHeight / 2) - rectTop;
+    if (_iframeCenterY < 0) _iframeCenterY = 0;
+
+    const modal = document.getElementById('orig-modal-overlay');
+    if (modal && modal.style.display === 'flex') {
+      const box = modal.querySelector('.orig-modal-box');
+      if (box) {
+        box.style.marginTop = Math.max(20, _iframeCenterY - (box.offsetHeight / 2)) + 'px';
+        box.style.maxHeight = (_parentViewHeight * 0.85) + 'px';
+        setTimeout(sendHeightOrig, 150);
+      }
     }
   }
 
@@ -915,54 +906,28 @@ function getSections() {
   ];
 }
 
-/* 모달 위치 계산 및 적용 */
-function _positionModal() {
-  const overlay = document.getElementById('orig-modal-overlay');
-  if (!overlay) return;
-
-  /* 부모 뷰포트 기준으로 iframe 내에서의 스크롤 오프셋 계산 */
-  /* iframeOffsetTop: 부모 내 iframe의 절대 위치
-     parentScrollY:  부모의 현재 스크롤
-     → 부모 뷰포트 내 iframe 상단 = iframeOffsetTop - parentScrollY
-     → 모달을 부모 뷰포트 중앙에 놓으려면:
-        iframe문서 기준 top = parentScrollY - iframeOffsetTop + (부모 뷰포트 높이/2) - (모달높이/2)
-        하지만 모달 높이는 가변이므로, 오버레이 전체를 뷰포트 크기로 고정하고
-        패딩으로 세로 중앙 정렬하는 방식이 가장 안정적 */
-
-  const vpH    = window.innerHeight;  /* iframe 자체 뷰포트 높이 */
-  const docH   = document.documentElement.scrollHeight;
-
-  /* iframe이 부모에 임베드되어 스크롤이 부모에 있는 경우:
-     iframe 내 scrollY는 항상 0이다.
-     부모 scrollY와 iframeOffsetTop을 받아서
-     현재 부모 뷰포트에서 보이는 iframe 내 좌표 범위를 계산 */
-
-  /* iframe 내 좌표로 변환: 부모 뷰포트 상단 = parentScrollY - iframeOffsetTop */
-  const visibleTop = Math.max(0, _parentScrollY - _iframeOffsetTop);
-  /* iframe 내 좌표로 변환: 부모 뷰포트 하단 */
-  const parentVpH  = e && e.data && e.data.viewportHeight ? e.data.viewportHeight : vpH;
-
-  /* 오버레이: 문서 전체를 덮도록 */
-  overlay.style.top    = '0';
-  overlay.style.height = docH + 'px';
-
-  /* 모달 박스: 현재 보이는 영역 중앙에 위치 */
-  const box = document.getElementById('orig-modal-box');
-  const boxH = Math.min(box.scrollHeight || 600, vpH * 0.85);
-  /* 오버레이 내부 padding-top으로 박스를 뷰포트 중앙으로 이동 */
-  const centerOffset = visibleTop + (vpH - boxH) / 2;
-  overlay.style.paddingTop = Math.max(20, centerOffset - 20) + 'px';
-  overlay.style.paddingBottom = '20px';
-  overlay.style.alignItems = 'flex-start';
+/* 모달 오픈 시 높이 알림 */
+function sendHeightOrig() {
+  const container = document.querySelector('.wrap');
+  let h = container ? (container.offsetHeight + 36 + 24) : document.documentElement.scrollHeight;
+  const modal = document.getElementById('orig-modal-overlay');
+  if (modal && modal.style.display === 'flex') {
+    const box = modal.querySelector('.orig-modal-box');
+    if (box) {
+      const mt = parseFloat(box.style.marginTop) || 0;
+      const bottom = mt + box.offsetHeight + 40;
+      if (bottom > h) h = bottom;
+    }
+  }
+  window.parent.postMessage({ height: h }, '*');
 }
 
-/* 실제 모달 오픈 (스크롤 정보 수신 후 호출) */
-let _pendingModalIdx = -1;
-function _doOpenModal() {
-  const item = origItems[_pendingModalIdx];
+function openOrigModal(idx) {
+  const item = origItems[idx];
   if (!item) return;
   const isSold = item.isSold;
 
+  /* 캐릭터 이미지 */
   const charEl = document.getElementById('orig-modal-char');
   if (item.charImg) {
     charEl.innerHTML = '<img src="' + item.charImg + '" alt="캐릭터">';
@@ -972,6 +937,7 @@ function _doOpenModal() {
     charEl.style.background = '';
   }
 
+  /* 페이셜 / 영상 */
   const facialEl = document.getElementById('orig-modal-facial');
   if (item.facialUrl) {
     const ytMatch = item.facialUrl.match(/(?:youtube\.com\/(?:.*[?&]v=|.*\/embed\/|.*\/v\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
@@ -990,50 +956,30 @@ function _doOpenModal() {
     facialEl.style.display = 'none';
   }
 
+  /* 상태 배지 & 설명 */
   const statusEl = document.getElementById('orig-modal-status');
   statusEl.textContent = isSold ? '판매완료' : '판매중';
   statusEl.className = 'orig-modal-status ' + (isSold ? 'sold-badge' : 'sale');
-
   document.getElementById('orig-modal-detail').innerHTML = nl2br(item.detail);
 
-  /* 모달 오버레이 표시 */
-  const overlay = document.getElementById('orig-modal-overlay');
-  overlay.classList.add('open');
-
-  /* 위치 계산 */
-  _positionModal();
-
-  /* 부모에게 스크롤 잠금 요청 */
-  window.parent.postMessage({ type: 'modalOpen' }, '*');
-}
-
-function openOrigModal(idx) {
-  _pendingModalIdx = idx;
-  _pendingModalOpen = true;
-  /* 부모에게 스크롤 정보 요청 → 응답 오면 _doOpenModal 호출 */
-  requestParentScroll();
-  /* 부모가 응답 못 하는 경우(동일 origin이 아닌 경우 등) 200ms 후 폴백 */
-  setTimeout(function() {
-    if (_pendingModalOpen) {
-      _pendingModalOpen = false;
-      /* 폴백: iframe 자체 스크롤 기준으로 처리 */
-      _parentScrollY   = window.scrollY || 0;
-      _iframeOffsetTop = 0;
-      _doOpenModal();
-    }
-  }, 200);
+  /* 모달 표시 & 위치 설정 */
+  const modal   = document.getElementById('orig-modal-overlay');
+  const box     = document.getElementById('orig-modal-box');
+  modal.style.display = 'flex';
+  box.style.maxHeight = (_parentViewHeight * 0.85) + 'px';
+  box.style.marginTop = Math.max(20, _iframeCenterY - (box.offsetHeight / 2)) + 'px';
+  setTimeout(sendHeightOrig, 150);
 }
 
 function closeOrigModal() {
-  const overlay = document.getElementById('orig-modal-overlay');
-  overlay.classList.remove('open');
-  /* iframe 내 video/iframe 정지 */
+  const modal = document.getElementById('orig-modal-overlay');
+  modal.style.display = 'none';
+  /* video / iframe 정지 */
   const iframe = document.querySelector('#orig-modal-facial iframe');
   if (iframe) { const s = iframe.src; iframe.src = ''; iframe.src = s; }
   const video = document.querySelector('#orig-modal-facial video');
   if (video) { video.pause(); }
-  /* 부모에게 스크롤 해제 요청 */
-  window.parent.postMessage({ type: 'modalClose' }, '*');
+  setTimeout(sendHeightOrig, 150);
 }
 
 /* 오버레이 배경 클릭 시 닫기 */
@@ -1633,6 +1579,8 @@ window.addEventListener('resize',()=>{clearTimeout(_calResizeTimer);_calResizeTi
   function sendHeight(){
     var wrap=document.querySelector('.wrap');
     var h=wrap?(wrap.offsetHeight+36+24):document.documentElement.scrollHeight;
+    /* 참고 코드와 동일한 포맷 { height } 및 기존 { type, height } 모두 전송 */
+    window.parent.postMessage({height:h},'*');
     window.parent.postMessage({type:'iframeResize',height:h},'*');
     try{
       var frames=window.parent.document.querySelectorAll('iframe');
