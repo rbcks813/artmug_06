@@ -475,6 +475,11 @@ html,body{height:auto!important;min-height:0!important}body{font-family:'Paperoz
   .orig-modal-detail{font-size:.82rem}
 }
 
+/* ── 개인작 모달 상태 배지 ── */
+.orig-modal-status{display:inline-block;padding:4px 13px;border-radius:999px;font-size:.75rem;font-weight:800;}
+.orig-modal-status.sale{background:linear-gradient(120deg,var(--c3),var(--c4));color:#fff;}
+.orig-modal-status.sold-badge{background:#999;color:#fff;}
+
 /* ── FAQ ── */
 .faq-list{display:flex;flex-direction:column;gap:9px}
 .faq-item{background:var(--solid);border-radius:14px;border:1.5px solid var(--bdr);overflow:hidden;transition:.25s}
@@ -999,8 +1004,20 @@ html,body{height:auto!important;min-height:0!important}body{font-family:'Paperoz
   </div>
 </div>
 
-
 </div><!-- /wrap -->
+
+<!-- 개인작 상세 (position:absolute, 스크롤 따라옴) -->
+<div id="orig-modal-box" style="display:none;position:absolute;left:50%;transform:translateX(-50%);width:calc(100% - 28px);max-width:540px;background:#fff;border-radius:24px;box-shadow:0 24px 60px rgba(0,0,0,.22);border:1.5px solid var(--bdr);z-index:9999;overflow:hidden;">
+  <div style="padding:12px 12px 0 0;display:flex;justify-content:flex-end;">
+    <button onclick="closeOrigModal()" style="width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.08);border:none;font-size:1.1rem;font-weight:700;color:#555;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+  </div>
+  <div id="orig-modal-char" style="width:100%;background:#e0e0e0;overflow:hidden;"></div>
+  <div id="orig-modal-facial" style="width:100%;aspect-ratio:16/9;overflow:hidden;border-top:1.5px solid rgba(0,0,0,.07);"></div>
+  <div style="padding:18px 22px 24px;">
+    <div style="margin-bottom:12px;"><span id="orig-modal-status"></span></div>
+    <div id="orig-modal-detail" style="font-size:.88rem;color:#7a7a7a;line-height:1.8;font-weight:300;"></div>
+  </div>
+</div>
 
 <script>
 /* ══ RFC 4180 CSV 파서 ══ */
@@ -1892,13 +1909,74 @@ function renderOrigPage(page) {
 function openOrigModal(idx) {
   const item = origItems[idx];
   if (!item) return;
-  window.parent.postMessage({ type: 'origModal', item: {
-    charImg:   item.charImg   || '',
-    facialUrl: item.facialUrl || '',
-    detail:    item.detail    || '',
-    isSold:    item.isSold
-  }}, '*');
+  const isSold = item.isSold;
+
+  /* 캐릭터 이미지 */
+  const charEl = document.getElementById('orig-modal-char');
+  if (item.charImg) {
+    charEl.innerHTML = '<img src="' + item.charImg + '" alt="캐릭터">';
+    charEl.style.background = 'none';
+  } else {
+    charEl.innerHTML = '<div class="orig-modal-char-ph">캐릭터 이미지</div>';
+    charEl.style.background = '';
+  }
+
+  /* 페이셜 GIF / 영상 - 없으면 숨김 */
+  const facialEl = document.getElementById('orig-modal-facial');
+  if (item.facialUrl) {
+    const ytMatch = item.facialUrl.match(/(?:youtube\.com\/(?:.*[?&]v=|.*\/embed\/|.*\/v\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if (ytMatch) {
+      facialEl.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytMatch[1] + '?autoplay=0&mute=1" allowfullscreen></iframe>';
+    } else if (/\.(gif)(\?|$)/i.test(item.facialUrl)) {
+      facialEl.innerHTML = '<img src="' + item.facialUrl + '" alt="페이셜">';
+    } else if (/\.(mp4|webm|mov)(\?|$)/i.test(item.facialUrl)) {
+      facialEl.innerHTML = '<video src="' + item.facialUrl + '" autoplay loop muted playsinline></video>';
+    } else {
+      facialEl.innerHTML = '<iframe src="' + item.facialUrl + '" allowfullscreen></iframe>';
+    }
+    facialEl.style.display = '';
+  } else {
+    facialEl.innerHTML = '';
+    facialEl.style.display = 'none';
+  }
+
+  /* 상태 배지 + 설명 */
+  const statusEl = document.getElementById('orig-modal-status');
+  statusEl.textContent = isSold ? '판매완료' : '판매중';
+  statusEl.className = 'orig-modal-status ' + (isSold ? 'sold-badge' : 'sale');
+  document.getElementById('orig-modal-detail').innerHTML = nl2br(item.detail);
+
+  /* 모달 표시 - 카드 클릭 위치 기준으로 배치 */
+  const box = document.getElementById('orig-modal-box');
+  box.style.display = 'block';
+
+  /* 카드 기준으로 top 위치 계산 */
+  const grid = document.getElementById('orig-grid');
+  const gridTop = grid ? grid.offsetTop : 200;
+  box.style.top = (gridTop - 10) + 'px';
+
+  _sendHeightOrig();
 }
+
+function closeOrigModal() {
+  const box = document.getElementById('orig-modal-box');
+  box.style.display = 'none';
+  const iframe = document.querySelector('#orig-modal-facial iframe');
+  if (iframe) { const s = iframe.src; iframe.src = ''; iframe.src = s; }
+  _sendHeightOrig();
+}
+
+function _sendHeightOrig() {
+  setTimeout(function() {
+    var h = document.documentElement.scrollHeight;
+    window.parent.postMessage({ height: h }, '*');
+    window.parent.postMessage({ type: 'iframeResize', height: h }, '*');
+  }, 100);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeOrigModal();
+});
 
 function initOriginal() { loadOriginal(); }
 
@@ -1908,8 +1986,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   calState.year  = now.getFullYear();
   calState.month = now.getMonth();
   buildFlow();
-  initOriginal();
-  await Promise.all([loadProfile(), loadPackages(), loadCollab(), loadCalendar(), loadPortfolio(), loadFAQ()]);
+  await Promise.all([loadProfile(), loadPackages(), loadCollab(), loadCalendar(), loadPortfolio(), loadFAQ(), loadOriginal()]);
+  /* 모든 데이터 로드 완료 후 높이 재전송 */
+  setTimeout(function() {
+    var wrap = document.querySelector('.wrap');
+    var h = wrap ? (wrap.offsetHeight + 36 + 24) : document.documentElement.scrollHeight;
+    window.parent.postMessage({ type: 'iframeResize', height: h }, '*');
+    window.parent.postMessage({ height: h }, '*');
+  }, 100);
 });
 
 /* 화면 크기 변경 시 캘린더 재렌더 (모바일↔데스크탑 전환 대응) */
@@ -1926,6 +2010,7 @@ window.addEventListener('resize', () => {
     var wrap = document.querySelector('.wrap');
     var h = wrap ? (wrap.offsetHeight + 36 + 24) : document.documentElement.scrollHeight;
     window.parent.postMessage({ type: 'iframeResize', height: h }, '*');
+    window.parent.postMessage({ height: h }, '*');
     try {
       var frames = window.parent.document.querySelectorAll('iframe');
       for (var i = 0; i < frames.length; i++) {
