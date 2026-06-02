@@ -132,6 +132,7 @@ html { scroll-behavior: smooth; }
 <div class="content">
 
   <div id="top" class="section top-center">
+    <span id="nav-slot"></span>
     <div class="logo">
       <img id="img-logo" src="">
       <p class="title-main">사김장 커미션</p>
@@ -141,12 +142,14 @@ html { scroll-behavior: smooth; }
       <div class="slot-box2" id="live-slot-display"><p>현황을 불러오는 중...</p></div>
     </div>
     <div style="display: flex; justify-content: center;">
+      <span id="nav-notice"></span>
       <img id="img-heart" src="" style="width: 100%; max-width: 750px;">
     </div>
     <div class="divider"></div>
   </div>
 
   <div id="sub" class="section">
+    <span id="nav-sub"></span>
     <h2>구독티콘</h2>
     <div class="image-grid-vertical">
       <img id="img-sub-price" src="" style="max-width: 90%;">
@@ -161,6 +164,7 @@ html { scroll-behavior: smooth; }
   </div>
 
   <div id="donation" class="section">
+    <span id="nav-donation"></span>
     <h2>후원움짤</h2>
     <div class="image-grid-vertical">
       <img id="img-donation-price" src="" style="max-width: 90%;">
@@ -186,6 +190,7 @@ html { scroll-behavior: smooth; }
   </div>
 
   <div id="subscription" class="section">
+    <span id="nav-subscription"></span>
     <h2>구독권</h2>
     <div class="image-grid-vertical">
       <img id="img-subscription-price" src="" style="max-width: 90%;">
@@ -208,6 +213,7 @@ html { scroll-behavior: smooth; }
   </div>
 
   <div id="avatar" class="section">
+    <span id="nav-avatar"></span>
     <h2>채팅아바타</h2>
     <div class="image-grid">
       <img id="img-avatar-price" src="" style="max-width: 90%; border-radius: 0; box-shadow: none;">
@@ -240,6 +246,7 @@ html { scroll-behavior: smooth; }
     </div>
     <div class="divider"></div>
     <div id="notice" class="section">
+      <span id="nav-guide"></span>
       <h2 style="margin-bottom:80px;">신청양식 및 안내사항</h2>
       <div id="notice-images"></div>
     </div>
@@ -364,6 +371,38 @@ async function fetchSlotData() {
     displayArea.innerHTML = "<p>슬롯 정보를 불러오지 못했습니다.</p>";
   }
 }
+
+// ===== 부모페이지 네비게이션 연동 =====
+// 부모에서 postMessage({ type: 'scrollTo', id: 'nav-slot' }) 형태로 호출
+window.addEventListener('message', (e) => {
+  if (!e.data || e.data.type !== 'scrollTo') return;
+  const el = document.getElementById(e.data.id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+// 스크롤 시 현재 섹션을 부모창으로 전송 (네비 활성화 동기화)
+const NAV_SECTIONS = [
+  { nav: 'nav-slot',         id: 'nav-slot' },
+  { nav: 'nav-notice',       id: 'nav-notice' },
+  { nav: 'nav-sub',          id: 'nav-sub' },
+  { nav: 'nav-donation',     id: 'nav-donation' },
+  { nav: 'nav-subscription', id: 'nav-subscription' },
+  { nav: 'nav-avatar',       id: 'nav-avatar' },
+  { nav: 'nav-guide',        id: 'nav-guide' }
+];
+
+function broadcastActiveSection() {
+  const scrollY  = window.scrollY || window.pageYOffset;
+  const viewMid  = scrollY + window.innerHeight * 0.35;
+  let current = NAV_SECTIONS[0].nav;
+  NAV_SECTIONS.forEach(({ nav, id }) => {
+    const el = document.getElementById(id);
+    if (el && viewMid >= el.offsetTop) current = nav;
+  });
+  window.parent.postMessage({ type: 'activeSection', id: current }, '*');
+}
+window.addEventListener('scroll', broadcastActiveSection, { passive: true });
+setTimeout(broadcastActiveSection, 500);
 
 // ===== 높이 전송 =====
 function sendHeight() {
