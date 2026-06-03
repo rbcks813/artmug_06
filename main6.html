@@ -187,7 +187,7 @@
         .select-btn.active { background: var(--point1); color: white; border-color: var(--point1); }
         .form-group { margin-bottom: 25px; }
         label { display: block; font-weight: 800; margin-bottom: 8px; color: var(--point2); font-size: 1.05em; }
-        input[type="text"], input[type="date"] { width: 100%; padding: 12px; border: 2px solid var(--base2); border-radius: 12px; box-sizing: border-box; font-family: 'Paperozi'; outline: none; }
+        input[type="text"] { width: 100%; padding: 12px; border: 2px solid var(--base2); border-radius: 12px; box-sizing: border-box; font-family: 'Paperozi'; outline: none; }
 
         .custom-file-label { display: inline-block; padding: 10px 20px; background: var(--base2); color: var(--point2); font-weight: 700; border-radius: 10px; cursor: pointer; border: 2px solid var(--base1); transition: 0.2s; }
         .custom-file-label:hover { background: var(--base1); color: white; }
@@ -305,13 +305,6 @@
                 <button class="select-btn" onclick="selectOnlyInCategory(this)">포트폴리오 영구 비공개</button>
             </div>
         </div>
-        <div class="form-group">
-            <label>8. 최종 필요하신 날짜</label>
-            <input type="date" id="f_date">
-            <div style="font-size: 0.85em; color: var(--point2); font-weight: 600; margin-top: 8px;">
-                *날짜 확인용입니다 작업기간은 ~14일이내로 전달드립니다!
-            </div>
-        </div>
         <label class="checkbox-group">
             <input type="checkbox" id="notice-agree" onchange="document.getElementById('copy-btn').disabled = !this.checked">
             <span>공지사항을 확인하였으며 이에 동의합니다.</span>
@@ -325,7 +318,7 @@
     <section>
         <h2>Notice</h2>
         <div class="detail-notice-box">
-            <div class="notice-item"><span class="notice-num">01.</span>작업기간은 사전 안내 후로부터 <span class="hl">~14일 이내</span>로 전달드립니다<span class="notice-sub">*작업기간은 신청 갯수 및 일정에 따라 변동 될 수 있습니다</span></div>
+            <div class="notice-item"><span class="notice-num">01.</span>작업기간은 사전 안내 후로부터 <span class="hl">~12일 이내</span>로 전달드리며, <span class="hl">일반홍보포스터/쇼츠틀/다시보기틀/체키틀</span>은 <span class="hl">~7일</span>내로 전달됩니다<span class="notice-sub">*기본 작업기간이며 대량신청 및 4개 이상 신청은 일정에 따라 작업기간이 변동될 수 있습니다. 신청 전 문의 부탁드립니다!</span></div>
             <div class="notice-item"><span class="notice-num">02.</span>모든 작업물은 <span class="hl">방송용 기준</span>입니다.<span class="notice-sub">*상업용/기업용은 <span class="hl">X2배</span></span></div>
             <div class="notice-item"><span class="notice-num">03.</span>모든 작업물은 허락없이 <span class="hl">제 3자에게 판매 및 제공을</span> 무단으로 하실 수 없습니다<span class="notice-sub">EX) <span class="hl">버츄얼판매</span>로 인한 디자인작업물을 제3자제공등등</span></div>
             <div class="notice-item"><span class="notice-num">04.</span>환불은 디자인 <span class="hl">제작전 100%환불 가능</span>하며 1차 시안 제작 후 환불은 전체 금액 중 <span class="hl">시안비 50% 금액제외</span> 환불해드립니다<span class="notice-sub">*작업상황에 따라 <span class="hl">30%~50%</span> 환불 측정</span></div>
@@ -425,9 +418,6 @@
 </div>
 
 <script>
-/* =====================================================================
-   CSV 파서
-   ===================================================================== */
 function parseCSV(text) {
     const rows = [];
     let row = [], field = '', inQuotes = false;
@@ -452,9 +442,6 @@ function parseCSV(text) {
     return rows;
 }
 
-/* =====================================================================
-   캘린더
-   ===================================================================== */
 const today = new Date();
 let showingNextMonth = false;
 let sheetData = {};
@@ -484,9 +471,6 @@ function renderCalendar() {
 }
 function changeMonth(dir) { showingNextMonth = (dir === 1); renderCalendar(); }
 
-/* =====================================================================
-   수정된 포트폴리오 로직 (가로 스크롤 방식)
-   ===================================================================== */
 const portfolioCategories = [
     "일반 홍보포스터","RT포스터","데뷔썸네일","다시보기틀","쇼츠틀",
     "숲타이틀배너","숲하단배너","숲플로팅배너","스케줄표 대형","스케줄표 소형",
@@ -500,14 +484,12 @@ function renderPortfolio() {
     const tabsContainer = document.getElementById('portfolio-tabs');
     tabsContainer.innerHTML = '';
     let firstSet = false;
-
     portfolioCategories.forEach(cat => {
         const btn = document.createElement('button');
         btn.className = 'portfolio-tab';
         btn.innerText  = cat;
         btn.onclick    = () => showPortfolioCategory(cat, btn);
         tabsContainer.appendChild(btn);
-
         if (!firstSet) {
             btn.classList.add('active');
             showPortfolioCategory(cat, btn);
@@ -519,12 +501,9 @@ function renderPortfolio() {
 function showPortfolioCategory(cat, btn) {
     document.querySelectorAll('.portfolio-tab').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    
     const gallery = document.getElementById('portfolio-gallery');
     gallery.innerHTML = '';
-    
     const images = portfolioData[cat] || [];
-    
     if (images.length === 0) {
         gallery.innerHTML = '<div class="port-empty">등록된 이미지가 없습니다.</div>';
     } else {
@@ -533,7 +512,6 @@ function showPortfolioCategory(cat, btn) {
             img.src = src;
             img.className = 'portfolio-item';
             img.loading = 'lazy';
-            // img.onclick 이벤트 삭제 (클릭 시 다운로드/새창 열림 방지)
             gallery.appendChild(img);
         });
     }
@@ -544,9 +522,6 @@ function scrollTabs(direction) {
     tabs.scrollBy({ left: direction * tabs.clientWidth, behavior: 'smooth' });
 }
 
-/* =====================================================================
-   데이터 로드
-   ===================================================================== */
 async function loadSheetData() {
     const BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQySVlQBMqlL7tguFKcH3yqvzfr2hic0llevvFPC0v2Bc-ipA1ZZrHHSwmv-MLrAJYUUIOq9xJU_LVk/pub';
     const urls = {
@@ -558,11 +533,7 @@ async function loadSheetData() {
     };
 
     const [noticeRes, calRes, collabRes, portRes, portStatusRes] = await Promise.allSettled([
-        fetch(urls.notice),
-        fetch(urls.cal),
-        fetch(urls.collab),
-        fetch(urls.portfolio),
-        fetch(urls.port_status),
+        fetch(urls.notice), fetch(urls.cal), fetch(urls.collab), fetch(urls.portfolio), fetch(urls.port_status),
     ]);
 
     try {
@@ -623,7 +594,6 @@ async function loadSheetData() {
         });
     } catch(e) {}
 
-    // 포트폴리오 사용여부 상태 체크 로직
     try {
         if (portStatusRes.status === 'fulfilled') {
             const rows = parseCSV(await portStatusRes.value.text());
@@ -647,9 +617,6 @@ async function loadSheetData() {
     renderPortfolio();
 }
 
-/* =====================================================================
-   폼 관련 및 기타 함수들
-   ===================================================================== */
 function syncColor(el, type) {
     const parent = el.closest('.color-item');
     if (type === 'hex') { parent.querySelector('.hex-input').value = el.value.toUpperCase(); }
@@ -674,13 +641,9 @@ let base64Images = [];
 
 function handleImage(input) {
     if (input.files) {
-        const files = Array.from(input.files);
-        files.forEach(file => {
+        Array.from(input.files).forEach(file => {
             const reader = new FileReader();
-            reader.onload = e => {
-                base64Images.push(e.target.result);
-                renderImagePreviews();
-            };
+            reader.onload = e => { base64Images.push(e.target.result); renderImagePreviews(); };
             reader.readAsDataURL(file);
         });
     }
@@ -689,14 +652,10 @@ function handleImage(input) {
 function renderImagePreviews() {
     const container = document.getElementById('preview-container');
     container.innerHTML = '';
-    
     base64Images.forEach((src, index) => {
         const wrap = document.createElement('div');
         wrap.className = 'preview-wrap';
-        wrap.innerHTML = `
-            <img src="${src}">
-            <button class="del-img-btn" onclick="removeImage(${index})">✕</button>
-        `;
+        wrap.innerHTML = `<img src="${src}"><button class="del-img-btn" onclick="removeImage(${index})">✕</button>`;
         container.appendChild(wrap);
     });
 }
@@ -704,20 +663,16 @@ function renderImagePreviews() {
 function removeImage(index) {
     base64Images.splice(index, 1);
     renderImagePreviews();
-    if (base64Images.length === 0) {
-        document.getElementById('f_file').value = '';
-    }
+    if (base64Images.length === 0) document.getElementById('f_file').value = '';
 }
 
 function resetForm() {
     if (!confirm('작성하신 모든 내용을 초기화할까요?')) return;
-    ['f_name','f_type','f_concept','f_content','f_date'].forEach(id => document.getElementById(id).value = '');
+    ['f_name','f_type','f_concept','f_content'].forEach(id => document.getElementById(id).value = '');
     document.querySelectorAll('.btn-group button').forEach(b => b.classList.remove('active'));
-    
     base64Images = [];
     renderImagePreviews();
     document.getElementById('f_file').value = '';
-
     const colorList = document.getElementById('color-list');
     const items = colorList.querySelectorAll('.color-item');
     for (let i = 1; i < items.length; i++) items[i].remove();
@@ -734,41 +689,28 @@ function copyForm() {
     const concept = document.getElementById('f_concept').value || '미작성';
     const colors = Array.from(document.querySelectorAll('.hex-input')).map(i => i.value).join(', ');
     const content = document.getElementById('f_content').value || '미작성';
-    const date = document.getElementById('f_date').value || '미정';
     const extras = Array.from(document.querySelectorAll('.category-group .active')).map(b => b.innerText);
-    
-    const imgHtml = base64Images.length > 0 
-        ? base64Images.map(img => `<br><img src="${img}" style="max-width:300px;border-radius:10px;margin-bottom:10px;"><br>`).join('') 
+    const imgHtml = base64Images.length > 0
+        ? base64Images.map(img => `<br><img src="${img}" style="max-width:300px;border-radius:10px;margin-bottom:10px;"><br>`).join('')
         : '첨부파일 없음';
-
-    const text = `[신청양식]\n1. 닉네임: ${name}\n2. 종류: ${type}\n3. 컨셉: ${concept}\n4. 색상: ${colors}\n5. 내용: ${content}\n6. 첨부이미지: ${imgHtml}\n7. 추가사항: ${extras.join(', ') || '없음'}\n8. 희망날짜: ${date}`;
-    
+    const text = `[신청양식]\n1. 닉네임: ${name}\n2. 종류: ${type}\n3. 컨셉: ${concept}\n4. 색상: ${colors}\n5. 내용: ${content}\n6. 첨부이미지: ${imgHtml}\n7. 추가사항: ${extras.join(', ') || '없음'}`;
     const blobHtml = new Blob([text.replace(/\n/g, '<br>')], { type: 'text/html' });
     const blobText = new Blob([text], { type: 'text/plain' });
     navigator.clipboard.write([new ClipboardItem({ 'text/html': blobHtml, 'text/plain': blobText })]).then(() => alert('양식이 복사되었습니다!'));
 }
 
-/* =====================================================================
-   실시간 자동 높이 조절 로직 (수정됨)
-   ===================================================================== */
-function sendHeightToParent() { 
+function sendHeightToParent() {
     const container = document.querySelector('.container');
-    // document.documentElement.scrollHeight 대신 실제 컨테이너의 높이(+패딩값)를 계산하여
-    // 줄어들 때도 부모 요소의 높이에 영향을 받지 않고 즉각적으로 갱신되게 처리합니다.
     const currentHeight = container ? container.offsetHeight + 40 : document.documentElement.scrollHeight;
-    window.parent.postMessage({ type: 'resize', height: currentHeight }, '*'); 
+    window.parent.postMessage({ type: 'resize', height: currentHeight }, '*');
 }
 
 window.addEventListener('load', sendHeightToParent);
 window.addEventListener('resize', sendHeightToParent);
-
-// 요소 크기 변화 감지
 const resizeObserver = new ResizeObserver(sendHeightToParent);
 const containerEl = document.querySelector('.container');
 if (containerEl) resizeObserver.observe(containerEl);
 else resizeObserver.observe(document.body);
-
-// 요소 추가/삭제 등 DOM 변화까지 실시간 감지
 const mutationObserver = new MutationObserver(sendHeightToParent);
 mutationObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
 
