@@ -41,9 +41,6 @@
             padding: 30px 0;
         }
 
-        /* ==========================================
-           1번 & 2번 코드 (Gallery) 공통 스타일
-        ========================================== */
         .container {
             width: 95%;
             max-width: 1180px; 
@@ -54,7 +51,6 @@
             margin: 0 auto;
         }
 
-        /* [수정 1] 타이틀 */
         .container .header {
             color: var(--white);
             font-size: 30px; 
@@ -64,7 +60,6 @@
             letter-spacing: 1px;
             user-select: none;
             line-height: 1.2;
-            
         }
 
         .main-wrapper {
@@ -186,28 +181,27 @@
             max-width: 95%; 
             margin: 0 auto; 
             border-radius: 50px;
-            padding: 30px 60px 60px 60px; 
+            padding: 25px 60px 45px 60px; /* 원래보다 조금 작게, 이전보다 조금 크게 */
             box-sizing: border-box;
             overflow: hidden; 
             transform: translateZ(0);
         }
 
-        .collab-wrapper .header {
+        /* ✅ 두 wrapper 공통으로 .collab-header 클래스 사용 */
+        .collab-header {
             text-align: left;
-            margin-bottom: 20px; 
+            margin-bottom: 15px; /* 약간 늘림 */
             padding-left: 10px;
         }
 
-        /* [수정 1] 콜라보 타이틀 크기 통일: 34px */
-        .collab-wrapper .header h1 {
-            font-size: 30px; 
+        .collab-header h1 {
+            font-size: 25px; 
             color: var(--title-white);
             margin: 0;
             letter-spacing: 2px;
-            
         }
 
-        .collab-wrapper .header h1 .heart-icon {
+        .collab-header h1 .heart-icon {
             font-size: 0.85em; 
             display: inline-block; 
             transform: scaleY(0.85); 
@@ -255,7 +249,6 @@
             object-fit: cover;
         }
 
-        /* [수정 4] 카드 info-area 패딩 및 gap 줄이기 */
         .info-area {
             padding: 15px 20px;
             display: flex;
@@ -313,28 +306,18 @@
             max-width: 95%;
             margin: 0 auto;
             border-radius: 50px;
-            padding: 30px 60px 60px 60px;
+            padding: 25px 60px 45px 60px; /* 원래보다 조금 작게, 이전보다 조금 크게 */
             box-sizing: border-box;
             overflow: hidden;
             transform: translateZ(0);
-        }
-
-        .other-benefit-title {
-            font-size: 30px;
-            color: var(--title-white);
-            letter-spacing: 2px;
-            padding-left: 10px;
-            margin-bottom: 20px;
-            min-height: 1em;
-            
         }
 
         /* ==========================================
            반응형 모바일 최적화 (통합)
         ========================================== */
         @media (max-width: 1200px) {
-            .collab-wrapper { width: 95%; padding: 30px 40px 40px 40px; }
-            .other-collab-wrapper { width: 95%; padding: 30px 40px 40px 40px; }
+            .collab-wrapper { width: 95%; padding: 25px 40px 30px 40px; } /* 여백 약간 늘림 */
+            .other-collab-wrapper { width: 95%; padding: 25px 40px 30px 40px; } /* 여백 약간 늘림 */
         }
 
         @media (max-width: 768px) {
@@ -358,17 +341,16 @@
             #extraGalleryContainer .thumb-list { gap: 6px; }
             #extraGalleryContainer .thumb-item { width: calc((100vw - 20px - 10px - 74px - 18px) / 4); flex: 0 0 auto; border-radius: 8px; border-width: 2px; }
 
-            .collab-wrapper { width: 100%; max-width: 100%; padding: 15px 10px 30px 10px; border-radius: 30px; }
-            .collab-wrapper .header { margin-bottom: 15px; padding-left: 0; text-align: center; } 
-            .collab-wrapper .header h1 { font-size: 24px; } 
-            .collab-wrapper .header h1 .heart-icon { font-size: 0.7em; } 
+            .collab-wrapper { width: 100%; max-width: 100%; padding: 15px 10px 20px 10px; border-radius: 30px; } /* 여백 약간 늘림 */
+            .collab-header { margin-bottom: 12px; padding-left: 0; text-align: center; } /* 여백 약간 늘림 */
+            .collab-header h1 { font-size: 24px; } 
+            .collab-header h1 .heart-icon { font-size: 0.7em; } 
             .collab-wrapper .header p { font-size: 14px; } 
             .collab-grid { grid-template-columns: 1fr; gap: 20px; }
             .info-area { padding: 12px 15px; gap: 6px; }
             .footer-text { padding: 15px 0 0 0; font-size: 11px; letter-spacing: -0.5px; }
 
-            .other-collab-wrapper { width: 100%; max-width: 100%; padding: 15px 10px 30px 10px; border-radius: 30px; }
-            .other-benefit-title { font-size: 24px; padding-left: 0; text-align: center; }
+            .other-collab-wrapper { width: 100%; max-width: 100%; padding: 15px 10px 20px 10px; border-radius: 30px; } /* 여백 약간 늘림 */
         }
     </style>
 </head>
@@ -419,14 +401,12 @@
     </div>
 </div>
 
-<!-- [수정 2] 콜라보 메인 박스 -->
 <div class="collab-wrapper">
-    <div class="header">
+    <div class="collab-header">
         <h1><span class="heart-icon">♥</span> 리깅 협업 혜택 : 일러스트 5만원 할인 + 표정 3종</h1>
     </div>
 
     <div class="collab-grid" id="collab-grid">
-        <!-- [수정 3] 컨펌 → 피드백 -->
         <div class="footer-text" id="static-footer">
             리깅 작가님과 협력하여,<br>
             캐릭터의 매력이 돋보이는 모델이 나올 수 있도록<br>
@@ -435,14 +415,14 @@
     </div>
 </div>
 
-<!-- 기타 콜라보 별도 박스 -->
 <div class="other-collab-wrapper">
-    <div class="other-benefit-title" id="other-benefit-title"></div>
+    <div class="collab-header">
+        <h1 id="other-benefit-title"></h1>
+    </div>
     <div class="collab-grid" id="other-collab-grid"></div>
 </div>
 
 <script>
-    // 통합 리사이즈 코드
     let lastUnifiedHeight = 0;
     function sendUnifiedHeight() {
         setTimeout(() => {
@@ -651,7 +631,6 @@
         } catch (error) { console.error('Collab Error:', error); }
     }
 
-    // 기타 협업 데이터 불러오기 (별도 박스)
     async function fetchOtherCollabData() {
         const grid = document.getElementById('other-collab-grid');
         try {
@@ -694,14 +673,15 @@
 
     const sheetUrlOtherBenefits = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBQtd81Ch1XD9iTV6me_YRFPxEBOJpHnG27HYi5aS0OTCFYJ9NRTUWs_gtpwyq79svXPc_x4GITWlH/pub?gid=1196586077&single=true&output=csv';
 
-    // 기타 콜라보 혜택 텍스트 불러오기
     async function fetchOtherBenefits() {
         try {
             const response = await fetch(sheetUrlOtherBenefits);
             const rawData = await response.text();
             const rows = parseCSV(rawData);
             if (rows.length > 1 && rows[1][0]) {
-                document.getElementById('other-benefit-title').innerHTML = `<span style="font-size:0.85em; display:inline-block; transform:scaleY(0.85); vertical-align:middle; margin-right:2px;">♥</span> 기타 협업 혜택 : ${rows[1][0].trim()}`;
+                // ✅ heart-icon 클래스 사용으로 리깅 헤더와 동일한 스타일 적용
+                document.getElementById('other-benefit-title').innerHTML =
+                    `<span class="heart-icon">♥</span> 기타 협업 혜택 : ${rows[1][0].trim()}`;
             }
         } catch (error) { console.error('Benefits Error:', error); }
     }
