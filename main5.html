@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* 폰트 설정 */
         @font-face {
             font-family: 'TMoneyDungunbaram';
             src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/TmoneyRoundWindRegular.woff') format('woff');
@@ -19,7 +18,6 @@
             font-display: swap;
         }
 
-        /* 기본 설정 및 색상 변수 */
         :root {
             --bg-base: #ffffff;
             --color-base1: #FEB1D1;
@@ -175,7 +173,6 @@
             text-transform: uppercase;
         }
 
-        /* 3번 모바일 최적화: 가로 스크롤 허용 및 찌그러짐 방지 */
         .board-wrapper {
             overflow-x: auto;
             padding: 10px;
@@ -192,7 +189,7 @@
             border-radius: 12px;
             width: 100%;
             max-width: 100%;
-            min-width: 550px; /* 모바일에서 칸이 찌그러지지 않도록 최소 너비 보장 */
+            min-width: 550px;
             margin: 0 auto;
             box-sizing: border-box;
         }
@@ -213,7 +210,6 @@
             transform: scale(1.02);
         }
 
-        /* ---------------- 보드판 글자 잘림 및 placeholder 해결 로직 ---------------- */
         .board-cell .board-input {
             width: 100%;
             border: none;
@@ -249,7 +245,6 @@
             display: block;
             position: absolute;
         }
-        /* ----------------------------------------------------------- */
 
         .submit-wrapper {
             position: relative;
@@ -347,7 +342,6 @@
             transition: background-color 0.3s;
         }
 
-        /* 이미지 미리보기 스타일 추가 */
         .image-preview-container {
             display: flex;
             flex-wrap: wrap;
@@ -403,6 +397,11 @@
             margin-right: 5px;
         }
 
+        /* 모서리 모양 칸 숨김 처리 */
+        .form-group.hidden {
+            display: none;
+        }
+
         .portfolio-container {
             position: relative;
             width: 100%;
@@ -453,7 +452,6 @@
             height: 100%;
             object-fit: cover;
         }
-        /* 2번 포트폴리오 마우스 오버 시 버튼 나타남 */
         .slider-nav {
             position: absolute;
             top: 50%;
@@ -503,7 +501,6 @@
             background: var(--color-point1);
         }
 
-        /* 3번 모바일 최적화 미디어 쿼리 추가 */
         @media screen and (max-width: 600px) {
             body {
                 padding: 10px;
@@ -521,7 +518,7 @@
                 font-size: 18px;
             }
             input[type="text"], textarea, select {
-                font-size: 16px; /* iOS 자동 확대 방지 */
+                font-size: 16px;
             }
             .radio-group {
                 flex-direction: column;
@@ -556,10 +553,13 @@
                 <label>2. 신청 주루마블 타입</label>
                 <div class="radio-group">
                     <label class="radio-label">
-                        <input type="radio" name="boardType" value="VER.1" checked onchange="drawBoard()"> VER.1 (총 26칸)
+                        <input type="radio" name="boardType" value="VER.1" checked onchange="drawBoard(); toggleCornerShape()"> VER.1 (총 26칸)
                     </label>
                     <label class="radio-label">
-                        <input type="radio" name="boardType" value="VER.2" onchange="drawBoard()"> VER.2 (총 22칸)
+                        <input type="radio" name="boardType" value="VER.2" onchange="drawBoard(); toggleCornerShape()"> VER.2 (총 22칸)
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="boardType" value="VER.3" onchange="drawBoard(); toggleCornerShape()"> VER.3 (총 26칸)
                     </label>
                 </div>
             </div>
@@ -593,7 +593,7 @@
                 <textarea id="menuText" name="menuText" rows="4" placeholder="메뉴판에 들어갈 문구를 적어주세요."></textarea>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="cornerShapeGroup">
                 <label for="cornerShape">6. 위아래 모서리 모양 작성</label>
                 <input type="text" id="cornerShape" name="cornerShape" placeholder="EX: 하트, 별, 고양이 등">
             </div>
@@ -660,7 +660,6 @@
         const files = Array.from(event.target.files);
         uploadedFiles = [...uploadedFiles, ...files];
         renderPreviews();
-        // 같은 파일을 다시 올릴 수 있도록 초기화
         event.target.value = '';
     }
 
@@ -688,12 +687,11 @@
         });
     }
 
-    // ---------------- [ 임베드 높이 자동 감지 로직 추가 (수정됨: 줄어들기 지원) ] ----------------
+    // ---------------- [ 임베드 높이 자동 감지 ] ----------------
     function sendHeight() {
         if (window.parent && window.parent !== window) {
             const container = document.getElementById('mainContainer');
             if (container) {
-                // scrollHeight 대신 실제 컨텐츠 높이(offsetHeight)를 측정하여 줄어드는 것도 감지
                 const bodyStyle = window.getComputedStyle(document.body);
                 const paddingTop = parseFloat(bodyStyle.paddingTop) || 0;
                 const paddingBottom = parseFloat(bodyStyle.paddingBottom) || 0;
@@ -708,6 +706,17 @@
         ro.observe(document.getElementById('mainContainer') || document.body);
     }
 
+    // ---------------- [ 6번 모서리 모양 칸 토글 ] ----------------
+    function toggleCornerShape() {
+        const type = document.querySelector('input[name="boardType"]:checked').value;
+        const cornerShapeGroup = document.getElementById('cornerShapeGroup');
+        if (type === 'VER.3') {
+            cornerShapeGroup.classList.add('hidden');
+        } else {
+            cornerShapeGroup.classList.remove('hidden');
+        }
+    }
+
     // ---------------- [ 포트폴리오 연동 로직 ] ----------------
     const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSvCNLWPH7eJa3TetSQ1IdzXF2fxWN6DqoNlyVP1tplEht_JJInhgmsN2vuAXdLXJbS6oyAoV_UL5FY/pub?gid=0&single=true&output=csv';
     const STATUS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSvCNLWPH7eJa3TetSQ1IdzXF2fxWN6DqoNlyVP1tplEht_JJInhgmsN2vuAXdLXJbS6oyAoV_UL5FY/pub?gid=1463736334&single=true&output=csv';
@@ -718,13 +727,12 @@
 
     async function fetchPortfolio() {
         try {
-            // 포트폴리오 노출 상태 확인
             const statusResponse = await fetch(STATUS_URL);
             const statusText = await statusResponse.text();
             if (statusText.toUpperCase().includes('FALSE')) {
                 const portfolioSection = document.getElementById('portfolioSection');
                 if(portfolioSection) portfolioSection.style.display = 'none';
-                return; // FALSE면 데이터를 가져오지 않고 종료
+                return;
             }
 
             const response = await fetch(CSV_URL);
@@ -807,7 +815,8 @@
         const grid = document.getElementById('boardGrid');
         grid.innerHTML = '';
         let cols, rows;
-        if (type === 'VER.1') { cols = 9; rows = 6; } else { cols = 8; rows = 5; }
+        // VER.3은 VER.1과 동일한 보드 구조 (9×6, 26칸)
+        if (type === 'VER.1' || type === 'VER.3') { cols = 9; rows = 6; } else { cols = 8; rows = 5; }
         grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
         const path = [];
         for (let x = 0; x < cols; x++) path.push({x, y: 0});
@@ -866,7 +875,7 @@
         reader.onerror = error => reject(error);
     });
 
-    // ---------------- [ 복사 기능 로직 수정 (모바일 호환성 강화) ] ----------------
+    // ---------------- [ 복사 기능 ] ----------------
     async function copyFormData() {
         const btn = document.getElementById('copyBtn');
         const noticeCheck = document.getElementById('noticeCheck');
@@ -883,10 +892,11 @@
             const color1 = document.getElementById('color1').value;
             const color2 = document.getElementById('color2').value;
             const menu = document.getElementById('menuText').value || '(공백)';
-            const shape = document.getElementById('cornerShape').value || '(공백)';
+            // VER.3은 모서리 모양 항목 제외
+            const isVer3 = type === 'VER.3';
+            const shape = isVer3 ? null : (document.getElementById('cornerShape').value || '(공백)');
             const extra = document.getElementById('extraNotes').value || '(공백)';
             
-            // 이미지 다중 처리 부분
             let charImagesHtml = "";
             if (uploadedFiles.length > 0) {
                 for (const file of uploadedFiles) {
@@ -903,17 +913,19 @@
             });
             const boardImageBase64 = boardCanvas.toDataURL("image/png");
             
-            const plainText = `[주루마블 신청 양식]\n1. 방송 닉네임: ${nickname}\n2. 신청 타입: ${type}\n3. 선택 색상: ${color1}, ${color2}\n5. 메뉴판 문구: ${menu}\n6. 모서리 모양: ${shape}\n8. 추가 요청사항: ${extra}`;
-            const htmlContent = `<div style="font-family: sans-serif;"><h3>주루마블 신청서</h3><p><b>1. 방송 닉네임:</b> ${nickname}</p><p><b>2. 신청 타입:</b> ${type}</p><p><b>3. 선택 색상:</b> ${color1}, ${color2}</p><p><b>5. 메뉴판 문구:</b> ${menu}</p><p><b>6. 모서리 모양:</b> ${shape}</p><p><b>8. 추가 요청사항:</b> ${extra}</p><br><p><b>[캐릭터 이미지]</b></p><div>${charImagesHtml}</div><br><p><b>[작성된 보드판 이미지]</b></p><img src="${boardImageBase64}" style="max-width: 100%; border: 1px solid #eee;" /></div>`;
+            const cornerShapeLine = isVer3 ? '' : `\n6. 모서리 모양: ${shape}`;
+            const cornerShapeHtml = isVer3 ? '' : `<p><b>6. 모서리 모양:</b> ${shape}</p>`;
+
+            const plainText = `[주루마블 신청 양식]\n1. 방송 닉네임: ${nickname}\n2. 신청 타입: ${type}\n3. 선택 색상: ${color1}, ${color2}\n5. 메뉴판 문구: ${menu}${cornerShapeLine}\n8. 추가 요청사항: ${extra}`;
+            const htmlContent = `<div style="font-family: sans-serif;"><h3>주루마블 신청서</h3><p><b>1. 방송 닉네임:</b> ${nickname}</p><p><b>2. 신청 타입:</b> ${type}</p><p><b>3. 선택 색상:</b> ${color1}, ${color2}</p><p><b>5. 메뉴판 문구:</b> ${menu}</p>${cornerShapeHtml}<p><b>8. 추가 요청사항:</b> ${extra}</p><br><p><b>[캐릭터 이미지]</b></p><div>${charImagesHtml}</div><br><p><b>[작성된 보드판 이미지]</b></p><img src="${boardImageBase64}" style="max-width: 100%; border: 1px solid #eee;" /></div>`;
 
             let copySuccess = false;
 
-            // 모바일 및 호환성 브라우저를 위한 Fallback 복사 기능 (execCommand)
             const fallbackCopy = () => {
                 const container = document.createElement('div');
                 container.innerHTML = htmlContent;
                 container.style.position = 'fixed';
-                container.style.left = '-9999px'; // 화면 밖으로 숨김
+                container.style.left = '-9999px';
                 container.style.top = '0';
                 document.body.appendChild(container);
 
@@ -930,7 +942,6 @@
                 return successful;
             };
 
-            // 1순위: 최신 Clipboard API 시도
             if (navigator.clipboard && window.ClipboardItem) {
                 try {
                     const clipboardData = [
@@ -943,11 +954,9 @@
                     copySuccess = true;
                 } catch (err) {
                     console.warn("Clipboard API failed, trying fallback...", err);
-                    // API가 실패할 경우(주로 모바일 비동기 시간초과) Fallback 실행
                     copySuccess = fallbackCopy();
                 }
             } else {
-                // Clipboard API 미지원 환경 (일부 인앱 브라우저 등)
                 copySuccess = fallbackCopy();
             }
 
