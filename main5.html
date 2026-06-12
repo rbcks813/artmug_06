@@ -599,13 +599,13 @@
             </div>
 
             <div class="form-group">
-                <label for="charImage">7. 캐릭터 이미지 첨부</label>
+                <label id="labelCharImage" for="charImage">7. 캐릭터 이미지 첨부</label>
                 <input type="file" id="charImage" accept="image/*" multiple onchange="handleImageUpload(event)">
                 <div id="imagePreviewContainer" class="image-preview-container"></div>
             </div>
 
             <div class="form-group">
-                <label for="extraNotes">8. 그 외 추가사항</label>
+                <label id="labelExtraNotes" for="extraNotes">8. 그 외 추가사항</label>
                 <textarea id="extraNotes" name="extraNotes" rows="3" placeholder="기타 요청사항을 적어주세요."></textarea>
             </div>
 
@@ -706,14 +706,20 @@
         ro.observe(document.getElementById('mainContainer') || document.body);
     }
 
-    // ---------------- [ 6번 모서리 모양 칸 토글 ] ----------------
+    // ---------------- [ 6번 모서리 모양 칸 토글 + 번호 재정렬 ] ----------------
     function toggleCornerShape() {
         const type = document.querySelector('input[name="boardType"]:checked').value;
         const cornerShapeGroup = document.getElementById('cornerShapeGroup');
+        const labelChar = document.getElementById('labelCharImage');
+        const labelExtra = document.getElementById('labelExtraNotes');
         if (type === 'VER.3') {
             cornerShapeGroup.classList.add('hidden');
+            labelChar.textContent = '6. 캐릭터 이미지 첨부';
+            labelExtra.textContent = '7. 그 외 추가사항';
         } else {
             cornerShapeGroup.classList.remove('hidden');
+            labelChar.textContent = '7. 캐릭터 이미지 첨부';
+            labelExtra.textContent = '8. 그 외 추가사항';
         }
     }
 
