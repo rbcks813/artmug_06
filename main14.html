@@ -32,59 +32,59 @@
     font-family: 'Paperlogy', 'Noto Sans KR', sans-serif;
     background: transparent;
     color: #1e293b;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.6;
     padding: 0;
     margin: 0;
   }
 
   .wrap {
-    max-width: 900px;
+    max-width: 1180px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
     background: #f4f7fa;
-    padding: 15px 10px;
+    padding: 20px 14px;
   }
 
   .card {
     background: #fff;
-    border-radius: 20px;
-    padding: 25px;
+    border-radius: 24px;
+    padding: 32px;
     box-shadow: 0 8px 30px rgba(0,0,0,0.04);
   }
 
   .badge {
     display: inline-block;
-    padding: 2px 12px;
+    padding: 3px 16px;
     background: #e8f0fe;
     color: #639AD4;
     border-radius: 50px;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 800;
     letter-spacing: 1px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
 
   .section-title {
     text-align: center;
-    font-size: 19px;
+    font-size: 23px;
     font-weight: 800;
     letter-spacing: -0.5px;
     color: #1e293b;
-    margin-bottom: 18px;
+    margin-bottom: 22px;
   }
 
   /* ════ ① 소개 ════ */
   .hero { text-align: center; }
   .hero h2 {
-    font-size: 26px; font-weight: 800; letter-spacing: -1px;
-    color: #1e293b; margin-bottom: 6px;
+    font-size: 32px; font-weight: 800; letter-spacing: -1px;
+    color: #1e293b; margin-bottom: 8px;
   }
   .hero h2 span { color: #639AD4; }
   .hero .sub {
-    font-size: 14px; color: #64748b; font-weight: 400;
+    font-size: 17px; color: #64748b; font-weight: 400;
     word-break: keep-all;
   }
 
@@ -92,111 +92,111 @@
   #event-box {
     background: #fffbeb;
     border: 1.5px solid #fde68a;
-    border-radius: 15px;
-    padding: 14px 18px;
-    margin-top: 16px;
+    border-radius: 18px;
+    padding: 18px 22px;
+    margin-top: 20px;
     text-align: center;
     display: none;
   }
   #event-box .event-title {
-    font-size: 14px; font-weight: 800; color: #b45309; margin-bottom: 6px;
+    font-size: 17px; font-weight: 800; color: #b45309; margin-bottom: 8px;
   }
   #event-box .event-body {
-    font-size: 12px; color: #78350f; line-height: 1.8;
+    font-size: 14px; color: #78350f; line-height: 1.8;
   }
 
   .intro-body {
     text-align: left;
     background: #f8faff;
-    border-radius: 15px;
+    border-radius: 18px;
     border: 1px solid #eef2f6;
-    padding: 18px 20px;
-    margin-top: 14px;
+    padding: 22px 24px;
+    margin-top: 18px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
   }
-  .intro-body p { font-size: 14px; color: #475569; line-height: 1.85; }
+  .intro-body p { font-size: 17px; color: #475569; line-height: 1.85; }
   .intro-body strong { color: #1e293b; font-weight: 700; }
   .intro-body .red { color: #e74c3c; }
 
   /* ════ ② 금액 ════ */
   .price-label {
-    font-size: 13px; font-weight: 800; margin-bottom: 10px; padding-left: 5px;
+    font-size: 16px; font-weight: 800; margin-bottom: 12px; padding-left: 5px;
   }
   .price-label.blue { color: #639AD4; }
   .price-label.cyan { color: #00acc1; }
   .price-label.gray { color: #64748b; }
 
-  .price-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+  .price-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
   .price-rows:last-of-type { margin-bottom: 0; }
 
   .price-row {
-    background: #f8faff; padding: 15px; border-radius: 15px;
+    background: #f8faff; padding: 18px; border-radius: 18px;
     border: 1px solid #eef2f6;
     display: flex; justify-content: space-between; align-items: center;
   }
   .price-row.cyan-row { background: #e0f7fa; border-color: #b2ebf2; }
   .price-row.gray-row { background: #f1f5f9; border-color: #e2e8f0; }
-  .price-row .info .name { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
+  .price-row .info .name { font-size: 17px; font-weight: 700; color: #1e293b; margin-bottom: 3px; }
   .price-row.cyan-row .info .name { color: #006064; }
   .price-row.gray-row .info .name { color: #334155; }
-  .price-row .info .desc { font-size: 11px; color: #64748b; }
+  .price-row .info .desc { font-size: 13px; color: #64748b; }
   .price-row.cyan-row .info .desc { color: #00838f; }
   .price-row.gray-row .info .desc { color: #64748b; }
-  .price-row .amount { font-size: 16px; font-weight: 800; color: #639AD4; white-space: nowrap; margin-left: 12px; }
+  .price-row .amount { font-size: 19px; font-weight: 800; color: #639AD4; white-space: nowrap; margin-left: 14px; }
   .price-row.cyan-row .amount { color: #00838f; }
   .price-row.gray-row .amount { color: #475569; }
-  .price-note { font-size: 11px; color: #94a3b8; text-align: center; margin-top: 10px; }
+  .price-note { font-size: 13px; color: #94a3b8; text-align: center; margin-top: 12px; }
 
-  #price-loading { text-align: center; padding: 20px; font-size: 13px; color: #94a3b8; }
+  #price-loading { text-align: center; padding: 26px; font-size: 15px; color: #94a3b8; }
 
   /* ════ ③ 작업 순서 ════ */
   .process-note {
     background: #f8faff; border: 1px dashed #c3daff;
-    border-radius: 12px; padding: 12px 16px;
-    font-size: 13px; color: #475569; line-height: 1.75;
-    text-align: center; margin-bottom: 14px;
+    border-radius: 14px; padding: 16px 20px;
+    font-size: 16px; color: #475569; line-height: 1.75;
+    text-align: center; margin-bottom: 18px;
   }
   .process-note strong { color: #e74c3c; font-weight: 700; }
 
   .process-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 7px; margin-bottom: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 9px; margin-bottom: 18px;
   }
   .process-step {
-    background: #f8faff; padding: 15px 5px;
-    border-radius: 15px; text-align: center; border: 1px solid #eef2f6;
+    background: #f8faff; padding: 18px 6px;
+    border-radius: 18px; text-align: center; border: 1px solid #eef2f6;
   }
-  .process-step .num { font-size: 10px; color: #639AD4; font-weight: 800; margin-bottom: 4px; }
-  .process-step .name { font-weight: 600; font-size: 12px; line-height: 1.3; }
+  .process-step .num { font-size: 12px; color: #639AD4; font-weight: 800; margin-bottom: 5px; }
+  .process-step .name { font-weight: 600; font-size: 14px; line-height: 1.3; }
 
   .duration-box {
-    background: #f8faff; border-radius: 15px;
-    border: 1px solid #eef2f6; padding: 16px 20px;
-    margin-bottom: 14px;
+    background: #f8faff; border-radius: 18px;
+    border: 1px solid #eef2f6; padding: 20px 24px;
+    margin-bottom: 18px;
   }
-  .duration-box .dur-title { font-size: 13px; font-weight: 800; color: #334155; margin-bottom: 10px; }
-  .dur-rows { display: flex; flex-direction: column; gap: 8px; }
+  .duration-box .dur-title { font-size: 16px; font-weight: 800; color: #334155; margin-bottom: 12px; }
+  .dur-rows { display: flex; flex-direction: column; gap: 10px; }
   .dur-row {
     display: flex; justify-content: space-between; align-items: center;
-    font-size: 13px; color: #475569;
-    padding-bottom: 8px; border-bottom: 1px dashed #e2e8f0;
+    font-size: 16px; color: #475569;
+    padding-bottom: 10px; border-bottom: 1px dashed #e2e8f0;
   }
   .dur-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .dur-row .day { font-size: 14px; font-weight: 800; color: #639AD4; }
-  .dur-footer { margin-top: 10px; font-size: 11px; color: #94a3b8; text-align: center; }
+  .dur-row .day { font-size: 17px; font-weight: 800; color: #639AD4; }
+  .dur-footer { margin-top: 12px; font-size: 13px; color: #94a3b8; text-align: center; }
 
   /* ════ 캘린더 ════ */
   .cal-tab-row {
-    display: flex; gap: 8px; margin-bottom: 14px;
+    display: flex; gap: 10px; margin-bottom: 18px;
   }
   .cal-tab-btn {
-    flex: 1; padding: 10px 0;
+    flex: 1; padding: 12px 0;
     background: #f8faff; border: 1.5px solid #eef2f6;
-    border-radius: 12px; font-family: 'Paperlogy', sans-serif;
-    font-size: 13px; font-weight: 800; color: #94a3b8;
+    border-radius: 14px; font-family: 'Paperlogy', sans-serif;
+    font-size: 16px; font-weight: 800; color: #94a3b8;
     cursor: pointer; transition: 0.2s;
   }
   .cal-tab-btn.active {
@@ -209,32 +209,32 @@
   .cal-block { }
   .cal-header {
     text-align: center;
-    font-size: 14px; font-weight: 800; color: #334155;
-    margin-bottom: 10px;
+    font-size: 17px; font-weight: 800; color: #334155;
+    margin-bottom: 12px;
   }
   .cal-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 3px;
+    gap: 4px;
   }
   .cal-dow {
     text-align: center;
-    font-size: 10px; font-weight: 800; color: #94a3b8;
-    padding: 4px 0;
+    font-size: 12px; font-weight: 800; color: #94a3b8;
+    padding: 5px 0;
   }
   .cal-dow:first-child { color: #f87171; }
   .cal-dow:last-child  { color: #60a5fa; }
 
   .cal-day {
     text-align: center;
-    font-size: 12px; font-weight: 600;
-    padding: 6px 2px;
-    border-radius: 8px;
+    font-size: 14px; font-weight: 600;
+    padding: 8px 2px;
+    border-radius: 10px;
     background: #f8faff;
     border: 1px solid #eef2f6;
     cursor: default;
     line-height: 1.2;
-    min-height: 38px;
+    min-height: 48px;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
   }
@@ -255,34 +255,34 @@
   .cal-day.closed {
     background: #fee2e2; border-color: #fca5a5; color: #991b1b;
   }
-  .cal-day .day-num { font-size: 12px; }
-  .cal-day .day-label { font-size: 9px; font-weight: 700; margin-top: 1px; }
+  .cal-day .day-num { font-size: 14px; }
+  .cal-day .day-label { font-size: 10px; font-weight: 700; margin-top: 2px; }
   .cal-day.vacation .day-label { color: #b45309; }
   .cal-day.closed  .day-label  { color: #b91c1c; }
 
   .cal-legend {
-    display: flex; gap: 12px; justify-content: center;
-    margin-top: 12px; flex-wrap: wrap;
+    display: flex; gap: 16px; justify-content: center;
+    margin-top: 16px; flex-wrap: wrap;
   }
   .legend-item {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 11px; color: #475569;
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; color: #475569;
   }
   .legend-dot {
-    width: 12px; height: 12px; border-radius: 4px;
+    width: 14px; height: 14px; border-radius: 5px;
   }
   .legend-dot.vacation { background: #fff3cd; border: 1px solid #fde68a; }
   .legend-dot.closed   { background: #fee2e2; border: 1px solid #fca5a5; }
   .legend-dot.today    { background: #fff; border: 2px solid #639AD4; }
 
-  #cal-loading { text-align: center; padding: 20px; font-size: 13px; color: #94a3b8; }
+  #cal-loading { text-align: center; padding: 26px; font-size: 15px; color: #94a3b8; }
 
   /* ════ ④ 포트폴리오 ════ */
   details summary::-webkit-details-marker { display: none; }
   details summary {
     display: flex; align-items: center; justify-content: center;
-    padding: 15px; background: #fff; border-radius: 15px; cursor: pointer;
-    list-style: none; font-weight: 800; color: #64748b;
+    padding: 18px; background: #fff; border-radius: 18px; cursor: pointer;
+    list-style: none; font-weight: 800; color: #64748b; font-size: 16px;
     border: 2px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
     transition: 0.3s;
   }
@@ -291,38 +291,38 @@
     border-color: #639AD4 !important;
   }
   .portfolio-inner {
-    background: #fff; margin-top: 10px; padding: 25px;
-    border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.03);
+    background: #fff; margin-top: 12px; padding: 32px;
+    border-radius: 24px; box-shadow: 0 8px 25px rgba(0,0,0,0.03);
   }
   .portfolio-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 15px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 18px;
   }
-  .portfolio-item { display: flex; flex-direction: column; gap: 8px; }
-  .portfolio-item iframe { width: 100%; aspect-ratio: 16/9; border-radius: 10px; border: none; }
-  .shorts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; }
-  .shorts-item { display: flex; flex-direction: column; gap: 8px; }
-  .shorts-item iframe { width: 100%; aspect-ratio: 9/16; border-radius: 10px; border: none; }
+  .portfolio-item { display: flex; flex-direction: column; gap: 10px; }
+  .portfolio-item iframe { width: 100%; aspect-ratio: 16/9; border-radius: 12px; border: none; }
+  .shorts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
+  .shorts-item { display: flex; flex-direction: column; gap: 10px; }
+  .shorts-item iframe { width: 100%; aspect-ratio: 9/16; border-radius: 12px; border: none; }
 
   /* 템플릿 — 1개씩 크게, 여러 개면 2열 */
   .template-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 560px), 1fr));
+    gap: 20px;
   }
-  .template-item { display: flex; flex-direction: column; gap: 8px; }
-  .template-item iframe { width: 100%; aspect-ratio: 16/9; border-radius: 12px; border: none; }
-  .portfolio-loading { text-align: center; padding: 30px; font-size: 13px; color: #94a3b8; }
-  .portfolio-error { text-align: center; padding: 20px; font-size: 13px; color: #e74c3c; background: #fff0f0; border-radius: 12px; }
+  .template-item { display: flex; flex-direction: column; gap: 10px; }
+  .template-item iframe { width: 100%; aspect-ratio: 16/9; border-radius: 14px; border: none; }
+  .portfolio-loading { text-align: center; padding: 36px; font-size: 15px; color: #94a3b8; }
+  .portfolio-error { text-align: center; padding: 24px; font-size: 15px; color: #e74c3c; background: #fff0f0; border-radius: 14px; }
 
   /* ════ ⑤ 주의사항 ════ */
-  .notice-card { border-left: 6px solid #639AD4; }
-  .notice-card > h3 { font-size: 19px; font-weight: 800; margin-bottom: 20px; }
-  .notice-list { display: flex; flex-direction: column; gap: 10px; }
+  .notice-card { border-left: 7px solid #639AD4; }
+  .notice-card > h3 { font-size: 23px; font-weight: 800; margin-bottom: 24px; }
+  .notice-list { display: flex; flex-direction: column; gap: 12px; }
   .notice-item {
     background: #f8faff; border: 1px solid #eef2f6;
-    border-radius: 14px; padding: 14px 16px;
-    font-size: 14px; color: #475569; line-height: 1.8;
+    border-radius: 16px; padding: 18px 20px;
+    font-size: 16px; color: #475569; line-height: 1.8;
   }
   .notice-item strong { color: #1e293b; font-weight: 700; }
   .notice-item.warn { background: #fff8f0; border-color: #fed7aa; }
@@ -331,27 +331,27 @@
   .notice-item.red-item strong { color: #991b1b; }
   .notice-highlight {
     background: #639AD4; color: #fff;
-    font-size: 15px; font-weight: 800;
-    text-align: center; padding: 16px 18px; border-radius: 15px;
+    font-size: 18px; font-weight: 800;
+    text-align: center; padding: 20px 22px; border-radius: 18px;
   }
   .notice-highlight small {
-    display: block; font-size: 12px; font-weight: 400;
-    opacity: 0.88; margin-top: 5px; line-height: 1.6;
+    display: block; font-size: 14px; font-weight: 400;
+    opacity: 0.88; margin-top: 6px; line-height: 1.6;
   }
 
   /* ════ 문의 양식 ════ */
-  .inquiry-card h3 { font-size: 19px; font-weight: 800; margin-bottom: 6px; text-align: center; }
-  .inquiry-card .inquiry-desc { text-align: center; font-size: 13px; color: #64748b; margin-bottom: 20px; }
-  .inquiry-form { display: flex; flex-direction: column; gap: 10px; }
-  .form-field { display: flex; flex-direction: column; gap: 5px; }
-  .form-field label { font-size: 12px; font-weight: 800; color: #334155; padding-left: 4px; }
-  .form-field label .hint { font-size: 11px; font-weight: 400; color: #94a3b8; margin-left: 6px; }
+  .inquiry-card h3 { font-size: 23px; font-weight: 800; margin-bottom: 8px; text-align: center; }
+  .inquiry-card .inquiry-desc { text-align: center; font-size: 16px; color: #64748b; margin-bottom: 24px; }
+  .inquiry-form { display: flex; flex-direction: column; gap: 12px; }
+  .form-field { display: flex; flex-direction: column; gap: 6px; }
+  .form-field label { font-size: 14px; font-weight: 800; color: #334155; padding-left: 4px; }
+  .form-field label .hint { font-size: 13px; font-weight: 400; color: #94a3b8; margin-left: 6px; }
   .form-field input,
   .form-field select,
   .form-field textarea {
-    width: 100%; padding: 12px 14px;
-    border: 1px solid #e2e8f0; border-radius: 12px;
-    font-size: 13px; font-family: 'Paperlogy', sans-serif;
+    width: 100%; padding: 14px 16px;
+    border: 1px solid #e2e8f0; border-radius: 14px;
+    font-size: 15px; font-family: 'Paperlogy', sans-serif;
     background: #f8faff; outline: none;
     appearance: none; -webkit-appearance: none;
     color: #1e293b;
@@ -362,25 +362,25 @@
   .form-field textarea:focus { border-color: #639AD4; background: #fff; }
   /* 스크롤 고정 높이 — resize 제거 */
   .form-field textarea {
-    height: 90px;
+    height: 100px;
     overflow-y: auto;
     resize: none;
   }
-  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .btn-copy {
-    width: 100%; height: 58px;
+    width: 100%; height: 64px;
     background: #1e293b; color: #fff;
-    border: none; border-radius: 16px;
-    font-size: 16px; font-weight: 800;
+    border: none; border-radius: 18px;
+    font-size: 18px; font-weight: 800;
     font-family: 'Paperlogy', sans-serif;
-    cursor: pointer; margin-top: 6px;
+    cursor: pointer; margin-top: 8px;
     box-shadow: 0 8px 20px rgba(30,41,59,0.18);
     transition: opacity 0.2s;
   }
   .btn-copy:hover { opacity: 0.88; }
   .copy-done {
-    display: none; text-align: center; font-size: 13px;
-    color: #639AD4; font-weight: 700; margin-top: 8px;
+    display: none; text-align: center; font-size: 15px;
+    color: #639AD4; font-weight: 700; margin-top: 10px;
   }
 </style>
 </head>
@@ -462,14 +462,14 @@
   </div>
 
   <!-- ④ 포트폴리오 -->
-  <div id="sec-portfolio" style="display:flex;flex-direction:column;gap:12px;">
+  <div id="sec-portfolio" style="display:flex;flex-direction:column;gap:16px;">
     <details open>
       <summary>🎬 LONG-FORM PORTFOLIO (전체보기)</summary>
       <div class="portfolio-inner">
         <div id="longform-container"><div class="portfolio-loading">불러오는 중...</div></div>
       </div>
     </details>
-    <details>
+    <details open>
       <summary>📱 SHORT-FORM PORTFOLIO (쇼츠)</summary>
       <div class="portfolio-inner">
         <div id="shortform-container"><div class="portfolio-loading">불러오는 중...</div></div>
@@ -489,7 +489,7 @@
     <div class="notice-list">
 
       <div class="notice-item red-item">
-        <strong>⚠️ 현재 쇼츠는 잠시 받지 않고 있습니다!</strong>
+        <strong>⚠️ 당분간 롱폼 작업은 쉬어갑니다! </strong>
       </div>
 
       <div class="notice-item">
